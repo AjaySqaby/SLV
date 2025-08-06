@@ -1,0 +1,14 @@
+import Header from "./header"
+import Sidebar from "./sidebar"
+
+export default function PageLayout({ children, activePage, pageTitle }) {
+  return (
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar activePage={activePage} />
+      <div className="flex-1 flex flex-col ">
+        <Header activePage={pageTitle} />
+        <main className="flex-1 p-6">{children}</main>
+      </div>
+    </div>
+  )
+}
