@@ -283,7 +283,7 @@ export default function RidesContent() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Rides Management</h1>
         <Button
-          // onClick={() => setShowAddRide(true)}
+          onClick={() => setShowAddRide(true)}
           className="flex !bg-blue-600 items-center gap-2"
           variant="primary"
         >
@@ -304,7 +304,7 @@ export default function RidesContent() {
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-[var(--gray-400)]" />
         </div>
         <Button
-          // onClick={() => setShowFilters((prev) => !prev)}
+          onClick={() => setShowFilters((prev) => !prev)}
           className="flex hover:bg-[var(--purple)] text-[var(--primary-black)] items-center gap-2"
           variant="secondary"
         >
@@ -395,7 +395,7 @@ export default function RidesContent() {
         rideId={selectedRideId}
       />
       <LiveTrackingDrawer
-        // isOpen={showTrackingDrawer}
+        isOpen={showTrackingDrawer}
         onClose={() => setShowTrackingDrawer(false)}
         rideId={trackingRideId}
       />

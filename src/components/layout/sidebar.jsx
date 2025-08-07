@@ -62,7 +62,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
               <li key={index}>
                 <Link
                   href={item.href}
-                  className={`sidebar-item hover:text-[var(--primary-black)] hover:bg-[var(--primary)] ${
+                  className={`sidebar-item hover:text-[var(--primary-black)] hover:bg-[var(--primary-hover)] ${
                     item.label === activePage ? "active" : ""
                   } py-2`}
                 >
