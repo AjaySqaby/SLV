@@ -72,6 +72,7 @@
   --header-search-ring: rgba(255,255,255,0.5);
   --header-icon: #fff;
   --header-icon-hover: rgba(255,255,255,0.10);
+  --timezone-hover: #be5eed;
 }
 
 body {

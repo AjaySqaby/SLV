@@ -26,6 +26,7 @@ export default function RidesTable({
     rideIndex: null,
     field: null,
   });
+  const [selectedTimezones, setSelectedTimezones] = useState({});
   const globeRefs = useRef({});
   const actionMenuRef = useRef();
 
@@ -38,7 +39,14 @@ export default function RidesTable({
   };
 
   const handleTimezoneSelect = (tz) => {
-    handleTimezoneClose();
+    // Store the selected timezone for this specific ride and field
+    const key = `${timezoneModal.rideIndex}-${timezoneModal.field}`;
+    setSelectedTimezones(prev => ({
+      ...prev,
+      [key]: tz
+    }));
+    // Don't close the modal automatically - let it stay open to show converted time
+    // handleTimezoneClose(); // Removed this line
   };
 
   useEffect(() => {
@@ -142,6 +150,7 @@ export default function RidesTable({
                               current: globeRefs.current[`${index}-pickup`],
                             }}
                             onSelect={handleTimezoneSelect}
+                            initialSelected={selectedTimezones[`${index}-pickup`]}
                           />
                         )}
                     </div>
@@ -189,6 +198,7 @@ export default function RidesTable({
                               current: globeRefs.current[`${index}-dropoff`],
                             }}
                             onSelect={handleTimezoneSelect}
+                            initialSelected={selectedTimezones[`${index}-dropoff`]}
                           />
                         )}
                     </div>

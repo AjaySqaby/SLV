@@ -2,10 +2,20 @@
 import { useState } from "react";
 import { Search, Bell, User } from "lucide-react";
 import Image from "next/image";
-export default function Header({ activePage }) {
+export default function Header({ activePage, onSearch }) {
   const [search, setSearch] = useState("");
+  
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    console.log("Header search input:", value);
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+  
   return (
-    <header className="bg-gradient-to-r from-[var(--header-gradient-from)] via-[var(--header-gradient-via)] to-[var(--header-gradient-to)] py-4 px-6 flex items-center justify-between">
+    <header className="bg-white py-4 px-6 flex items-center justify-between shadow-md border-b border-gray-200">
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
           <span className="text-[var(--header-logo)] font-bold text-xl">
@@ -13,10 +23,10 @@ export default function Header({ activePage }) {
           </span>
         </div>
         <div className="ml-8 flex items-center space-x-4">
-          <span className="text-white uppercase font-medium border-r-2 border-white px-4">
+          <span className="text-[var(--primary-black)] uppercase font-medium border-r-2 border-gray-300 px-4">
             Ride
           </span>
-          <span className="text-[var(--header-nav-active)] font-medium ">
+          <span className="text-[var(--primary-black)] font-medium ">
             {activePage}
           </span>
         </div>
@@ -26,16 +36,16 @@ export default function Header({ activePage }) {
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearch}
             placeholder="Search rides or drivers..."
-            className="bg-[var(--header-search-bg)] text-[var(--header-search-text)] placeholder-[var(--header-search-placeholder)] rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-2 focus:ring-[var(--header-search-ring)]"
+            className="bg-gray-100 text-gray-900 placeholder-gray-500 rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-200"
           />
-          <Search className="absolute left-3 top-2.5 h-5 w-5 text-[var(--header-search-placeholder)]" />
+          <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-500" />
         </div>
-        <button className="text-[var(--header-icon)] p-2 rounded-full hover:bg-[var(--header-icon-hover)]">
+        <button className="text-[var(--primary-black)] p-2 rounded-full hover:bg-[var(--primary-hover)]">
           <Bell className="h-5 w-5" />
         </button>
-        <button className="text-[var(--header-icon)] p-2 rounded-full hover:bg-[var(--header-icon-hover)]">
+        <button className="text-[var(--primary-black)] p-2 rounded-full hover:bg-[var(--primary-hover)]">
           <User className="h-5 w-5" />
         </button>
       </div>

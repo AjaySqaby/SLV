@@ -15,10 +15,13 @@ function StatIconWithBadge({ icon, count, iconBg, iconColor, badgeBg }) {
   );
 }
 
-export default function RidesStats({ stats }) {
+export default function RidesStats({ stats, onStatsClick }) {
   return (
     <div className="grid grid-cols-5 gap-4 mb-6">
-      <div className=" p-4 rounded-lg shadow-sm flex flex-col items-center">
+      <div 
+        className="p-4 rounded-lg shadow-sm flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200" 
+        onClick={() => onStatsClick && onStatsClick('all')}
+      >
         <StatIconWithBadge
           icon={
             <svg
@@ -45,7 +48,10 @@ export default function RidesStats({ stats }) {
         <div className="text-gray-700 text-sm mt-2">Total Rides</div>
         <div className="text-2xl font-bold text-black">{stats.total}</div>
       </div>
-      <div className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center">
+      <div 
+        className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200" 
+        onClick={() => onStatsClick && onStatsClick('completed')}
+      >
         <StatIconWithBadge
           icon={
             <svg
@@ -79,7 +85,10 @@ export default function RidesStats({ stats }) {
         <div className="text-gray-700 text-sm mt-2">Completed</div>
         <div className="text-2xl font-bold text-black">{stats.completed}</div>
       </div>
-      <div className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center">
+      <div 
+        className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200" 
+        onClick={() => onStatsClick && onStatsClick('inProgress')}
+      >
         <StatIconWithBadge
           icon={
             <svg
@@ -112,7 +121,10 @@ export default function RidesStats({ stats }) {
         <div className="text-gray-700 text-sm mt-2">In Progress</div>
         <div className="text-2xl font-bold text-black">{stats.inProgress}</div>
       </div>
-      <div className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center">
+      <div 
+        className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200" 
+        onClick={() => onStatsClick && onStatsClick('canceled')}
+      >
         <StatIconWithBadge
           icon={
             <svg
@@ -145,7 +157,10 @@ export default function RidesStats({ stats }) {
         <div className="text-gray-700 text-sm mt-2">Canceled</div>
         <div className="text-2xl font-bold text-black">{stats.canceled}</div>
       </div>
-      <div className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center">
+      <div 
+        className="bg-[var(--background)] p-4 rounded-lg shadow-sm flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors duration-200" 
+        onClick={() => onStatsClick && onStatsClick('rejected')}
+      >
         <StatIconWithBadge
           icon={
             <svg

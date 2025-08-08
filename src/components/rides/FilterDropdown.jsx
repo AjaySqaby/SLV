@@ -48,11 +48,11 @@ export default function FilterDropdown({ value, onChange }) {
                 key={type}
                 value={type}
                 className={({ active, selected }) =>
-                  `cursor-pointer select-none relative py-2.5 pl-10 pr-4 transition-colors hover:bg-[var(--primary-hover)] hover:text-white ${
+                  `cursor-pointer select-none relative py-2.5 pl-10 pr-4 transition-colors !hover:bg-[#be5eed] hover:text-white ${
                     selected
-                      ? "bg-[var(--primary-hover)] text-white font-medium"
+                      ? "bg-[#be5eed] text-white font-medium"
                       : active
-                      ? "bg-[var(--primary-hover)] text-white"
+                      ? "bg-[#be5eed] text-white"
                       : "text-gray-900"
                   }`
                 }
