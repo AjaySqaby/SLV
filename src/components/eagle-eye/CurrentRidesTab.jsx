@@ -73,13 +73,15 @@ export default function CurrentRidesTab({
             Filter & Search Rides
           </h3>
         </div>
-        
+
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
+            <Search className="h-4 w-4 text-gray-400" />
+          </div>
           <Input
             type="text"
             placeholder="Search by ride ID, driver, or location..."
-            className="pl-10 pr-4 py-2.5 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white"
+            className="pl-10 pr-4 py-2.5 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white w-full"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
