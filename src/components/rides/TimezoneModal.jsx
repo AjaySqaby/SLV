@@ -1,37 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import TimezoneSelect from "@/components/ui/TimezoneSelect";
+import { convertTimeBetweenTimezones, debugLuxonConversion, getUserTimezone, getTimezoneLabel, formatTimeWithTimezone } from "@/utils/timezone";
+import { useTimezone } from "@/contexts/TimezoneContext";
 
-const TIMEZONES = [
-  "Pacific Time (PT)",
-  "Mountain Time (MT)",
-  "Central Time (CT)",
-  "Eastern Time (ET)",
-  "Greenwich Mean Time (GMT)",
-  "Central European Time (CET)",
-  "Japan Standard Time (JST)",
-  "Australian Eastern Time (AET)",
-];
-
-// Timezone offset mapping (in hours from UTC)
-const TIMEZONE_OFFSETS = {
-  "Pacific Time (PT)": -8,
-  "Mountain Time (MT)": -7,
-  "Central Time (CT)": -6,
-  "Eastern Time (ET)": -5,
-  "Greenwich Mean Time (GMT)": 0,
-  "Central European Time (CET)": 1,
-  "Japan Standard Time (JST)": 9,
-  "Australian Eastern Time (AET)": 10,
-};
-
-export default function TimezoneModal({ open, onClose, onSelect, originalTime = "08:30 AM", initialSelected = null }) {
+export default function TimezoneModal({ open, onClose, onSelect, originalTime = "08:30 AM", initialSelected = null, sourceTimezone = null }) {
   const modalRef = useRef();
   const [selected, setSelected] = useState(initialSelected);
+  const { userTimezone, isDetecting } = useTimezone();
 
   // Update selected when initialSelected prop changes
   useEffect(() => {
     setSelected(initialSelected);
   }, [initialSelected]);
+
+  // Set user's timezone as default if no initial selection
+  useEffect(() => {
+    if (!initialSelected && userTimezone && !isDetecting) {
+      setSelected(userTimezone);
+    }
+  }, [initialSelected, userTimezone, isDetecting]);
 
   useEffect(() => {
     function handle(e) {
@@ -43,60 +30,84 @@ export default function TimezoneModal({ open, onClose, onSelect, originalTime = 
     return () => document.removeEventListener("mousedown", handle);
   }, [open, onClose]);
 
-  // Convert time based on selected timezone
+  // Convert time based on selected timezone using Luxon
   const getConvertedTime = (timezone) => {
-    if (!timezone) return null;
+    if (!timezone || !sourceTimezone) return null;
 
-    const offset = TIMEZONE_OFFSETS[timezone];
-    if (offset === undefined) return null;
-
-    // Parse original time (assuming 24-hour format)
-    const [hours, minutes] = originalTime.split(':');
-    const isPM = originalTime.includes('PM');
-    let hour = parseInt(hours);
-    if (isPM && hour !== 12) hour += 12;
-    if (!isPM && hour === 12) hour = 0;
-
-    // Apply timezone offset
-    let convertedHour = hour + offset;
-
-    // Handle day wrapping
-    if (convertedHour >= 24) convertedHour -= 24;
-    if (convertedHour < 0) convertedHour += 24;
-
-    // Convert back to 12-hour format
-    const period = convertedHour >= 12 ? 'PM' : 'AM';
-    const displayHour = convertedHour === 0 ? 12 : convertedHour > 12 ? convertedHour - 12 : convertedHour;
-
-    return `${displayHour}:${minutes.split(' ')[0]} ${period}`;
+    try {
+      // Use debug function to see what's happening
+      return debugLuxonConversion(originalTime, sourceTimezone, timezone);
+    } catch (error) {
+      console.error('Error converting time:', error);
+      return null;
+    }
   };
 
   const convertedTime = getConvertedTime(selected);
+  const sourceTimezoneLabel = sourceTimezone ? getTimezoneLabel(sourceTimezone) : 'Original timezone';
 
   if (!open) return null;
   return (
     <div
       ref={modalRef}
-      className="absolute top-12 mt-2 z-50 bg-white border border-gray-200 rounded-xl shadow-xl p-4 w-80"
+      className="absolute top-12 mt-2 z-50 bg-white border border-gray-200 rounded-xl shadow-xl p-6 w-96"
     >
-      <div className="font-semibold text-lg text-gray-900 mb-2">
+      <div className="font-semibold text-lg text-gray-900 mb-4">
         Convert to different timezone
       </div>
-      <TimezoneSelect
-        value={selected}
-        onChange={(tz) => {
-          setSelected(tz);
-          onSelect?.(tz);
-          // Don't close the modal - let it stay open to show converted time
-        }}
-      />
+      
+      {/* Original time display */}
+      <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+        <div className="text-sm text-gray-600 mb-1">Original Time</div>
+        <div className="text-lg font-semibold text-gray-900">{originalTime}</div>
+        <div className="text-xs text-gray-500">{sourceTimezoneLabel}</div>
+      </div>
+
+      {/* Timezone selector */}
+      <div className="mb-4">
+        <div className="text-sm text-gray-600 mb-2">Select Target Timezone</div>
+        <TimezoneSelect
+          value={selected}
+          onChange={(tz) => {
+            setSelected(tz);
+            onSelect?.(tz);
+          }}
+          showAutoDetect={true}
+        />
+      </div>
+
+      {/* Converted time display */}
       {convertedTime && selected && (
-        <div className="mt-4 text-center">
-          <div className="text-2xl font-bold text-gray-900 mb-1">
+        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="text-sm text-blue-600 mb-1">Converted Time</div>
+          <div className="text-2xl font-bold text-blue-900 mb-1">
             {convertedTime}
           </div>
+          <div className="text-sm text-blue-700">
+            {getTimezoneLabel(selected)}
+          </div>
+          {userTimezone && selected !== userTimezone && (
+            <div className="mt-2 text-xs text-blue-600">
+              Your timezone: {getTimezoneLabel(userTimezone)}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Timezone comparison info */}
+      {selected && sourceTimezone && selected !== sourceTimezone && (
+        <div className="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+          <div className="text-sm text-yellow-800">
+            <strong>Note:</strong> Times are automatically converted from {sourceTimezoneLabel} to {getTimezoneLabel(selected)}
+          </div>
+        </div>
+      )}
+
+      {/* Loading state */}
+      {isDetecting && (
+        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
           <div className="text-sm text-gray-600">
-            {selected}
+            Detecting your timezone...
           </div>
         </div>
       )}

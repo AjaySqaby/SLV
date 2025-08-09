@@ -1,16 +1,24 @@
-export default function StatusBadge({ status, type = "default" }) {
-  const variants = {
-  active: "bg-[var(--green-100)] text-[var(--green-800)]",
-  inactive: "bg-[var(--gray-100)] text-[var(--gray-800)]",
-  pending: "bg-[var(--blue-100)] text-[var(--blue-800)]",
-  warning: "bg-[var(--amber-100)] text-[var(--warning-dark)]",
-  error: "bg-[var(--red-100)] text-[var(--red-800)]",
-  default: "bg-[var(--gray-100)] text-[var(--gray-800)]",
-  }
+import React from 'react';
+
+export default function StatusBadge({ status }) {
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'in progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'scheduled':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${variants[type]}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
       {status}
     </span>
-  )
+  );
 } 

@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Search, Bell, User } from "lucide-react";
 import Image from "next/image";
+import TimezoneIndicator from "@/components/ui/TimezoneIndicator";
+
 export default function Header({ activePage, onSearch }) {
   const [search, setSearch] = useState("");
   
@@ -18,20 +20,13 @@ export default function Header({ activePage, onSearch }) {
     <header className="bg-white py-4 px-6 flex items-center justify-between shadow-md border-b border-gray-200">
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
-          <span className="text-[var(--header-logo)] font-bold text-xl">
-            <Image src="/logo.png" alt="logo" width={100} height={100} />
-          </span>
-        </div>
-        <div className="ml-8 flex items-center space-x-4">
-          <span className="text-[var(--primary-black)] uppercase font-medium border-r-2 border-gray-300 px-4">
-            Ride
-          </span>
           <span className="text-[var(--primary-black)] font-medium ">
             {activePage}
           </span>
         </div>
       </div>
       <div className="flex items-center space-x-4">
+        <TimezoneIndicator />
         <div className="relative">
           <input
             type="text"

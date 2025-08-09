@@ -81,6 +81,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       district: "Oakland Unified School District",
       date: "12/25/2024 (Wednesday)",
       scheduledTime: "08:30 AM",
+      timezone: "America/Los_Angeles",
       pickup: {
         scheduled: "08:30 AM",
         arrived: "08:30 AM",
@@ -113,6 +114,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       district: "Oakland Unified School District",
       date: "12/26/2024 (Thursday)",
       scheduledTime: "09:15 AM",
+      timezone: "America/Los_Angeles",
       pickup: {
         scheduled: "09:15 AM",
         arrived: "09:15 AM",
@@ -144,6 +146,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       district: "Atlanta Public Schools",
       date: "12/27/2024 (Friday)",
       scheduledTime: "08:30 AM",
+      timezone: "America/New_York",
       pickup: {
         scheduled: "08:30 AM",
         arrived: "08:30 AM",
@@ -175,6 +178,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       district: "Atlanta Public Schools",
       date: "12/28/2024 (Saturday)",
       scheduledTime: "09:05 AM",
+      timezone: "America/New_York",
       pickup: {
         scheduled: "09:05 AM",
         arrived: "09:05 AM",
@@ -205,6 +209,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       district: "Atlanta Public Schools",
       date: "12/29/2024 (Sunday)",
       scheduledTime: "09:10 AM",
+      timezone: "America/New_York",
       pickup: {
         scheduled: "09:10 AM",
         arrived: "09:10 AM",

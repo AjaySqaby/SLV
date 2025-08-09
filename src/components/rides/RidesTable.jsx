@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import TimezoneModal from "./TimezoneModal";
 import Button from "@/components/ui/Button";
+import { convertRideTimeToUserTimezone, getUserTimezone } from "@/utils/timezone";
+import { useTimezone } from "@/contexts/TimezoneContext";
 
 export default function RidesTable({
   rides,
@@ -21,14 +23,20 @@ export default function RidesTable({
 }) {
   const [showActionMenu, setShowActionMenu] = useState(false);
   const [activeRideIndex, setActiveRideIndex] = useState(null);
+  const [selectedTimezones, setSelectedTimezones] = useState({});
   const [timezoneModal, setTimezoneModal] = useState({
     open: false,
     rideIndex: null,
     field: null,
   });
-  const [selectedTimezones, setSelectedTimezones] = useState({});
+  const { userTimezone } = useTimezone();
   const globeRefs = useRef({});
   const actionMenuRef = useRef();
+
+  // Auto-convert ride time to user's timezone
+  const getConvertedTime = (rideTime, rideTimezone) => {
+    return convertRideTimeToUserTimezone(rideTime, rideTimezone, userTimezone);
+  };
 
   const handleGlobeClick = (rideIndex, field) => {
     setTimezoneModal({ open: true, rideIndex, field });
@@ -115,7 +123,7 @@ export default function RidesTable({
                       {ride.date}
                     </div>
                     <div className="text-sm text-[var(--blue-dark)] font-semibold">
-                      Scheduled: {ride.scheduledTime}
+                      Scheduled: {getConvertedTime(ride.scheduledTime, ride.timezone)}
                     </div>
                   </div>
                 </div>
@@ -127,7 +135,7 @@ export default function RidesTable({
                   <div>
                     <div className="text-xs font-medium">Pick-up</div>
                     <div className="text-xs text-[var(--blue-600)] flex items-center">
-                      Scheduled: {ride.pickup.scheduled}
+                      Scheduled: {getConvertedTime(ride.pickup.scheduled, ride.timezone)}
                       <button
                         type="button"
                         ref={(el) => {
@@ -151,15 +159,17 @@ export default function RidesTable({
                             }}
                             onSelect={handleTimezoneSelect}
                             initialSelected={selectedTimezones[`${index}-pickup`]}
+                            originalTime={ride.pickup.scheduled}
+                            sourceTimezone={ride.timezone || "America/Los_Angeles"}
                           />
                         )}
                     </div>
                     <div className="text-xs text-[var(--success-dark)]">
-                      Arrived: {ride.pickup.arrived}
+                      Arrived: {getConvertedTime(ride.pickup.arrived, ride.timezone)}
                     </div>
                     {ride.pickup.confirmed && (
                       <div className="text-xs text-[var(--warning-dark)]">
-                        Confirmed: {ride.pickup.confirmed}
+                        Confirmed: {getConvertedTime(ride.pickup.confirmed, ride.timezone)}
                       </div>
                     )}
                     <div className="text-xs text-[var(--gray-700)] mt-1">
@@ -175,7 +185,7 @@ export default function RidesTable({
                   <div>
                     <div className="text-xs font-medium">Drop-off</div>
                     <div className="text-xs text-[var(--blue-600)] flex items-center">
-                      Scheduled: {ride.dropoff.scheduled}
+                      Scheduled: {getConvertedTime(ride.dropoff.scheduled, ride.timezone)}
                       <button
                         type="button"
                         ref={(el) => {
@@ -199,15 +209,17 @@ export default function RidesTable({
                             }}
                             onSelect={handleTimezoneSelect}
                             initialSelected={selectedTimezones[`${index}-dropoff`]}
+                            originalTime={ride.dropoff.scheduled}
+                            sourceTimezone={ride.timezone || "America/Los_Angeles"}
                           />
                         )}
                     </div>
                     <div className="text-xs text-[var(--success-dark)]">
-                      Arrived: {ride.dropoff.arrived}
+                      Arrived: {getConvertedTime(ride.dropoff.arrived, ride.timezone)}
                     </div>
                     {ride.dropoff.completed && (
                       <div className="text-xs text-[var(--warning-dark)]">
-                        Completed: {ride.dropoff.completed}
+                        Completed: {getConvertedTime(ride.dropoff.completed, ride.timezone)}
                       </div>
                     )}
                     <div className="text-xs text-[var(--gray-700)] mt-1">

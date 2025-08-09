@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",
+    "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "lucide-react": "^0.511.0",
+    "luxon": "^3.7.1",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-day-picker": "^9.7.0",
