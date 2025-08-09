@@ -30,7 +30,7 @@ export default function CurrentRidesTab({
   });
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full px-4">
       <div className="cursor-pointer p-4 flex items-center justify-between border-b shadow-lg flex-shrink-0" style={{ backgroundColor: '#2563eb' }}>
         <div className="flex items-center">
           <div className="rounded-full p-2 mr-3 shadow-md" style={{ backgroundColor: '#3b82f6' }}>
@@ -64,15 +64,15 @@ export default function CurrentRidesTab({
         </div>
       </div>
 
-            <div className="bg-gradient-to-b from-gray-50 to-white p-3 border-b border-gray-200 flex-shrink-0 shadow-sm">
-        <div className="flex items-center mb-2">
+            <div className="bg-gradient-to-b from-gray-50 to-white py-3 border-b border-gray-200 flex-shrink-0 shadow-sm">
+        {/* <div className="flex items-center mb-2">
           <div className="bg-blue-100 rounded-full p-1 mr-2">
             <Search className="h-3 w-3 text-blue-600" />
           </div>
           <h3 className="font-medium text-gray-800 text-xs">
             Filter & Search Rides
           </h3>
-        </div>
+        </div> */}
         
         <div className="relative mb-3">
           <div className="absolute left-2.5 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
@@ -118,7 +118,7 @@ export default function CurrentRidesTab({
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto px-4 py-2 min-h-0 bg-gray-50/30">
+      <div className="flex-1 overflow-auto  py-2 min-h-0 bg-gray-50/30">
         {filteredRides.length === 0 ? (
           <div className="text-center py-12">
             <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
