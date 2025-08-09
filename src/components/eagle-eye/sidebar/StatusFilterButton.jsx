@@ -19,7 +19,7 @@ export default function StatusFilterButton({
   return (
     <Button
       variant="primary"
-      className={`px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150
+      className={`px-2 py-1.5 rounded-md text-xs font-semibold transition-all duration-150 w-full
         ${colorVar} text-white border-2 ${
         isActive ? "border-gray-400" : "border-transparent"
       }

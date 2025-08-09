@@ -64,32 +64,32 @@ export default function CurrentRidesTab({
         </div>
       </div>
 
-      <div className="bg-gradient-to-b from-gray-50 to-white p-4 border-b border-gray-200 flex-shrink-0 shadow-sm">
-        <div className="flex items-center mb-3">
-          <div className="bg-blue-100 rounded-full p-1.5 mr-2">
-            <Search className="h-4 w-4 text-blue-600" />
+            <div className="bg-gradient-to-b from-gray-50 to-white p-3 border-b border-gray-200 flex-shrink-0 shadow-sm">
+        <div className="flex items-center mb-2">
+          <div className="bg-blue-100 rounded-full p-1 mr-2">
+            <Search className="h-3 w-3 text-blue-600" />
           </div>
-          <h3 className="font-semibold text-gray-800 text-sm">
+          <h3 className="font-medium text-gray-800 text-xs">
             Filter & Search Rides
           </h3>
         </div>
-
-        <div className="relative mb-4">
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+        
+        <div className="relative mb-3">
+          <div className="absolute left-2.5 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
+            <Search className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <Input
             type="text"
-            placeholder="Search by ride ID, driver, or location..."
-            className="pl-10 pr-4 py-2.5 text-sm border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white w-full"
+            placeholder="Search rides..."
+            className="pl-8 pr-3 py-2 text-xs border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white w-full"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        <div className="space-y-2 mb-2">
+        <div className="space-y-1.5">
           <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">Status Filters</p>
-          <div className="flex whitespace-nowrap overflow-x-auto space-x-2 pb-1">
+          <div className="grid grid-cols-2 gap-1.5">
             <StatusFilterButton
               label="All"
               isActive={activeStatusFilter === "All"}
