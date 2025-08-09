@@ -10,9 +10,6 @@ import RideDetailModal from "./ride-detail-modal";
 export default function EagleEyeContent() {
   const [activeTab, setActiveTab] = useState(0);
   const [activeStatusFilter, setActiveStatusFilter] = useState("All");
-  const [showDistrictsDropdown, setShowDistrictsDropdown] = useState(false);
-  const [showSchoolsDropdown, setShowSchoolsDropdown] = useState(false);
-  const [showPartnersDropdown, setShowPartnersDropdown] = useState(false);
   const [showRideModal, setShowRideModal] = useState(false);
   const [selectedRideId, setSelectedRideId] = useState(null);
   const [sidebarTab, setSidebarTab] = useState("rides");
@@ -64,19 +61,13 @@ export default function EagleEyeContent() {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden">
       <EagleEyeHeader />
-      <div className="flex-1 flex">
-        <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex min-h-0">
+        <div className="flex-1 flex flex-col min-w-0">
           <SearchFilters
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            showDistrictsDropdown={showDistrictsDropdown}
-            setShowDistrictsDropdown={setShowDistrictsDropdown}
-            showSchoolsDropdown={showSchoolsDropdown}
-            setShowSchoolsDropdown={setShowSchoolsDropdown}
-            showPartnersDropdown={showPartnersDropdown}
-            setShowPartnersDropdown={setShowPartnersDropdown}
             districts={districts}
             schools={schools}
             partners={partners}

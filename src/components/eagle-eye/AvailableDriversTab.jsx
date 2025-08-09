@@ -14,26 +14,26 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
   });
 
   return (
-    <>
-      <div className="bg-[var(--purple-50)] p-4 flex items-center justify-between">
+    <div className="flex flex-col h-full">
+      <div className="bg-purple-50 p-3 flex items-center justify-between border-b flex-shrink-0">
         <div className="flex items-center">
-          <User className="text-[var(--purple)] mr-2" />
-          <span className="font-medium text-[var(--purple)]">Available Drivers</span>
+          <User className="text-purple-600 mr-2" size={18} />
+          <span className="font-semibold text-purple-800 text-sm">Available Drivers</span>
         </div>
-        <div className="bg-[var(--purple-100)] text-[var(--purple)] px-2 py-1 rounded-full text-xs font-medium">
-          {mockDrivers.length} Total
+        <div className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-semibold">
+          {mockDrivers.length}
         </div>
       </div>
-      <div className="p-4 border-b border-gray-200">
-        <div className="relative mb-3">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+      <div className="p-3 border-b border-gray-200 flex-shrink-0">
+        <div className="relative mb-2">
+          <Search className="absolute left-3 top-2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
             placeholder="Search drivers..."
-            className="pl-9 pr-4 py-2 text-sm"
+            className="pl-9 pr-4 py-1.5 text-sm border-gray-300 rounded-md"
           />
         </div>
-        <div className="flex whitespace-nowrap overflow-x-auto space-x-2 mb-4 pb-2">
+        <div className="flex whitespace-nowrap overflow-x-auto space-x-1.5 mb-3 pb-1">
           <StatusFilterButton
             label="All"
             isActive={driverFilter === "All"}
@@ -44,7 +44,7 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
             label="Ready"
             isActive={driverFilter === "Ready"}
             onClick={() => setDriverFilter("Ready")}
-            colorVar="bg-[var(--green)]"
+            colorVar="bg-[var(--green-600)]"
           />
           <StatusFilterButton
             label="On Ride"
@@ -60,11 +60,17 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
           />
         </div>
       </div>
-      <div className="flex-1 overflow-auto">
-        {filteredDrivers.map((driver) => (
-          <DriverCard key={driver.id} driver={driver} />
-        ))}
+      <div className="flex-1 overflow-auto p-3 min-h-0">
+        {filteredDrivers.length === 0 ? (
+          <div className="text-center text-gray-500 py-6 text-sm">
+            No drivers found.
+          </div>
+        ) : (
+          filteredDrivers.map((driver) => (
+            <DriverCard key={driver.id} driver={driver} />
+          ))
+        )}
       </div>
-    </>
+    </div>
   );
 } 

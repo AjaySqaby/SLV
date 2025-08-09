@@ -2,18 +2,29 @@ import { ArrowLeft, RefreshCw } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 export default function EagleEyeHeader() {
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] py-3 px-6 flex items-center justify-between">
       <div className="flex items-center">
-        <Button variant="ghost" className="flex items-center text-[var(--muted-text)] mr-4 p-0 h-auto min-w-0">
+        <Button 
+          variant="primary" 
+          className="flex items-center bg-[var(--secondary)] text-white mr-4 px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
+        >
           <ArrowLeft size={18} className="mr-1" />
-          <span className="text-sm">Back to Rides</span>
+          <span>Back</span>
         </Button>
         <h1 className="text-xl font-bold">Eagle Eye Live View</h1>
       </div>
-      <Button variant="ghost" className="flex items-center border text-[var(--muted-text)] p-0 h-auto min-w-0">
+      <Button
+        variant="primary"
+        className="flex items-center bg-[var(--blue)] text-white px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
+        onClick={handleRefresh}
+      >
         <RefreshCw size={18} className="mr-1" />
-        <span className="text-sm">Refresh</span>
+        <span>Refresh</span>
       </Button>
     </div>
   );

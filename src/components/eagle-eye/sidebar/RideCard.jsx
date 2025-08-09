@@ -4,10 +4,11 @@ import Button from "@/components/ui/Button";
 
 export default function RideCard({ ride, onViewRide }) {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-sm mb-4 border-b border-[var(--gray-200)]">
+    <div className="p-3 bg-white rounded-lg shadow-sm mb-2 border border-[var(--gray-200)] hover:shadow-md transition-shadow">
+      {/* Header - Ride ID and Status */}
       <div className="flex items-center justify-between mb-2">
-        <div className="text-[var(--blue-600)] font-medium">
-          Ride #{ride.id}
+        <div className="text-[var(--blue-600)] font-semibold text-sm">
+          #{ride.id}
         </div>
         <StatusBadge
           status={ride.status}
@@ -20,37 +21,52 @@ export default function RideCard({ ride, onViewRide }) {
           }
         />
       </div>
-      <div className="flex items-center mb-3">
-        <div className="w-10 h-10 rounded-full mr-3">
+
+      {/* Driver Info - Compact Layout */}
+      <div className="flex items-start gap-3 mb-2">
+        <div className="w-8 h-8 rounded-full flex-shrink-0 bg-gray-200 flex items-center justify-center">
           <img
             src={ride.driver.avatar || "/placeholder.svg"}
             alt={ride.driver.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-full"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextElementSibling.style.display = 'flex';
+            }}
           />
-        </div>
-        <div>
-          <div className="font-medium">{ride.driver.name}</div>
-          <div className="text-xs text-gray-500 flex items-center">
-            <MapPin size={12} className="mr-1" />
-            {ride.driver.location}
+          <div className="hidden w-full h-full rounded-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center text-white font-semibold text-xs">
+            {ride.driver.name.split(' ').map(n => n[0]).join('')}
           </div>
-          <div className="text-xs text-gray-500 flex items-center">
-            <Phone size={12} className="mr-1" />
-            {ride.driver.phone}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-sm text-gray-900 truncate">
+            {ride.driver.name}
+          </div>
+          <div className="flex items-center gap-1 text-xs text-gray-500">
+            <MapPin size={10} />
+            <span className="truncate">{ride.driver.location}</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-gray-500">
+            <Phone size={10} />
+            <span>{ride.driver.phone}</span>
           </div>
         </div>
       </div>
-      <div className="flex items-center mb-3">
-        <Clock size={16} className="text-gray-400 mr-2" />
-        <div className="text-sm text-gray-700">ETA: {ride.eta}</div>
+
+      {/* ETA and Action */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1 text-xs font-medium text-gray-700">
+          <Clock size={12} className="text-gray-400" />
+          <span>ETA: {ride.eta}</span>
+        </div>
+        <Button
+          variant="secondary"
+          className="px-3 py-1 text-xs text-purple-700 border border-purple-300 bg-white rounded hover:bg-purple-50 font-semibold"
+          onClick={() => onViewRide(ride.id)}
+        >
+          Details
+        </Button>
       </div>
-      <Button
-        variant="secondary"
-        className="w-full py-2 text-center text-[var(--purple)]  border border-[var(--purple)] rounded-md hover:bg-[var(--purple-50)] font-semibold"
-        onClick={() => onViewRide(ride.id)}
-      >
-        View Details
-      </Button>
     </div>
   );
 }

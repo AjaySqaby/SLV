@@ -80,14 +80,14 @@ export default function Sidebar({
   const [driverFilter, setDriverFilter] = useState("All");
 
   return (
-    <div className="w-80 bg-[var(--sidebar-bg)] border-l border-[var(--border)] flex flex-col">
-      <div className="p-4 flex whitespace-nowrap space-x-2">
+    <div className="w-96 bg-[var(--sidebar-bg)] border-l border-[var(--border)] flex flex-col h-full">
+      <div className="p-3 flex whitespace-nowrap space-x-2 flex-shrink-0">
         <Button
           variant={sidebarTab === "rides" ? "primary" : "secondary"}
-          className={`flex-1 flex items-center justify-center text-xs gap-2 px-4 py-2 rounded-md border transition-colors relative ${
+          className={`cursor-pointer flex-1 flex items-center justify-center text-xs gap-1.5 px-3 py-2 rounded-md border transition-colors relative ${
             sidebarTab === "rides"
-              ? "bg-[var(--primary)] text-[var(--on-primary)] border-[var(--primary)]"
-              : "bg-[var(--surface-bg)] text-[var(--muted-text)] border-[var(--border)]"
+              ? "bg-blue-600 text-white border-blue-600"
+              : "bg-white text-gray-600 border-gray-300"
           }`}
           onClick={() => setSidebarTab("rides")}
         >
@@ -108,16 +108,16 @@ export default function Sidebar({
             <path d="M5 14h6"></path>
           </svg>
           Current Rides
-          <span className="absolute -top-2 -right-2 bg-[var(--blue)] text-white text-xs font-bold px-2 py-0.5 rounded-full border-2 border-white">
+          <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full border border-white text-center min-w-[18px]">
             {rides.length}
           </span>
         </Button>
         <Button
           variant={sidebarTab === "drivers" ? "primary" : "secondary"}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm border transition-colors relative ${
+          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs border transition-colors relative ${
             sidebarTab === "drivers"
-              ? "bg-[var(--purple)] text-[var(--on-primary)] border-[var(--purple)]"
-              : "bg-[var(--surface-bg)] text-[var(--muted-text)] border-[var(--border)]"
+              ? "bg-purple-600 text-white border-purple-600"
+              : "bg-white text-gray-600 border-gray-300"
           }`}
           onClick={() => setSidebarTab("drivers")}
         >
@@ -138,28 +138,30 @@ export default function Sidebar({
             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
           </svg>
           Available Drivers
-          <span className="absolute -top-2 -right-2 bg-[var(--purple)] text-white text-xs font-bold px-2 py-0.5 rounded-full border-2 border-white">
+          <span className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full border border-white text-center min-w-[18px]">
             {mockDrivers.length}
           </span>
         </Button>
       </div>
 
-      {sidebarTab === "rides" && (
-        <CurrentRidesTab
-          rides={rides}
-          activeStatusFilter={activeStatusFilter}
-          setActiveStatusFilter={setActiveStatusFilter}
-          onViewRide={onViewRide}
-        />
-      )}
+      <div className="flex-1 flex flex-col min-h-0">
+        {sidebarTab === "rides" && (
+          <CurrentRidesTab
+            rides={rides}
+            activeStatusFilter={activeStatusFilter}
+            setActiveStatusFilter={setActiveStatusFilter}
+            onViewRide={onViewRide}
+          />
+        )}
 
-      {sidebarTab === "drivers" && (
-        <AvailableDriversTab
-          mockDrivers={mockDrivers}
-          driverFilter={driverFilter}
-          setDriverFilter={setDriverFilter}
-        />
-      )}
+        {sidebarTab === "drivers" && (
+          <AvailableDriversTab
+            mockDrivers={mockDrivers}
+            driverFilter={driverFilter}
+            setDriverFilter={setDriverFilter}
+          />
+        )}
+      </div>
     </div>
   );
 }

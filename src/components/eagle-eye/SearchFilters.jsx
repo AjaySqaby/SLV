@@ -1,21 +1,19 @@
 import { Search } from "lucide-react";
+import { useState } from "react";
 import Tabs from "@/components/ui/Tabs";
 import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
+import SearchableDropdown from "@/components/ui/SearchableDropdown";
 
 export default function SearchFilters({ 
   activeTab, 
   setActiveTab, 
-  showDistrictsDropdown, 
-  setShowDistrictsDropdown,
-  showSchoolsDropdown,
-  setShowSchoolsDropdown,
-  showPartnersDropdown,
-  setShowPartnersDropdown,
   districts,
   schools,
   partners
 }) {
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedSchool, setSelectedSchool] = useState(null);
+  const [selectedPartner, setSelectedPartner] = useState(null);
   const tabs = [
     { id: 0, label: "All" },
     { id: 1, label: "Districts" },
@@ -35,37 +33,28 @@ export default function SearchFilters({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 w-full">
-        <DropdownButton
+        <SearchableDropdown
           label="All Districts"
-          isOpen={showDistrictsDropdown}
-          onToggle={() => {
-            setShowDistrictsDropdown(!showDistrictsDropdown);
-            setShowSchoolsDropdown(false);
-            setShowPartnersDropdown(false);
-          }}
           items={districts}
+          selectedItem={selectedDistrict}
+          onSelect={setSelectedDistrict}
+          placeholder="Search districts..."
         />
 
-        <DropdownButton
+        <SearchableDropdown
           label="All Schools"
-          isOpen={showSchoolsDropdown}
-          onToggle={() => {
-            setShowSchoolsDropdown(!showSchoolsDropdown);
-            setShowDistrictsDropdown(false);
-            setShowPartnersDropdown(false);
-          }}
           items={schools}
+          selectedItem={selectedSchool}
+          onSelect={setSelectedSchool}
+          placeholder="Search schools..."
         />
 
-        <DropdownButton
+        <SearchableDropdown
           label="All Partners"
-          isOpen={showPartnersDropdown}
-          onToggle={() => {
-            setShowPartnersDropdown(!showPartnersDropdown);
-            setShowDistrictsDropdown(false);
-            setShowSchoolsDropdown(false);
-          }}
           items={partners}
+          selectedItem={selectedPartner}
+          onSelect={setSelectedPartner}
+          placeholder="Search partners..."
         />
       </div>
 
@@ -96,61 +85,6 @@ export default function SearchFilters({
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function DropdownButton({ label, isOpen, onToggle, items }) {
-  return (
-    <div className="relative">
-      <Button
-        variant="secondary"
-        className="w-full flex justify-between items-center px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--surface-bg)]"
-        onClick={onToggle}
-      >
-        <span>{label}</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
-      </Button>
-      {isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-[var(--surface-bg)] border border-[var(--border)] rounded-lg shadow-lg">
-          {items.map((item, index) => (
-            <div
-              key={index}
-              className={`px-4 py-2 hover:bg-[var(--hover-bg)] cursor-pointer ${index === 0 ? "bg-[var(--primary)] text-[var(--on-primary)]" : ""}`}
-            >
-              {index === 0 && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="inline mr-2"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              )}
-              {item}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 } 
