@@ -11,8 +11,9 @@ import {
   Trash2,
   MoreHorizontal,
 } from "lucide-react";
-import RouteEditModal from "./route-edit/RouteEditModal";
+
 import AddRouteModal from "./route-edit/AddRouteModal";
+import ScheduleRideModal from "./ScheduleRideModal";
 import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
@@ -21,23 +22,25 @@ import DeleteModal from "@/components/common/DeleteModal";
 
 export default function RoutesContent() {
   const router = useRouter();
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editRouteId, setEditRouteId] = useState(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [selectedRoute, setSelectedRoute] = useState(null);
   const [search, setSearch] = useState("");
   const [routes, setRoutes] = useState([
     {
       id: "RT-30842",
       name: "North District Route",
+      district: "86022-Z",
       stops: 5,
       distance: "12.4 mi",
       students: 7,
       status: "Active",
-      driver: "Sam Ikebede",
+      driver: "Sam Kebede",
     },
     {
       id: "RT-30843",
       name: "South Campus Route",
+      district: "86022-Z",
       stops: 4,
       distance: "10.2 mi",
       students: 5,
@@ -47,6 +50,7 @@ export default function RoutesContent() {
     {
       id: "RT-30844",
       name: "East District Route",
+      district: "75044-A",
       stops: 6,
       distance: "15.8 mi",
       students: 9,
@@ -56,6 +60,7 @@ export default function RoutesContent() {
     {
       id: "RT-30845",
       name: "West Campus Route",
+      district: "75044-A",
       stops: 3,
       distance: "8.5 mi",
       students: 4,
@@ -91,6 +96,7 @@ export default function RoutesContent() {
     return (
       route.id.toLowerCase().includes(q) ||
       route.name.toLowerCase().includes(q) ||
+      route.district.toLowerCase().includes(q) ||
       (route.driver && route.driver.toLowerCase().includes(q))
     );
   });
@@ -118,6 +124,12 @@ export default function RoutesContent() {
   // Handler for viewing the route in eagle-eye
   const handleViewRoute = (routeId) => {
     router.push(`/eagle-eye?routeId=${routeId}`);
+  };
+
+  // Handler for scheduling a route
+  const handleScheduleRoute = (route) => {
+    setSelectedRoute(route);
+    setScheduleModalOpen(true);
   };
 
   return (
@@ -162,72 +174,78 @@ export default function RoutesContent() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead>
-              <tr className="text-left text-sm text-[var(--muted-text)] border-b border-[var(--card-border)]">
-                <th className="px-6 py-3 font-medium">Route ID</th>
-                <th className="px-6 py-3 font-medium">Name</th>
-                <th className="px-6 py-3 font-medium">Stops</th>
-                <th className="px-6 py-3 font-medium">Distance</th>
-                <th className="px-6 py-3 font-medium">Students</th>
-                <th className="px-6 py-3 font-medium">Status</th>
-                <th className="px-6 py-3 font-medium">Driver</th>
-                <th className="px-6 py-3 font-medium">Actions</th>
-              </tr>
-            </thead>
+                         <thead>
+               <tr className="text-left text-sm text-[var(--muted-text)] border-b border-[var(--card-border)]">
+                 <th className="px-6 py-3 font-medium">Route ID</th>
+                 <th className="px-6 py-3 font-medium">Name</th>
+                 <th className="px-6 py-3 font-medium">District</th>
+                 <th className="px-6 py-3 font-medium">Stops</th>
+                 <th className="px-6 py-3 font-medium">Distance</th>
+                 <th className="px-6 py-3 font-medium">Students</th>
+                 <th className="px-6 py-3 font-medium">Status</th>
+                 <th className="px-6 py-3 font-medium">Driver</th>
+                 <th className="px-6 py-3 font-medium">Actions</th>
+               </tr>
+             </thead>
             <tbody>
               {filteredRoutes.map((route) => (
-                <tr
-                  key={route.id}
-                  className="border-b border-[var(--card-border)] hover:bg-[var(--hover-bg)]"
-                >
-                  <td className="px-6 py-4 font-medium">{route.id}</td>
-                  <td className="px-6 py-4">{route.name}</td>
-                  <td className="px-6 py-4">{route.stops}</td>
-                  <td className="px-6 py-4">{route.distance}</td>
-                  <td className="px-6 py-4">{route.students}</td>
-                  <td className="px-6 py-4">
-                    <StatusBadge
-                      status={route.status}
-                      type={route.status === "Active" ? "active" : "inactive"}
-                    />
-                  </td>
-                  <td className="px-6 py-4">
-                    {route.driver ? (
-                      route.driver
-                    ) : (
-                      <span className="text-[var(--warning)] font-medium">
-                        Assign Driver
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      <IconButton
-                        icon={Eye}
-                        variant="default"
-                        onClick={() => handleViewRoute(route.id)}
-                      />
-                      <IconButton
-                        icon={Share2}
-                        variant="default"
-                        onClick={() => handleShareRoute(route.id)}
-                      />
-                      <IconButton
-                        icon={Edit}
-                        variant="default"
-                        onClick={() => {
-                          setEditRouteId(route.id);
-                          setEditModalOpen(true);
-                        }}
-                      />
-                      <IconButton
-                        icon={Trash2}
-                        variant="danger"
-                        onClick={() => handleDeleteRoute(route.id)}
-                      />
-                    </div>
-                  </td>
-                </tr>
+                                 <tr
+                   key={route.id}
+                   className="border-b border-[var(--card-border)] hover:bg-[var(--hover-bg)]"
+                 >
+                   <td className="px-6 py-4 font-medium">{route.id}</td>
+                   <td className="px-6 py-4">{route.name}</td>
+                   <td className="px-6 py-4">
+                     <span className="text-blue-600 cursor-pointer hover:underline">
+                       {route.district}
+                     </span>
+                   </td>
+                   <td className="px-6 py-4">{route.stops}</td>
+                   <td className="px-6 py-4">{route.distance}</td>
+                   <td className="px-6 py-4">{route.students}</td>
+                   <td className="px-6 py-4">
+                     <StatusBadge
+                       status={route.status}
+                       type={route.status === "Active" ? "active" : "inactive"}
+                     />
+                   </td>
+                   <td className="px-6 py-4">
+                     {route.driver ? (
+                       route.driver
+                     ) : (
+                       <span className="text-blue-600 cursor-pointer hover:underline">
+                         Assign Driver
+                       </span>
+                     )}
+                   </td>
+                   <td className="px-6 py-4">
+                     <div className="flex gap-2">
+                       <Button
+                         variant="secondary"
+                         className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
+                         onClick={() => handleViewRoute(route.id)}
+                       >
+                         View
+                       </Button>
+                       <Button
+                         variant="secondary"
+                         className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
+                         onClick={() => {
+                           router.push(`/routes/edit/${route.id}`);
+                         }}
+                       >
+                         Edit
+                       </Button>
+                                               <Button
+                          variant="secondary"
+                          className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
+                          onClick={() => handleScheduleRoute(route)}
+                        >
+                          Schedule
+                        </Button>
+                     </div>
+                   </td>
+                 </tr>
               ))}
             </tbody>
           </table>
@@ -238,25 +256,29 @@ export default function RoutesContent() {
           </div>
         )}
       </div>
-      {editModalOpen && (
-        <RouteEditModal
-          isOpen={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-          routeId={editRouteId}
-        />
-      )}
+
       <DeleteModal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onDelete={confirmDeleteRoute}
         itemName={`route ${deleteRouteId}`}
       />
-      {addModalOpen && (
-        <AddRouteModal
-          isOpen={addModalOpen}
-          onClose={() => setAddModalOpen(false)}
-        />
-      )}
-    </div>
-  );
-}
+             {addModalOpen && (
+         <AddRouteModal
+           isOpen={addModalOpen}
+           onClose={() => setAddModalOpen(false)}
+         />
+       )}
+       {scheduleModalOpen && (
+         <ScheduleRideModal
+           isOpen={scheduleModalOpen}
+           onClose={() => {
+             setScheduleModalOpen(false);
+             setSelectedRoute(null);
+           }}
+           route={selectedRoute}
+         />
+       )}
+     </div>
+   );
+ }

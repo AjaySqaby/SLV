@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 export default function RouteEditTabs({ activeTab, setActiveTab }) {
   return (
-    <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] px-6">
+    <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] px-6 mt-4">
       <div className="flex space-x-6">
         {["Route Details", "Route Map"].map((tab) => (
           <Button

@@ -25,6 +25,13 @@ This implementation provides comprehensive timezone support for the SLV Ride app
 
 ### 4. User Interface Components
 
+#### DualTimeDisplay (NEW - Automatic Timezone Conversion)
+- **Automatic Display**: Shows both ride time and user's local time when they're in different timezones
+- **No Manual Interaction**: No buttons to press - system automatically detects and converts
+- **Smart Display**: Only shows both times when they're different; shows single time when same timezone
+- **Primary/Secondary Layout**: Ride time (where ride happens) shown as primary, user's time as secondary
+- **Used in**: Rides table, Eagle Eye components, ride detail modals
+
 #### TimezoneIndicator
 - Located in the header
 - Shows current user timezone and local time
@@ -78,11 +85,19 @@ const timezone = await detectUserLocation(); // Uses geolocation API
 
 ## Usage Examples
 
-### 1. User from India viewing US rides
-- User's timezone: `Asia/Kolkata` (IST)
-- Ride timezone: `America/Los_Angeles` (PST)
-- 8:30 AM PST ride shows as 9:00 PM IST
-- Automatic conversion with clear labeling
+### 1. Automatic Dual Time Display (NEW)
+- **User from India viewing US rides**:
+  - User's timezone: `Asia/Kolkata` (IST)
+  - Ride timezone: `America/Los_Angeles` (PST)
+  - Display shows: 
+    - `7:30 AM CDT` (ride time)
+    - `5:30 AM PDT` (user's local time)
+  - **No manual interaction required** - system automatically detects and displays both times
+
+- **User from US viewing rides in same timezone**:
+  - User's timezone: `America/New_York` (EST)
+  - Ride timezone: `America/New_York` (EST)
+  - Display shows: `7:30 AM` (single time only, since same timezone)
 
 ### 2. User from US viewing rides in different timezones
 - User's timezone: `America/New_York` (EST)

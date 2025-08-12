@@ -1,6 +1,7 @@
 import { MapPin, Phone, Clock } from "lucide-react";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Button from "@/components/ui/Button";
+import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
 export default function RideCard({ ride, onViewRide }) {
   return (
@@ -57,7 +58,13 @@ export default function RideCard({ ride, onViewRide }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1 text-xs font-medium text-gray-700">
           <Clock size={12} className="text-gray-400" />
-          <span>ETA: {ride.eta}</span>
+          <span>ETA: </span>
+          <DualTimeDisplay 
+            rideTime={ride.eta}
+            rideTimezone="America/Los_Angeles"
+            showLabels={false}
+            className="text-xs font-medium text-gray-700"
+          />
         </div>
         <Button
           variant="secondary"

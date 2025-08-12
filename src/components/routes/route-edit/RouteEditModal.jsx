@@ -9,7 +9,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-white overflow-y-auto mt-4">
       <RouteEditHeader onClose={onClose} />
       <RouteEditTabs activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="p-6">

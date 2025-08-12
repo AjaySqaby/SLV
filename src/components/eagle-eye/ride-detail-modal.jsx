@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
+import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
 export default function RideDetailModal({
   isOpen,
@@ -275,15 +276,23 @@ export default function RideDetailModal({
                   {rideData.ride.status}
                 </p>
                 <p className="text-sm text-[var(--muted-text)]">Pickup Time:</p>
-                <p className="text-sm font-medium">
-                  {rideData.ride.pickupTime}
-                </p>
+                <div className="text-sm font-medium">
+                  <DualTimeDisplay 
+                    rideTime={rideData.ride.pickupTime}
+                    rideTimezone="America/Los_Angeles"
+                    showLabels={false}
+                  />
+                </div>
                 <p className="text-sm text-[var(--muted-text)]">
                   Estimated Arrival:
                 </p>
-                <p className="text-sm font-medium">
-                  {rideData.ride.estimatedArrival}
-                </p>
+                <div className="text-sm font-medium">
+                  <DualTimeDisplay 
+                    rideTime={rideData.ride.estimatedArrival}
+                    rideTimezone="America/Los_Angeles"
+                    showLabels={false}
+                  />
+                </div>
                 <p className="text-sm text-[var(--muted-text)]">Distance:</p>
                 <p className="text-sm font-medium">{rideData.ride.distance}</p>
                 <p className="text-sm text-[var(--muted-text)]">Duration:</p>

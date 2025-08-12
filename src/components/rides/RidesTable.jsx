@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   MoreVertical,
-  Globe,
   Edit,
   UserPlus,
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import TimezoneModal from "./TimezoneModal";
 import Button from "@/components/ui/Button";
-import { convertRideTimeToUserTimezone, getUserTimezone } from "@/utils/timezone";
+import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 import { useTimezone } from "@/contexts/TimezoneContext";
 
 export default function RidesTable({
@@ -23,39 +21,7 @@ export default function RidesTable({
 }) {
   const [showActionMenu, setShowActionMenu] = useState(false);
   const [activeRideIndex, setActiveRideIndex] = useState(null);
-  const [selectedTimezones, setSelectedTimezones] = useState({});
-  const [timezoneModal, setTimezoneModal] = useState({
-    open: false,
-    rideIndex: null,
-    field: null,
-  });
-  const { userTimezone } = useTimezone();
-  const globeRefs = useRef({});
   const actionMenuRef = useRef();
-
-  // Auto-convert ride time to user's timezone
-  const getConvertedTime = (rideTime, rideTimezone) => {
-    return convertRideTimeToUserTimezone(rideTime, rideTimezone, userTimezone);
-  };
-
-  const handleGlobeClick = (rideIndex, field) => {
-    setTimezoneModal({ open: true, rideIndex, field });
-  };
-
-  const handleTimezoneClose = () => {
-    setTimezoneModal({ open: false, rideIndex: null, field: null });
-  };
-
-  const handleTimezoneSelect = (tz) => {
-    // Store the selected timezone for this specific ride and field
-    const key = `${timezoneModal.rideIndex}-${timezoneModal.field}`;
-    setSelectedTimezones(prev => ({
-      ...prev,
-      [key]: tz
-    }));
-    // Don't close the modal automatically - let it stay open to show converted time
-    // handleTimezoneClose(); // Removed this line
-  };
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -122,9 +88,15 @@ export default function RidesTable({
                     <div className="text-xs text-[var(--gray-500)] mb-1">
                       {ride.date}
                     </div>
-                    <div className="text-sm text-[var(--blue-dark)] font-semibold">
-                      Scheduled: {getConvertedTime(ride.scheduledTime, ride.timezone)}
-                    </div>
+                                         <div className="text-sm text-[var(--blue-dark)] font-semibold">
+                       Scheduled: <DualTimeDisplay 
+                         rideTime={ride.scheduledTime}
+                         rideTimezone={ride.timezone}
+                         showLabels={false}
+                         className="text-[var(--blue-dark)]"
+                         compact={true}
+                       />
+                     </div>
                   </div>
                 </div>
               </div>
@@ -134,44 +106,35 @@ export default function RidesTable({
                   <div className="w-3 h-3 rounded-full bg-[var(--green)] flex items-center justify-center mt-1 mr-1"></div>
                   <div>
                     <div className="text-xs font-medium">Pick-up</div>
-                    <div className="text-xs text-[var(--blue-600)] flex items-center">
-                      Scheduled: {getConvertedTime(ride.pickup.scheduled, ride.timezone)}
-                      <button
-                        type="button"
-                        ref={(el) => {
-                          if (!globeRefs.current[`${index}-pickup`])
-                            globeRefs.current[`${index}-pickup`] = el;
-                        }}
-                        className="ml-1 p-1 text-[var(--blue-400)] hover:text-[var(--blue-800)]"
-                        onClick={() => handleGlobeClick(index, "pickup")}
-                        aria-label="Convert pick-up time"
-                      >
-                        <Globe size={16} />
-                      </button>
-                      {timezoneModal.open &&
-                        timezoneModal.rideIndex === index &&
-                        timezoneModal.field === "pickup" && (
-                          <TimezoneModal
-                            open={true}
-                            onClose={handleTimezoneClose}
-                            anchorRef={{
-                              current: globeRefs.current[`${index}-pickup`],
-                            }}
-                            onSelect={handleTimezoneSelect}
-                            initialSelected={selectedTimezones[`${index}-pickup`]}
-                            originalTime={ride.pickup.scheduled}
-                            sourceTimezone={ride.timezone || "America/Los_Angeles"}
-                          />
-                        )}
-                    </div>
-                    <div className="text-xs text-[var(--success-dark)]">
-                      Arrived: {getConvertedTime(ride.pickup.arrived, ride.timezone)}
-                    </div>
-                    {ride.pickup.confirmed && (
-                      <div className="text-xs text-[var(--warning-dark)]">
-                        Confirmed: {getConvertedTime(ride.pickup.confirmed, ride.timezone)}
-                      </div>
-                    )}
+                                         <div className="text-xs text-[var(--blue-600)]">
+                       Scheduled: <DualTimeDisplay 
+                         rideTime={ride.pickup.scheduled}
+                         rideTimezone={ride.timezone}
+                         showLabels={false}
+                         className="text-[var(--blue-600)]"
+                         compact={true}
+                       />
+                     </div>
+                                         <div className="text-xs text-[var(--success-dark)]">
+                       Arrived: <DualTimeDisplay 
+                         rideTime={ride.pickup.arrived}
+                         rideTimezone={ride.timezone}
+                         showLabels={false}
+                         className="text-[var(--success-dark)]"
+                         compact={true}
+                       />
+                     </div>
+                                         {ride.pickup.confirmed && (
+                       <div className="text-xs text-[var(--warning-dark)]">
+                         Confirmed: <DualTimeDisplay 
+                           rideTime={ride.pickup.confirmed}
+                           rideTimezone={ride.timezone}
+                           showLabels={false}
+                           className="text-[var(--warning-dark)]"
+                           compact={true}
+                         />
+                       </div>
+                     )}
                     <div className="text-xs text-[var(--gray-700)] mt-1">
                       {ride.pickup.location}
                     </div>
@@ -184,44 +147,35 @@ export default function RidesTable({
                   <div className="w-3 h-3 rounded-full bg-[var(--orange)] flex items-center justify-center mt-1 mr-1"></div>
                   <div>
                     <div className="text-xs font-medium">Drop-off</div>
-                    <div className="text-xs text-[var(--blue-600)] flex items-center">
-                      Scheduled: {getConvertedTime(ride.dropoff.scheduled, ride.timezone)}
-                      <button
-                        type="button"
-                        ref={(el) => {
-                          if (!globeRefs.current[`${index}-dropoff`])
-                            globeRefs.current[`${index}-dropoff`] = el;
-                        }}
-                        className="ml-1 p-1 text-[var(--blue-400)] hover:text-[var(--blue-800)]"
-                        onClick={() => handleGlobeClick(index, "dropoff")}
-                        aria-label="Convert drop-off time"
-                      >
-                        <Globe size={16} />
-                      </button>
-                      {timezoneModal.open &&
-                        timezoneModal.rideIndex === index &&
-                        timezoneModal.field === "dropoff" && (
-                          <TimezoneModal
-                            open={true}
-                            onClose={handleTimezoneClose}
-                            anchorRef={{
-                              current: globeRefs.current[`${index}-dropoff`],
-                            }}
-                            onSelect={handleTimezoneSelect}
-                            initialSelected={selectedTimezones[`${index}-dropoff`]}
-                            originalTime={ride.dropoff.scheduled}
-                            sourceTimezone={ride.timezone || "America/Los_Angeles"}
-                          />
-                        )}
-                    </div>
-                    <div className="text-xs text-[var(--success-dark)]">
-                      Arrived: {getConvertedTime(ride.dropoff.arrived, ride.timezone)}
-                    </div>
-                    {ride.dropoff.completed && (
-                      <div className="text-xs text-[var(--warning-dark)]">
-                        Completed: {getConvertedTime(ride.dropoff.completed, ride.timezone)}
-                      </div>
-                    )}
+                                         <div className="text-xs text-[var(--blue-600)]">
+                       Scheduled: <DualTimeDisplay 
+                         rideTime={ride.dropoff.scheduled}
+                         rideTimezone={ride.timezone}
+                         showLabels={false}
+                         className="text-[var(--blue-600)]"
+                         compact={true}
+                       />
+                     </div>
+                                         <div className="text-xs text-[var(--success-dark)]">
+                       Arrived: <DualTimeDisplay 
+                         rideTime={ride.dropoff.arrived}
+                         rideTimezone={ride.timezone}
+                         showLabels={false}
+                         className="text-[var(--success-dark)]"
+                         compact={true}
+                       />
+                     </div>
+                                         {ride.dropoff.completed && (
+                       <div className="text-xs text-[var(--warning-dark)]">
+                         Completed: <DualTimeDisplay 
+                           rideTime={ride.dropoff.completed}
+                           rideTimezone={ride.timezone}
+                           showLabels={false}
+                           className="text-[var(--warning-dark)]"
+                           compact={true}
+                         />
+                       </div>
+                     )}
                     <div className="text-xs text-[var(--gray-700)] mt-1">
                       {ride.dropoff.location}
                     </div>

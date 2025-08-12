@@ -20,16 +20,16 @@ export default function EagleEyeHeader() {
   };
 
   return (
-    <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] py-3 px-6 flex items-center justify-between">
+    <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] py-3  flex items-center justify-between">
       <div className="flex items-center">
-        <Button 
+        {/* <Button 
           variant="primary" 
           className="flex items-center bg-[var(--secondary)] text-white mr-4 px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
           onClick={handleBack}
         >
           <ArrowLeft size={18} className="mr-1" />
           <span>Back</span>
-        </Button>
+        </Button> */}
         <h1 className="text-xl font-bold">Eagle Eye Live View</h1>
       </div>
       <Button

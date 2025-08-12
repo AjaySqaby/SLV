@@ -3,6 +3,8 @@ import React from 'react';
 export default function StatusBadge({ status }) {
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
+      case 'active':
+        return ' bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] text-white';
       case 'completed':
         return 'bg-green-100 text-green-800';
       case 'in progress':
