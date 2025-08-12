@@ -10,10 +10,14 @@ import {
   Edit,
   Trash2,
   MoreHorizontal,
+  Calendar,
+  RefreshCw,
 } from "lucide-react";
 
 import AddRouteModal from "./route-edit/AddRouteModal";
 import ScheduleRideModal from "./ScheduleRideModal";
+import BulkScheduleModal from "./BulkScheduleModal";
+import AutoGenerateModal from "./AutoGenerateModal";
 import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
@@ -24,6 +28,8 @@ export default function RoutesContent() {
   const router = useRouter();
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [bulkScheduleModalOpen, setBulkScheduleModalOpen] = useState(false);
+  const [autoGenerateModalOpen, setAutoGenerateModalOpen] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [search, setSearch] = useState("");
   const [routes, setRoutes] = useState([
@@ -132,6 +138,16 @@ export default function RoutesContent() {
     setScheduleModalOpen(true);
   };
 
+  // Handler for bulk scheduling
+  const handleBulkSchedule = () => {
+    setBulkScheduleModalOpen(true);
+  };
+
+  // Handler for auto-generate
+  const handleAutoGenerate = () => {
+    setAutoGenerateModalOpen(true);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -156,20 +172,36 @@ export default function RoutesContent() {
               Manage all transportation routes
             </p>
           </div>
-          <div className="flex gap-3">
-            <SearchInput
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search routes..."
-            />
-            <Button
-              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)]"
-              onClick={() => setAddModalOpen(true)}
-            >
-              <Plus size={18} />
-              Add New Route
-            </Button>
-          </div>
+                     <div className="flex gap-3">
+             <SearchInput
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+               placeholder="Search routes by ID, name or district"
+             />
+             <Button
+               className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)]"
+               onClick={() => setAddModalOpen(true)}
+             >
+               <Plus size={18} />
+               Add New Route
+             </Button>
+             <Button
+               variant="secondary"
+               className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50"
+               onClick={handleBulkSchedule}
+             >
+               <Calendar size={18} />
+               Bulk Schedule
+             </Button>
+             <Button
+               variant="secondary"
+               className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50"
+               onClick={handleAutoGenerate}
+             >
+               <RefreshCw size={18} />
+               Auto-Generate
+             </Button>
+           </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -277,6 +309,18 @@ export default function RoutesContent() {
              setSelectedRoute(null);
            }}
            route={selectedRoute}
+         />
+       )}
+       {bulkScheduleModalOpen && (
+         <BulkScheduleModal
+           isOpen={bulkScheduleModalOpen}
+           onClose={() => setBulkScheduleModalOpen(false)}
+         />
+       )}
+       {autoGenerateModalOpen && (
+         <AutoGenerateModal
+           isOpen={autoGenerateModalOpen}
+           onClose={() => setAutoGenerateModalOpen(false)}
          />
        )}
      </div>
