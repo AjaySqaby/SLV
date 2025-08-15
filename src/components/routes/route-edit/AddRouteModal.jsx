@@ -9,8 +9,10 @@ export default function AddRouteModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("Basic Info");
   const [formData, setFormData] = useState({
     routeId: "",
-    routeType: "oneWay",
-    routeDescription: "Pick up students from their addresses and drop off at school",
+    routeType: "roundTrip",
+    oneWayDirection: "morning", // "morning", "midday", or "afternoon"
+    dropoffLocation: "school", // "school" or "home"
+    routeDescription: "",
     district: "",
     campus: "",
     operatingDays: {
@@ -42,6 +44,9 @@ export default function AddRouteModal({ isOpen, onClose }) {
   });
   const [showPartnerDropdown, setShowPartnerDropdown] = useState(false);
   const [partnerSearchQuery, setPartnerSearchQuery] = useState("");
+  const [showStudentDropdown, setShowStudentDropdown] = useState(false);
+  const [studentSearchQuery, setStudentSearchQuery] = useState("");
+  const [selectedStudents, setSelectedStudents] = useState([]);
   
   // Partner data from screenshot
   const partners = [
@@ -50,6 +55,72 @@ export default function AddRouteModal({ isOpen, onClose }) {
     { id: "metro-transit", name: "Metro Transit Co." },
     { id: "safe-ride", name: "Safe Ride Partners" }
   ];
+
+  // Student data based on campus
+  const getStudentsForCampus = (campus) => {
+    switch (campus) {
+      case "west-campus":
+        return [
+          { id: "student-1", name: "Abigail King" },
+          { id: "student-2", name: "Henry Wright" },
+          { id: "student-3", name: "Ella Lopez" },
+          { id: "student-4", name: "Jackson Scott" }
+        ];
+      case "east-campus":
+        return [
+          { id: "student-5", name: "Emma Johnson" },
+          { id: "student-6", name: "Liam Davis" },
+          { id: "student-7", name: "Olivia Wilson" },
+          { id: "student-8", name: "Noah Brown" }
+        ];
+      case "main-campus":
+        return [
+          { id: "student-9", name: "Sophia Miller" },
+          { id: "student-10", name: "William Garcia" },
+          { id: "student-11", name: "Isabella Rodriguez" },
+          { id: "student-12", name: "James Martinez" }
+        ];
+      case "north-campus":
+        return [
+          { id: "student-13", name: "Charlotte Anderson" },
+          { id: "student-14", name: "Benjamin Taylor" },
+          { id: "student-15", name: "Amelia Thomas" },
+          { id: "student-16", name: "Lucas Hernandez" }
+        ];
+      case "south-campus":
+        return [
+          { id: "student-17", name: "Harper Moore" },
+          { id: "student-18", name: "Mason Jackson" },
+          { id: "student-19", name: "Evelyn Martin" },
+          { id: "student-20", name: "Logan Lee" }
+        ];
+      case "central-campus":
+        return [
+          { id: "student-21", name: "Aria Perez" },
+          { id: "student-22", name: "Alexander Thompson" },
+          { id: "student-23", name: "Luna White" },
+          { id: "student-24", name: "Sebastian Harris" }
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const availableStudents = getStudentsForCampus(formData.campus);
+  const filteredStudents = availableStudents.filter(student =>
+    student.name.toLowerCase().includes(studentSearchQuery.toLowerCase()) &&
+    !selectedStudents.find(selected => selected.id === student.id)
+  );
+
+  const handleStudentSelect = (student) => {
+    setSelectedStudents(prev => [...prev, student]);
+    setShowStudentDropdown(false);
+    setStudentSearchQuery("");
+  };
+
+  const handleStudentRemove = (studentId) => {
+    setSelectedStudents(prev => prev.filter(student => student.id !== studentId));
+  };
 
   // Click outside handlers
   const handleClickOutside = (event) => {
@@ -64,6 +135,12 @@ export default function AddRouteModal({ isOpen, onClose }) {
       setShowDriverDropdown(false);
       setDriverSearchQuery("");
     }
+
+    // Close student dropdown if clicking outside
+    if (showStudentDropdown && !event.target.closest('.student-dropdown')) {
+      setShowStudentDropdown(false);
+      setStudentSearchQuery("");
+    }
   };
 
   // Add event listener for click outside
@@ -72,7 +149,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showPartnerDropdown, showDriverDropdown]);
+  }, [showPartnerDropdown, showDriverDropdown, showStudentDropdown]);
   
   const filteredPartners = partners.filter(partner =>
     partner.name.toLowerCase().includes(partnerSearchQuery.toLowerCase())
@@ -82,56 +159,183 @@ export default function AddRouteModal({ isOpen, onClose }) {
 
   const tabs = ["Basic Info", "Schedule", "Additional Stops", "Monitor", "Driver", "Payment"];
 
-  const renderBasicInfo = () => (
+    const renderBasicInfo = () => (
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-900 mb-2">Route ID</label>
-        <input type="text" placeholder="Enter route ID" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+        <input 
+          type="text" 
+          placeholder="Enter route ID" 
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          value={formData.routeId}
+          onChange={(e) => setFormData(prev => ({ ...prev, routeId: e.target.value }))}
+        />
       </div>
       
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-2">Route Type</label>
-        <label className="flex items-center">
-          <input type="radio" name="routeType" defaultChecked className="mr-2" />
-          One Way Route
-        </label>
+        <label className="block text-sm font-medium text-gray-900 mb-3">Route Type</label>
+        <div className="space-y-3">
+          <label className="flex items-center">
+            <input 
+              type="radio" 
+              name="routeType" 
+              value="roundTrip"
+              checked={formData.routeType === "roundTrip"}
+              onChange={(e) => setFormData(prev => ({ ...prev, routeType: e.target.value }))}
+              className="mr-2 h-4 w-4 text-blue-600" 
+            />
+            <span className="font-medium">Round Trip Route</span>
+          </label>
+          <label className="flex items-center">
+            <input 
+              type="radio" 
+              name="routeType" 
+              value="oneWay"
+              checked={formData.routeType === "oneWay"}
+              onChange={(e) => setFormData(prev => ({ ...prev, routeType: e.target.value }))}
+              className="mr-2 h-4 w-4 text-blue-600" 
+            />
+            <span className="font-medium">One Way Route</span>
+          </label>
+        </div>
       </div>
 
-             <div>
-         <h3 className="text-lg font-medium text-gray-900 mb-3">Round Trip Routes</h3>
-         <div className="space-y-4">
-           {/* Top Row - Route Optimization */}
-           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow-sm">
-             <h4 className="font-medium text-yellow-900">Route Optimization</h4>
-             <span className="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded mt-1">Auto-Generated</span>
-             <p className="text-sm text-yellow-700 mt-2">The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
-           </div>
-           
-           {/* Bottom Row - Morning and Afternoon Routes */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-sm">
-               <h4 className="font-medium text-blue-900">Morning Route</h4>
-               <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-1">Home → School</span>
-               <p className="text-sm text-blue-700 mt-2">Pick up students from addresses and drop off at campus</p>
-             </div>
-             <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-sm">
-               <h4 className="font-medium text-green-900">Afternoon Route</h4>
-               <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mt-1">School → Home</span>
-               <p className="text-sm text-green-700 mt-2">Pick up students from campus and drop off at addresses</p>
-             </div>
-           </div>
-         </div>
-       </div>
+      {/* Round Trip Details - Only shown when roundTrip is selected */}
+      {formData.routeType === "roundTrip" && (
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 mb-3">Round Trip Routes</h3>
+          <div className="space-y-4">
+            {/* Top Row - Route Optimization */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow-sm">
+              <h4 className="font-medium text-yellow-900">Route Optimization</h4>
+              <span className="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded mt-1">Auto-Generated</span>
+              <p className="text-sm text-yellow-700 mt-2">The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
+            </div>
+            
+            {/* Bottom Row - Morning and Afternoon Routes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-blue-900">Morning Route</h4>
+                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-1">Home → School</span>
+                <p className="text-sm text-blue-700 mt-2">Pick up students from addresses and drop off at campus</p>
+              </div>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-sm">
+                <h4 className="font-medium text-green-900">Afternoon Route</h4>
+                <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mt-1">School → Home</span>
+                <p className="text-sm text-green-700 mt-2">Pick up students from campus and drop off at addresses</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* One Way Direction Selection - Only shown when oneWay is selected */}
+      {formData.routeType === "oneWay" && (
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-3">Route Direction</label>
+            <div className="space-y-3">
+              <label className="flex items-center">
+                <input 
+                  type="radio" 
+                  name="oneWayDirection" 
+                  value="morning"
+                  checked={formData.oneWayDirection === "morning"}
+                  onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
+                  className="mr-2 h-4 w-4 text-blue-600" 
+                />
+                <span className="font-medium">Morning Route</span>
+              </label>
+              <label className="flex items-center">
+                <input 
+                  type="radio" 
+                  name="oneWayDirection" 
+                  value="midday"
+                  checked={formData.oneWayDirection === "midday"}
+                  onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
+                  className="mr-2 h-4 w-4 text-blue-600" 
+                />
+                <span className="font-medium">Midday Route</span>
+              </label>
+              <label className="flex items-center">
+                <input 
+                  type="radio" 
+                  name="oneWayDirection" 
+                  value="afternoon"
+                  checked={formData.oneWayDirection === "afternoon"}
+                  onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
+                  className="mr-2 h-4 w-4 text-blue-600" 
+                />
+                <span className="font-medium">Afternoon Route</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Drop-off Location Section - Only show for Midday Route */}
+          {formData.oneWayDirection === "midday" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-3">Drop-off Location</label>
+              <div className="space-y-3">
+                <label className="flex items-center">
+                  <input 
+                    type="radio" 
+                    name="dropoffLocation" 
+                    value="school"
+                    checked={formData.dropoffLocation === "school"}
+                    onChange={(e) => setFormData(prev => ({ ...prev, dropoffLocation: e.target.value }))}
+                    className="mr-2 h-4 w-4 text-blue-600" 
+                  />
+                  <span className="font-medium">Drop off at School</span>
+                </label>
+                <label className="flex items-center">
+                  <input 
+                    type="radio" 
+                    name="dropoffLocation" 
+                    value="home"
+                    checked={formData.dropoffLocation === "home"}
+                    onChange={(e) => setFormData(prev => ({ ...prev, dropoffLocation: e.target.value }))}
+                    className="mr-2 h-4 w-4 text-blue-600" 
+                  />
+                  <span className="font-medium">Drop off at Home</span>
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-gray-900 mb-2">Route Description</label>
-        <textarea rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-md" defaultValue="Pick up students from their addresses and drop off at school" />
+        <textarea 
+          rows={3} 
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          value={formData.routeDescription}
+          onChange={(e) => setFormData(prev => ({ ...prev, routeDescription: e.target.value }))}
+          placeholder={
+            formData.routeType === "roundTrip" 
+              ? "Round trip route with automatic morning and afternoon scheduling" 
+              : formData.oneWayDirection === "morning"
+                ? "Pick up students from their addresses and drop off at school"
+                : formData.oneWayDirection === "afternoon"
+                  ? "Pick up students from school and drop off at their addresses"
+                  : formData.dropoffLocation === "school"
+                    ? "Pick up students from their addresses and drop off at school"
+                    : "Pick up students from school and drop off at their addresses"
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">District</label>
-          <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <select 
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            value={formData.district}
+            onChange={(e) => {
+              setFormData(prev => ({ ...prev, district: e.target.value, campus: "" }));
+              setSelectedStudents([]);
+            }}
+          >
             <option value="">Select district</option>
             <option value="86022-Z">86022-Z</option>
             <option value="75044-A">75044-A</option>
@@ -139,23 +343,133 @@ export default function AddRouteModal({ isOpen, onClose }) {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">Campus</label>
-          <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-            <option value="">Select a district first</option>
+          <select 
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            value={formData.campus}
+            onChange={(e) => {
+              setFormData(prev => ({ ...prev, campus: e.target.value }));
+              setSelectedStudents([]);
+            }}
+            disabled={!formData.district}
+          >
+            <option value="">
+              {formData.district ? "Select a campus" : "Select a district first"}
+            </option>
+            {formData.district === "86022-Z" && (
+              <>
+                <option value="west-campus">West Campus</option>
+                <option value="east-campus">East Campus</option>
+                <option value="main-campus">Main Campus</option>
+              </>
+            )}
+            {formData.district === "75044-A" && (
+              <>
+                <option value="north-campus">North Campus</option>
+                <option value="south-campus">South Campus</option>
+                <option value="central-campus">Central Campus</option>
+              </>
+            )}
           </select>
         </div>
       </div>
 
       <div>
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-4">
           <label className="block text-sm font-medium text-gray-900">Students</label>
-          <Button variant="primary" className="flex items-center gap-2 text-sm">
+          <Button 
+            variant="primary" 
+            className="flex items-center gap-2 text-sm"
+            disabled={!formData.campus}
+          >
             <Plus size={16} />
             Add a Student
           </Button>
         </div>
-        <div className="border border-gray-300 rounded-md p-4 min-h-[100px] bg-gray-50">
-          <p className="text-gray-500 text-sm">Select a campus to add students.</p>
-        </div>
+        
+        {formData.campus ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-900 mb-2">Select Students</label>
+              <div className="relative student-dropdown">
+                <button
+                  type="button"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white flex items-center justify-between"
+                  onClick={() => setShowStudentDropdown(!showStudentDropdown)}
+                >
+                  <span className="text-gray-500">Search and select students</span>
+                  <ChevronDown size={16} className="text-gray-400" />
+                </button>
+                
+                {showStudentDropdown && (
+                  <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                    {/* Search Bar */}
+                    <div className="p-3 border-b border-gray-200">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search search and select students"
+                          value={studentSearchQuery}
+                          onChange={(e) => setStudentSearchQuery(e.target.value)}
+                          className="w-full px-3 py-2 pl-8 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <svg className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    {/* Student List */}
+                    <div className="max-h-48 overflow-y-auto">
+                      {filteredStudents.length > 0 ? (
+                        filteredStudents.map((student) => (
+                          <button
+                            key={student.id}
+                            type="button"
+                            onClick={() => handleStudentSelect(student)}
+                            className="w-full px-3 py-2 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none text-sm"
+                          >
+                            {student.name}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="px-3 py-2 text-sm text-gray-500">
+                          No students found
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Selected Students Display */}
+            {selectedStudents.length > 0 && (
+              <div className="border border-gray-200 rounded-md p-3">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Selected Students ({selectedStudents.length})</h4>
+                <div className="space-y-1">
+                  {selectedStudents.map((student) => (
+                    <div key={student.id} className="flex items-center justify-between py-1">
+                      <span className="text-sm text-gray-700">{student.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleStudentRemove(student.id)}
+                        className="text-red-500 hover:text-red-700 text-xs"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="border border-gray-300 rounded-md p-4 min-h-[100px] bg-gray-50">
+            <p className="text-gray-500 text-sm">
+              {formData.district ? "Select a campus to add students." : "Select a district and campus to add students."}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
