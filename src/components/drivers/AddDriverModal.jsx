@@ -190,13 +190,12 @@ export default function AddDriverModal({ isOpen, onClose }) {
               {[1, 2, 3].map((step, index) => (
                 <div key={step} className="flex items-center">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                      step === currentStep
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 !text-black ${step === currentStep
                         ? "bg-blue-600 text-white shadow-lg ring-2 ring-blue-200"
                         : step < currentStep
-                        ? "bg-green-600 text-white shadow-md"
-                        : "bg-gray-100 text-gray-800 border-2 border-gray-300 shadow-sm"
-                    }`}
+                          ? "bg-green-600 text-black shadow-md"
+                          : "bg-gray-100 text-gray-800 border-2 border-gray-300 shadow-sm"
+                      }`}
                   >
                     {step < currentStep ? (
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -207,14 +206,13 @@ export default function AddDriverModal({ isOpen, onClose }) {
                         />
                       </svg>
                     ) : (
-                      <span className="font-bold">{step}</span>
+                      <span className="font-bold text-black">{step}</span>
                     )}
                   </div>
                   {index < 2 && (
                     <div
-                      className={`w-16 h-1 mx-2 rounded-full transition-all duration-300 ${
-                        step < currentStep ? "bg-green-600" : "bg-gray-300"
-                      }`}
+                      className={`w-16 h-1 mx-2 rounded-full transition-all duration-300 ${step < currentStep ? "bg-green-600" : "bg-gray-300"
+                        }`}
                     />
                   )}
                 </div>
