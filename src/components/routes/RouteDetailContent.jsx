@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import Tabs from '@/components/ui/Tabs'
+import Table from '@/components/ui/Table'
 
 export default function RouteDetailContent({ routeId }) {
   const [activeTab, setActiveTab] = useState(0)
@@ -126,49 +127,38 @@ export default function RouteDetailContent({ routeId }) {
             <p className="text-sm text-[var(--gray-600)] mb-6">Stops are listed in the order they will be visited</p>
             
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[var(--gray-200)]">
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Order</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Stop ID</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Name</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Address</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Time</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Students</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {routeData.routeStops.map((stop, index) => (
-                    <tr key={stop.stopId} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
-                      <td className="py-4 px-4">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-[var(--blue-600)] text-white rounded-full flex items-center justify-center text-sm font-medium shadow-sm">
-                            {stop.order}
-                          </div>
-                          {index < routeData.routeStops.length - 1 && (
-                            <div className="ml-4 w-px h-8 bg-[var(--gray-300)]"></div>
-                          )}
+              <Table
+                columns={["Order", "Stop ID", "Name", "Address", "Time", "Students", "Type"]}
+                data={routeData.routeStops}
+                renderRow={(stop, index) => (
+                  <tr key={stop.stopId} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
+                    <td className="py-4 px-4">
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 bg-[var(--blue-600)] text-white rounded-full flex items-center justify-center text-sm font-medium shadow-sm">
+                          {stop.order}
                         </div>
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{stop.stopId}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{stop.name}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-700)]">{stop.address}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{stop.time}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{stop.students}</td>
-                      <td className="py-4 px-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          stop.type === 'Pickup' 
-                            ? 'bg-[var(--blue-100)] text-[var(--blue-700)]' 
-                            : 'bg-[var(--green-100)] text-[var(--green-700)]'
-                        }`}>
-                          {stop.type}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        {index < routeData.routeStops.length - 1 && (
+                          <div className="ml-4 w-px h-8 bg-[var(--gray-300)]"></div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{stop.stopId}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{stop.name}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-700)]">{stop.address}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{stop.time}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{stop.students}</td>
+                    <td className="py-4 px-4">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        stop.type === 'Pickup' 
+                          ? 'bg-[var(--blue-100)] text-[var(--blue-700)]' 
+                          : 'bg-[var(--green-100)] text-[var(--green-700)]'
+                      }`}>
+                        {stop.type}
+                      </span>
+                    </td>
+                  </tr>
+                )}
+              />
             </div>
           </Card>
         );
@@ -206,47 +196,36 @@ export default function RouteDetailContent({ routeId }) {
                       
                       <div className="ml-16">
                         <div className="overflow-x-auto">
-                          <table className="w-full">
-                            <thead>
-                              <tr className="border-b border-[var(--gray-200)]">
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Student ID</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Name</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Grade</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Campus</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Pickup</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Status</th>
-                                <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Actions</th>
+                          <Table
+                            columns={["Student ID", "Name", "Grade", "Campus", "Pickup", "Status", "Actions"]}
+                            data={studentsInStop}
+                            renderRow={(student) => (
+                              <tr key={student.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
+                                <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{student.id}</td>
+                                <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.name}</td>
+                                <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.grade}</td>
+                                <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.campus}</td>
+                                <td className="py-4 px-4 text-sm text-[var(--gray-900)]">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 bg-[var(--blue-600)] rounded-full"></div>
+                                    {student.pickupStop}
+                                  </div>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <StatusBadge status={student.status} type="active" />
+                                </td>
+                                <td className="py-4 px-4">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                                  >
+                                    View
+                                  </Button>
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {studentsInStop.map((student) => (
-                                <tr key={student.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
-                                  <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{student.id}</td>
-                                  <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.name}</td>
-                                  <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.grade}</td>
-                                  <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{student.campus}</td>
-                                  <td className="py-4 px-4 text-sm text-[var(--gray-900)]">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-2 h-2 bg-[var(--blue-600)] rounded-full"></div>
-                                      {student.pickupStop}
-                                    </div>
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <StatusBadge status={student.status} type="active" />
-                                  </td>
-                                  <td className="py-4 px-4">
-                                    <Button 
-                                      variant="outline" 
-                                      size="sm"
-                                      className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                                    >
-                                      View
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                            )}
+                          />
                         </div>
                       </div>
                     </div>
@@ -273,41 +252,32 @@ export default function RouteDetailContent({ routeId }) {
             </div>
             
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[var(--gray-200)]">
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Ride ID</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Scheduled Date</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Driver</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Status</th>
-                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Actions</th>
+              <Table
+                columns={["Ride ID", "Scheduled Date", "Driver", "Status", "Actions"]}
+                data={routeData.scheduledRides}
+                renderRow={(ride) => (
+                  <tr key={ride.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">#{ride.id}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.scheduledDate}</td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.driver}</td>
+                    <td className="py-4 px-4">
+                      <StatusBadge 
+                        status={ride.status} 
+                        type={ride.status === "In progress" ? "active" : "warning"}
+                      />
+                    </td>
+                    <td className="py-4 px-4">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                      >
+                        View
+                      </Button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {routeData.scheduledRides.map((ride) => (
-                    <tr key={ride.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">#{ride.id}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.scheduledDate}</td>
-                      <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.driver}</td>
-                      <td className="py-4 px-4">
-                        <StatusBadge 
-                          status={ride.status} 
-                          type={ride.status === "In progress" ? "active" : "warning"}
-                        />
-                      </td>
-                      <td className="py-4 px-4">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        >
-                          View
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                )}
+              />
             </div>
           </Card>
         );
