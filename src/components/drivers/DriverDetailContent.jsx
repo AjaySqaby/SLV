@@ -89,7 +89,7 @@ export default function DriverDetailContent({ driverId }) {
       <div className="flex items-center">
         <Link 
           href="/drivers" 
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center text-[var(--gray-500)] hover:text-[var(--gray-700)] transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
           Back to Drivers

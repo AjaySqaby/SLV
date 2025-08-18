@@ -1,9 +1,11 @@
 "use client";
 import { RiEyeLine, RiRouteLine, RiCalendarLine, RiGroupLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function UpcomingRidesTab({ driverId }) {
+  const router = useRouter();
   // Real data from user
   const upcomingRides = [
     {
@@ -55,7 +57,12 @@ export default function UpcomingRidesTab({ driverId }) {
                     />
                   </td>
                   <td className="py-4 px-4">
-                    <Button variant="secondary" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                      onClick={() => router.push(`/rides/${ride.rideId}`)}
+                    >
                       View
                     </Button>
                   </td>

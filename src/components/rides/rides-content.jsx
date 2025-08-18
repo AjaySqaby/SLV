@@ -3,6 +3,7 @@
 import { Search, Plus, Filter, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import React from "react";
+import { useRouter } from "next/navigation";
 import RidesStats from "./RidesStats";
 import RidesTabs from "./RidesTabs";
 import RidesTable from "./RidesTable";
@@ -18,6 +19,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [filterType, setFilterType] = useState("Driver");
   const [startDate, setStartDate] = useState();
@@ -509,8 +511,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       <RidesTable
         rides={getFilteredRides()}
         onView={(rideId) => {
-          setSelectedRideId(rideId);
-          setShowRideModal(true);
+          router.push(`/rides/${rideId}`);
         }}
         onTrack={(rideId) => {
           setTrackingRideId(rideId);

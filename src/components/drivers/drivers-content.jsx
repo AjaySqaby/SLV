@@ -227,13 +227,21 @@ export default function DriversContent() {
                 <td className="py-4 px-4">
                   <div className="flex gap-2">
                     <Link href={`/drivers/${driver.id}`}>
-                      <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                      >
                         View
-                      </button>
+                      </Button>
                     </Link>
-                    <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-[var(--gray-600)] border-[var(--gray-200)] hover:bg-[var(--gray-50)] hover:border-[var(--gray-300)]"
+                    >
                       Edit
-                    </button>
+                    </Button>
                   </div>
                 </td>
               </tr>

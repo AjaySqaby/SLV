@@ -78,7 +78,11 @@ export default function MaintenanceTab({ driverId }) {
                       <StatusBadge status={item.status} type="warning" />
                     </td>
                     <td className="py-3 px-4">
-                      <Button variant="secondary" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                      >
                         View
                       </Button>
                     </td>

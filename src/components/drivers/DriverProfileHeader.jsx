@@ -4,26 +4,13 @@ import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function DriverProfileHeader({ driverData }) {
   const getInitials = (name) => {
+    if (!name) return "DR";
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
-      .toUpperCase();
-  };
-
-  const getStatusType = (status) => {
-    switch (status) {
-      case "Active":
-        return "active";
-      case "Inactive":
-        return "inactive";
-      case "On Leave":
-        return "warning";
-      case "Pending":
-        return "pending";
-      default:
-        return "default";
-    }
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -31,17 +18,27 @@ export default function DriverProfileHeader({ driverData }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {/* Driver Avatar */}
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4 shadow-md">
-            <RiUserLine className="w-8 h-8 text-white" />
+          <div 
+            className="w-16 h-16 rounded-full flex items-center justify-center mr-4 shadow-lg"
+            style={{
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #7C3AED 100%)'
+            }}
+          >
+            <span 
+              className="text-white font-bold"
+              style={{ fontSize: '20px', lineHeight: '1' }}
+            >
+              {getInitials(driverData?.name || "Driver")}
+            </span>
           </div>
           
           {/* Driver Info */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              {driverData.name}
+              {driverData?.name || "Driver Name"}
             </h1>
             <p className="text-gray-600 flex items-center gap-2">
-              <span className="font-medium">Driver ID:</span> {driverData.id}
+              <span className="font-medium">Driver ID:</span> {driverData?.id || "N/A"}
             </p>
           </div>
         </div>
@@ -49,8 +46,7 @@ export default function DriverProfileHeader({ driverData }) {
         {/* Status Only */}
         <div className="flex items-center">
           <StatusBadge 
-            status={driverData.status} 
-            type={getStatusType(driverData.status)}
+            status={driverData?.status || "Unknown"}
           />
         </div>
       </div>

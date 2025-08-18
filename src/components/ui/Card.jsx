@@ -1,4 +1,12 @@
-export default function Card({ icon, title, description, color }) {
+export default function Card({ icon, title, description, color, className = "", children }) {
+  if (children) {
+    return (
+      <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
+        {children}
+      </div>
+    );
+  }
+  
   return (
     <div className="dashboard-card">
       <div className={`icon-circle ${color} text-[var(--on-primary)]`}>{icon}</div>

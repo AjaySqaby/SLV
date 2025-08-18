@@ -11,7 +11,9 @@ export default function Button({
   const variants = {
     primary: "bg-[var(--primary)] text-[var(--on-primary)] hover:bg-[var(--primary-dark)]",
     secondary: "bg-[var(--surface-bg)] text-[var(--muted-text)] border border-[var(--border)] hover:bg-[var(--hover-bg)]",
+    outline: "bg-transparent text-[var(--muted-text)] border border-[var(--border)] hover:bg-[var(--hover-bg)]",
     danger: "bg-[var(--danger)] text-[var(--on-danger)] hover:bg-[var(--danger-dark)]",
+    destructive: "bg-red-600 text-white hover:bg-red-700",
     success: "bg-[var(--success)] text-[var(--on-success)] hover:bg-[var(--success-dark)]",
     warning: "bg-[var(--warning)] text-[var(--on-warning)] hover:bg-[var(--warning-dark)]",
     ghost: "bg-transparent text-[var(--muted-text)] hover:bg-[var(--hover-bg)]",

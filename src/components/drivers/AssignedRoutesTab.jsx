@@ -1,8 +1,10 @@
 "use client";
 import { RiEyeLine, RiEditLine, RiRouteLine, RiTimeLine, RiGroupLine, RiMapPinLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 
 export default function AssignedRoutesTab({ driverId }) {
+  const router = useRouter();
   // Real data from user
   const assignedRoutes = [
     {
@@ -58,7 +60,15 @@ export default function AssignedRoutesTab({ driverId }) {
                   <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
                   <td className="py-4 px-4">
                     <div className="flex gap-2">
-                      <Button variant="secondary" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                        onClick={() => {
+                          console.log('Button clicked for route:', route.routeId);
+                          router.push(`/routes/${route.routeId}`);
+                        }}
+                      >
                         View
                       </Button>
                     </div>

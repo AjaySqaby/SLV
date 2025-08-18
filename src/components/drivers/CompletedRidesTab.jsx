@@ -55,7 +55,11 @@ export default function CompletedRidesTab({ driverId }) {
                     />
                   </td>
                   <td className="py-4 px-4">
-                    <Button variant="secondary" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                    >
                       View
                     </Button>
                   </td>
