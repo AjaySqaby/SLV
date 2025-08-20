@@ -212,13 +212,14 @@ export default function RouteDetailContent({ routeId }) {
                                   </div>
                                 </td>
                                 <td className="py-4 px-4">
-                                  <StatusBadge status={student.status} type="active" />
+                                  <StatusBadge status={student.status} />
                                 </td>
                                 <td className="py-4 px-4">
                                   <Button 
                                     variant="outline" 
                                     size="sm"
                                     className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                                    onClick={() => window.location.href = `/students/${student.id}`}
                                   >
                                     View
                                   </Button>

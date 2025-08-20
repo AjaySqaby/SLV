@@ -12,41 +12,122 @@ export default function RideDetailContent({ rideId }) {
   const [isLoading, setIsLoading] = useState(false)
 
   // Mock data - replace with actual API call
-  const rideData = {
-    id: rideId,
-    status: "In-progress",
-    eta: "7:35 AM",
-    driver: {
-      name: "Yonathan Mekonnen",
-      vehicle: "Chrysler Pacifica"
-    },
-    route: {
-      id: "RT-30842",
-      district: "86022-Z",
-      duration: "45 minutes",
-      distance: "11.2 mi"
-    },
-    passengers: {
-      students: 3,
-      stops: 4
-    },
-    pickup: {
-      address: "5325 Buford Hwy NE, Doraville, GA",
-      scheduledTime: "7:00 AM",
-      actualTime: "6:45 AM",
-      status: "Complete"
-    },
-    dropoff: {
-      address: "Cross Keys High School",
-      scheduledTime: "7:40 AM",
-      actualTime: "Not arrived yet",
-      status: "Pending"
-    },
-    payment: {
-      driverPayment: "$75.00",
-      districtCharge: "$120.00"
+  const getRideData = (id) => {
+    if (id === "1") {
+      // Completed ride
+      return {
+        id: id,
+        status: "Completed",
+        eta: "7:35 AM",
+        driver: {
+          name: "Yonathan Mekonnen",
+          vehicle: "Chrysler Pacifica"
+        },
+        route: {
+          id: "RT-30842",
+          district: "86022-Z",
+          duration: "45 minutes",
+          distance: "11.2 mi"
+        },
+        passengers: {
+          students: 3,
+          stops: 4
+        },
+        pickup: {
+          address: "5325 Buford Hwy NE, Doraville, GA",
+          scheduledTime: "7:00 AM",
+          actualTime: "6:45 AM",
+          status: "Complete"
+        },
+        dropoff: {
+          address: "Cross Keys High School",
+          scheduledTime: "7:40 AM",
+          actualTime: "7:35 AM",
+          status: "Complete"
+        },
+        payment: {
+          driverPayment: "$75.00",
+          districtCharge: "$120.00"
+        }
+      }
+    } else if (id === "2") {
+      // Upcoming ride
+      return {
+        id: id,
+        status: "Scheduled",
+        eta: "8:15 AM",
+        driver: {
+          name: "Yonathan Mekonnen",
+          vehicle: "Chrysler Pacifica"
+        },
+        route: {
+          id: "RT-30843",
+          district: "86022-Z",
+          duration: "35 minutes",
+          distance: "8.5 mi"
+        },
+        passengers: {
+          students: 5,
+          stops: 3
+        },
+        pickup: {
+          address: "1234 Peachtree St, Atlanta, GA",
+          scheduledTime: "7:45 AM",
+          actualTime: "Not started",
+          status: "Pending"
+        },
+        dropoff: {
+          address: "North Atlanta High School",
+          scheduledTime: "8:20 AM",
+          actualTime: "Not started",
+          status: "Pending"
+        },
+        payment: {
+          driverPayment: "$65.00",
+          districtCharge: "$110.00"
+        }
+      }
+    } else {
+      // Default ride data
+      return {
+        id: id,
+        status: "In-progress",
+        eta: "7:35 AM",
+        driver: {
+          name: "Yonathan Mekonnen",
+          vehicle: "Chrysler Pacifica"
+        },
+        route: {
+          id: "RT-30842",
+          district: "86022-Z",
+          duration: "45 minutes",
+          distance: "11.2 mi"
+        },
+        passengers: {
+          students: 3,
+          stops: 4
+        },
+        pickup: {
+          address: "5325 Buford Hwy NE, Doraville, GA",
+          scheduledTime: "7:00 AM",
+          actualTime: "6:45 AM",
+          status: "Complete"
+        },
+        dropoff: {
+          address: "Cross Keys High School",
+          scheduledTime: "7:40 AM",
+          actualTime: "Not arrived yet",
+          status: "Pending"
+        },
+        payment: {
+          driverPayment: "$75.00",
+          districtCharge: "$120.00"
+        }
+      }
     }
   }
+
+  const rideData = getRideData(rideId)
 
   const handleCancelRide = () => {
     // Handle cancel ride logic

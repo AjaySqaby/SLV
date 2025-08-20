@@ -20,7 +20,7 @@ const customStyles = `
   }
 `;
 
-export default function SingleDatePicker({ selected, onSelect }) {
+export default function SingleDatePicker({ selected, onSelect, hideLabel = false }) {
   const [show, setShow] = useState(false);
   const [tempDate, setTempDate] = useState(selected);
   const ref = useRef();
@@ -78,9 +78,11 @@ export default function SingleDatePicker({ selected, onSelect }) {
   return (
     <div className="w-full relative" ref={ref}>
       <style>{customStyles}</style>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Select Date
-      </label>
+      {!hideLabel && (
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Date
+        </label>
+      )}
       <Button
         type="button"
         className={`w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg py-2 px-4 flex items-center gap-2 focus:outline-none`}

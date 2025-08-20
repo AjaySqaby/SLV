@@ -1,9 +1,13 @@
 "use client";
+import { useState } from "react";
 import { RiUserAddLine, RiCheckLine, RiTimeLine, RiCalendarLine, RiDownloadLine, RiEyeLine } from "react-icons/ri";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
+import OnboardingHistoryModal from "@/components/onboarding/OnboardingHistoryModal";
 
 export default function OnboardingTab({ driverId }) {
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  
   // Real data from user
   const onboardingData = {
     startDate: "03/15/2025",
@@ -70,7 +74,12 @@ export default function OnboardingTab({ driverId }) {
           Onboarding Progress
         </h3>
         <div className="flex gap-2">
-          <Button variant="secondary" size="sm" className="flex items-center gap-2">
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="flex items-center gap-2"
+            onClick={() => setIsHistoryModalOpen(true)}
+          >
             <RiTimeLine className="w-4 h-4" />
             View History
           </Button>
@@ -139,6 +148,13 @@ export default function OnboardingTab({ driverId }) {
           </div>
         ))}
       </div>
+      
+      {/* Onboarding History Modal */}
+      <OnboardingHistoryModal
+        isOpen={isHistoryModalOpen}
+        onClose={() => setIsHistoryModalOpen(false)}
+        driverData={{ id: driverId, name: 'Sam Kebede' }}
+      />
     </div>
   );
 }

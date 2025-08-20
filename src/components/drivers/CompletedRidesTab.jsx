@@ -1,9 +1,11 @@
 "use client";
 import { RiEyeLine, RiRouteLine, RiCalendarLine, RiGroupLine, RiCheckLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function CompletedRidesTab({ driverId }) {
+  const router = useRouter();
   // Real data from user
   const completedRides = [
     {
@@ -51,7 +53,6 @@ export default function CompletedRidesTab({ driverId }) {
                   <td className="py-4 px-4">
                     <StatusBadge 
                       status={ride.status} 
-                      type="active"
                     />
                   </td>
                   <td className="py-4 px-4">
@@ -59,6 +60,7 @@ export default function CompletedRidesTab({ driverId }) {
                       variant="outline" 
                       size="sm"
                       className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                      onClick={() => router.push(`/rides/${ride.rideId}`)}
                     >
                       View
                     </Button>
