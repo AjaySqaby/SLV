@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { RiUserAddLine, RiCheckLine, RiTimeLine, RiCalendarLine, RiDownloadLine, RiEyeLine } from "react-icons/ri";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import OnboardingHistoryModal from "@/components/onboarding/OnboardingHistoryModal";
@@ -83,10 +84,16 @@ export default function OnboardingTab({ driverId }) {
             <RiTimeLine className="w-4 h-4" />
             View History
           </Button>
-          <Button variant="primary" size="sm" className="flex items-center gap-2">
-            <RiUserAddLine className="w-4 h-4" />
-            View Full Onboarding
-          </Button>
+          <Link href={`/drivers/${driverId}/onboarding`}>
+            <Button 
+              variant="primary" 
+              size="sm" 
+              className="flex items-center gap-2"
+            >
+              <RiUserAddLine className="w-4 h-4" />
+              View Full Onboarding
+            </Button>
+          </Link>
         </div>
       </div>
 

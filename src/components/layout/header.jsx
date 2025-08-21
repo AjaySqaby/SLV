@@ -34,6 +34,7 @@ export default function Header({ activePage, onSearch }) {
             onChange={handleSearch}
             placeholder="Search rides or drivers..."
             className="bg-gray-100 text-gray-900 placeholder-gray-500 rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-200"
+            suppressHydrationWarning={true}
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-500" />
         </div>
