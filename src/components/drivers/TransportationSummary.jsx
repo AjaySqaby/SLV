@@ -1,6 +1,7 @@
 "use client";
 import { RiRouteLine, RiTimeLine, RiFileTextLine, RiSettings3Line, RiFolderLine } from "react-icons/ri";
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function TransportationSummary({ driverData }) {
   return (
@@ -44,10 +45,12 @@ export default function TransportationSummary({ driverData }) {
           <RiSettings3Line className="w-4 h-4" />
           Manage Vehicle Information
         </Button>
-        <Button variant="secondary" className="w-full flex items-center justify-center gap-2">
-          <RiFolderLine className="w-4 h-4" />
-          Manage Documents
-        </Button>
+        <Link href={`/drivers/${driverData.id}/documents`}>
+          <Button variant="secondary" className="w-full flex items-center justify-center gap-2">
+            <RiFolderLine className="w-4 h-4" />
+            Manage Documents
+          </Button>
+        </Link>
       </div>
     </div>
   );
