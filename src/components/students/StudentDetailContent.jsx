@@ -222,7 +222,7 @@ export default function StudentDetailContent({ studentId }) {
 
   return (
     <div className="min-h-screen bg-[var(--gray-50)]">
-      <div className="w-full px-6 py-6">
+      <div className="w-full px-6 pb-6">
         {/* Back Navigation */}
         <div className="mb-6">
           <Button
