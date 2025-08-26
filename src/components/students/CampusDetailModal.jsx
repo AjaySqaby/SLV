@@ -340,9 +340,11 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
                 <div className="w-4 h-4 flex items-center justify-center">
                   <div className="w-2 h-2 bg-[var(--green-600)] rounded-full"></div>
                 </div>
-                <div>
+                <div className="flex gap-2 items-center">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                  <StatusBadge status={mockCampusData.status} type="active" />
+                  <div className="">
+                    <StatusBadge status={mockCampusData.status} type="active" />
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
