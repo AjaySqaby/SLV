@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import StatusBadge from "../ui/StatusBadge";
 import Button from "../ui/Button";
 import AddStudentModal from './AddStudentModal';
+import CampusDetailModal from './CampusDetailModal';
+import DistrictDetailModal from './DistrictDetailModal';
 
 export default function StudentsContent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +20,10 @@ export default function StudentsContent() {
   const [districtFilter, setDistrictFilter] = useState("");
   const router = useRouter();
   const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isCampusModalOpen, setIsCampusModalOpen] = useState(false);
+  const [selectedCampusData, setSelectedCampusData] = useState(null);
+  const [isDistrictModalOpen, setIsDistrictModalOpen] = useState(false);
+  const [selectedDistrictData, setSelectedDistrictData] = useState(null);
   const students = [
     {
       id: "S-001",
@@ -70,6 +76,22 @@ export default function StudentsContent() {
     const matchesDistrict = !districtFilter || student.district === districtFilter;
     return matchesSearch && matchesGrade && matchesCampus && matchesDistrict;
   });
+
+  const handleCampusClick = (campusName, district, address) => {
+    setSelectedCampusData({
+      name: campusName,
+      district: district,
+      address: address
+    });
+    setIsCampusModalOpen(true);
+  };
+
+  const handleDistrictClick = (districtId) => {
+    setSelectedDistrictData({
+      district: districtId
+    });
+    setIsDistrictModalOpen(true);
+  };
 
   return (
     <div>
@@ -127,12 +149,18 @@ export default function StudentsContent() {
                 <td className="px-6 py-4 font-medium">{student.name}</td>
                 <td className="px-6 py-4">{student.grade}</td>
                 <td className="px-6 py-4">
-                  <span className="text-[var(--blue-600)] hover:underline cursor-pointer">
+                  <span 
+                    className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
+                    onClick={() => handleCampusClick(student.campus, student.district, student.address)}
+                  >
                     {student.campus}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-[var(--blue-600)] hover:underline cursor-pointer">
+                  <span 
+                    className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
+                    onClick={() => handleDistrictClick(student.district)}
+                  >
                     {student.district}
                   </span>
                 </td>
@@ -145,14 +173,14 @@ export default function StudentsContent() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex gap-2">
-                    <button
-                      className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)]"
-                      onClick={() =>
-                        router.push(`/students/${student.id}?view=1`)
-                      }
-                    >
-                      View
-                    </button>
+                                         <button
+                       className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors"
+                       onClick={() =>
+                         router.push(`/students/${student.id}`)
+                       }
+                     >
+                       View
+                     </button>
                     <button
                       className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)]"
                       onClick={() => router.push(`/students/${student.id}`)}
@@ -169,6 +197,16 @@ export default function StudentsContent() {
       <AddStudentModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
+      />
+      <CampusDetailModal
+        open={isCampusModalOpen}
+        onClose={() => setIsCampusModalOpen(false)}
+        campusData={selectedCampusData}
+      />
+      <DistrictDetailModal
+        open={isDistrictModalOpen}
+        onClose={() => setIsDistrictModalOpen(false)}
+        districtData={selectedDistrictData}
       />
     </div>
   );

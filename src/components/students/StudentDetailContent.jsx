@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
   User,
@@ -32,6 +33,7 @@ import Table from '@/components/ui/Table'
 
 export default function StudentDetailContent({ studentId }) {
   const [activeTab, setActiveTab] = useState(0)
+  const router = useRouter()
 
   // Mock data - replace with actual API call
   const studentData = {
@@ -232,7 +234,7 @@ export default function StudentDetailContent({ studentId }) {
             onClick={() => window.history.back()}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back to Routes</span>
+            <span className="font-medium">Back to Students</span>
           </Button>
         </div>
 
@@ -289,7 +291,15 @@ export default function StudentDetailContent({ studentId }) {
                 <Building2 className="w-4 h-4 text-[var(--gray-500)]" />
                 <div>
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Campus</span>
-                  <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium">{studentData.campus}</p>
+                  <p 
+                    className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]"
+                    onClick={() => {
+                      // You can add campus modal functionality here if needed
+                      console.log('Campus clicked:', studentData.campus)
+                    }}
+                  >
+                    {studentData.campus}
+                  </p>
                 </div>
               </div>
 
@@ -297,7 +307,15 @@ export default function StudentDetailContent({ studentId }) {
                 <Building2 className="w-4 h-4 text-[var(--gray-500)]" />
                 <div>
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">District</span>
-                  <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium">{studentData.district}</p>
+                  <p 
+                    className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]"
+                    onClick={() => {
+                      // You can add district modal functionality here if needed
+                      console.log('District clicked:', studentData.district)
+                    }}
+                  >
+                    {studentData.district}
+                  </p>
                 </div>
               </div>
 
