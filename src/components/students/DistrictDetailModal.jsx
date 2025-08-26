@@ -419,7 +419,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                 <div className="w-4 h-4 flex items-center justify-center">
                   <div className="w-2 h-2 bg-[var(--green-600)] rounded-full"></div>
                 </div>
-                <div className="flex gap-2 items-cente">
+                <div className="flex gap-2 items-center">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
                   <div>
                     <StatusBadge status={mockDistrictData.status} type="active" />
