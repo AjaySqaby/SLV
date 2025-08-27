@@ -24,7 +24,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     { icon: <Users size={20} />, label: "Partners", href: "/partners"  },
     { icon: <Car size={20} />, label: "Drivers", href: "/drivers" },
     { icon: <GraduationCap size={20} />, label: "Students", href: "/students"  },
-    { icon: <Building size={20} />, label: "Campus", href: "#"  },
+    { icon: <Building size={20} />, label: "Campus", href: "/campus"  },
     { icon: <Building2 size={20} />, label: "Districts", href: "#"  },
     { icon: <Users size={20} />, label: "Employees", href: "#"  },
     {
@@ -35,7 +35,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     {
       icon: <Bell size={20} />,
       label: "Notifications",
-      href: "/notifications",
+      href: "/notifications", 
     },
     { icon: <UserPlus size={20} />, label: "Onboarding", href: "/onboarding" },
     { icon: <FileText size={20} />, label: "Reports", href: "/reports" },
