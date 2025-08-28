@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   ArrowLeft,
   Building2,
@@ -33,6 +33,7 @@ export default function CampusDetailContent({ campusId }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedCampusData, setEditedCampusData] = useState(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   // Mock data - replace with actual API call based on campusId
   const [campusData, setCampusData] = useState({
@@ -157,6 +158,19 @@ export default function CampusDetailContent({ campusId }) {
   }
 
   const currentData = isEditing ? editedCampusData : campusData
+
+  // Check for edit parameter in URL
+  useEffect(() => {
+    const editParam = searchParams.get('edit')
+    if (editParam === 'true' && !isEditing) {
+      setEditedCampusData({ ...campusData })
+      setIsEditing(true)
+      // Remove edit parameter from URL
+      const newUrl = new URL(window.location)
+      newUrl.searchParams.delete('edit')
+      window.history.replaceState({}, '', newUrl.pathname)
+    }
+  }, [searchParams, campusData, isEditing])
 
   const renderTabContent = () => {
     switch (activeTab) {

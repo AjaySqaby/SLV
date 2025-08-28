@@ -186,7 +186,7 @@ export default function CampusContent() {
                     </button>
                     <button
                       className="px-3 py-1 text-sm text-[var(--gray-600)] hover:text-[var(--gray-700)] border border-[var(--gray-300)] rounded"
-                      onClick={() => router.push(`/campus/${campus.id}/edit`)}
+                      onClick={() => router.push(`/campus/${campus.id}?edit=true`)}
                     >
                       Edit
                     </button>
