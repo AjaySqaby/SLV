@@ -14,7 +14,10 @@ import {
   Hash,
   GraduationCap,
   Building,
-  CheckCircle
+  CheckCircle,
+  Edit3,
+  Save,
+  X
 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
@@ -27,10 +30,12 @@ import RidesTab from '@/components/campus/details/RidesTab'
 
 export default function CampusDetailContent({ campusId }) {
   const [activeTab, setActiveTab] = useState(0)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedCampusData, setEditedCampusData] = useState(null)
   const router = useRouter()
 
   // Mock data - replace with actual API call based on campusId
-  const campusData = {
+  const [campusData, setCampusData] = useState({
     id: campusId,
     name: "Riverside High School",
     type: "High School",
@@ -48,7 +53,7 @@ export default function CampusDetailContent({ campusId }) {
       scheduledRides: 8,
       status: "Active"
     }
-  }
+  })
 
   const students = [
     {
@@ -113,6 +118,46 @@ export default function CampusDetailContent({ campusId }) {
     { id: 2, label: "Rides", icon: Car }
   ]
 
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Save changes
+      console.log('Saving changes:', editedCampusData)
+      // Update the main campus data with edited data
+      setCampusData(editedCampusData)
+      // Here you would make API call to save data
+      setIsEditing(false)
+      setEditedCampusData(null)
+    } else {
+      // Start editing
+      setEditedCampusData({ ...campusData })
+      setIsEditing(true)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setEditedCampusData(null)
+  }
+
+  const handleFieldChange = (field, value) => {
+    setEditedCampusData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handlePrincipalFieldChange = (field, value) => {
+    setEditedCampusData(prev => ({
+      ...prev,
+      principal: {
+        ...prev.principal,
+        [field]: value
+      }
+    }))
+  }
+
+  const currentData = isEditing ? editedCampusData : campusData
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 0:
@@ -147,16 +192,49 @@ export default function CampusDetailContent({ campusId }) {
 
         {/* Header Section */}
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-[var(--orange-600)] rounded-xl flex items-center justify-center shadow-lg">
-              <Building2 className="w-6 h-6 text-blue-500" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[var(--orange-600)] rounded-xl flex items-center justify-center shadow-lg">
+                <Building2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-[var(--gray-900)]">{currentData.name}</h1>
+                <p className="text-[var(--gray-600)] flex items-center gap-2 mt-1">
+                  <Building className="w-4 h-4" />
+                  {currentData.type} • {currentData.district}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-[var(--gray-900)]">{campusData.name}</h1>
-              <p className="text-[var(--gray-600)] flex items-center gap-2 mt-1">
-                <Building className="w-4 h-4" />
-                {campusData.type} • {campusData.district}
-              </p>
+            <div className="flex gap-2">
+              {isEditing ? (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    icon={<X className="w-4 h-4" />}
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Save className="w-4 h-4" />}
+                    onClick={handleEditToggle}
+                  >
+                    Save Changes
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon={<Edit3 className="w-4 h-4" />}
+                  onClick={handleEditToggle}
+                >
+                  Edit Campus
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -175,48 +253,96 @@ export default function CampusDetailContent({ campusId }) {
             <div className="flex flex-col items-center mb-6">
               <div className="w-20 h-20 bg-[var(--gray-200)] rounded-full flex items-center justify-center mb-4 shadow-inner">
                 <span className="text-2xl font-bold text-[var(--gray-700)]">
-                  {campusData.name.split(' ').map(n => n[0]).join('')}
+                  {currentData.name.split(' ').map(n => n[0]).join('')}
                 </span>
               </div>
-              <h4 className="text-xl font-semibold text-[var(--gray-900)] mb-1">{campusData.name}</h4>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={currentData.name}
+                  onChange={(e) => handleFieldChange('name', e.target.value)}
+                  className="text-xl font-semibold text-[var(--gray-900)] mb-1 border border-[var(--gray-300)] rounded px-2 py-1 text-center"
+                />
+              ) : (
+                <h4 className="text-xl font-semibold text-[var(--gray-900)] mb-1">{currentData.name}</h4>
+              )}
               <p className="text-[var(--gray-600)] flex items-center gap-1">
                 <Building className="w-4 h-4" />
-                {campusData.type}
+                {isEditing ? (
+                  <select
+                    value={currentData.type}
+                    onChange={(e) => handleFieldChange('type', e.target.value)}
+                    className="border border-[var(--gray-300)] rounded px-2 py-1 text-sm"
+                  >
+                    <option value="Elementary School">Elementary School</option>
+                    <option value="Middle School">Middle School</option>
+                    <option value="High School">High School</option>
+                  </select>
+                ) : (
+                  currentData.type
+                )}
               </p>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <Hash className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Campus ID</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{campusData.id}</p>
+                  <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.id}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <Building className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">District</span>
-                  <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]">
-                    {campusData.district}
-                  </p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={currentData.district}
+                      onChange={(e) => handleFieldChange('district', e.target.value)}
+                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]">
+                      {currentData.district}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <MapPin className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Address</span>
-                  <p className="text-sm text-[var(--gray-900)]">{campusData.address}</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={currentData.address}
+                      onChange={(e) => handleFieldChange('address', e.target.value)}
+                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm text-[var(--gray-900)]">{currentData.address}</p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <Users className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Total Students</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{campusData.students}</p>
+                  {isEditing ? (
+                    <input
+                      type="number"
+                      value={currentData.students}
+                      onChange={(e) => handleFieldChange('students', parseInt(e.target.value))}
+                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.students}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -234,25 +360,52 @@ export default function CampusDetailContent({ campusId }) {
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <GraduationCap className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Name</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{campusData.principal.name}</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={currentData.principal.name}
+                      onChange={(e) => handlePrincipalFieldChange('name', e.target.value)}
+                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.principal.name}</p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <Phone className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Phone</span>
-                  <p className="text-sm text-[var(--gray-900)]">{campusData.principal.phone}</p>
+                  {isEditing ? (
+                    <input
+                      type="tel"
+                      value={currentData.principal.phone}
+                      onChange={(e) => handlePrincipalFieldChange('phone', e.target.value)}
+                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm text-[var(--gray-900)]">{currentData.principal.phone}</p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
                 <Mail className="w-4 h-4 text-[var(--gray-500)]" />
-                <div>
+                <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Email</span>
-                  <p className="text-sm text-[var(--gray-900)]">{campusData.principal.email}</p>
+                  {isEditing ? (
+                    <input
+                      type="email"
+                      value={currentData.principal.email}
+                      onChange={(e) => handlePrincipalFieldChange('email', e.target.value)}
+                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                    />
+                  ) : (
+                    <p className="text-sm text-[var(--gray-900)]">{currentData.principal.email}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -288,7 +441,7 @@ export default function CampusDetailContent({ campusId }) {
                 <CheckCircle className="w-4 h-4 text-[var(--gray-500)]" />
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                  <StatusBadge status={campusData.transportation.status} />
+                  <StatusBadge status={currentData.transportation.status} />
                 </div>
               </div>
             </div>
