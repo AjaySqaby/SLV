@@ -7,17 +7,16 @@ export default function RoutesTab({ routes }) {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div className="font-semibold text-base">Bus Routes</div>
-        <Button variant="success">Add Route</Button>
+        <Button variant="primary">Add Route</Button>
       </div>
       <table className="w-full text-sm border">
         <thead>
           <tr className="bg-gray-50">
             <th className="p-2 text-left">Route ID</th>
             <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Driver</th>
-            <th className="p-2 text-left">Vehicle</th>
+            <th className="p-2 text-left">Stops</th>
+            <th className="p-2 text-left">Distance</th>
             <th className="p-2 text-left">Students</th>
-            <th className="p-2 text-left">Schedule</th>
             <th className="p-2 text-left">Status</th>
             <th className="p-2 text-left">Actions</th>
           </tr>
@@ -34,13 +33,9 @@ export default function RoutesTab({ routes }) {
                   <span>{r.name}</span>
                 </span>
               </td>
-              <td className="p-2">{r.driver}</td>
-              <td className="p-2">{r.vehicle}</td>
+              <td className="p-2">{r.stops}</td>
+              <td className="p-2">{r.distance}</td>
               <td className="p-2">{r.students}</td>
-              <td className="p-2">
-                <div><span className="text-xs">Departure: {r.schedule.departure}</span></div>
-                <div><span className="text-xs">Arrival: {r.schedule.arrival}</span></div>
-              </td>
               <td className="p-2">
                 <StatusBadge status={r.status} type={r.status === "Active" ? "active" : "inactive"} />
               </td>

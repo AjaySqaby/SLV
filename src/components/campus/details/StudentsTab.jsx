@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge"
@@ -6,6 +7,7 @@ import { AiOutlineUser } from "react-icons/ai";
 
 export default function StudentsTab({ students }) {
   const [search, setSearch] = useState("");
+  const router = useRouter();
   const filteredStudents = students.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
     s.id.toLowerCase().includes(search.toLowerCase())
@@ -19,7 +21,7 @@ export default function StudentsTab({ students }) {
           placeholder="Search students..."
           width="w-[300px]"
         />
-        <Button variant="success">Add Student</Button>
+        <Button variant="primary">Add Student</Button>
       </div>
       <table className="w-full text-sm border">
         <thead>
@@ -53,7 +55,15 @@ export default function StudentsTab({ students }) {
               <td className="p-2">
                 <StatusBadge status={s.status} type={s.status === "Active" ? "active" : "inactive"} />
               </td>
-              <td className="p-2"><Button size="sm" variant="secondary">View</Button></td>
+              <td className="p-2">
+                <Button 
+                  size="sm" 
+                  variant="secondary"
+                  onClick={() => router.push(`/students/${s.id}`)}
+                >
+                  View
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>
