@@ -25,7 +25,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     { icon: <Car size={20} />, label: "Drivers", href: "/drivers" },
     { icon: <GraduationCap size={20} />, label: "Students", href: "/students"  },
     { icon: <Building size={20} />, label: "Campus", href: "/campus"  },
-    { icon: <Building2 size={20} />, label: "Districts", href: "#"  },
+    { icon: <Building2 size={20} />, label: "Districts", href: "/districts"  },
     { icon: <Users size={20} />, label: "Employees", href: "#"  },
     {
       icon: <ShoppingBag size={20} />,
