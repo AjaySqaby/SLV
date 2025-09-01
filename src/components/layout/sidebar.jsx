@@ -30,15 +30,15 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     {
       icon: <ShoppingBag size={20} />,
       label: "Marketplace",
-      href: "/marketplace",
+      href: "#",
     },
     {
       icon: <Bell size={20} />,
       label: "Notifications",
-      href: "/notifications", 
+      href: "#",
     },
-    { icon: <UserPlus size={20} />, label: "Onboarding", href: "/onboarding" },
-    { icon: <FileText size={20} />, label: "Reports", href: "/reports" },
+    { icon: <UserPlus size={20} />, label: "Onboarding", href: "#" },
+    { icon: <FileText size={20} />, label: "Reports", href: "#" },
   ];
 
   const driverStatuses = [
