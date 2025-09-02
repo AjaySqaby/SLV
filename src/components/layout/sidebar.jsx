@@ -30,7 +30,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     {
       icon: <ShoppingBag size={20} />,
       label: "Marketplace",
-      href: "#",
+      href: "/marketplace",
     },
     {
       icon: <Bell size={20} />,
