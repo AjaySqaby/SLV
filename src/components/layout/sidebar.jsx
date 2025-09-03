@@ -35,7 +35,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
     {
       icon: <Bell size={20} />,
       label: "Notifications",
-      href: "#",
+      href: "/notifications",
     },
     { icon: <UserPlus size={20} />, label: "Onboarding", href: "#" },
     { icon: <FileText size={20} />, label: "Reports", href: "#" },
