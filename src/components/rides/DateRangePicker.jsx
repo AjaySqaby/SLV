@@ -89,9 +89,9 @@ export default function DateRangePicker({ startDate, endDate, onDateRangeChange 
   return (
     <div className="w-full relative" ref={ref}>
       <style>{customStyles}</style>
-      <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
+      {/* <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
         Date Range
-      </label>
+      </label> */}
       <Button
         type="button"
         className={`w-full bg-background border-2 border-[var(--gray-300)] font-semibold rounded-lg py-2 px-4 flex items-center gap-2 focus:outline-none ${
