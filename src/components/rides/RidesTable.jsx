@@ -1,45 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  MoreVertical,
-  Edit,
-  UserPlus,
-  CheckCircle,
-  XCircle,
-} from "lucide-react";
-import Button from "@/components/ui/Button";
+import React from "react";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
-import { useTimezone } from "@/contexts/TimezoneContext";
 
-export default function RidesTable({
-  rides,
-  onActionMenu,
-  onView,
-  onTrack,
-  onAssignDriver,
-  onCompleteRide,
-  onCancelRide,
-}) {
-  const [showActionMenu, setShowActionMenu] = useState(false);
-  const [activeRideIndex, setActiveRideIndex] = useState(null);
-  const actionMenuRef = useRef();
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (actionMenuRef.current && !actionMenuRef.current.contains(e.target)) {
-        setShowActionMenu(false);
-        setActiveRideIndex(null);
-      }
-    }
-    if (showActionMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showActionMenu]);
+export default function RidesTable({ rides }) {
 
   return (
-    <div className="bg-transparent">
+    <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
       {rides.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">
           <svg
@@ -65,240 +30,195 @@ export default function RidesTable({
           </div>
         </div>
       ) : (
-        rides.map((ride, index) => (
-          <div
-            key={ride.id}
-            className="bg-[var(--on-primary)] rounded-xl shadow-sm border border-[var(--gray-200)] mb-4 px-4 py-4 relative"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-              <div className="md:col-span-2 flex items-center">
-                <div className="flex-1">
-                  <div className="bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-lg p-4 relative">
-                    <div className="absolute top-2 right-2">
-                      <span className="w-8 h-8 rounded-full bg-[var(--on-primary)] border border-[--gray-300] flex items-center justify-center text-base font-semibold text-[var(--gray-500)] shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Ride Info</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Pick-up</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Drop-off</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver & Vehicle</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rides.map((ride, index) => (
+                <tr
+                  key={ride.id}
+                  className="border-b border-[var(--gray-100)]"
+                >
+                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                         {index + 1}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-[var(--primary-black)]">
+                          {ride.id}
+                        </div>
+                        <div className="text-xs text-[var(--gray-600)] font-medium">
+                          {ride.district}
+                        </div>
+                        <div className="text-xs text-[var(--gray-500)]">
+                          {ride.date}
+                        </div>
+                        <div className="text-xs text-[var(--blue-dark)] font-semibold mt-1">
+                          Scheduled: <DualTimeDisplay 
+                            rideTime={ride.scheduledTime}
+                            rideTimezone={ride.timezone}
+                            showLabels={false}
+                            className="text-[var(--blue-dark)]"
+                            compact={true}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1 flex-shrink-0"></div>
+                      <div className="min-w-0">
+                        <div className="text-xs text-[var(--blue-600)]">
+                          Scheduled: <DualTimeDisplay 
+                            rideTime={ride.pickup.scheduled}
+                            rideTimezone={ride.timezone}
+                            showLabels={false}
+                            className="text-[var(--blue-600)]"
+                            compact={true}
+                          />
+                        </div>
+                        <div className="text-xs text-[var(--success-dark)]">
+                          Arrived: <DualTimeDisplay 
+                            rideTime={ride.pickup.arrived}
+                            rideTimezone={ride.timezone}
+                            showLabels={false}
+                            className="text-[var(--success-dark)]"
+                            compact={true}
+                          />
+                        </div>
+                        {ride.pickup.confirmed && (
+                          <div className="text-xs text-[var(--warning-dark)]">
+                            Confirmed: <DualTimeDisplay 
+                              rideTime={ride.pickup.confirmed}
+                              rideTimezone={ride.timezone}
+                              showLabels={false}
+                              className="text-[var(--warning-dark)]"
+                              compact={true}
+                            />
+                          </div>
+                        )}
+                        <div className="text-xs text-[var(--gray-700)] mt-1 truncate max-w-[200px]" title={ride.pickup.location}>
+                          {ride.pickup.location}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[var(--orange)] mt-1 flex-shrink-0"></div>
+                      <div className="min-w-0">
+                        <div className="text-xs text-[var(--blue-600)]">
+                          Scheduled: <DualTimeDisplay 
+                            rideTime={ride.dropoff.scheduled}
+                            rideTimezone={ride.timezone}
+                            showLabels={false}
+                            className="text-[var(--blue-600)]"
+                            compact={true}
+                          />
+                        </div>
+                        <div className="text-xs text-[var(--success-dark)]">
+                          Arrived: <DualTimeDisplay 
+                            rideTime={ride.dropoff.arrived}
+                            rideTimezone={ride.timezone}
+                            showLabels={false}
+                            className="text-[var(--success-dark)]"
+                            compact={true}
+                          />
+                        </div>
+                        {ride.dropoff.completed && (
+                          <div className="text-xs text-[var(--warning-dark)]">
+                            Completed: <DualTimeDisplay 
+                              rideTime={ride.dropoff.completed}
+                              rideTimezone={ride.timezone}
+                              showLabels={false}
+                              className="text-[var(--warning-dark)]"
+                              compact={true}
+                            />
+                          </div>
+                        )}
+                        <div className="text-xs text-[var(--gray-700)] mt-1 truncate max-w-[200px]" title={ride.dropoff.location}>
+                          {ride.dropoff.location}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                    <div>
+                      <div className="font-semibold text-sm text-[var(--primary-black)]">
+                        {ride.driver.name}
+                      </div>
+                      <div className="text-xs text-[var(--gray-600)]">
+                        {ride.driver.vehicle}
+                      </div>
+                      <div className="text-xs text-[var(--gray-500)] mt-1">
+                        {ride.details.distance} • {ride.details.duration}
+                      </div>
+                      <div className="text-xs text-[var(--gray-500)]">
+                        {ride.details.stops} stops • {ride.details.students} students
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          ride.statusColor === "blue"
+                            ? "bg-[var(--green)]"
+                            : ride.statusColor === "[var(--warning)]"
+                            ? "bg-[var(--orange)]"
+                            : ride.statusColor === "[var(--red)]"
+                            ? "bg-[var(--red)]"
+                            : "bg-[var(--gray-500)]"
+                        }`}
+                      ></div>
+                      <span
+                        className={`text-xs font-medium ${
+                          ride.statusColor === "blue"
+                            ? "text-[var(--green)]"
+                            : ride.statusColor === "[var(--warning)]"
+                            ? "text-[var(--orange)]"
+                            : ride.statusColor === "[var(--red)]"
+                            ? "text-[var(--red)]"
+                            : "text-[var(--gray-500)]"
+                        }`}
+                      >
+                        {ride.status}
                       </span>
                     </div>
-                    <div className="text-sm font-bold text-[var(--primary-black)] mb-1">
-                      {ride.id}
-                    </div>
-                    <div className="text-sm text-[var(--gray-500)] font-medium mb-1">
-                      {ride.district}
-                    </div>
-                    <div className="text-xs text-[var(--gray-500)] mb-1">
-                      {ride.date}
-                    </div>
-                                         <div className="text-sm text-[var(--blue-dark)] font-semibold">
-                       Scheduled: <DualTimeDisplay 
-                         rideTime={ride.scheduledTime}
-                         rideTimezone={ride.timezone}
-                         showLabels={false}
-                         className="text-[var(--blue-dark)]"
-                         compact={true}
-                       />
-                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-3">
-                <div className="flex items-start">
-                  <div className="w-3 h-3 rounded-full bg-[var(--green)] flex items-center justify-center mt-1 mr-1"></div>
-                  <div>
-                    <div className="text-xs font-medium">Pick-up</div>
-                                         <div className="text-xs text-[var(--blue-600)]">
-                       Scheduled: <DualTimeDisplay 
-                         rideTime={ride.pickup.scheduled}
-                         rideTimezone={ride.timezone}
-                         showLabels={false}
-                         className="text-[var(--blue-600)]"
-                         compact={true}
-                       />
-                     </div>
-                                         <div className="text-xs text-[var(--success-dark)]">
-                       Arrived: <DualTimeDisplay 
-                         rideTime={ride.pickup.arrived}
-                         rideTimezone={ride.timezone}
-                         showLabels={false}
-                         className="text-[var(--success-dark)]"
-                         compact={true}
-                       />
-                     </div>
-                                         {ride.pickup.confirmed && (
-                       <div className="text-xs text-[var(--warning-dark)]">
-                         Confirmed: <DualTimeDisplay 
-                           rideTime={ride.pickup.confirmed}
-                           rideTimezone={ride.timezone}
-                           showLabels={false}
-                           className="text-[var(--warning-dark)]"
-                           compact={true}
-                         />
-                       </div>
-                     )}
-                    <div className="text-xs text-[var(--gray-700)] mt-1">
-                      {ride.pickup.location}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-3">
-                <div className="flex items-start">
-                  <div className="w-3 h-3 rounded-full bg-[var(--orange)] flex items-center justify-center mt-1 mr-1"></div>
-                  <div>
-                    <div className="text-xs font-medium">Drop-off</div>
-                                         <div className="text-xs text-[var(--blue-600)]">
-                       Scheduled: <DualTimeDisplay 
-                         rideTime={ride.dropoff.scheduled}
-                         rideTimezone={ride.timezone}
-                         showLabels={false}
-                         className="text-[var(--blue-600)]"
-                         compact={true}
-                       />
-                     </div>
-                                         <div className="text-xs text-[var(--success-dark)]">
-                       Arrived: <DualTimeDisplay 
-                         rideTime={ride.dropoff.arrived}
-                         rideTimezone={ride.timezone}
-                         showLabels={false}
-                         className="text-[var(--success-dark)]"
-                         compact={true}
-                       />
-                     </div>
-                                         {ride.dropoff.completed && (
-                       <div className="text-xs text-[var(--warning-dark)]">
-                         Completed: <DualTimeDisplay 
-                           rideTime={ride.dropoff.completed}
-                           rideTimezone={ride.timezone}
-                           showLabels={false}
-                           className="text-[var(--warning-dark)]"
-                           compact={true}
-                         />
-                       </div>
-                     )}
-                    <div className="text-xs text-[var(--gray-700)] mt-1">
-                      {ride.dropoff.location}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-4 flex flex-col justify-between">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="font-semibold text-sm leading-tight">
-                      {ride.driver.name}
-                    </div>
-                    <div className="text-[var(--gray-700)] text-sm">
-                      {ride.driver.vehicle}
-                    </div>
-                    <div className="text-xs text-[var(--gray-500)] mt-1">
-                      {ride.details.distance} {ride.details.duration}{" "}
-                      {ride.details.stops} stops {ride.details.students}{" "}
-                      students
-                    </div>
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <span
-                      className={`w-2 h-2 rounded-full mr-1 bg-${ride.statusColor}`}
-                    ></span>
-                    <span
-                      className={`text-xs font-medium text-${ride.statusColor} `}
-                    >
-                      {ride.status}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-2 mt-3">
-                  <Button
-                    className="flex-1 py-1.5 rounded-lg text-sm font-medium text-foreground bg-transparent hover:bg-[var(--purple)] transition border-2"
-                    onClick={() => onView && onView(ride.id)}
-                    variant="ghost"
-                  >
-                    View
-                  </Button>
-                  <Button
-                    className="flex-1 py-1.5 border border-[--gray-300] rounded-lg text-sm font-medium text-foreground bg-[var(--background)] hover:bg-[var(--purple)] transition"
-                    onClick={() => onTrack && onTrack(ride.id)}
-                    variant="secondary"
-                  >
-                    Track
-                  </Button>
-                  <Button
-                    className="flex-1 py-1.5 border border-[--gray-300] rounded-lg text-sm font-medium text-foreground hover:bg-[var(--purple)] transition"
-                    style={{ backgroundColor: '#eff6ff' }}
-                    onClick={() => onAssignDriver && onAssignDriver(ride.id)}
-                    variant="secondary"
-                  >
-                    Assign
-                  </Button>
-                  <div className="relative">
-                    <Button
-                      className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)]"
-                      onClick={() => {
-                        setShowActionMenu(
-                          index === activeRideIndex ? !showActionMenu : true
-                        );
-                        setActiveRideIndex(index);
-                        if (onActionMenu) onActionMenu(ride, index);
-                      }}
-                      variant="ghost"
-                    >
-                      <MoreVertical size={18} />
-                    </Button>
-                    {showActionMenu && activeRideIndex === index && (
+                    <div className="mt-2">
                       <div
-                        ref={actionMenuRef}
-                        className="absolute right-0 mt-2 w-48 bg-[var(--background)] rounded-lg shadow-lg z-50 py-2 border border-card-border"
-                      >
-                        <Button
-                          className="flex !justify-start w-full px-4 py-2 text-sm text-foreground hover:bg-[var(--purple)] gap-2"
-                          variant="ghost"
-                        >
-                          <Edit size={16} /> Edit
-                        </Button>
-                        <Button
-                          className="flex !justify-start w-full px-4 py-2 text-sm text-foreground hover:bg-[var(--purple)] gap-2"
-                          variant="ghost"
-                          onClick={() => {
-                            setShowActionMenu(false);
-                            onCompleteRide && onCompleteRide(ride.id);
-                          }}
-                        >
-                          <CheckCircle size={16} /> Complete
-                        </Button>
-                        <Button
-                          className="flex !justify-start w-full px-4 py-2 text-sm text-[var(--red)] hover:bg-[var(--purple)] gap-2"
-                          variant="ghost"
-                          onClick={() => {
-                            setShowActionMenu(false);
-                            onCancelRide && onCancelRide(ride.id);
-                          }}
-                        >
-                          <XCircle size={16} /> Cancel
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div
-                className={`h-1.5 rounded-full ${
-                  ride.statusColor === "blue"
-                    ? "bg-[var(--green)]"
-                    : ride.statusColor === "[var(--warning)]"
-                    ? "bg-[var(--orange)]"
-                    : ride.statusColor === "[var(--red)]"
-                    ? "bg-[var(--red)]"
-                    : "bg-[var(--gray-500)]"
-                }`}
-                style={{ width: "10%" }}
-              ></div>
-            </div>
-          </div>
-        ))
+                        className={`h-1 rounded-full ${
+                          ride.statusColor === "blue"
+                            ? "bg-[var(--green)]"
+                            : ride.statusColor === "[var(--warning)]"
+                            ? "bg-[var(--orange)]"
+                            : ride.statusColor === "[var(--red)]"
+                            ? "bg-[var(--red)]"
+                            : "bg-[var(--gray-500)]"
+                        }`}
+                        style={{ width: "60%" }}
+                      ></div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

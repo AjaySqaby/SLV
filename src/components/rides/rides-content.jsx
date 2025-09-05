@@ -10,11 +10,6 @@ import RidesTable from "./RidesTable";
 import FilterDropdown from "./FilterDropdown";
 import DateRangePicker from "./DateRangePicker";
 import AddRideModal from "./AddRideModal";
-import RideDetailModal from "../eagle-eye/ride-detail-modal";
-import LiveTrackingDrawer from "./LiveTrackingDrawer";
-import AssignDriverModal from "./AssignDriverModal";
-import CompleteRideModal from "./CompleteRideModal";
-import CancelRideModal from "./CancelRideModal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
@@ -67,14 +62,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   }, [headerSearchTerm]);
   const [showFilters, setShowFilters] = useState(false);
   const [showAddRide, setShowAddRide] = useState(false);
-  const [showRideModal, setShowRideModal] = useState(false);
-  const [selectedRideId, setSelectedRideId] = useState(null);
-  const [showTrackingDrawer, setShowTrackingDrawer] = useState(false);
-  const [trackingRideId, setTrackingRideId] = useState(null);
-  const [showAssignDriver, setShowAssignDriver] = useState(false);
-  const [showCompleteRide, setShowCompleteRide] = useState(false);
-  const [showCancelRide, setShowCancelRide] = useState(false);
-  const [actionRideId, setActionRideId] = useState(null);
 
   const rides = [
     {
@@ -257,10 +244,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     rejected: tabCounts.rejected,
   };
 
-  const driverOptions = rides.map((r) => ({
-    value: r.driver.name,
-    label: r.driver.name,
-  }));
 
   function getFilteredRides() {
     let filteredRides = rides;
@@ -383,7 +366,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   }
 
   return (
-    <div className="bg-[var(--gray-50)] min-h-screen">
+    <div className="min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Rides Management</h1>
         <Button
@@ -508,64 +491,8 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           )}
         </div>
       </div>
-      <RidesTable
-        rides={getFilteredRides()}
-        onView={(rideId) => {
-          router.push(`/rides/${rideId}`);
-        }}
-        onTrack={(rideId) => {
-          setTrackingRideId(rideId);
-          setShowTrackingDrawer(true);
-        }}
-        onAssignDriver={(rideId) => {
-          setActionRideId(rideId);
-          setShowAssignDriver(true);
-        }}
-        onCompleteRide={(rideId) => {
-          setActionRideId(rideId);
-          setShowCompleteRide(true);
-        }}
-        onCancelRide={(rideId) => {
-          setActionRideId(rideId);
-          setShowCancelRide(true);
-        }}
-      />
+      <RidesTable rides={getFilteredRides()} />
       <AddRideModal open={showAddRide} onClose={() => setShowAddRide(false)} />
-      <RideDetailModal
-        isOpen={showRideModal}
-        onClose={() => setShowRideModal(false)}
-        rideId={selectedRideId}
-      />
-      <LiveTrackingDrawer
-        isOpen={showTrackingDrawer}
-        onClose={() => setShowTrackingDrawer(false)}
-        rideId={trackingRideId}
-      />
-      <AssignDriverModal
-        open={showAssignDriver}
-        onClose={() => setShowAssignDriver(false)}
-        rideId={actionRideId}
-        driverOptions={driverOptions}
-        onAssign={(driver) => {
-          /* handle assign logic here */
-        }}
-      />
-      <CompleteRideModal
-        open={showCompleteRide}
-        onClose={() => setShowCompleteRide(false)}
-        rideId={actionRideId}
-        onComplete={() => {
-          /* handle complete logic here */
-        }}
-      />
-      <CancelRideModal
-        open={showCancelRide}
-        onClose={() => setShowCancelRide(false)}
-        rideId={actionRideId}
-        onCancel={() => {
-          /* handle cancel logic here */
-        }}
-      />
     </div>
   );
 }

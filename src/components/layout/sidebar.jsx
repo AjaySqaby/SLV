@@ -37,7 +37,7 @@ export default function Sidebar({ activePage = "Dashboard" }) {
       label: "Notifications",
       href: "/notifications",
     },
-    { icon: <UserPlus size={20} />, label: "Onboarding", href: "#" },
+    { icon: <UserPlus size={20} />, label: "Onboarding", href: "/onboarding" },
     { icon: <FileText size={20} />, label: "Reports", href: "/reports" },
   ];
 
