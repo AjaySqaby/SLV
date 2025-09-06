@@ -38,6 +38,24 @@ export const getTimezoneLabel = (timezoneValue) => {
   return timezone ? timezone.label : timezoneValue;
 };
 
+// Get short timezone abbreviation (e.g., PDT, EST, CDT) with daylight saving consideration
+export const getShortTimezoneAbbreviation = (timezoneValue, dateTime = null) => {
+  try {
+    // Use provided dateTime or current time
+    const time = dateTime || DateTime.now();
+    // Set the timezone and get the formatted abbreviation
+    const zonedTime = time.setZone(timezoneValue);
+    const abbr = zonedTime.toFormat('ZZZZ'); // Returns short abbreviation like PDT, EST, CDT
+    return abbr;
+  } catch (error) {
+    console.error('Error getting short timezone abbreviation:', error);
+    // Fallback to extracting abbreviation from timezone label
+    const label = getTimezoneLabel(timezoneValue);
+    const match = label.match(/\(([A-Z]{2,4})\)/);
+    return match ? match[1] : timezoneValue;
+  }
+};
+
 // Get timezone value from label
 export const getTimezoneValue = (timezoneLabel) => {
   const timezone = TIMEZONES.find(tz => tz.label === timezoneLabel);

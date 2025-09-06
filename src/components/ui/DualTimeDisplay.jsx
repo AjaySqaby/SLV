@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { convertRideTimeToUserTimezone, getTimezoneLabel, getUserTimezone } from "@/utils/timezone";
+import { convertRideTimeToUserTimezone, getTimezoneLabel, getShortTimezoneAbbreviation, getUserTimezone } from "@/utils/timezone";
 import { useTimezone } from "@/contexts/TimezoneContext";
 
 export default function DualTimeDisplay({ 
@@ -37,16 +37,18 @@ export default function DualTimeDisplay({
   const rideTimezoneLabel = getTimezoneLabel(effectiveRideTimezone);
   const userTimezoneLabel = getTimezoneLabel(effectiveUserTimezone);
   
-  // Compact display (original design)
+  // Compact display (side by side with short abbreviations)
   if (compact) {
+    // Get short timezone abbreviations
+    const rideTimezoneAbbr = getShortTimezoneAbbreviation(effectiveRideTimezone);
+    const userTimezoneAbbr = getShortTimezoneAbbreviation(effectiveUserTimezone);
+    
     return (
       <span className={`${className}`}>
         {showLabels && <span className="text-gray-600 mr-1">Time:</span>}
-        <span className="font-medium">{rideTime}</span>
-        <span className="text-xs text-gray-500 ml-1">({rideTimezoneLabel})</span>
-        <br />
-        <span className="text-sm text-gray-600">{userTime}</span>
-        <span className="text-xs text-gray-500 ml-1">({userTimezoneLabel})</span>
+        <span className="font-medium">{rideTime} {rideTimezoneAbbr}</span>
+        <span className="text-gray-500 mx-1">-</span>
+        <span className="font-medium">{userTime} {userTimezoneAbbr}</span>
       </span>
     );
   }

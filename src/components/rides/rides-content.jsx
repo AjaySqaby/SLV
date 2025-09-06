@@ -227,21 +227,25 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
 
   const tabCounts = {
     all: rides.length,
-    upcoming: 0,
-    unassigned: 0,
-    completed: 0,
-    canceled: 0,
-    rejected: 0,
-    assigned: rides.length,
+    upcoming: rides.filter((r) => r.status === "Upcoming").length,
+    completed: rides.filter((r) => r.status === "Completed").length,
+    assigned: rides.filter((r) => r.status === "Assigned").length,
+    accepted: rides.filter((r) => r.status === "Accepted").length,
     inProgress: rides.filter((r) => r.status === "In Progress").length,
+    unassigned: rides.filter((r) => r.status === "Unassigned").length,
+    unaccepted: rides.filter((r) => r.status === "Unaccepted").length,
+    notStarted: rides.filter((r) => r.status === "Not Started").length,
+    substituteNeeded: rides.filter((r) => r.status === "Substitute Needed").length,
+    late: rides.filter((r) => r.status === "Late" || r.status === "Delayed").length,
+    rejectedCanceled: rides.filter((r) => r.status === "Rejected" || r.status === "Canceled" || r.status === "Cancelled").length,
   };
 
   const stats = {
     total: rides.length,
     completed: tabCounts.completed,
     inProgress: tabCounts.inProgress,
-    canceled: tabCounts.canceled,
-    rejected: tabCounts.rejected,
+    canceled: tabCounts.rejectedCanceled,
+    rejected: tabCounts.rejectedCanceled,
   };
 
 
@@ -250,29 +254,41 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
 
     // Filter by active tab
     switch (activeTab) {
-      case 0:
+      case 0: // All Rides
         filteredRides = rides;
         break;
-      case 1:
-        filteredRides = [];
+      case 1: // Upcoming
+        filteredRides = rides.filter((r) => r.status === "Upcoming");
         break;
-      case 2:
-        filteredRides = [];
+      case 2: // Completed
+        filteredRides = rides.filter((r) => r.status === "Completed");
         break;
-      case 3:
-        filteredRides = [];
+      case 3: // Assigned
+        filteredRides = rides.filter((r) => r.status === "Assigned");
         break;
-      case 4:
-        filteredRides = [];
+      case 4: // Accepted
+        filteredRides = rides.filter((r) => r.status === "Accepted");
         break;
-      case 5:
-        filteredRides = [];
-        break;
-      case 6:
-        filteredRides = rides;
-        break;
-      case 7:
+      case 5: // In Progress
         filteredRides = rides.filter((r) => r.status === "In Progress");
+        break;
+      case 6: // Unassigned
+        filteredRides = rides.filter((r) => r.status === "Unassigned");
+        break;
+      case 7: // Unaccepted
+        filteredRides = rides.filter((r) => r.status === "Unaccepted");
+        break;
+      case 8: // Not Started
+        filteredRides = rides.filter((r) => r.status === "Not Started");
+        break;
+      case 9: // Substitute Needed
+        filteredRides = rides.filter((r) => r.status === "Substitute Needed");
+        break;
+      case 10: // Late
+        filteredRides = rides.filter((r) => r.status === "Late" || r.status === "Delayed");
+        break;
+      case 11: // Rejected/Canceled
+        filteredRides = rides.filter((r) => r.status === "Rejected" || r.status === "Canceled" || r.status === "Cancelled");
         break;
       default:
         filteredRides = rides;

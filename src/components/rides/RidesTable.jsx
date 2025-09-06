@@ -1,7 +1,13 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
 export default function RidesTable({ rides }) {
+  const router = useRouter();
+
+  const handleRideClick = (rideId) => {
+    router.push(`/rides/${rideId}`);
+  };
 
   return (
     <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
@@ -45,9 +51,10 @@ export default function RidesTable({ rides }) {
               {rides.map((ride, index) => (
                 <tr
                   key={ride.id}
-                  className="border-b border-[var(--gray-100)]"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] cursor-pointer transition-all duration-200"
+                  onClick={() => handleRideClick(ride.id)}
                 >
-                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                  <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                         {index + 1}
@@ -75,7 +82,7 @@ export default function RidesTable({ rides }) {
                     </div>
                   </td>
                   
-                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                  <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1 flex-shrink-0"></div>
                       <div className="min-w-0">
@@ -115,7 +122,7 @@ export default function RidesTable({ rides }) {
                     </div>
                   </td>
                   
-                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                  <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 rounded-full bg-[var(--orange)] mt-1 flex-shrink-0"></div>
                       <div className="min-w-0">
@@ -155,7 +162,7 @@ export default function RidesTable({ rides }) {
                     </div>
                   </td>
                   
-                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                  <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div>
                       <div className="font-semibold text-sm text-[var(--primary-black)]">
                         {ride.driver.name}
@@ -172,7 +179,7 @@ export default function RidesTable({ rides }) {
                     </div>
                   </td>
                   
-                  <td className="px-4 py-4 hover:bg-[var(--gray-100)] transition-all duration-200 cursor-pointer">
+                  <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-2 h-2 rounded-full ${
