@@ -13,7 +13,7 @@ export default function RideDetailContent({ rideId }) {
 
   // Mock data - replace with actual API call
   const getRideData = (id) => {
-    if (id === "1") {
+    if (id === "1" || id === "1001") {
       // Completed ride
       return {
         id: id,
@@ -50,11 +50,11 @@ export default function RideDetailContent({ rideId }) {
           districtCharge: "$120.00"
         }
       }
-    } else if (id === "2") {
-      // Upcoming ride
+    } else if (id === "2" || id === "1002") {
+      // In Progress ride
       return {
         id: id,
-        status: "Scheduled",
+        status: "In Progress",
         eta: "8:15 AM",
         driver: {
           name: "Yonathan Mekonnen",
@@ -87,11 +87,88 @@ export default function RideDetailContent({ rideId }) {
           districtCharge: "$110.00"
         }
       }
-    } else {
-      // Default ride data
+    } else if (id === "D-1001") {
+      // Upcoming ride
       return {
         id: id,
-        status: "In-progress",
+        status: "Upcoming",
+        eta: "8:30 AM",
+        driver: {
+          name: "William Rodriguez",
+          vehicle: "Toyota Sienna"
+        },
+        route: {
+          id: "RT-30845",
+          district: "86022-Z",
+          duration: "30 minutes",
+          distance: "2.8 mi"
+        },
+        passengers: {
+          students: 1,
+          stops: 2
+        },
+        pickup: {
+          address: "Midtown High School",
+          scheduledTime: "8:30 AM",
+          actualTime: "Not started",
+          status: "Pending"
+        },
+        dropoff: {
+          address: "1500 Broadway, Oakland, CA 94612",
+          scheduledTime: "9:00 AM",
+          actualTime: "Not started",
+          status: "Pending"
+        },
+        payment: {
+          driverPayment: "$65.00",
+          districtCharge: "$100.00"
+        }
+      }
+    } else if (id === "D-1002") {
+      // Delayed ride
+      return {
+        id: id,
+        status: "Delayed",
+        eta: "9:35 AM",
+        driver: {
+          name: "Maria Sanchez",
+          vehicle: "Honda Odyssey"
+        },
+        route: {
+          id: "RT-30846",
+          district: "86022-Z",
+          duration: "30 minutes",
+          distance: "3.2 mi"
+        },
+        passengers: {
+          students: 1,
+          stops: 2
+        },
+        pickup: {
+          address: "Buckhead Elementary",
+          scheduledTime: "9:05 AM",
+          actualTime: "9:05 AM",
+          status: "Complete"
+        },
+        dropoff: {
+          address: "145 Ralph McGill Blvd NE, Atlanta, GA 30308",
+          scheduledTime: "9:35 AM",
+          actualTime: "Running late",
+          status: "Delayed"
+        },
+        payment: {
+          driverPayment: "$65.00",
+          districtCharge: "$110.00"
+        }
+      }
+    } else {
+      // Default ride data - make it dynamic based on common statuses
+      const statuses = ["In Progress", "Upcoming", "Assigned", "Accepted"];
+      const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+      
+      return {
+        id: id,
+        status: randomStatus,
         eta: "7:35 AM",
         driver: {
           name: "Yonathan Mekonnen",
@@ -160,7 +237,7 @@ export default function RideDetailContent({ rideId }) {
   }
 
   return (
-    <div className="space-y-6 bg-gray-50 min-h-screen p-6">
+    <div className="space-y-6 bg-white min-h-screen">
       {/* Back Navigation */}
       <div className="mb-4">
         <Button
@@ -179,12 +256,11 @@ export default function RideDetailContent({ rideId }) {
         <div className="flex items-center space-x-2">
           <Car className="w-6 h-6 text-[var(--blue-600)]" />
           <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <StatusBadge status={rideData.status} />
+          <StatusBadge status={rideData.status} fontSize="text-lg" />
           <span className="text-sm font-medium text-gray-700">ETA: {rideData.eta}</span>
         </div>
+
+      
       </div>
 
       {/* Action Buttons */}

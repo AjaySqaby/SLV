@@ -1,16 +1,44 @@
-import React from "react";
+"use client";
 import { useRouter } from "next/navigation";
+import React, { useState, useRef, useEffect } from "react";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
+import Button from "@/components/ui/Button";
+import { MoreVertical } from "lucide-react";
+import { Edit, CheckCircle, XCircle } from "lucide-react";
+import CompleteRideModal from "./CompleteRideModal";
+import CancelRideModal from "./CancelRideModal";
 
-export default function RidesTable({ rides }) {
+export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
 
   const handleRideClick = (rideId) => {
     router.push(`/rides/${rideId}`);
   };
 
+  const [showActionMenu, setShowActionMenu] = useState(false);
+  const [activeRideIndex, setActiveRideIndex] = useState(null);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedRide, setSelectedRide] = useState(null);
+  const actionMenuRef = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(e.target)) {
+        setShowActionMenu(false);
+        setActiveRideIndex(null);
+      }
+    }
+    if (showActionMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showActionMenu]);
+
   return (
-    <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
+    <div className="overflow-hidden">
       {rides.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">
           <svg
@@ -57,7 +85,7 @@ export default function RidesTable({ rides }) {
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
-                        {index + 1}
+                        {(currentPage - 1) * itemsPerPage + index + 1}
                       </div>
                       <div>
                         <div className="text-sm font-bold text-[var(--primary-black)]">
@@ -70,7 +98,7 @@ export default function RidesTable({ rides }) {
                           {ride.date}
                         </div>
                         <div className="text-xs text-[var(--blue-dark)] font-semibold mt-1">
-                          Scheduled: <DualTimeDisplay 
+                          Scheduled: <DualTimeDisplay
                             rideTime={ride.scheduledTime}
                             rideTimezone={ride.timezone}
                             showLabels={false}
@@ -81,13 +109,13 @@ export default function RidesTable({ rides }) {
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 rounded-full bg-[var(--green)] mt-1 flex-shrink-0"></div>
                       <div className="min-w-0">
                         <div className="text-xs text-[var(--blue-600)]">
-                          Scheduled: <DualTimeDisplay 
+                          Scheduled: <DualTimeDisplay
                             rideTime={ride.pickup.scheduled}
                             rideTimezone={ride.timezone}
                             showLabels={false}
@@ -96,7 +124,7 @@ export default function RidesTable({ rides }) {
                           />
                         </div>
                         <div className="text-xs text-[var(--success-dark)]">
-                          Arrived: <DualTimeDisplay 
+                          Arrived: <DualTimeDisplay
                             rideTime={ride.pickup.arrived}
                             rideTimezone={ride.timezone}
                             showLabels={false}
@@ -106,7 +134,7 @@ export default function RidesTable({ rides }) {
                         </div>
                         {ride.pickup.confirmed && (
                           <div className="text-xs text-[var(--warning-dark)]">
-                            Confirmed: <DualTimeDisplay 
+                            Confirmed: <DualTimeDisplay
                               rideTime={ride.pickup.confirmed}
                               rideTimezone={ride.timezone}
                               showLabels={false}
@@ -121,13 +149,13 @@ export default function RidesTable({ rides }) {
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-start gap-2">
                       <div className="w-2 h-2 rounded-full bg-[var(--orange)] mt-1 flex-shrink-0"></div>
                       <div className="min-w-0">
                         <div className="text-xs text-[var(--blue-600)]">
-                          Scheduled: <DualTimeDisplay 
+                          Scheduled: <DualTimeDisplay
                             rideTime={ride.dropoff.scheduled}
                             rideTimezone={ride.timezone}
                             showLabels={false}
@@ -136,7 +164,7 @@ export default function RidesTable({ rides }) {
                           />
                         </div>
                         <div className="text-xs text-[var(--success-dark)]">
-                          Arrived: <DualTimeDisplay 
+                          Arrived: <DualTimeDisplay
                             rideTime={ride.dropoff.arrived}
                             rideTimezone={ride.timezone}
                             showLabels={false}
@@ -146,7 +174,7 @@ export default function RidesTable({ rides }) {
                         </div>
                         {ride.dropoff.completed && (
                           <div className="text-xs text-[var(--warning-dark)]">
-                            Completed: <DualTimeDisplay 
+                            Completed: <DualTimeDisplay
                               rideTime={ride.dropoff.completed}
                               rideTimezone={ride.timezone}
                               showLabels={false}
@@ -161,7 +189,7 @@ export default function RidesTable({ rides }) {
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div>
                       <div className="font-semibold text-sm text-[var(--primary-black)]">
@@ -178,45 +206,102 @@ export default function RidesTable({ rides }) {
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          ride.statusColor === "blue"
-                            ? "bg-[var(--green)]"
-                            : ride.statusColor === "[var(--warning)]"
-                            ? "bg-[var(--orange)]"
-                            : ride.statusColor === "[var(--red)]"
-                            ? "bg-[var(--red)]"
-                            : "bg-[var(--gray-500)]"
-                        }`}
-                      ></div>
-                      <span
-                        className={`text-xs font-medium ${
-                          ride.statusColor === "blue"
-                            ? "text-[var(--green)]"
-                            : ride.statusColor === "[var(--warning)]"
-                            ? "text-[var(--orange)]"
-                            : ride.statusColor === "[var(--red)]"
-                            ? "text-[var(--red)]"
-                            : "text-[var(--gray-500)]"
-                        }`}
-                      >
-                        {ride.status}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-2 h-2 rounded-full ${ride.statusColor === "blue"
+                              ? "bg-[var(--green)]"
+                              : ride.statusColor === "[var(--warning)]"
+                                ? "bg-[var(--orange)]"
+                                : ride.statusColor === "[var(--red)]"
+                                  ? "bg-[var(--red)]"
+                                  : "bg-[var(--gray-500)]"
+                            }`}
+                        ></div>
+                        <span
+                          className={`text-xs font-medium ${ride.statusColor === "blue"
+                              ? "text-[var(--green)]"
+                              : ride.statusColor === "[var(--warning)]"
+                                ? "text-[var(--orange)]"
+                                : ride.statusColor === "[var(--red)]"
+                                  ? "text-[var(--red)]"
+                                  : "text-[var(--gray-500)]"
+                            }`}
+                        >
+                          {ride.status}
+                        </span>
+                      </div>
+                      <div className="relative">
+                        <Button
+                          className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowActionMenu(
+                              index === activeRideIndex ? !showActionMenu : true
+                            );
+                            setActiveRideIndex(index);
+                            if (onActionMenu) onActionMenu(ride, index);
+                          }}
+                          variant="ghost"
+                        >
+                          <MoreVertical size={18} />
+                        </Button>
+                        {showActionMenu && activeRideIndex === index && (
+                          <div
+                            ref={actionMenuRef}
+                            className="absolute right-0 mt-2 w-48 bg-[var(--background)] rounded-lg shadow-lg z-50 py-2 border border-card-border"
+                          >
+                            <Button
+                              className="flex !justify-start w-full px-4 py-2 text-sm text-foreground hover:bg-[var(--purple)] gap-2"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowActionMenu(false);
+                                // Add edit functionality here
+                              }}
+                            >
+                              <Edit size={16} /> Edit
+                            </Button>
+                            <Button
+                              className="flex !justify-start w-full px-4 py-2 text-sm text-foreground hover:bg-[var(--purple)] gap-2"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowActionMenu(false);
+                                setSelectedRide(ride);
+                                setShowCompleteModal(true);
+                              }}
+                            >
+                              <CheckCircle size={16} /> Complete
+                            </Button>
+                            <Button
+                              className="flex !justify-start w-full px-4 py-2 text-sm text-[var(--red)] hover:bg-[var(--purple)] gap-2"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowActionMenu(false);
+                                setSelectedRide(ride);
+                                setShowCancelModal(true);
+                              }}
+                            >
+                              <XCircle size={16} /> Cancel
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="mt-2">
                       <div
-                        className={`h-1 rounded-full ${
-                          ride.statusColor === "blue"
+                        className={`h-1 rounded-full ${ride.statusColor === "blue"
                             ? "bg-[var(--green)]"
                             : ride.statusColor === "[var(--warning)]"
-                            ? "bg-[var(--orange)]"
-                            : ride.statusColor === "[var(--red)]"
-                            ? "bg-[var(--red)]"
-                            : "bg-[var(--gray-500)]"
-                        }`}
+                              ? "bg-[var(--orange)]"
+                              : ride.statusColor === "[var(--red)]"
+                                ? "bg-[var(--red)]"
+                                : "bg-[var(--gray-500)]"
+                          }`}
                         style={{ width: "60%" }}
                       ></div>
                     </div>
@@ -227,6 +312,30 @@ export default function RidesTable({ rides }) {
           </table>
         </div>
       )}
+
+      {/* Complete Ride Modal */}
+      <CompleteRideModal
+        open={showCompleteModal}
+        onClose={() => {
+          setShowCompleteModal(false);
+          setSelectedRide(null);
+        }}
+        rideId={selectedRide?.id}
+        onComplete={() => {
+         }}
+      />
+
+      {/* Cancel Ride Modal */}
+      <CancelRideModal
+        open={showCancelModal}
+        onClose={() => {
+          setShowCancelModal(false);
+          setSelectedRide(null);
+        }}
+        rideId={selectedRide?.id}
+        onCancel={() => {
+        }}
+      />
     </div>
   );
 }

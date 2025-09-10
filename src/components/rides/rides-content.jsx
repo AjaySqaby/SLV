@@ -12,6 +12,7 @@ import DateRangePicker from "./DateRangePicker";
 import AddRideModal from "./AddRideModal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import Pagination from "@/components/ui/Pagination";
 
 export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const router = useRouter();
@@ -22,6 +23,8 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [search, setSearch] = useState("");
   const [mainSearch, setMainSearch] = useState("");
   const [statsFilter, setStatsFilter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const clearFilters = () => {
     setSearch("");
@@ -30,6 +33,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setEndDate();
     setFilterType("Driver");
     setStatsFilter(null);
+    setCurrentPage(1);
   };
 
   const handleDateRangeChange = (start, end) => {
@@ -45,6 +49,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setStartDate();
     setEndDate();
     setActiveTab(0); // Reset to 'All' tab
+    setCurrentPage(1);
   };
 
   // Use header search term if provided
@@ -58,6 +63,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       setEndDate();
       setStatsFilter(null);
       setActiveTab(0); // Reset to 'All' tab
+      setCurrentPage(1);
     }
   }, [headerSearchTerm]);
   const [showFilters, setShowFilters] = useState(false);
@@ -93,7 +99,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         stops: 2,
         students: 2,
       },
-      status: "In Progress",
+      status: "Completed",
       statusColor: "blue",
       rowColor: "border-green-500",
     },
@@ -157,7 +163,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         stops: 2,
         students: 1,
       },
-      status: "In Progress",
+      status: "Upcoming",
       statusColor: "blue",
       rowColor: "border-green-500",
     },
@@ -219,9 +225,453 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         stops: 2,
         students: 1,
       },
-      status: "Potential Delay",
+      status: "Assigned",
       statusColor: "[var(--warning)]",
       rowColor: "border-[var(--warning)]",
+    },
+    {
+      id: "1003",
+      number: 6,
+      district: "San Francisco Unified School District",
+      date: "12/30/2024 (Monday)",
+      scheduledTime: "07:45 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "07:45 AM",
+        arrived: "07:45 AM",
+        location: "Golden Gate Elementary",
+      },
+      dropoff: {
+        scheduled: "08:15 AM",
+        arrived: "08:15 AM",
+        location: "Mission District Center",
+      },
+      driver: {
+        name: "Jennifer Kim",
+        vehicle: "Toyota Sienna",
+      },
+      details: {
+        distance: "4.1 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "Accepted",
+      statusColor: "blue",
+      rowColor: "border-green-500",
+    },
+    {
+      id: "1004",
+      number: 7,
+      district: "San Francisco Unified School District",
+      date: "12/31/2024 (Tuesday)",
+      scheduledTime: "08:00 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "08:00 AM",
+        location: "Richmond High School",
+      },
+      dropoff: {
+        scheduled: "08:30 AM",
+        location: "Sunset Boulevard Campus",
+      },
+      driver: {
+        name: "David Thompson",
+        vehicle: "Ford Transit",
+      },
+      details: {
+        distance: "5.2 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 3,
+      },
+      status: "Unassigned",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-orange-500",
+    },
+    {
+      id: "1005",
+      number: 8,
+      district: "Los Angeles Unified School District",
+      date: "01/01/2025 (Wednesday)",
+      scheduledTime: "07:30 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "07:30 AM",
+        location: "Hollywood High School",
+      },
+      dropoff: {
+        scheduled: "08:00 AM",
+        location: "Beverly Hills Campus",
+      },
+      driver: {
+        name: "Amanda Johnson",
+        vehicle: "Honda Odyssey",
+      },
+      details: {
+        distance: "6.8 mi",
+        duration: "30 min",
+        stops: 4,
+        students: 6,
+      },
+      status: "Unaccepted",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-orange-500",
+    },
+    {
+      id: "1006",
+      number: 9,
+      district: "Los Angeles Unified School District",
+      date: "01/02/2025 (Thursday)",
+      scheduledTime: "09:00 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "09:00 AM",
+        location: "Venice Beach Elementary",
+      },
+      dropoff: {
+        scheduled: "09:30 AM",
+        location: "Santa Monica Center",
+      },
+      driver: {
+        name: "Robert Garcia",
+        vehicle: "Ford Transit",
+      },
+      details: {
+        distance: "3.7 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 2,
+      },
+      status: "Not Started",
+      statusColor: "[var(--gray-500)]",
+      rowColor: "border-gray-500",
+    },
+    {
+      id: "1007",
+      number: 10,
+      district: "Chicago Public Schools",
+      date: "01/03/2025 (Friday)",
+      scheduledTime: "08:15 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "08:15 AM",
+        location: "Lincoln Park High School",
+      },
+      dropoff: {
+        scheduled: "08:45 AM",
+        location: "Downtown Chicago Campus",
+      },
+      driver: {
+        name: "Michelle Brown",
+        vehicle: "Toyota Sienna",
+      },
+      details: {
+        distance: "4.5 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "Substitute Needed",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-yellow-500",
+    },
+    {
+      id: "1008",
+      number: 11,
+      district: "Chicago Public Schools",
+      date: "01/04/2025 (Saturday)",
+      scheduledTime: "07:50 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "07:50 AM",
+        arrived: "08:10 AM",
+        location: "North Side Elementary",
+      },
+      dropoff: {
+        scheduled: "08:20 AM",
+        location: "Millennium Park Center",
+      },
+      driver: {
+        name: "Christopher Wilson",
+        vehicle: "Honda Odyssey",
+      },
+      details: {
+        distance: "5.1 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 3,
+      },
+      status: "Late",
+      statusColor: "[var(--red)]",
+      rowColor: "border-red-500",
+    },
+    {
+      id: "1009",
+      number: 12,
+      district: "Boston Public Schools",
+      date: "01/05/2025 (Sunday)",
+      scheduledTime: "08:30 AM",
+      timezone: "America/New_York",
+      pickup: {
+        scheduled: "08:30 AM",
+        location: "Back Bay High School",
+      },
+      dropoff: {
+        scheduled: "09:00 AM",
+        location: "Cambridge Campus",
+      },
+      driver: {
+        name: "Sarah Davis",
+        vehicle: "Ford Transit",
+      },
+      details: {
+        distance: "3.9 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 2,
+      },
+      status: "Rejected",
+      statusColor: "[var(--red)]",
+      rowColor: "border-red-500",
+    },
+    {
+      id: "1010",
+      number: 13,
+      district: "Boston Public Schools",
+      date: "01/06/2025 (Monday)",
+      scheduledTime: "09:15 AM",
+      timezone: "America/New_York",
+      pickup: {
+        scheduled: "09:15 AM",
+        location: "South End Elementary",
+      },
+      dropoff: {
+        scheduled: "09:45 AM",
+        location: "Harbor District Center",
+      },
+      driver: {
+        name: "Kevin Martinez",
+        vehicle: "Toyota Sienna",
+      },
+      details: {
+        distance: "4.3 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 5,
+      },
+      status: "Cancelled",
+      statusColor: "[var(--red)]",
+      rowColor: "border-red-500",
+    },
+    {
+      id: "1011",
+      number: 14,
+      district: "Miami-Dade County Public Schools",
+      date: "01/07/2025 (Tuesday)",
+      scheduledTime: "07:45 AM",
+      timezone: "America/New_York",
+      pickup: {
+        scheduled: "07:45 AM",
+        arrived: "07:45 AM",
+        confirmed: "07:50 AM",
+        location: "South Beach High School",
+      },
+      dropoff: {
+        scheduled: "08:15 AM",
+        arrived: "08:15 AM",
+        completed: "08:25 AM",
+        location: "Downtown Miami Campus",
+      },
+      driver: {
+        name: "Luis Rodriguez",
+        vehicle: "Honda Odyssey",
+      },
+      details: {
+        distance: "6.2 mi",
+        duration: "30 min",
+        stops: 4,
+        students: 7,
+      },
+      status: "Completed",
+      statusColor: "blue",
+      rowColor: "border-green-500",
+    },
+    {
+      id: "1012",
+      number: 15,
+      district: "Miami-Dade County Public Schools",
+      date: "01/08/2025 (Wednesday)",
+      scheduledTime: "08:00 AM",
+      timezone: "America/New_York",
+      pickup: {
+        scheduled: "08:00 AM",
+        arrived: "08:00 AM",
+        location: "Coral Gables Elementary",
+      },
+      dropoff: {
+        scheduled: "08:30 AM",
+        arrived: "08:30 AM",
+        location: "Brickell Center",
+      },
+      driver: {
+        name: "Maria Gonzalez",
+        vehicle: "Ford Transit",
+      },
+      details: {
+        distance: "5.8 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "In Progress",
+      statusColor: "blue",
+      rowColor: "border-green-500",
+    },
+    {
+      id: "1013",
+      number: 16,
+      district: "Houston Independent School District",
+      date: "01/09/2025 (Thursday)",
+      scheduledTime: "07:30 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "07:30 AM",
+        location: "Heights Elementary",
+      },
+      dropoff: {
+        scheduled: "08:00 AM",
+        location: "Downtown Houston Campus",
+      },
+      driver: {
+        name: "James Anderson",
+        vehicle: "Toyota Sienna",
+      },
+      details: {
+        distance: "7.1 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 3,
+      },
+      status: "Upcoming",
+      statusColor: "blue",
+      rowColor: "border-blue-500",
+    },
+    {
+      id: "1014",
+      number: 17,
+      district: "Houston Independent School District",
+      date: "01/10/2025 (Friday)",
+      scheduledTime: "08:45 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "08:45 AM",
+        location: "Memorial High School",
+      },
+      dropoff: {
+        scheduled: "09:15 AM",
+        location: "Galleria District Center",
+      },
+      driver: {
+        name: "Patricia White",
+        vehicle: "Honda Odyssey",
+      },
+      details: {
+        distance: "4.7 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 5,
+      },
+      status: "Assigned",
+      statusColor: "blue",
+      rowColor: "border-purple-500",
+    },
+    {
+      id: "1015",
+      number: 18,
+      district: "Phoenix Union High School District",
+      date: "01/11/2025 (Saturday)",
+      scheduledTime: "09:00 AM",
+      timezone: "America/Phoenix",
+      pickup: {
+        scheduled: "09:00 AM",
+        location: "Desert Ridge High School",
+      },
+      dropoff: {
+        scheduled: "09:30 AM",
+        location: "Scottsdale Campus",
+      },
+      driver: {
+        name: "Mark Johnson",
+        vehicle: "Ford Transit",
+      },
+      details: {
+        distance: "8.3 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 2,
+      },
+      status: "Accepted",
+      statusColor: "blue",
+      rowColor: "border-teal-500",
+    },
+    {
+      id: "1016",
+      number: 19,
+      district: "Phoenix Union High School District",
+      date: "01/12/2025 (Sunday)",
+      scheduledTime: "08:15 AM",
+      timezone: "America/Phoenix",
+      pickup: {
+        scheduled: "08:15 AM",
+        location: "Central Phoenix Elementary",
+      },
+      dropoff: {
+        scheduled: "08:45 AM",
+        location: "Tempe District Center",
+      },
+      driver: {
+        name: "Lisa Thompson",
+        vehicle: "Toyota Sienna",
+      },
+      details: {
+        distance: "6.4 mi",
+        duration: "30 min",
+        stops: 4,
+        students: 6,
+      },
+      status: "In Progress",
+      statusColor: "blue",
+      rowColor: "border-indigo-500",
+    },
+    {
+      id: "1017",
+      number: 20,
+      district: "Seattle Public Schools",
+      date: "01/13/2025 (Monday)",
+      scheduledTime: "07:45 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "07:45 AM",
+        location: "Capitol Hill High School",
+      },
+      dropoff: {
+        scheduled: "08:15 AM",
+        location: "University District Campus",
+      },
+      driver: {
+        name: "Daniel Lee",
+        vehicle: "Honda Odyssey",
+      },
+      details: {
+        distance: "5.5 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "Delayed",
+      statusColor: "[var(--red)]",
+      rowColor: "border-red-500",
     },
   ];
 
@@ -237,15 +687,16 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     notStarted: rides.filter((r) => r.status === "Not Started").length,
     substituteNeeded: rides.filter((r) => r.status === "Substitute Needed").length,
     late: rides.filter((r) => r.status === "Late" || r.status === "Delayed").length,
-    rejectedCanceled: rides.filter((r) => r.status === "Rejected" || r.status === "Canceled" || r.status === "Cancelled").length,
+    rejected: rides.filter((r) => r.status === "Rejected").length,
+    cancelled: rides.filter((r) => r.status === "Canceled" || r.status === "Cancelled").length,
   };
 
   const stats = {
     total: rides.length,
     completed: tabCounts.completed,
     inProgress: tabCounts.inProgress,
-    canceled: tabCounts.rejectedCanceled,
-    rejected: tabCounts.rejectedCanceled,
+    canceled: tabCounts.cancelled,
+    rejected: tabCounts.rejected,
   };
 
 
@@ -287,8 +738,11 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       case 10: // Late
         filteredRides = rides.filter((r) => r.status === "Late" || r.status === "Delayed");
         break;
-      case 11: // Rejected/Canceled
-        filteredRides = rides.filter((r) => r.status === "Rejected" || r.status === "Canceled" || r.status === "Cancelled");
+      case 11: // Rejected
+        filteredRides = rides.filter((r) => r.status === "Rejected");
+        break;
+      case 12: // Cancelled
+        filteredRides = rides.filter((r) => r.status === "Canceled" || r.status === "Cancelled");
         break;
       default:
         filteredRides = rides;
@@ -380,6 +834,21 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
 
     return filteredRides;
   }
+
+  function getPaginatedRides() {
+    const filtered = getFilteredRides();
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filtered.slice(startIndex, endIndex);
+  }
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, mainSearch, startDate, endDate, activeTab, statsFilter]);
+
+  const filteredRides = getFilteredRides();
+  const paginatedRides = getPaginatedRides();
 
   return (
     <div className="min-h-screen">
@@ -497,17 +966,19 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           </div> */}
         </div>
       )}
-      <div className="mb-4">
-        <div className="text-sm text-[var(--gray-500)]">
-          Showing {getFilteredRides().length} of {rides.length} rides
-          {(search.trim() || mainSearch.trim() || startDate || endDate) && (
-            <span className="ml-2 text-[var(--purple)]">
-              (filtered)
-            </span>
-          )}
-        </div>
+      <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
+        <RidesTable 
+          rides={paginatedRides}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredRides.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
-      <RidesTable rides={getFilteredRides()} />
       <AddRideModal open={showAddRide} onClose={() => setShowAddRide(false)} />
     </div>
   );

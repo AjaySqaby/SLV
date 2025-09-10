@@ -12,14 +12,15 @@ const topRowTabs = [
   { id: 5, label: "In Progress", color: "bg-indigo" },
 ];
 
-// Bottom row tabs (6-11)
+// Bottom row tabs (6-12)
 const bottomRowTabs = [
   { id: 6, label: "Unassigned", color: "bg-amber" },
   { id: 7, label: "Unaccepted", color: "bg-orange" },
   { id: 8, label: "Not Started", color: "bg-gray" },
   { id: 9, label: "Substitute Needed", color: "bg-yellow" },
   { id: 10, label: "Late", color: "bg-red" },
-  { id: 11, label: "Rejected/Canceled", color: "bg-red" },
+  { id: 11, label: "Rejected", color: "bg-red" },
+  { id: 12, label: "Cancelled", color: "bg-red" },
 ];
 
 const tabList = [...topRowTabs, ...bottomRowTabs];
@@ -49,7 +50,9 @@ const getTabCount = (idx, counts) => {
     case 10:
       return counts.late;
     case 11:
-      return counts.rejectedCanceled;
+      return counts.rejected;
+    case 12:
+      return counts.cancelled;
     default:
       return 0;
   }
@@ -60,7 +63,7 @@ export default function RidesTabs({ activeTab, onTabChange, tabCounts }) {
     <Button
       key={tab.id}
       onClick={() => onTabChange(idx)}
-      className={`flex items-center justify-center px-4 py-3 !rounded-full font-semibold cursor-pointer border transition-all duration-150 gap-2 w-56 min-w-56
+      className={`flex items-center justify-center px-3 py-3 !rounded-full font-semibold cursor-pointer border transition-all duration-150 gap-2 w-48 min-w-48
         ${
           activeTab === idx
             ? `${tab.color} text-white border-transparent`
