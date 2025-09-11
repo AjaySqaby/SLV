@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const filterTypes = [
   "Driver",
+  "Partners",
   "District",
   "Campus",
   "Student",

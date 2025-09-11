@@ -24,7 +24,9 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [mainSearch, setMainSearch] = useState("");
   const [statsFilter, setStatsFilter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
 
   const clearFilters = () => {
     setSearch("");
@@ -33,6 +35,8 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setEndDate();
     setFilterType("Driver");
     setStatsFilter(null);
+    setSelectedState("");
+    setSelectedCity("");
     setCurrentPage(1);
   };
 
@@ -48,8 +52,24 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setMainSearch("");
     setStartDate();
     setEndDate();
+    setSelectedState("");
+    setSelectedCity("");
     setActiveTab(0); // Reset to 'All' tab
     setCurrentPage(1);
+  };
+
+  const handleStateChange = (state) => {
+    setSelectedState(state);
+    setSelectedCity(""); // Reset city when state changes
+  };
+
+  const handleCityChange = (city) => {
+    setSelectedCity(city);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
   };
 
   // Use header search term if provided
@@ -62,12 +82,32 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       setStartDate();
       setEndDate();
       setStatsFilter(null);
+      setSelectedState("");
+      setSelectedCity("");
       setActiveTab(0); // Reset to 'All' tab
       setCurrentPage(1);
     }
   }, [headerSearchTerm]);
   const [showFilters, setShowFilters] = useState(false);
   const [showAddRide, setShowAddRide] = useState(false);
+
+  // State and City options for driver filtering
+  const states = ["California", "Georgia", "Illinois", "Massachusetts", "Florida", "Texas", "Arizona", "Washington", "Oregon", "Colorado", "Tennessee", "Nevada", "Utah"];
+  const cities = {
+    "California": ["Oakland", "San Francisco", "Los Angeles"],
+    "Georgia": ["Atlanta"],
+    "Illinois": ["Chicago"],
+    "Massachusetts": ["Boston"],
+    "Florida": ["Miami"],
+    "Texas": ["Houston", "Austin"],
+    "Arizona": ["Phoenix"],
+    "Washington": ["Seattle"],
+    "Oregon": ["Portland"],
+    "Colorado": ["Denver"],
+    "Tennessee": ["Nashville"],
+    "Nevada": ["Las Vegas"],
+    "Utah": ["Salt Lake City"]
+  };
 
   const rides = [
     {
@@ -92,7 +132,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Michael Davis",
         vehicle: "Ford Transit",
+        state: "California",
+        city: "Oakland",
       },
+      partner: "ABC Transportation",
       details: {
         distance: "3.5 mi",
         duration: "30 min",
@@ -124,7 +167,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Sophia Martinez",
         vehicle: "Honda Odyssey",
+        state: "California",
+        city: "Oakland",
       },
+      partner: "XYZ Logistics",
       details: {
         distance: "4.2 mi",
         duration: "30 min",
@@ -156,7 +202,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "William Rodriguez",
         vehicle: "Toyota Sienna",
+        state: "Georgia",
+        city: "Atlanta",
       },
+      partner: "Atlanta Express",
       details: {
         distance: "2.8 mi",
         duration: "30 min",
@@ -187,7 +236,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Maria Sanchez",
         vehicle: "Honda Odyssey",
+        state: "Georgia",
+        city: "Atlanta",
       },
+      partner: "Southeast Transport",
       details: {
         distance: "3.2 mi",
         duration: "30 min",
@@ -218,7 +270,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Carlos Mendez",
         vehicle: "Ford Transit",
+        state: "Georgia",
+        city: "Atlanta",
       },
+      partner: "Metro Rides",
       details: {
         distance: "2.4 mi",
         duration: "30 min",
@@ -249,7 +304,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Jennifer Kim",
         vehicle: "Toyota Sienna",
+        state: "California",
+        city: "San Francisco",
       },
+      partner: "Bay Area Transit",
       details: {
         distance: "4.1 mi",
         duration: "30 min",
@@ -278,7 +336,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "David Thompson",
         vehicle: "Ford Transit",
+        state: "California",
+        city: "San Francisco",
       },
+      partner: "Golden Gate Transport",
       details: {
         distance: "5.2 mi",
         duration: "30 min",
@@ -307,7 +368,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Amanda Johnson",
         vehicle: "Honda Odyssey",
+        state: "California",
+        city: "Los Angeles",
       },
+      partner: "LA School Transport",
       details: {
         distance: "6.8 mi",
         duration: "30 min",
@@ -336,16 +400,19 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Robert Garcia",
         vehicle: "Ford Transit",
+        state: "California",
+        city: "Los Angeles",
       },
+      partner: "West Coast Rides",
       details: {
         distance: "3.7 mi",
         duration: "30 min",
         stops: 2,
         students: 2,
       },
-      status: "Not Started",
-      statusColor: "[var(--gray-500)]",
-      rowColor: "border-gray-500",
+      status: "Started",
+      statusColor: "[var(--green)]",
+      rowColor: "border-green-500",
     },
     {
       id: "1007",
@@ -365,7 +432,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Michelle Brown",
         vehicle: "Toyota Sienna",
+        state: "Illinois",
+        city: "Chicago",
       },
+      partner: "Windy City Transport",
       details: {
         distance: "4.5 mi",
         duration: "30 min",
@@ -395,7 +465,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Christopher Wilson",
         vehicle: "Honda Odyssey",
+        state: "Illinois",
+        city: "Chicago",
       },
+      partner: "Chicago School Services",
       details: {
         distance: "5.1 mi",
         duration: "30 min",
@@ -424,7 +497,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Sarah Davis",
         vehicle: "Ford Transit",
+        state: "Massachusetts",
+        city: "Boston",
       },
+      partner: "New England Transport",
       details: {
         distance: "3.9 mi",
         duration: "30 min",
@@ -453,7 +529,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Kevin Martinez",
         vehicle: "Toyota Sienna",
+        state: "Massachusetts",
+        city: "Boston",
       },
+      partner: "Northeast Rides",
       details: {
         distance: "4.3 mi",
         duration: "30 min",
@@ -486,7 +565,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Luis Rodriguez",
         vehicle: "Honda Odyssey",
+        state: "Florida",
+        city: "Miami",
       },
+      partner: "Miami-Dade Transport",
       details: {
         distance: "6.2 mi",
         duration: "30 min",
@@ -517,7 +599,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Maria Gonzalez",
         vehicle: "Ford Transit",
+        state: "Florida",
+        city: "Miami",
       },
+      partner: "Sunshine State Rides",
       details: {
         distance: "5.8 mi",
         duration: "30 min",
@@ -546,7 +631,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "James Anderson",
         vehicle: "Toyota Sienna",
+        state: "Texas",
+        city: "Houston",
       },
+      partner: "Lone Star Transport",
       details: {
         distance: "7.1 mi",
         duration: "30 min",
@@ -575,7 +663,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Patricia White",
         vehicle: "Honda Odyssey",
+        state: "Texas",
+        city: "Houston",
       },
+      partner: "Texas Express",
       details: {
         distance: "4.7 mi",
         duration: "30 min",
@@ -604,7 +695,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Mark Johnson",
         vehicle: "Ford Transit",
+        state: "Arizona",
+        city: "Phoenix",
       },
+      partner: "Desert Transport",
       details: {
         distance: "8.3 mi",
         duration: "30 min",
@@ -633,7 +727,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Lisa Thompson",
         vehicle: "Toyota Sienna",
+        state: "Arizona",
+        city: "Phoenix",
       },
+      partner: "Southwest Rides",
       details: {
         distance: "6.4 mi",
         duration: "30 min",
@@ -662,7 +759,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       driver: {
         name: "Daniel Lee",
         vehicle: "Honda Odyssey",
+        state: "Washington",
+        city: "Seattle",
       },
+      partner: "Pacific Northwest Transport",
       details: {
         distance: "5.5 mi",
         duration: "30 min",
@@ -672,6 +772,207 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       status: "Delayed",
       statusColor: "[var(--red)]",
       rowColor: "border-red-500",
+    },
+    {
+      id: "1018",
+      number: 21,
+      district: "Portland Public Schools",
+      date: "01/14/2025 (Tuesday)",
+      scheduledTime: "08:30 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "08:30 AM",
+        location: "Pearl District Elementary",
+      },
+      dropoff: {
+        scheduled: "09:00 AM",
+        location: "Northwest Portland Campus",
+      },
+      driver: {
+        name: "Emily Johnson",
+        vehicle: "Honda Odyssey",
+        state: "Oregon",
+        city: "Portland",
+      },
+      partner: "Northwest Transport",
+      details: {
+        distance: "4.8 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 3,
+      },
+      status: "Not Started",
+      statusColor: "[var(--gray)]",
+      rowColor: "border-gray-400",
+    },
+    {
+      id: "1019",
+      number: 22,
+      district: "Denver Public Schools", 
+      date: "01/15/2025 (Wednesday)",
+      scheduledTime: "07:45 AM",
+      timezone: "America/Denver",
+      pickup: {
+        scheduled: "07:45 AM",
+        location: "Capitol Hill High School",
+      },
+      dropoff: {
+        scheduled: "08:15 AM",
+        location: "Downtown Denver Campus",
+      },
+      driver: {
+        name: "Michael Clark",
+        vehicle: "Ford Transit",
+        state: "Colorado",
+        city: "Denver",
+      },
+      partner: "Rocky Mountain Transport",
+      details: {
+        distance: "5.2 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "Not Started",
+      statusColor: "[var(--gray)]",
+      rowColor: "border-gray-400",
+    },
+    {
+      id: "1020",
+      number: 23,
+      district: "Nashville-Davidson County Schools",
+      date: "01/16/2025 (Thursday)",
+      scheduledTime: "08:00 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "08:00 AM",
+        arrived: "08:05 AM",
+        location: "Music City Elementary",
+      },
+      dropoff: {
+        scheduled: "08:30 AM",
+        location: "Downtown Nashville Center",
+      },
+      driver: {
+        name: "Sarah Wilson",
+        vehicle: "Toyota Sienna",
+        state: "Tennessee",
+        city: "Nashville",
+      },
+      partner: "Music City Transport",
+      details: {
+        distance: "6.1 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 5,
+      },
+      status: "Substitute Needed",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-yellow-500",
+    },
+    {
+      id: "1021",
+      number: 24,
+      district: "Austin Independent School District",
+      date: "01/17/2025 (Friday)",
+      scheduledTime: "09:00 AM",
+      timezone: "America/Chicago",
+      pickup: {
+        scheduled: "09:00 AM",
+        arrived: "09:00 AM",
+        confirmed: "09:05 AM",
+        location: "South Austin High School",
+      },
+      dropoff: {
+        scheduled: "09:30 AM",
+        location: "University of Texas Campus",
+      },
+      driver: {
+        name: "David Rodriguez",
+        vehicle: "Honda Odyssey",
+        state: "Texas",
+        city: "Austin",
+      },
+      partner: "Lone Star Education Transport",
+      details: {
+        distance: "7.3 mi",
+        duration: "30 min",
+        stops: 4,
+        students: 6,
+      },
+      status: "Substitute Needed",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-yellow-500",
+    },
+    {
+      id: "1022",
+      number: 25,
+      district: "Las Vegas Clark County School District",
+      date: "01/18/2025 (Saturday)",
+      scheduledTime: "08:15 AM",
+      timezone: "America/Los_Angeles",
+      pickup: {
+        scheduled: "08:15 AM",
+        arrived: "08:15 AM",
+        confirmed: "08:20 AM",
+        location: "Summerlin High School",
+      },
+      dropoff: {
+        scheduled: "08:45 AM",
+        arrived: "08:45 AM",
+        location: "Vegas Strip Campus",
+      },
+      driver: {
+        name: "Maria Lopez",
+        vehicle: "Ford Transit",
+        state: "Nevada",
+        city: "Las Vegas",
+      },
+      partner: "Desert Valley Transport",
+      details: {
+        distance: "8.7 mi",
+        duration: "30 min",
+        stops: 3,
+        students: 4,
+      },
+      status: "In Progress",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-orange-500",
+    },
+    {
+      id: "1023",
+      number: 26,
+      district: "Salt Lake City School District",
+      date: "01/19/2025 (Sunday)",
+      scheduledTime: "07:30 AM",
+      timezone: "America/Denver",
+      pickup: {
+        scheduled: "07:30 AM",
+        arrived: "07:30 AM",
+        confirmed: "07:35 AM",
+        location: "Millcreek Elementary",
+      },
+      dropoff: {
+        scheduled: "08:00 AM",
+        arrived: "08:00 AM",
+        location: "Sugar House Center",
+      },
+      driver: {
+        name: "Robert Taylor",
+        vehicle: "Toyota Sienna",
+        state: "Utah",
+        city: "Salt Lake City",
+      },
+      partner: "Mountain West Transport",
+      details: {
+        distance: "5.9 mi",
+        duration: "30 min",
+        stops: 2,
+        students: 3,
+      },
+      status: "In Progress",
+      statusColor: "[var(--warning)]",
+      rowColor: "border-orange-500",
     },
   ];
 
@@ -685,11 +986,13 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     unassigned: rides.filter((r) => r.status === "Unassigned").length,
     unaccepted: rides.filter((r) => r.status === "Unaccepted").length,
     notStarted: rides.filter((r) => r.status === "Not Started").length,
+    started: rides.filter((r) => r.status === "Started").length,
     substituteNeeded: rides.filter((r) => r.status === "Substitute Needed").length,
     late: rides.filter((r) => r.status === "Late" || r.status === "Delayed").length,
     rejected: rides.filter((r) => r.status === "Rejected").length,
     cancelled: rides.filter((r) => r.status === "Canceled" || r.status === "Cancelled").length,
   };
+
 
   const stats = {
     total: rides.length,
@@ -717,31 +1020,34 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       case 3: // Assigned
         filteredRides = rides.filter((r) => r.status === "Assigned");
         break;
-      case 4: // Accepted
-        filteredRides = rides.filter((r) => r.status === "Accepted");
-        break;
-      case 5: // In Progress
-        filteredRides = rides.filter((r) => r.status === "In Progress");
-        break;
-      case 6: // Unassigned
+      case 4: // Unassigned
         filteredRides = rides.filter((r) => r.status === "Unassigned");
         break;
-      case 7: // Unaccepted
+      case 5: // Accepted
+        filteredRides = rides.filter((r) => r.status === "Accepted");
+        break;
+      case 6: // Unaccepted
         filteredRides = rides.filter((r) => r.status === "Unaccepted");
         break;
-      case 8: // Not Started
+      case 7: // Not Started
         filteredRides = rides.filter((r) => r.status === "Not Started");
+        break;
+      case 8: // Started
+        filteredRides = rides.filter((r) => r.status === "Started");
         break;
       case 9: // Substitute Needed
         filteredRides = rides.filter((r) => r.status === "Substitute Needed");
         break;
-      case 10: // Late
+      case 10: // In Progress
+        filteredRides = rides.filter((r) => r.status === "In Progress");
+        break;
+      case 11: // Late
         filteredRides = rides.filter((r) => r.status === "Late" || r.status === "Delayed");
         break;
-      case 11: // Rejected
+      case 12: // Rejected
         filteredRides = rides.filter((r) => r.status === "Rejected");
         break;
-      case 12: // Cancelled
+      case 13: // Cancelled
         filteredRides = rides.filter((r) => r.status === "Canceled" || r.status === "Cancelled");
         break;
       default:
@@ -755,6 +1061,8 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         switch (filterType) {
           case "Driver":
             return ride.driver.name.toLowerCase().includes(searchTerm);
+          case "Partners":
+            return ride.partner.toLowerCase().includes(searchTerm);
           case "District":
             return ride.district.toLowerCase().includes(searchTerm);
           case "Campus":
@@ -768,6 +1076,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           default:
             return (
               ride.driver.name.toLowerCase().includes(searchTerm) ||
+              ride.partner.toLowerCase().includes(searchTerm) ||
               ride.district.toLowerCase().includes(searchTerm) ||
               ride.pickup.location.toLowerCase().includes(searchTerm) ||
               ride.dropoff.location.toLowerCase().includes(searchTerm) ||
@@ -785,6 +1094,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       filteredRides = filteredRides.filter((ride) => {
         return (
           ride.driver.name.toLowerCase().includes(searchTerm) ||
+          ride.partner.toLowerCase().includes(searchTerm) ||
           ride.district.toLowerCase().includes(searchTerm) ||
           ride.pickup.location.toLowerCase().includes(searchTerm) ||
           ride.dropoff.location.toLowerCase().includes(searchTerm) ||
@@ -832,6 +1142,20 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       });
     }
 
+    // Filter by selected state (only when filterType is "Driver")
+    if (selectedState && filterType === "Driver") {
+      filteredRides = filteredRides.filter((ride) => 
+        ride.driver.state === selectedState
+      );
+    }
+
+    // Filter by selected city (only when filterType is "Driver")
+    if (selectedCity && filterType === "Driver") {
+      filteredRides = filteredRides.filter((ride) => 
+        ride.driver.city === selectedCity
+      );
+    }
+
     return filteredRides;
   }
 
@@ -845,7 +1169,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, mainSearch, startDate, endDate, activeTab, statsFilter]);
+  }, [search, mainSearch, startDate, endDate, activeTab, statsFilter, selectedState, selectedCity, itemsPerPage]);
 
   const filteredRides = getFilteredRides();
   const paginatedRides = getPaginatedRides();
@@ -878,15 +1202,15 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         <Button
           onClick={() => setShowFilters((prev) => !prev)}
           className={`flex hover:bg-[var(--purple)] text-[var(--primary-black)] items-center gap-2 ${
-            (search.trim() || mainSearch.trim() || startDate || endDate) ? "bg-[var(--purple)] text-white" : ""
+            (search.trim() || mainSearch.trim() || startDate || endDate || selectedState || selectedCity) ? "bg-[var(--purple)] text-white" : ""
           }`}
           variant="secondary"
         >
           <Filter size={18} />
           Filters
-          {(search.trim() || mainSearch.trim() || startDate || endDate) && (
+          {(search.trim() || mainSearch.trim() || startDate || endDate || selectedState || selectedCity) && (
             <span className="bg-white text-[var(--purple)] rounded-full w-5 h-5 text-xs flex items-center justify-center">
-              {(search.trim() ? 1 : 0) + (mainSearch.trim() ? 1 : 0) + ((startDate || endDate) ? 1 : 0)}
+              {(search.trim() ? 1 : 0) + (mainSearch.trim() ? 1 : 0) + ((startDate || endDate) ? 1 : 0) + (selectedState ? 1 : 0) + (selectedCity ? 1 : 0)}
             </span>
           )}
           <svg
@@ -913,16 +1237,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         />
       </div>
       {showFilters && (
-        <div className="bg-background rounded-xl shadow px-6 py-4 mb-4 flex flex-col md:flex-row gap-4 items-center relative">
-          {/* {(search.trim() || mainSearch.trim() || selectedDate) && (
-            <div className="absolute top-2 left-2 text-xs text-[var(--gray-500)]">
-              Active filters: {[
-                search.trim() && `${filterType}: "${search}"`,
-                mainSearch.trim() && `General: "${mainSearch}"`,
-                selectedDate && `Date: ${selectedDate.toLocaleDateString()}`
-              ].filter(Boolean).join(", ")}
-            </div>
-          )} */}
+        <div className="bg-background rounded-xl shadow px-6 py-4 mb-4 relative">
           <Button
             className="absolute top-2 right-2 text-xl z-50"
             onClick={() => {
@@ -934,36 +1249,75 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           >
             <X />
           </Button>
-          <div className="w-full md:w-1/4">
-            <FilterDropdown value={filterType} onChange={setFilterType} />
+          
+          {/* First row - Main filters */}
+          <div className="flex flex-col md:flex-row gap-4 items-end mb-4">
+            <div className="w-full md:w-1/4">
+              <FilterDropdown value={filterType} onChange={setFilterType} />
+            </div>
+            <div className="w-full md:w-1/2">
+              <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
+                Search
+              </label>
+              <Input
+                placeholder={`Search by ${filterType}...`}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="w-full md:w-1/4">
+              <DateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                onDateRangeChange={handleDateRangeChange}
+              />
+            </div>
           </div>
-          <div className="w-full md:w-1/2">
-            <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-              Search
-            </label>
-            <Input
-              placeholder={`Search by ${filterType}...`}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <div className="w-full md:w-1/4">
-            <DateRangePicker
-              startDate={startDate}
-              endDate={endDate}
-              onDateRangeChange={handleDateRangeChange}
-            />
-          </div>
-          {/* <div className="w-full md:w-auto flex items-end">
-            <Button
-              onClick={clearFilters}
-              className="px-4 py-2 text-sm"
-              variant="secondary"
-            >
-              Clear Filters
-            </Button>
-          </div> */}
+
+          {/* Second row - Driver specific filters */}
+          {filterType === "Driver" && (
+            <div className="flex flex-col md:flex-row gap-4 items-end">
+              <div className="w-full md:w-1/4">
+                <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
+                  State
+                </label>
+                <select
+                  value={selectedState}
+                  onChange={(e) => handleStateChange(e.target.value)}
+                  className="w-full bg-white border border-[var(--gray-300)] rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                >
+                  <option value="">All States</option>
+                  {states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full md:w-1/4">
+                <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
+                  City
+                </label>
+                <select
+                  value={selectedCity}
+                  onChange={(e) => handleCityChange(e.target.value)}
+                  className="w-full bg-white border border-[var(--gray-300)] rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  disabled={!selectedState}
+                >
+                  <option value="">All Cities</option>
+                  {selectedState && cities[selectedState] && cities[selectedState].map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full md:w-1/2">
+                {/* Empty space to maintain alignment */}
+              </div>
+            </div>
+          )}
         </div>
       )}
       <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
@@ -977,6 +1331,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           totalItems={filteredRides.length}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
         />
       </div>
       <AddRideModal open={showAddRide} onClose={() => setShowAddRide(false)} />

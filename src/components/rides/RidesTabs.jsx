@@ -2,60 +2,80 @@ import Tabs from "../ui/Tabs";
 import React from "react";
 import Button from "@/components/ui/Button";
 
-// Top row tabs (0-5)
+// Top row tabs (0-6)
 const topRowTabs = [
   { id: 0, label: "All Rides", color: "bg-cyan" },
   { id: 1, label: "Upcoming", color: "bg-blue" },
   { id: 2, label: "Completed", color: "bg-green" },
   { id: 3, label: "Assigned", color: "bg-purple" },
-  { id: 4, label: "Accepted", color: "bg-teal" },
-  { id: 5, label: "In Progress", color: "bg-indigo" },
+  { id: 4, label: "Unassigned", color: "bg-amber" },
+  { id: 5, label: "Accepted", color: "bg-teal" },
+  { id: 6, label: "Unaccepted", color: "bg-orange" },
 ];
 
-// Bottom row tabs (6-12)
+// Bottom row tabs (7-13)
 const bottomRowTabs = [
-  { id: 6, label: "Unassigned", color: "bg-amber" },
-  { id: 7, label: "Unaccepted", color: "bg-orange" },
-  { id: 8, label: "Not Started", color: "bg-gray" },
+  { id: 7, label: "Not Started", color: "bg-gray" },
+  { id: 8, label: "Started", color: "bg-green" },
   { id: 9, label: "Substitute Needed", color: "bg-yellow" },
-  { id: 10, label: "Late", color: "bg-red" },
-  { id: 11, label: "Rejected", color: "bg-red" },
-  { id: 12, label: "Cancelled", color: "bg-red" },
+  { id: 10, label: "In Progress", color: "bg-indigo" },
+  { id: 11, label: "Late", color: "bg-red" },
+  { id: 12, label: "Rejected", color: "bg-red" },
+  { id: 13, label: "Cancelled", color: "bg-red" },
 ];
 
 const tabList = [...topRowTabs, ...bottomRowTabs];
 
 const getTabCount = (idx, counts) => {
+  let count;
   switch (idx) {
     case 0:
-      return counts.all;
+      count = counts.all;
+      break;
     case 1:
-      return counts.upcoming;
+      count = counts.upcoming;
+      break;
     case 2:
-      return counts.completed;
+      count = counts.completed;
+      break;
     case 3:
-      return counts.assigned;
+      count = counts.assigned;
+      break;
     case 4:
-      return counts.accepted;
+      count = counts.unassigned;
+      break;
     case 5:
-      return counts.inProgress;
+      count = counts.accepted;
+      break;
     case 6:
-      return counts.unassigned;
+      count = counts.unaccepted;
+      break;
     case 7:
-      return counts.unaccepted;
+      count = counts.notStarted;
+      break;
     case 8:
-      return counts.notStarted;
+      count = counts.started;
+      break;
     case 9:
-      return counts.substituteNeeded;
+      count = counts.substituteNeeded;
+      break;
     case 10:
-      return counts.late;
+      count = counts.inProgress;
+      break;
     case 11:
-      return counts.rejected;
+      count = counts.late;
+      break;
     case 12:
-      return counts.cancelled;
+      count = counts.rejected;
+      break;
+    case 13:
+      count = counts.cancelled;
+      break;
     default:
-      return 0;
+      count = 0;
   }
+  
+  return count !== undefined && count !== null ? count : 0;
 };
 
 export default function RidesTabs({ activeTab, onTabChange, tabCounts }) {
@@ -63,7 +83,7 @@ export default function RidesTabs({ activeTab, onTabChange, tabCounts }) {
     <Button
       key={tab.id}
       onClick={() => onTabChange(idx)}
-      className={`flex items-center justify-center px-3 py-3 !rounded-full font-semibold cursor-pointer border transition-all duration-150 gap-2 w-48 min-w-48
+      className={`flex items-center justify-center px-3 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 w-[13rem] min-w-[13rem]
         ${
           activeTab === idx
             ? `${tab.color} text-white border-transparent`
@@ -74,9 +94,9 @@ export default function RidesTabs({ activeTab, onTabChange, tabCounts }) {
     >
       <span className="truncate">{tab.label}</span>
       <span
-        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-black ${
+        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold min-w-[24px] ${
           activeTab === idx
-            ? `bg-white text-${tab.color.replace("bg-", "")}`
+            ? `bg-white text-black`
             : `${tab.color} text-white`
         }`}
       >
@@ -94,7 +114,7 @@ export default function RidesTabs({ activeTab, onTabChange, tabCounts }) {
       
       {/* Bottom Row */}
       <div className="flex flex-wrap gap-4">
-        {bottomRowTabs.map((tab, idx) => renderTabButton(tab, idx + 6))}
+        {bottomRowTabs.map((tab, idx) => renderTabButton(tab, idx + 7))}
       </div>
     </div>
   );
