@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -78,6 +78,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
         center={[ (pickupCoords.lat + dropoffCoords.lat) / 2, (pickupCoords.lng + dropoffCoords.lng) / 2 ]}
         zoom={13}
         scrollWheelZoom
+        zoomControl={false}
       >
         {baseLayer === 'map' ? (
           <TileLayer
@@ -103,6 +104,8 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
         <Marker position={[dropoffCoords.lat, dropoffCoords.lng]} icon={dropIcon} />
 
         <Polyline positions={routePath} color="#22c55e" weight={5} opacity={0.9} />
+
+        <ZoomControl position="bottomleft" />
 
         <Bounds points={routePath} />
         <InvalidateSize />

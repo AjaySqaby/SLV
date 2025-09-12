@@ -117,3 +117,9 @@ body {
 .heading-blue {
   color: var(--blue-500);
 }
+
+/* Hide any default Leaflet zoom control that renders at the top-left,
+   since we show our own at the bottom. */
+.leaflet-top.leaflet-left .leaflet-control-zoom {
+  display: none !important;
+}
