@@ -1,138 +1,112 @@
 "use client";
 
-import { MapPin, Navigation } from 'lucide-react';
-import Card from '@/components/ui/Card';
+import { useEffect, useMemo, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-export default function RideMap({ pickup, dropoff, status = "In-progress" }) {
-  // Mock coordinates - in real app, these would come from API
-  const pickupCoords = { lat: 33.9036, lng: -84.2833 }; // Doraville, GA
-  const dropoffCoords = { lat: 33.9174, lng: -84.3376 }; // Cross Keys High School area
-  
-  const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case 'in-progress':
-        return 'text-blue-600';
-      case 'complete':
-        return 'text-green-600';
-      case 'pending':
-        return 'text-yellow-600';
-      default:
-        return 'text-gray-600';
-    }
+export default function RideMap({ pickup, dropoff, status = "In-progress", className = "" }) {
+  // Temporary demo coordinates (Seattle-like path) if none provided
+  const pickupCoords = pickup?.coords || { lat: 47.675, lng: -122.302 };
+  const dropoffCoords = dropoff?.coords || { lat: 47.642, lng: -122.322 };
+
+  const [baseLayer, setBaseLayer] = useState('map'); // 'map' | 'sat'
+
+  const routePath = useMemo(() => ([
+    [pickupCoords.lat, pickupCoords.lng],
+    [47.668, -122.302],
+    [47.661, -122.314],
+    [47.655, -122.314],
+    [47.653, -122.31],
+    [47.65, -122.312],
+    [47.646, -122.318],
+    [dropoffCoords.lat, dropoffCoords.lng],
+  ]), [pickupCoords, dropoffCoords]);
+
+  const startIcon = useMemo(() => L.divIcon({
+    className: "",
+    html: `<div style="display:flex;align-items:center;gap:6px;background:#fff;padding:4px 8px;border-radius:18px;border:1px solid #d1d5db;box-shadow:0 1px 2px rgba(0,0,0,0.06)"><span style="width:8px;height:8px;border-radius:50%;background:#16a34a;display:inline-block"></span><span style="font-size:11px;color:#111827;font-weight:600">START</span></div>`
+  }), []);
+
+  const dropIcon = useMemo(() => L.divIcon({
+    className: "",
+    html: `<div style="display:flex;align-items:center;gap:6px;background:#fff;padding:4px 8px;border-radius:18px;border:1px solid #d1d5db;box-shadow:0 1px 2px rgba(0,0,0,0.06)"><span style="width:8px;height:8px;border-radius:50%;background:#dc2626;display:inline-block"></span><span style="font-size:11px;color:#111827;font-weight:700">DROP</span></div>`
+  }), []);
+
+  const Bounds = ({ points }) => {
+    const map = useMap();
+    useEffect(() => {
+      if (!map || !points?.length) return;
+      const bounds = L.latLngBounds(points.map(p => L.latLng(p[0], p[1])));
+      map.fitBounds(bounds, { padding: [40, 40] });
+    }, [map, points]);
+    return null;
+  };
+
+  const InvalidateSize = () => {
+    const map = useMap();
+    useEffect(() => {
+      const invalidate = () => map.invalidateSize();
+      invalidate();
+      const t = setTimeout(invalidate, 200);
+      window.addEventListener('resize', invalidate);
+      return () => {
+        clearTimeout(t);
+        window.removeEventListener('resize', invalidate);
+      };
+    }, [map]);
+    return null;
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center space-x-2 mb-4">
-        <Navigation className="w-5 h-5 text-blue-600" />
-        <h2 className="text-lg font-semibold text-gray-900">Live Tracking</h2>
+    <div className={`relative ${className}`}>
+      {/* Map/Satellite toggle */}
+      <div className="absolute z-[1000] top-2 left-2 bg-white rounded-md shadow border border-gray-300 overflow-hidden flex">
+        <button
+          onClick={() => setBaseLayer('map')}
+          className={`px-3 py-1 text-sm ${baseLayer === 'map' ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}
+        >Map</button>
+        <button
+          onClick={() => setBaseLayer('sat')}
+          className={`px-3 py-1 text-sm border-l border-gray-300 ${baseLayer === 'sat' ? 'bg-gray-100 font-semibold' : 'hover:bg-gray-50'}`}
+        >Satellite</button>
+          </div>
+          
+      <MapContainer
+        className="w-full h-[70vh]"
+        style={{ minHeight: '100%', height: '100%', background: '#e5e7eb' }}
+        center={[ (pickupCoords.lat + dropoffCoords.lat) / 2, (pickupCoords.lng + dropoffCoords.lng) / 2 ]}
+        zoom={13}
+        scrollWheelZoom
+      >
+        {baseLayer === 'map' ? (
+          <TileLayer
+            attribution='&copy; OpenStreetMap contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        ) : (
+          <TileLayer
+            attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        )}
+
+        {/* Optional labels overlay for Satellite */}
+        {baseLayer === 'sat' && (
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png"
+            attribution='&copy; CARTO &copy; OpenStreetMap contributors'
+          />
+        )}
+
+        <Marker position={[pickupCoords.lat, pickupCoords.lng]} icon={startIcon} />
+        <Marker position={[dropoffCoords.lat, dropoffCoords.lng]} icon={dropIcon} />
+
+        <Polyline positions={routePath} color="#22c55e" weight={5} opacity={0.9} />
+
+        <Bounds points={routePath} />
+        <InvalidateSize />
+      </MapContainer>
       </div>
-      
-      <div className="space-y-4">
-        <div className="text-sm text-gray-600">
-          Real-time location of the vehicle.
-        </div>
-        
-        {/* Map Container */}
-        <div className="relative bg-gray-100 rounded-lg h-64 overflow-hidden">
-          {/* Mock Map Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100">
-            {/* Road lines */}
-            <div className="absolute top-1/4 left-0 right-0 h-1 bg-gray-400 opacity-30"></div>
-            <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-400 opacity-30"></div>
-            <div className="absolute top-3/4 left-0 right-0 h-1 bg-gray-400 opacity-30"></div>
-            
-            {/* Vertical roads */}
-            <div className="absolute top-0 bottom-0 left-1/4 w-1 bg-gray-400 opacity-30"></div>
-            <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-gray-400 opacity-30"></div>
-            <div className="absolute top-0 bottom-0 left-3/4 w-1 bg-gray-400 opacity-30"></div>
-          </div>
-          
-          {/* Pickup Location */}
-          <div className="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="relative">
-              <MapPin className="w-6 h-6 text-green-600" />
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white px-2 py-1 rounded text-xs shadow-sm border">
-                Pickup
-              </div>
-            </div>
-          </div>
-          
-          {/* Dropoff Location */}
-          <div className="absolute bottom-1/4 right-1/4 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="relative">
-              <MapPin className="w-6 h-6 text-red-600" />
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white px-2 py-1 rounded text-xs shadow-sm border">
-                Dropoff
-              </div>
-            </div>
-          </div>
-          
-          {/* Vehicle Location (moving dot) */}
-          <div className="absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="relative">
-              <div className="w-4 h-4 bg-blue-600 rounded-full animate-pulse shadow-lg"></div>
-              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-2 py-1 rounded text-xs">
-                Vehicle
-              </div>
-            </div>
-          </div>
-          
-          {/* Route Line */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            <path
-              d="M 25% 25% Q 50% 35% 75% 75%"
-              stroke="#3B82F6"
-              strokeWidth="3"
-              fill="none"
-              strokeDasharray="5,5"
-              className="animate-pulse"
-            />
-          </svg>
-        </div>
-        
-        {/* Map Legend */}
-        <div className="flex items-center justify-between text-xs text-gray-600">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <MapPin className="w-4 h-4 text-green-600" />
-              <span>Pickup</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <MapPin className="w-4 h-4 text-red-600" />
-              <span>Dropoff</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-              <span>Vehicle</span>
-            </div>
-          </div>
-          
-          <div className={`flex items-center space-x-1 ${getStatusColor(status)}`}>
-            <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
-            <span className="font-medium">{status}</span>
-          </div>
-        </div>
-        
-        {/* Location Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-            <div className="flex items-center space-x-2 mb-2">
-              <MapPin className="w-4 h-4 text-green-600" />
-              <span className="text-sm font-medium text-green-800">Pickup Location</span>
-            </div>
-            <p className="text-sm text-green-700">{pickup.address}</p>
-          </div>
-          
-          <div className="bg-red-50 p-3 rounded-lg border border-red-200">
-            <div className="flex items-center space-x-2 mb-2">
-              <MapPin className="w-4 h-4 text-red-600" />
-              <span className="text-sm font-medium text-red-800">Dropoff Location</span>
-            </div>
-            <p className="text-sm text-red-700">{dropoff.address}</p>
-          </div>
-        </div>
-      </div>
-    </Card>
   );
 }
