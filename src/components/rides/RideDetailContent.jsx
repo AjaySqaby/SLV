@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react'
-import { ArrowLeft, Car, X, Copy, Edit, Check, Bell, UserPlus, MapPin, DollarSign, Route, Clock, Users, Navigation, FileText, Activity, Star, Eye } from 'lucide-react'
+import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
@@ -222,19 +222,14 @@ export default function RideDetailContent({ rideId }) {
 
   const rideData = getRideData(rideId)
 
-  const handleCancelRide = () => {
-    // Handle cancel ride logic
-    console.log('Cancel ride')
-  }
-
   const handleDuplicateRide = () => {
     // Handle duplicate ride logic
     console.log('Duplicate ride')
   }
 
-  const handleEditRide = () => {
-    // Handle edit ride logic
-    console.log('Edit ride')
+  const handleForceStart = () => {
+    // Handle force start logic
+    console.log('Force start')
   }
 
   const handleForceComplete = () => {
@@ -242,14 +237,14 @@ export default function RideDetailContent({ rideId }) {
     console.log('Force complete')
   }
 
-  const handleSendNotification = () => {
-    // Handle send notification logic
-    console.log('Send notification')
+  const handleForceNoShow = () => {
+    // Handle force no show logic
+    console.log('Force no show')
   }
 
-  const handleAssignDriver = () => {
-    // Handle assign driver logic
-    console.log('Assign driver')
+  const handleManageTrip = () => {
+    // Handle manage trip logic
+    console.log('Manage trip')
   }
 
   return (
@@ -276,38 +271,47 @@ export default function RideDetailContent({ rideId }) {
           <span className="text-sm font-medium text-gray-700">ETA: {rideData.eta}</span>
         </div>
 
-        {/* Action Buttons - Professional Design */}
+        {/* Action Buttons - Requested actions */}
         <div className="flex items-center space-x-3">
           <Button
-            onClick={handleCancelRide}
-            className="flex items-center space-x-2 bg-[var(--danger)] hover:bg-[var(--danger-dark)] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+            variant="primary"
+            onClick={handleForceStart}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-[var(--purple)] text-white border-transparent"
           >
-            <X className="w-4 h-4" />
-            <span>Cancel</span>
+            <Play className="w-4 h-4" />
+            <span>Force Start</span>
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
+            onClick={handleForceComplete}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+          >
+            <Check className="w-4 h-4" />
+            <span>Force Complete</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleForceNoShow}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+          >
+            <UserX className="w-4 h-4" />
+            <span>Force No Show</span>
+          </Button>
+          <Button
+            variant="secondary"
             onClick={handleDuplicateRide}
-            className="flex items-center space-x-2 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200"
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
           >
             <Copy className="w-4 h-4" />
             <span>Duplicate</span>
           </Button>
           <Button
-            variant="outline"
-            onClick={handleSendNotification}
-            className="flex items-center space-x-2 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200"
+            variant="secondary"
+            onClick={handleManageTrip}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
           >
-            <Bell className="w-4 h-4" />
-            <span>Send Notification</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleAssignDriver}
-            className="flex items-center space-x-2 bg-white border border-gray-300 hover:bg-gray-50 hover:border-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200"
-          >
-            <UserPlus className="w-4 h-4" />
-            <span>Assign Driver</span>
+            <Settings className="w-4 h-4" />
+            <span>Manage Trip</span>
           </Button>
         </div>
       </div>
@@ -419,12 +423,11 @@ export default function RideDetailContent({ rideId }) {
           </Card>
         </div>
 
-        {/* Middle Column - Trip content tabs */}
+        {/* Middle Column - Content with tabs header */}
         <div className="col-span-4 min-w-0">
           <div className="space-y-4">
-          <div className="mt-0">
-        {/* Mid tabs (temporarily non-interactive) */}
-        <div className="flex items-center justify-between">
+            {/* Mid tabs (non-interactive visual as requested) */}
+            <div className="flex items-center justify-center">
               <div></div>
               <div className="flex space-x-2">
                 <button disabled className={`px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 cursor-default`}>
@@ -439,7 +442,7 @@ export default function RideDetailContent({ rideId }) {
               </div>
             </div>
 
-        {/* Tab Content - Professional Cards */}
+        {/* Content Cards */}
         <div>
           {activeTab === 'stops' && (
             <Card className="p-6 shadow-sm border border-gray-100">
@@ -448,15 +451,72 @@ export default function RideDetailContent({ rideId }) {
                 <p className="text-sm text-gray-600">Follow the route from pickup to destination</p>
               </div>
 
-           
+              {/* Stops timeline */}
+              <div className="space-y-6">
+                {[
+                  { id: 1, type: 'Pick Up', time: '7:45 AM', address: '4512 W Othello St', student: { name: 'Maya Patel', grade: 'Grade 10' } },
+                  { id: 2, type: 'Pick Up', time: '7:52 AM', address: '4237 33rd Ave SW', student: { name: 'Jackson Reed', grade: 'Grade 9' } },
+                  { id: 3, type: 'Pick Up', time: '8:01 AM', address: '156 NW 85th St', student: { name: 'Zoe Anderson', grade: 'Grade 11' } },
+                  { id: 4, type: 'Pick Up', time: '8:08 AM', address: '789 Pine Boulevard', student: { name: 'Noah Kim', grade: 'Grade 7' } },
+                ].map((stop, idx) => (
+                  <div key={stop.id} className="rounded-xl border border-green-200 bg-green-50/60 p-4 shadow-[0_1px_0_rgba(16,185,129,0.2)]">
+                    <div className="flex items-start gap-4">
+                      {/* Circle number marker */}
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-green-500 text-white font-semibold flex items-center justify-center shadow">
+                          {idx + 1}
+                        </div>
+                      </div>
+
+                      <div className="flex-1 space-y-3">
+                        {/* Badge row */}
+                        <div className="flex items-center gap-3 text-sm">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-300">
+                            <MapPin className="w-3.5 h-3.5" /> {stop.type.toUpperCase()}
+                          </span>
+                          <span className="text-gray-500">{stop.time}</span>
+                        </div>
+
+                        {/* Address */}
+                        <div className="text-[15px] font-medium text-gray-800">{stop.address}</div>
+
+                        {/* Passenger card */}
+                        <div className="rounded-lg border border-green-200 bg-white p-3 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center text-gray-400">
+                              <User className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{stop.student.name}</div>
+                              <div className="text-xs text-gray-500">{stop.student.grade}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-green-600">
+                            <Shield className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Separator arrow */}
+                    {idx < 3 && (
+                      <div className="flex justify-center mt-3">
+                        <div className="w-7 h-7 rounded-full bg-green-100 border border-green-200 flex items-center justify-center text-green-600">
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
 
               {/* Action buttons */}
-              <div className="flex items-center justify-center gap-3">
-                <Button className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-3 mt-6">
+                <Button className="flex items-center gap-2 !rounded-full">
                   <Car className="w-4 h-4" />
                   Start Journey
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-2 !rounded-full">
                   <Eye className="w-4 h-4" />
                   View Details
                 </Button>
@@ -567,8 +627,7 @@ export default function RideDetailContent({ rideId }) {
             </Card>
           )}
         </div>
-      </div>
-          </div>
+        </div>
         </div>
 
         {/* Right Side - Map and Controls */}
