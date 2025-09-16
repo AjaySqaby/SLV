@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from 'react'
-import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield } from 'lucide-react'
+import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield, Search, Calendar } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import ProgressBar from '@/components/ui/ProgressBar'
+import Select from '@/components/ui/Select'
+import SearchInput from '@/components/ui/SearchInput'
+import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
 
 export default function RideDetailContent({ rideId }) {
@@ -15,6 +18,16 @@ export default function RideDetailContent({ rideId }) {
   const [mapView, setMapView] = useState('route') // route, photos, streetview
   const [showAllDrivers, setShowAllDrivers] = useState(false)
   const [midTab, setMidTab] = useState('stops') // stops | students | timeline
+  const [showForceStartModal, setShowForceStartModal] = useState(false)
+  const [forceStartTime, setForceStartTime] = useState('')
+  const [forceStartReason, setForceStartReason] = useState('')
+  const [showForceCompleteModal, setShowForceCompleteModal] = useState(false)
+  const [showForceNoShowModal, setShowForceNoShowModal] = useState(false)
+  const [showDuplicateTripModal, setShowDuplicateTripModal] = useState(false)
+  const [duplicateTripDate, setDuplicateTripDate] = useState('')
+  const [duplicateTripTime, setDuplicateTripTime] = useState('')
+  const [showManageTripModal, setShowManageTripModal] = useState(false)
+  const [selectedNewDriver, setSelectedNewDriver] = useState('')
 
   // Mock data - replace with actual API call
   const getRideData = (id) => {
@@ -223,28 +236,58 @@ export default function RideDetailContent({ rideId }) {
   const rideData = getRideData(rideId)
 
   const handleDuplicateRide = () => {
-    // Handle duplicate ride logic
-    console.log('Duplicate ride')
+    setShowDuplicateTripModal(true)
+  }
+
+  const handleDuplicateTripSubmit = () => {
+    // Handle duplicate trip submission
+    console.log('Duplicate trip submitted:', { date: duplicateTripDate, time: duplicateTripTime })
+    setShowDuplicateTripModal(false)
+    setDuplicateTripDate('')
+    setDuplicateTripTime('')
   }
 
   const handleForceStart = () => {
-    // Handle force start logic
-    console.log('Force start')
+    setShowForceStartModal(true)
+  }
+
+  const handleForceStartSubmit = () => {
+    // Handle force start submission
+    console.log('Force start submitted:', { time: forceStartTime, reason: forceStartReason })
+    setShowForceStartModal(false)
+    setForceStartTime('')
+    setForceStartReason('')
   }
 
   const handleForceComplete = () => {
-    // Handle force complete logic
-    console.log('Force complete')
+    setShowForceCompleteModal(true)
+  }
+
+  const handleForceCompleteSubmit = () => {
+    // Handle force complete submission
+    console.log('Force complete submitted for ride:', rideId)
+    setShowForceCompleteModal(false)
   }
 
   const handleForceNoShow = () => {
-    // Handle force no show logic
-    console.log('Force no show')
+    setShowForceNoShowModal(true)
+  }
+
+  const handleForceNoShowSubmit = () => {
+    // Handle force no show submission
+    console.log('Force no show submitted for ride:', rideId)
+    setShowForceNoShowModal(false)
   }
 
   const handleManageTrip = () => {
-    // Handle manage trip logic
-    console.log('Manage trip')
+    setShowManageTripModal(true)
+  }
+
+  const handleManageTripSubmit = () => {
+    // Handle manage trip submission
+    console.log('Driver reassigned:', selectedNewDriver)
+    setShowManageTripModal(false)
+    setSelectedNewDriver('')
   }
 
   return (
@@ -426,17 +469,47 @@ export default function RideDetailContent({ rideId }) {
         {/* Middle Column - Content with tabs header */}
         <div className="col-span-4 min-w-0">
           <div className="space-y-4">
-            {/* Mid tabs (non-interactive visual as requested) */}
+            {/* Mid tabs (interactive) */}
             <div className="flex items-center justify-center">
               <div></div>
               <div className="flex space-x-2">
-                <button disabled className={`px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 cursor-default`}>
+                <button 
+                  onClick={() => setActiveTab('stops')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                  style={{ 
+                    backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)', 
+                    color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                    <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                  </div>
                   TRIP STOPS
                 </button>
-                <button disabled className={`px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 cursor-default`}>
+                <button 
+                  onClick={() => setActiveTab('students')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                  style={{ 
+                    backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)', 
+                    color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
                   STUDENTS
                 </button>
-                <button disabled className={`px-4 py-2 text-sm font-medium rounded-lg bg-white text-gray-700 border border-gray-300 cursor-default`}>
+                <button 
+                  onClick={() => setActiveTab('ridelog')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                  style={{ 
+                    backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)', 
+                    color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
                   TIMELINE
                 </button>
               </div>
@@ -445,137 +518,429 @@ export default function RideDetailContent({ rideId }) {
         {/* Content Cards */}
         <div>
           {activeTab === 'stops' && (
-            <Card className="p-6 shadow-sm border border-gray-100">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Trip Journey</h3>
-                <p className="text-sm text-gray-600">Follow the route from pickup to destination</p>
+            <div className="space-y-6">
+              {/* Trip Route Summary Card */}
+              <div className="rounded-xl p-6" style={{ backgroundColor: 'var(--light-blue-bg)', border: '1px solid var(--blue-100)' }}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-500)' }}>
+                      <span className="text-white font-bold text-lg">TR</span>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold" style={{ color: 'var(--heading)' }}>Trip Route</h3>
+                      <p className="text-sm" style={{ color: 'var(--muted-text)' }}>2 stops • 1 student • 6.2 miles total</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Est. Duration</p>
+                    <p className="text-xl font-bold" style={{ color: 'var(--heading)' }}>25 min</p>
+                  </div>
+                </div>
               </div>
 
-              {/* Stops timeline */}
-              <div className="space-y-6">
-                {[
-                  { id: 1, type: 'Pick Up', time: '7:45 AM', address: '4512 W Othello St', student: { name: 'Maya Patel', grade: 'Grade 10' } },
-                  { id: 2, type: 'Pick Up', time: '7:52 AM', address: '4237 33rd Ave SW', student: { name: 'Jackson Reed', grade: 'Grade 9' } },
-                  { id: 3, type: 'Pick Up', time: '8:01 AM', address: '156 NW 85th St', student: { name: 'Zoe Anderson', grade: 'Grade 11' } },
-                  { id: 4, type: 'Pick Up', time: '8:08 AM', address: '789 Pine Boulevard', student: { name: 'Noah Kim', grade: 'Grade 7' } },
-                ].map((stop, idx) => (
-                  <div key={stop.id} className="rounded-xl border border-green-200 bg-green-50/60 p-4 shadow-[0_1px_0_rgba(16,185,129,0.2)]">
+              {/* Stops with vertical line */}
+              <div className="relative">
+                {/* Vertical line */}
+                <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
+                
+                <div className="space-y-8">
+                  {/* Stop 1 - Pickup */}
+                  <div className="relative">
                     <div className="flex items-start gap-4">
-                      {/* Circle number marker */}
-                      <div className="flex-shrink-0">
-                        <div className="w-10 h-10 rounded-full bg-green-500 text-white font-semibold flex items-center justify-center shadow">
-                          {idx + 1}
-                        </div>
+                      {/* Stop number circle */}
+                      <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--green-600)' }}>
+                        <span className="text-white font-bold text-lg">1</span>
                       </div>
-
-                      <div className="flex-1 space-y-3">
-                        {/* Badge row */}
-                        <div className="flex items-center gap-3 text-sm">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-300">
-                            <MapPin className="w-3.5 h-3.5" /> {stop.type.toUpperCase()}
-                          </span>
-                          <span className="text-gray-500">{stop.time}</span>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>1425 Oak Street Apt 204, Springfield, MA 01103</h4>
+                          <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                            <Eye className="w-4 h-4" />
+                            View Details
+                          </button>
                         </div>
-
-                        {/* Address */}
-                        <div className="text-[15px] font-medium text-gray-800">{stop.address}</div>
-
-                        {/* Passenger card */}
-                        <div className="rounded-lg border border-green-200 bg-white p-3 flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center text-gray-400">
-                              <User className="w-4 h-4" />
+                        
+                        <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                              <span className="text-white text-xs">🏠</span>
                             </div>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{stop.student.name}</div>
-                              <div className="text-xs text-gray-500">{stop.student.grade}</div>
-                            </div>
+                            <span>Residential • Door-to-door pickup</span>
                           </div>
-                          <div className="flex items-center gap-2 text-green-600">
-                            <Shield className="w-4 h-4" />
+                          <div className="ml-6">
+                            <span>Scheduled 7:15 AM EST Pick up 1 student</span>
+                          </div>
+                        </div>
+                        
+                        {/* Student info */}
+                        <div className="mt-4 flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                            <User className="w-3 h-3 text-white" />
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold" style={{ color: 'var(--heading)' }}>Marcus Johnson</span>
+                            <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
+                            <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Separator arrow */}
-                    {idx < 3 && (
-                      <div className="flex justify-center mt-3">
-                        <div className="w-7 h-7 rounded-full bg-green-100 border border-green-200 flex items-center justify-center text-green-600">
-                          <ChevronDown className="w-4 h-4" />
+                  {/* Stop 2 - Drop off */}
+                  <div className="relative">
+                    <div className="flex items-start gap-4">
+                      {/* Stop number circle */}
+                      <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--orange)' }}>
+                        <span className="text-white font-bold text-lg">2</span>
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>48:50 Riverside Drive, Boston, MA</h4>
+                          <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                            <Eye className="w-4 h-4" />
+                            View Details
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                              <span className="text-white text-xs">🏫</span>
+                            </div>
+                            <span>School Campus • Main entrance</span>
+                          </div>
+                          <div className="ml-6">
+                            <span>Scheduled 7:45 AM EST Drop off 1 student</span>
+                          </div>
+                        </div>
+                        
+                        {/* School info */}
+                        <div className="mt-4 flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                            <span className="text-white text-xs">🏫</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="font-semibold" style={{ color: 'var(--heading)' }}>Lincoln Academy High School</span>
+                            <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                          </div>
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
-                ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'students' && (
+            <div className="space-y-6">
+              {/* Search and Filter Section */}
+              <div className="space-y-4">
+                {/* Search Bar */}
+                <SearchInput
+                  placeholder="Search students"
+                  width="w-full"
+                  className="text-sm"
+                />
+
+                {/* Student Filter Dropdown */}
+                <Select
+                  options={[
+                    { value: 'all', label: 'All Students' },
+                    { value: 'pickup', label: 'Pickup Only' },
+                    { value: 'dropoff', label: 'Drop-off Only' }
+                  ]}
+                  value="all"
+                  onChange={(e) => console.log('Filter changed:', e.target.value)}
+                  placeholder="Select filter"
+                  className="text-sm"
+                  width="w-full"
+                />
               </div>
 
-              {/* Action buttons */}
-              <div className="flex items-center justify-center gap-3 mt-6">
-                <Button className="flex items-center gap-2 !rounded-full">
-                  <Car className="w-4 h-4" />
-                  Start Journey
-                </Button>
-                <Button variant="outline" className="flex items-center gap-2 !rounded-full">
-                  <Eye className="w-4 h-4" />
-                  View Details
-                </Button>
+              {/* Student Detail Card */}
+              <div className="bg-white rounded-lg shadow-sm border overflow-hidden" style={{ borderColor: 'var(--gray-200)' }}>
+                {/* Student Header */}
+                <div className="p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Marcus Johnson</h3>
+                      <p className="text-sm mt-1" style={{ color: 'var(--muted-text)' }}>Grade 10</p>
+                    </div>
+                    <span 
+                      className="px-3 py-1 text-xs rounded-full"
+                      style={{ 
+                        backgroundColor: 'var(--gray-100)', 
+                        color: 'var(--muted-text)' 
+                      }}
+                    >
+                      Scheduled
+                    </span>
+                  </div>
+                </div>
+
+                {/* Pickup Section */}
+                <div className="relative">
+                  <div 
+                    className="p-6 rounded-t-lg"
+                    style={{ backgroundColor: 'var(--green-100)' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Pickup Circle */}
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      >
+                        1
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Pickup</h4>
+                          <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                          <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:15 AM EST</span>
+                        </div>
+                        <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          1425 Oak Street Apt 204, Springfield, MA 01103
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Vertical Line */}
+                  <div 
+                    className="absolute left-6 top-16 w-0.5 h-16"
+                    style={{ backgroundColor: 'var(--green-600)' }}
+                  ></div>
+                </div>
+
+                {/* Dropoff Section */}
+                <div className="relative">
+                  <div 
+                    className="p-6"
+                    style={{ backgroundColor: 'var(--amber-100)' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Dropoff Circle */}
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                        style={{ backgroundColor: 'var(--orange)' }}
+                      >
+                        2
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Dropoff</h4>
+                          <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                          <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:45 AM EST</span>
+                        </div>
+                        <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          Lincoln Academy High School
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Vertical Line */}
+                  <div 
+                    className="absolute left-6 top-16 w-0.5 h-16"
+                    style={{ backgroundColor: 'var(--orange)' }}
+                  ></div>
+                </div>
+
+                {/* Notes Section */}
+                <div className="relative">
+                  <div 
+                    className="p-6 rounded-b-lg"
+                    style={{ backgroundColor: 'var(--blue-100)' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Notes Icon */}
+                      <div 
+                        className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: 'var(--blue-600)' }}
+                      >
+                        <FileText className="w-4 h-4 text-white" />
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h4 className="font-semibold mb-2" style={{ color: 'var(--heading)' }}>Notes</h4>
+                        <p className="text-sm" style={{ color: 'var(--blue-600)' }}>
+                          Guardian requested pickup at main building entrance. Student requires wheelchair accessibility.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </Card>
+            </div>
           )}
 
           {activeTab === 'ridelog' && (
-            <Card className="p-6 shadow-sm border border-gray-100">
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Ride Timeline</h3>
-                <p className="text-sm text-gray-600">Real-time activity log for this ride</p>
+            <div className="space-y-6">
+              {/* Timeline Header */}
+              <div className="text-center">
+                <h3 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Timeline</h3>
+                <p className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>Ride activity and status updates</p>
               </div>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-100">
-                  <div className="w-3 h-3 bg-[var(--green-600)] rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="font-medium text-gray-900">Ride Started</p>
-                      <span className="text-sm font-medium text-gray-700">7:00 AM</span>
-                    </div>
-                    <p className="text-sm text-gray-600">Driver began pickup route from first location</p>
-                  </div>
-                </div>
+
+              {/* Timeline Events */}
+              <div className="relative">
+                {/* Vertical Line */}
+                <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--gray-200)' }}></div>
                 
-                <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <div className="w-3 h-3 bg-[var(--blue-600)] rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="font-medium text-gray-900">Student Picked Up</p>
-                      <span className="text-sm font-medium text-gray-700">7:15 AM</span>
+                <div className="space-y-6">
+                  {/* Event 1 - Accepted */}
+                  <div className="relative flex items-start gap-4">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                      style={{ backgroundColor: 'var(--green-600)' }}
+                    >
+                      <Check className="w-6 h-6 text-white" />
                     </div>
-                    <p className="text-sm text-gray-600">First stop completed - 1 student boarded</p>
+                    
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
+                        <span 
+                          className="px-3 py-1 text-sm rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: 'var(--green-100)', 
+                            color: 'var(--green-600)' 
+                          }}
+                        >
+                          Accepted
+                        </span>
+                      </div>
+                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                        <p>Mon Sep 15, 2025 at 4:30 PM EST (2:30 PM MST)</p>
+                        <p className="mt-1">Sarah Mitchell – driver</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="flex items-start space-x-4 p-4 bg-yellow-50 rounded-lg border border-yellow-100">
-                  <div className="w-3 h-3 bg-[var(--yellow-600)] rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="font-medium text-gray-900">En Route</p>
-                      <span className="text-sm font-medium text-gray-700">7:25 AM</span>
+
+                  {/* Event 2 - Assigned */}
+                  <div className="relative flex items-start gap-4">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                      style={{ backgroundColor: 'var(--blue-600)' }}
+                    >
+                      <User className="w-6 h-6 text-white" />
                     </div>
-                    <p className="text-sm text-gray-600">Traveling to next pickup location</p>
+                    
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
+                        <span 
+                          className="px-3 py-1 text-sm rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: 'var(--blue-100)', 
+                            color: 'var(--blue-600)' 
+                          }}
+                        >
+                          Assigned
+                        </span>
+                      </div>
+                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                        <p>Mon Sep 15, 2025 at 4:25 PM EST (2:25 PM MST)</p>
+                        <p className="mt-1">David Johnson – admin</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-100">
-                  <div className="w-3 h-3 bg-[var(--green-600)] rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="font-medium text-gray-900">Route Completed</p>
-                      <span className="text-sm font-medium text-gray-700">7:35 AM</span>
+
+                  {/* Event 3 - Vehicle Assigned */}
+                  <div className="relative flex items-start gap-4">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                      style={{ backgroundColor: 'var(--blue-600)' }}
+                    >
+                      <Settings className="w-6 h-6 text-white" />
                     </div>
-                    <p className="text-sm text-gray-600">All students safely dropped off at destination</p>
+                    
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA448891 Ford Transit</h4>
+                        <span 
+                          className="px-3 py-1 text-sm rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: 'var(--blue-100)', 
+                            color: 'var(--blue-600)' 
+                          }}
+                        >
+                          Assigned
+                        </span>
+                      </div>
+                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                        <p>Mon Sep 15, 2025</p>
+                        <p className="mt-1">System</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Event 4 - Rejected */}
+                  <div className="relative flex items-start gap-4">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                      style={{ backgroundColor: 'var(--red-600)' }}
+                    >
+                      <X className="w-6 h-6 text-white" />
+                    </div>
+                    
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Robert Chen</h4>
+                        <span 
+                          className="px-3 py-1 text-sm rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: 'var(--red-100)', 
+                            color: 'var(--red-600)' 
+                          }}
+                        >
+                          Rejected
+                        </span>
+                      </div>
+                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                        <p>Sun Sep 14, 2025 at 7:00 PM EST (5:00 PM MST)</p>
+                        <p className="mt-1">Robert Chen – driver</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Event 5 - Vehicle Assigned */}
+                  <div className="relative flex items-start gap-4">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                      style={{ backgroundColor: 'var(--blue-600)' }}
+                    >
+                      <Car className="w-6 h-6 text-white" />
+                    </div>
+                    
+                    <div className="flex-1 pt-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA92XY45 Honda Pilot</h4>
+                        <span 
+                          className="px-3 py-1 text-sm rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: 'var(--blue-100)', 
+                            color: 'var(--blue-600)' 
+                          }}
+                        >
+                          Assigned
+                        </span>
+                      </div>
+                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                        <p>Sun Sep 14, 2025</p>
+                        <p className="mt-1">System</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </Card>
+            </div>
           )}
 
           {activeTab === 'documents' && (
@@ -800,6 +1165,457 @@ export default function RideDetailContent({ rideId }) {
                 }}
               >
                 Refresh List
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Force Start Modal */}
+      {showForceStartModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--green-600)' }}
+                >
+                  <Play className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Force Start Ride</h2>
+              </div>
+              <button
+                onClick={() => setShowForceStartModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Admin Override Warning */}
+            <div 
+              className="p-4 rounded-lg border mb-6"
+              style={{ 
+                backgroundColor: 'var(--amber-100)', 
+                borderColor: 'var(--amber-500)' 
+              }}
+            >
+              <div className="flex items-start gap-3">
+                <div 
+                  className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                  style={{ backgroundColor: 'var(--amber-500)' }}
+                >
+                  <span className="text-white text-sm">!</span>
+                </div>
+                <div>
+                  <h3 className="font-bold mb-2" style={{ color: 'var(--heading)' }}>Admin Override Action</h3>
+                  <p className="text-sm mb-3" style={{ color: 'var(--muted-text)' }}>
+                    This function allows dispatch/admins to override the driver app in case it fails. Use this when the driver app is not responding or has technical issues.
+                  </p>
+                  <p className="font-bold text-sm mb-2" style={{ color: 'var(--heading)' }}>What this does:</p>
+                  <ul className="text-sm space-y-1" style={{ color: 'var(--muted-text)' }}>
+                    <li>• Manually marks ride #{rideId} as started</li>
+                    <li>• Uses the assigned driver for this ride</li>
+                    <li>• Bypasses normal driver app check-in process</li>
+                    <li>• Logs the override action with reason for tracking</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Assigned Driver & Vehicle */}
+            <div className="mb-6">
+              <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Assigned Driver & Vehicle</h3>
+              <div 
+                className="p-4 rounded-lg border"
+                style={{ 
+                  backgroundColor: 'var(--gray-50)', 
+                  borderColor: 'var(--gray-200)' 
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--blue-100)' }}
+                  >
+                    <User className="w-6 h-6" style={{ color: 'var(--blue-600)' }} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-bold" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4" style={{ color: 'var(--amber-500)' }} />
+                        <span className="text-sm font-medium" style={{ color: 'var(--heading)' }}>4.96</span>
+                      </div>
+                    </div>
+                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                      2023 Tesla Model Y • JN1BJ1CWXLW641964
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Force Start Time */}
+            <div className="mb-6">
+              <Input
+                type="time"
+                label="Force Start Time"
+                value={forceStartTime}
+                onChange={(e) => setForceStartTime(e.target.value)}
+                icon={<Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />}
+                className="text-sm"
+                width="w-full"
+                placeholder="--:--"
+              />
+              <p className="text-xs mt-2" style={{ color: 'var(--muted-text)' }}>
+                Set the time when the ride should be marked as started
+              </p>
+            </div>
+
+            {/* Reason */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                Reason (Optional)
+              </label>
+              <textarea
+                value={forceStartReason}
+                onChange={(e) => setForceStartReason(e.target.value)}
+                placeholder="Enter reason for force start..."
+                rows={3}
+                className="w-full px-4 py-3 rounded-lg border text-sm resize-none"
+                style={{ 
+                  borderColor: 'var(--gray-200)', 
+                  backgroundColor: 'var(--surface-bg)',
+                  color: 'var(--heading)'
+                }}
+              />
+              <p className="text-xs mt-2" style={{ color: 'var(--muted-text)' }}>
+                Provide details about why this override was necessary (e.g., "Driver app not responding", "Technical issues with device")
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowForceStartModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleForceStartSubmit}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--green-600)', 
+                  color: 'var(--on-success)' 
+                }}
+              >
+                Force Start Ride
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Force Complete Modal */}
+      {showForceCompleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--green-600)' }}
+                >
+                  <Check className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Force Complete Ride</h2>
+              </div>
+              <button
+                onClick={() => setShowForceCompleteModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Main Description */}
+            <div className="mb-6">
+              <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                This will mark ride #{rideId} as completed, even if all stops haven't been confirmed through the driver app.
+              </p>
+            </div>
+
+            {/* Action Summary */}
+            <div 
+              className="p-4 rounded-lg border mb-6"
+              style={{ 
+                backgroundColor: 'var(--green-100)', 
+                borderColor: 'var(--green-600)' 
+              }}
+            >
+              <h3 className="font-bold mb-2" style={{ color: 'var(--green-600)' }}>Action Summary</h3>
+              <p className="text-sm" style={{ color: 'var(--green-600)' }}>
+                This will update the ride status to completed and notify parents that the trip has finished.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowForceCompleteModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleForceCompleteSubmit}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--green-600)', 
+                  color: 'var(--on-success)' 
+                }}
+              >
+                Force Complete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Force No Show Modal */}
+      {showForceNoShowModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--red-600)' }}
+                >
+                  <UserX className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Mark as No Show</h2>
+              </div>
+              <button
+                onClick={() => setShowForceNoShowModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Main Description */}
+            <div className="mb-6">
+              <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                This will mark ride #{rideId} as a no-show, indicating the driver did not appear for the scheduled trip.
+              </p>
+            </div>
+
+            {/* Warning Section */}
+            <div 
+              className="p-4 rounded-lg border mb-6"
+              style={{ 
+                backgroundColor: 'var(--red-100)', 
+                borderColor: 'var(--red-600)' 
+              }}
+            >
+              <h3 className="font-bold mb-2" style={{ color: 'var(--red-600)' }}>Warning</h3>
+              <p className="text-sm" style={{ color: 'var(--red-600)' }}>
+                This action will notify parents and may trigger automatic rescheduling procedures.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowForceNoShowModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleForceNoShowSubmit}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--red-600)', 
+                  color: 'var(--on-danger)' 
+                }}
+              >
+                Mark No Show
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Duplicate Trip Modal */}
+      {showDuplicateTripModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--blue-600)' }}
+                >
+                  <Copy className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Duplicate Trip</h2>
+              </div>
+              <button
+                onClick={() => setShowDuplicateTripModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Main Description */}
+            <div className="mb-6">
+              <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                Create a copy of ride #{rideId} with the same route, stops, and students.
+              </p>
+            </div>
+
+            {/* New Trip Date */}
+            <div className="mb-4">
+              <Input
+                type="date"
+                label="New Trip Date"
+                value={duplicateTripDate}
+                onChange={(e) => setDuplicateTripDate(e.target.value)}
+                icon={<Calendar className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />}
+                className="text-sm"
+                width="w-full"
+              />
+            </div>
+
+            {/* New Trip Time */}
+            <div className="mb-6">
+              <Input
+                type="time"
+                label="New Trip Time"
+                value={duplicateTripTime}
+                onChange={(e) => setDuplicateTripTime(e.target.value)}
+                icon={<Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />}
+                className="text-sm"
+                width="w-full"
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowDuplicateTripModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDuplicateTripSubmit}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--blue-600)', 
+                  color: 'var(--on-primary)' 
+                }}
+              >
+                Create Duplicate
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manage Trip Modal */}
+      {showManageTripModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--blue-600)' }}
+                >
+                  <Settings className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Manage Trip</h2>
+              </div>
+              <button
+                onClick={() => setShowManageTripModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Current Driver Section */}
+            <div className="mb-6">
+              <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Current Driver</h3>
+              <Card className="p-4">
+                <div className="flex items-center gap-4">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--blue-100)' }}
+                  >
+                    <User className="w-6 h-6" style={{ color: 'var(--blue-600)' }} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
+                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                      2023 Tesla Model Y
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Reassign to New Driver Section */}
+            <div className="mb-6">
+              <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Reassign to New Driver</h3>
+              <Select
+                options={[
+                  { value: 'john-smith', label: 'John Smith - 2019 Ford Transit - ABC123' },
+                  { value: 'maria-garcia', label: 'Maria Garcia - 2020 Chevrolet Express - DEF456' },
+                  { value: 'david-johnson', label: 'David Johnson - 2018 Mercedes Sprinter - GHI789' }
+                ]}
+                value={selectedNewDriver}
+                onChange={(e) => setSelectedNewDriver(e.target.value)}
+                placeholder="Select new driver"
+                className="text-sm"
+                width="w-full"
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowManageTripModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleManageTripSubmit}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--blue-600)', 
+                  color: 'var(--on-primary)' 
+                }}
+              >
+                Reassign Driver
               </Button>
             </div>
           </div>
