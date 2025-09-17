@@ -10,8 +10,10 @@ import Select from '@/components/ui/Select'
 import SearchInput from '@/components/ui/SearchInput'
 import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
+import { useRouter } from 'next/navigation'
 
 export default function RideDetailContent({ rideId }) {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('stops')
   const [selectedDriver, setSelectedDriver] = useState(null)
@@ -579,7 +581,13 @@ export default function RideDetailContent({ rideId }) {
                             <User className="w-3 h-3 text-white" />
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className="font-semibold" style={{ color: 'var(--heading)' }}>Marcus Johnson</span>
+                            <button 
+                              className="font-semibold hover:underline cursor-pointer"
+                              style={{ color: 'var(--blue-600)' }}
+                              onClick={() => router.push('/students/STU001234')}
+                            >
+                              Marcus Johnson
+                            </button>
                             <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
                             <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
                           </div>

@@ -1,12 +1,10 @@
 import PageLayout from "@/components/layout/page-layout"
-import StudentDetailContent from "@/components/students/StudentDetailContent"
+import StudentProfilePage from "@/components/students/StudentProfilePage"
 
-export default async function StudentDetailPage({ params }) {
-  const resolvedParams = await params;
-  const studentId = resolvedParams.id;
+export default function StudentProfile({ params }) {
   return (
-    <PageLayout activePage="Students" pageTitle="Student Details">
-      <StudentDetailContent studentId={studentId} />
+    <PageLayout activePage="Students" pageTitle="Student Profile">
+      <StudentProfilePage studentId={params.id} />
     </PageLayout>
   )
 }

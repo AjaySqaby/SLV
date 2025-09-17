@@ -65,6 +65,12 @@ export const getTimezoneValue = (timezoneLabel) => {
 // Simple test function to debug Luxon conversion
 export const debugLuxonConversion = (time, fromTimezone, toTimezone) => {
   try {
+    // Check if time is valid
+    if (!time || typeof time !== 'string') {
+      console.warn('Invalid time provided to debugLuxonConversion:', time);
+      return time || '';
+    }
+    
     console.log('=== DEBUGGING LUXON CONVERSION ===');
     console.log(`Input: ${time} from ${fromTimezone} to ${toTimezone}`);
     
@@ -114,6 +120,12 @@ export const debugLuxonConversion = (time, fromTimezone, toTimezone) => {
 // Convert time between timezones using Luxon
 export const convertTimeBetweenTimezones = (time, fromTimezone, toTimezone) => {
   try {
+    // Check if time is valid
+    if (!time || typeof time !== 'string') {
+      console.warn('Invalid time provided to convertTimeBetweenTimezones:', time);
+      return time || '';
+    }
+    
     console.log(`Luxon conversion: ${time} from ${fromTimezone} to ${toTimezone}`);
     
     // Parse the time string (assuming format like "08:30 AM")
@@ -246,6 +258,12 @@ export const testTimezoneConversionWithLuxon = (time, fromTimezone, toTimezone) 
 // Automatic timezone conversion - converts ride time to user's timezone
 export const convertRideTimeToUserTimezone = (rideTime, rideTimezone, userTimezone = null) => {
   try {
+    // Check if rideTime is valid
+    if (!rideTime || typeof rideTime !== 'string') {
+      console.warn('Invalid rideTime provided:', rideTime);
+      return rideTime || '';
+    }
+    
     // If no user timezone provided, detect it automatically
     const detectedUserTimezone = userTimezone || getUserTimezone();
     
