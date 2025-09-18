@@ -73,7 +73,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
           </div>
           
       <MapContainer
-        className="w-full h-[70vh]"
+        className="w-full h-full"
         style={{ minHeight: '100%', height: '100%', background: '#e5e7eb' }}
         center={[ (pickupCoords.lat + dropoffCoords.lat) / 2, (pickupCoords.lng + dropoffCoords.lng) / 2 ]}
         zoom={13}

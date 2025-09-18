@@ -7,7 +7,7 @@ export default function PageLayout({ children, activePage, pageTitle, onHeaderSe
       <Sidebar activePage={activePage} />
       <div className="flex-1 flex flex-col ">
         <Header activePage={pageTitle} onSearch={onHeaderSearch} />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   )

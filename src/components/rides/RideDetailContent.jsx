@@ -293,76 +293,119 @@ export default function RideDetailContent({ rideId }) {
   }
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Back Navigation */}
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="flex items-center space-x-2 text-blue-600 hover:text-blue-700"
-          onClick={() => window.history.back()}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
-        </Button>
-      </div>
-
+    <div className="bg-white h-screen flex flex-col">
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-2">
+      <div className="mb-6 px-6 pt-6">
+        {/* Top Row - Title and Status */}
+        <div className="flex items-center space-x-3 mb-4">
           <Car className="w-6 h-6 text-[var(--blue-600)]" />
+          <Route className="w-5 h-5 text-[var(--blue-600)]" />
+          <Clock className="w-5 h-5 text-[var(--blue-600)]" />
           <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
           <StatusBadge status={rideData.status} fontSize="text-lg" />
           <span className="text-sm font-medium text-gray-700">ETA: {rideData.eta}</span>
         </div>
 
-        {/* Action Buttons - Requested actions */}
-        <div className="flex items-center space-x-3">
-          <Button
-            variant="primary"
-            onClick={handleForceStart}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-[var(--purple)] text-white border-transparent"
-          >
-            <Play className="w-4 h-4" />
-            <span>Force Start</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleForceComplete}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <Check className="w-4 h-4" />
-            <span>Force Complete</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleForceNoShow}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <UserX className="w-4 h-4" />
-            <span>Force No Show</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleDuplicateRide}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <Copy className="w-4 h-4" />
-            <span>Duplicate</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleManageTrip}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <Settings className="w-4 h-4" />
-            <span>Manage Trip</span>
-          </Button>
+        {/* Bottom Row - Tabs and Action Buttons - Centered */}
+        <div className="flex items-center justify-center">
+          <div className="flex items-center space-x-2">
+            {/* Tabs */}
+            <button 
+              onClick={() => setActiveTab('stops')}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{ 
+                backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)', 
+                color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
+                border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
+                borderRadius: '12px'
+              }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+              </div>
+              TRIP STOPS
+            </button>
+            <button 
+              onClick={() => setActiveTab('students')}
+              className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+              style={{ 
+                backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)', 
+                color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
+                border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
+                borderRadius: '12px'
+              }}
+            >
+              STUDENTS
+            </button>
+            <button 
+              onClick={() => setActiveTab('ridelog')}
+              className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+              style={{ 
+                backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)', 
+                color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
+                border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
+                borderRadius: '12px'
+              }}
+            >
+              TIMELINE
+            </button>
+
+            {/* Action Buttons */}
+            <Button
+              variant="primary"
+              onClick={handleForceStart}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
+              style={{ backgroundColor: 'var(--green-600)' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <Play className="w-2.5 h-2.5" />
+              </div>
+              <span>Force Start</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleForceComplete}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
+              style={{ backgroundColor: 'var(--secondary)' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <Check className="w-2.5 h-2.5" />
+              </div>
+              <span>Mark Complete</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleForceNoShow}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
+              style={{ backgroundColor: 'var(--red-600)' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <UserX className="w-2.5 h-2.5" />
+              </div>
+              <span>Force No Show</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleDuplicateRide}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+            >
+              <Copy className="w-4 h-4" />
+              <span>Duplicate</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleManageTrip}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Manage Trip</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Main Content - Three-column grid */}
-      <div className="grid grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-12 gap-6 items-start flex-1 px-6">
         {/* Left Sidebar - Clean Detail Stack */}
         <div className="col-span-3 min-w-0 space-y-4">
           {/* Driver */}
@@ -468,57 +511,11 @@ export default function RideDetailContent({ rideId }) {
           </Card>
         </div>
 
-        {/* Middle Column - Content with tabs header */}
+        {/* Middle Column - Content */}
         <div className="col-span-4 min-w-0">
           <div className="space-y-4">
-            {/* Mid tabs (interactive) */}
-            <div className="flex items-center justify-center">
-              <div></div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => setActiveTab('stops')}
-                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-                  style={{ 
-                    backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)', 
-                    color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
-                    border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
-                    borderRadius: '12px'
-                  }}
-                >
-                  <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
-                    <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
-                  </div>
-                  TRIP STOPS
-                </button>
-                <button 
-                  onClick={() => setActiveTab('students')}
-                  className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-                  style={{ 
-                    backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)', 
-                    color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
-                    border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
-                    borderRadius: '12px'
-                  }}
-                >
-                  STUDENTS
-                </button>
-                <button 
-                  onClick={() => setActiveTab('ridelog')}
-                  className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-                  style={{ 
-                    backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)', 
-                    color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
-                    border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
-                    borderRadius: '12px'
-                  }}
-                >
-                  TIMELINE
-                </button>
-              </div>
-            </div>
-
-        {/* Content Cards */}
-        <div>
+            {/* Content Cards */}
+            <div>
           {activeTab === 'stops' && (
             <div className="space-y-6">
               {/* Trip Route Summary Card */}
@@ -1004,11 +1001,11 @@ export default function RideDetailContent({ rideId }) {
         </div>
 
         {/* Right Side - Map and Controls */}
-        <div className="col-span-5 min-w-0">
-          <div className="space-y-4">
+        <div className="col-span-5 min-w-0 h-full">
+          <div className="h-full">
           
             {/* Map Container */}
-            <div className="h-[70vh] bg-gray-200 rounded-lg overflow-hidden">
+            <div className="h-full bg-gray-200 overflow-hidden">
               {mapView === 'route' && (
                 <RideMap
                   pickup={rideData.pickup}
