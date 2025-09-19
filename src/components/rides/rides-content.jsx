@@ -4,7 +4,6 @@ import { Search, Plus, Filter, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import RidesStats from "./RidesStats";
 import RidesTabs from "./RidesTabs";
 import RidesTable from "./RidesTable";
 import FilterDropdown from "./FilterDropdown";
@@ -22,7 +21,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [endDate, setEndDate] = useState();
   const [search, setSearch] = useState("");
   const [mainSearch, setMainSearch] = useState("");
-  const [statsFilter, setStatsFilter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedState, setSelectedState] = useState("");
@@ -34,7 +32,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setStartDate();
     setEndDate();
     setFilterType("Driver");
-    setStatsFilter(null);
     setSelectedState("");
     setSelectedCity("");
     setCurrentPage(1);
@@ -45,18 +42,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setEndDate(end);
   };
 
-  const handleStatsClick = (statsType) => {
-    setStatsFilter(statsType);
-    // Also clear other filters to show only the stats-based filter
-    setSearch("");
-    setMainSearch("");
-    setStartDate();
-    setEndDate();
-    setSelectedState("");
-    setSelectedCity("");
-    setActiveTab(0); // Reset to 'All' tab
-    setCurrentPage(1);
-  };
 
   const handleStateChange = (state) => {
     setSelectedState(state);
@@ -81,7 +66,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       setSearch("");
       setStartDate();
       setEndDate();
-      setStatsFilter(null);
       setSelectedState("");
       setSelectedCity("");
       setActiveTab(0); // Reset to 'All' tab
@@ -994,13 +978,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   };
 
 
-  const stats = {
-    total: rides.length,
-    completed: tabCounts.completed,
-    inProgress: tabCounts.inProgress,
-    canceled: tabCounts.cancelled,
-    rejected: tabCounts.rejected,
-  };
 
 
   function getFilteredRides() {
@@ -1124,23 +1101,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       });
     }
 
-    // Filter by stats selection
-    if (statsFilter && statsFilter !== 'all') {
-      filteredRides = filteredRides.filter((ride) => {
-        switch (statsFilter) {
-          case 'completed':
-            return ride.status === 'Completed';
-          case 'inProgress':
-            return ride.status === 'In Progress';
-          case 'canceled':
-            return ride.status === 'Canceled' || ride.status === 'Cancelled';
-          case 'rejected':
-            return ride.status === 'Rejected';
-          default:
-            return true;
-        }
-      });
-    }
 
     // Filter by selected state (only when filterType is "Driver")
     if (selectedState && filterType === "Driver") {
@@ -1169,7 +1129,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, mainSearch, startDate, endDate, activeTab, statsFilter, selectedState, selectedCity, itemsPerPage]);
+  }, [search, mainSearch, startDate, endDate, activeTab, selectedState, selectedCity, itemsPerPage]);
 
   const filteredRides = getFilteredRides();
   const paginatedRides = getPaginatedRides();
@@ -1187,7 +1147,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           Add New Ride
         </Button>
       </div>
-      <RidesStats stats={stats} onStatsClick={handleStatsClick} />
       <div className="flex justify-between items-center mb-4 gap-2">
         <div className="relative w-full">
           <Input
