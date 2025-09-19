@@ -30,6 +30,12 @@ export default function RideDetailContent({ rideId }) {
   const [duplicateTripTime, setDuplicateTripTime] = useState('')
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [selectedNewDriver, setSelectedNewDriver] = useState('')
+  const [driverAssignment, setDriverAssignment] = useState('keep-current')
+  const [vehicleAssignment, setVehicleAssignment] = useState('keep-current')
+  const [searchPartner, setSearchPartner] = useState('')
+  const [selectedState, setSelectedState] = useState('all')
+  const [selectedCity, setSelectedCity] = useState('all')
+  const [availableFilter, setAvailableFilter] = useState('available')
 
   // Mock data - replace with actual API call
   const getRideData = (id) => {
@@ -237,6 +243,46 @@ export default function RideDetailContent({ rideId }) {
 
   const rideData = getRideData(rideId)
 
+  // Mock data for available drivers
+  const availableDrivers = [
+    {
+      id: 1,
+      name: "Mike Johnson",
+      vehicle: "2023 Honda Odyssey",
+      rating: 4.9,
+      status: "Available",
+      location: "CA San Francisco",
+      image: "/picture.jpg"
+    },
+    {
+      id: 2,
+      name: "Sarah Williams",
+      vehicle: "2022 Toyota Sienna",
+      rating: 4.8,
+      status: "Available",
+      location: "CA Los Angeles",
+      image: "/picture.jpg"
+    },
+    {
+      id: 3,
+      name: "David Chen",
+      vehicle: "2023 Ford Transit",
+      rating: 4.7,
+      status: "Available",
+      location: "CA San Diego",
+      image: "/picture.jpg"
+    },
+    {
+      id: 4,
+      name: "Maria Garcia",
+      vehicle: "2022 Chevrolet Express",
+      rating: 4.9,
+      status: "Available",
+      location: "CA Oakland",
+      image: "/picture.jpg"
+    }
+  ]
+
   const handleDuplicateRide = () => {
     setShowDuplicateTripModal(true)
   }
@@ -351,20 +397,20 @@ export default function RideDetailContent({ rideId }) {
             </button>
 
             {/* Action Buttons */}
-            <Button
-              variant="primary"
-              onClick={handleForceStart}
+          <Button
+            variant="primary"
+            onClick={handleForceStart}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--green-600)' }}
-            >
+          >
               <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
                 <Play className="w-2.5 h-2.5" />
               </div>
-              <span>Force Start</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleForceComplete}
+            <span>Force Start</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleForceComplete}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--secondary)' }}
             >
@@ -372,34 +418,34 @@ export default function RideDetailContent({ rideId }) {
                 <Check className="w-2.5 h-2.5" />
               </div>
               <span>Mark Complete</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleForceNoShow}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleForceNoShow}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--red-600)' }}
-            >
+          >
               <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
                 <UserX className="w-2.5 h-2.5" />
               </div>
-              <span>Force No Show</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleDuplicateRide}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-            >
-              <Copy className="w-4 h-4" />
-              <span>Duplicate</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleManageTrip}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-            >
-              <Settings className="w-4 h-4" />
-              <span>Manage Trip</span>
-            </Button>
+            <span>Force No Show</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleDuplicateRide}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+          >
+            <Copy className="w-4 h-4" />
+            <span>Duplicate</span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleManageTrip}
+            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Manage Trip</span>
+          </Button>
           </div>
         </div>
       </div>
@@ -514,8 +560,8 @@ export default function RideDetailContent({ rideId }) {
         {/* Middle Column - Content */}
         <div className="col-span-4 min-w-0">
           <div className="space-y-4">
-            {/* Content Cards */}
-            <div>
+        {/* Content Cards */}
+        <div>
           {activeTab === 'stops' && (
             <div className="space-y-6">
               {/* Trip Route Summary Card */}
@@ -1542,85 +1588,405 @@ export default function RideDetailContent({ rideId }) {
         </div>
       )}
 
-      {/* Manage Trip Modal */}
+      {/* Trip Assignment Manager Modal */}
       {showManageTripModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-6xl mx-4">
             {/* Modal Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
                 <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
                   style={{ backgroundColor: 'var(--blue-600)' }}
                 >
-                  <Settings className="w-5 h-5 text-white" />
+                  <Settings className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Manage Trip</h2>
+                <div>
+                  <h2 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Trip Assignment Manager</h2>
+                  <p className="text-base mt-1" style={{ color: 'var(--muted-text)' }}>
+                    Ride #{rideData.id} • Thu September 11, 2025
+                  </p>
               </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <span 
+                  className="px-4 py-2 text-sm rounded-full font-semibold shadow-sm"
+                  style={{ 
+                    backgroundColor: 'var(--green-100)', 
+                    color: 'var(--green-600)',
+                    border: '1px solid var(--green-600)'
+                  }}
+                >
+                  accepted
+                </span>
               <button
                 onClick={() => setShowManageTripModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               >
-                <X className="w-6 h-6" />
+                  <X className="w-6 h-6 text-gray-500" />
               </button>
+              </div>
             </div>
 
-            {/* Current Driver Section */}
-            <div className="mb-6">
-              <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Current Driver</h3>
-              <Card className="p-4">
-                <div className="flex items-center gap-4">
+            {/* Three Column Layout */}
+            <div className="grid grid-cols-3 gap-8 mb-8">
+              {/* Current Assignments - Blue Theme */}
+              <div 
+                className="p-8 rounded-2xl shadow-sm"
+                style={{ backgroundColor: 'var(--light-blue-bg)', border: '2px solid var(--blue-100)' }}
+              >
+                <div className="flex items-center gap-3 mb-6">
                   <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: 'var(--blue-100)' }}
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--blue-600)' }}
                   >
-                    <User className="w-6 h-6" style={{ color: 'var(--blue-600)' }} />
+                    <Eye className="w-5 h-5 text-white" />
                   </div>
-                  <div>
-                    <h4 className="font-bold" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
-                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                      2023 Tesla Model Y
-                    </p>
+                  <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Current Assignments</h3>
+                </div>
+                
+                {/* Current Driver */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div 
+                      className="w-16 h-16 rounded-full flex items-center justify-center shadow-md overflow-hidden"
+                      style={{ backgroundColor: 'var(--blue-100)' }}
+                    >
+                      <User className="w-8 h-8" style={{ color: 'var(--blue-600)' }} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-bold text-lg" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
+                        <Check className="w-5 h-5" style={{ color: 'var(--green-600)' }} />
+                      </div>
+                      <p className="text-base mb-2" style={{ color: 'var(--muted-text)' }}>Current driver</p>
+                      <div className="flex items-center gap-2">
+                        <Star className="w-4 h-4" style={{ color: 'var(--amber-500)' }} />
+                        <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>4.96 rating</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </Card>
+
+                {/* Current Vehicle */}
+                <div>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div 
+                      className="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
+                      style={{ backgroundColor: 'var(--gray-100)' }}
+                    >
+                      <Car className="w-8 h-8" style={{ color: 'var(--blue-600)' }} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-bold text-lg" style={{ color: 'var(--heading)' }}>JN1BJ1CWXLW641964</h4>
+                        <Check className="w-5 h-5" style={{ color: 'var(--green-600)' }} />
+                      </div>
+                      <p className="text-base mb-1" style={{ color: 'var(--muted-text)' }}>Model Y</p>
+                      <p className="text-base" style={{ color: 'var(--muted-text)' }}>Current assignment</p>
+                    </div>
+                  </div>
+                </div>
             </div>
 
-            {/* Reassign to New Driver Section */}
-            <div className="mb-6">
-              <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Reassign to New Driver</h3>
-              <Select
-                options={[
-                  { value: 'john-smith', label: 'John Smith - 2019 Ford Transit - ABC123' },
-                  { value: 'maria-garcia', label: 'Maria Garcia - 2020 Chevrolet Express - DEF456' },
-                  { value: 'david-johnson', label: 'David Johnson - 2018 Mercedes Sprinter - GHI789' }
-                ]}
-                value={selectedNewDriver}
-                onChange={(e) => setSelectedNewDriver(e.target.value)}
-                placeholder="Select new driver"
-                className="text-sm"
-                width="w-full"
-              />
+              {/* Driver Assignment - Green Theme */}
+              <div 
+                className="p-8 rounded-2xl shadow-sm"
+                style={{ backgroundColor: 'var(--green-100)', border: '2px solid var(--green-600)' }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--green-600)' }}
+                  >
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Driver Assignment</h3>
+                </div>
+                
+                <div className="space-y-4 mb-6">
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="driverAssignment"
+                      value="keep-current"
+                      checked={driverAssignment === 'keep-current'}
+                      onChange={(e) => setDriverAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--green-600)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Keep Current Driver</span>
+                  </label>
+                  
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="driverAssignment"
+                      value="assign-new"
+                      checked={driverAssignment === 'assign-new'}
+                      onChange={(e) => setDriverAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--green-600)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Assign New Driver</span>
+                  </label>
+                  
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="driverAssignment"
+                      value="unassign"
+                      checked={driverAssignment === 'unassign'}
+                      onChange={(e) => setDriverAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--green-600)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Unassign Driver</span>
+                  </label>
+                </div>
+
+                {/* Search & Filter Section - Only show when "Assign New Driver" is selected */}
+                {driverAssignment === 'assign-new' && (
+                  <div className="space-y-4">
+                    {/* Search Partner */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                        Search Partner
+                      </label>
+                      <SearchInput
+                        placeholder="Search by partner name..."
+                        value={searchPartner}
+                        onChange={(e) => setSearchPartner(e.target.value)}
+                        width="w-full"
+                        className="text-sm"
+                      />
+                    </div>
+
+                    {/* State and City Dropdowns */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                          State
+                        </label>
+                        <Select
+                          options={[
+                            { value: 'all', label: 'All States' },
+                            { value: 'ca', label: 'California' },
+                            { value: 'ny', label: 'New York' },
+                            { value: 'tx', label: 'Texas' }
+                          ]}
+                          value={selectedState}
+                          onChange={(e) => setSelectedState(e.target.value)}
+                          placeholder="All States"
+                          className="text-sm"
+                          width="w-full"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                          City
+                        </label>
+                        <Select
+                          options={[
+                            { value: 'all', label: 'All Cities' },
+                            { value: 'sf', label: 'San Francisco' },
+                            { value: 'la', label: 'Los Angeles' },
+                            { value: 'sd', label: 'San Diego' }
+                          ]}
+                          value={selectedCity}
+                          onChange={(e) => setSelectedCity(e.target.value)}
+                          placeholder="All Cities"
+                          className="text-sm"
+                          width="w-full"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Filter Buttons */}
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setAvailableFilter('available')}
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
+                          availableFilter === 'available' 
+                            ? 'text-white' 
+                            : 'text-gray-600'
+                        }`}
+                        style={{ 
+                          backgroundColor: availableFilter === 'available' 
+                            ? 'var(--green-600)' 
+                            : 'var(--gray-200)' 
+                        }}
+                      >
+                        Available Only
+                      </button>
+                      <button
+                        onClick={() => setAvailableFilter('rated')}
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
+                          availableFilter === 'rated' 
+                            ? 'text-white' 
+                            : 'text-gray-600'
+                        }`}
+                        style={{ 
+                          backgroundColor: availableFilter === 'rated' 
+                            ? 'var(--green-600)' 
+                            : 'var(--gray-200)' 
+                        }}
+                      >
+                        High Rated (4.5+)
+                      </button>
+                      <button
+                        onClick={() => setAvailableFilter('nearby')}
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
+                          availableFilter === 'nearby' 
+                            ? 'text-white' 
+                            : 'text-gray-600'
+                        }`}
+                        style={{ 
+                          backgroundColor: availableFilter === 'nearby' 
+                            ? 'var(--green-600)' 
+                            : 'var(--gray-200)' 
+                        }}
+                      >
+                        Nearby
+                      </button>
+                    </div>
+
+                    {/* Available Drivers List */}
+                    <div className="max-h-64 overflow-y-auto">
+                      <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--heading)' }}>
+                        Available Drivers
+                      </h4>
+                      <div className="space-y-3">
+                        {availableDrivers.map((driver) => (
+                          <div 
+                            key={driver.id}
+                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors cursor-pointer"
+                          >
+                            <img 
+                              src={driver.image} 
+                              alt={driver.name} 
+                              className="w-10 h-10 rounded-full object-cover" 
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h5 className="font-semibold text-sm" style={{ color: 'var(--heading)' }}>
+                                  {driver.name}
+                                </h5>
+                                <div className="flex items-center gap-1">
+                                  <Star className="w-3 h-3" style={{ color: 'var(--amber-500)' }} />
+                                  <span className="text-xs font-medium" style={{ color: 'var(--heading)' }}>
+                                    {driver.rating}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-xs" style={{ color: 'var(--muted-text)' }}>
+                                {driver.vehicle}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span 
+                                  className="px-2 py-0.5 text-xs rounded-full"
+                                  style={{ 
+                                    backgroundColor: 'var(--green-100)', 
+                                    color: 'var(--green-600)' 
+                                  }}
+                                >
+                                  {driver.status}
+                                </span>
+                                <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
+                                  {driver.location}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Vehicle Assignment - Purple Theme */}
+              <div 
+                className="p-8 rounded-2xl shadow-sm"
+                style={{ backgroundColor: 'var(--primary-bg)', border: '2px solid var(--primary)' }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--primary)' }}
+                  >
+                    <Car className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Vehicle Assignment</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="vehicleAssignment"
+                      value="keep-current"
+                      checked={vehicleAssignment === 'keep-current'}
+                      onChange={(e) => setVehicleAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--primary)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Keep Current Vehicle</span>
+                  </label>
+                  
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="vehicleAssignment"
+                      value="assign-new"
+                      checked={vehicleAssignment === 'assign-new'}
+                      onChange={(e) => setVehicleAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--primary)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Assign New Vehicle</span>
+                  </label>
+                  
+                  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="vehicleAssignment"
+                      value="unassign"
+                      checked={vehicleAssignment === 'unassign'}
+                      onChange={(e) => setVehicleAssignment(e.target.value)}
+                      className="w-5 h-5"
+                      style={{ accentColor: 'var(--primary)' }}
+                    />
+                    <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Unassign Vehicle</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-end gap-3">
+            <div className="flex items-center justify-end gap-4 pt-6 border-t" style={{ borderColor: 'var(--gray-200)' }}>
               <Button
                 variant="secondary"
                 onClick={() => setShowManageTripModal(false)}
-                className="px-6 py-2"
+                className="px-8 py-3 text-base font-semibold rounded-xl shadow-sm"
+                style={{ 
+                  backgroundColor: 'var(--gray-100)', 
+                  color: 'var(--heading)',
+                  border: '2px solid var(--gray-200)'
+                }}
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleManageTripSubmit}
-                className="px-6 py-2"
+                className="px-8 py-3 text-base font-semibold rounded-xl shadow-lg"
                 style={{ 
-                  backgroundColor: 'var(--blue-600)', 
-                  color: 'var(--on-primary)' 
+                  backgroundColor: 'var(--green-600)', 
+                  color: 'var(--on-success)',
+                  border: '2px solid var(--green-600)'
                 }}
               >
-                Reassign Driver
+                Confirm
               </Button>
             </div>
           </div>
