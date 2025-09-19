@@ -1852,7 +1852,7 @@ export default function RideDetailContent({ rideId }) {
                     </div>
 
                     {/* Available Drivers List */}
-                    <div className="max-h-64 overflow-y-auto">
+                    <div className="max-h-48 overflow-y-auto">
                       <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--heading)' }}>
                         Available Drivers
                       </h4>
