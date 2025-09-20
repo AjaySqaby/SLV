@@ -7,12 +7,14 @@ import { MoreVertical } from "lucide-react";
 import { Edit, CheckCircle, XCircle } from "lucide-react";
 import CompleteRideModal from "./CompleteRideModal";
 import CancelRideModal from "./CancelRideModal";
+import RideDetailContent from "./RideDetailContent";
 
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
 
   const handleRideClick = (rideId) => {
-    router.push(`/rides/${rideId}`);
+    setSelectedRideId(rideId);
+    setShowRideDetailModal(true);
   };
 
   const [showActionMenu, setShowActionMenu] = useState(false);
@@ -20,6 +22,8 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
+  const [showRideDetailModal, setShowRideDetailModal] = useState(false);
+  const [selectedRideId, setSelectedRideId] = useState(null);
   const actionMenuRef = useRef();
 
   useEffect(() => {
@@ -336,6 +340,18 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
         onCancel={() => {
         }}
       />
+
+      {/* Ride Detail Modal */}
+      {showRideDetailModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl  !max-w-[82rem] mx-4 h-full overflow-auto">
+            <RideDetailContent 
+              rideId={selectedRideId} 
+              onClose={() => setShowRideDetailModal(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

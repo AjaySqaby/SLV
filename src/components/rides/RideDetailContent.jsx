@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react'
-import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield, Search, Calendar } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield, Search, Calendar, Edit } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
@@ -12,9 +12,43 @@ import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
 import { useRouter } from 'next/navigation'
 
-export default function RideDetailContent({ rideId }) {
+export default function RideDetailContent({ rideId, onClose }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+
+  // Function to highlight local time
+  const formatTimeWithHighlight = (time, timezone = 'PDT') => {
+    if (!time || time === '--') return time
+    
+    // Get user's local timezone abbreviation
+    const now = new Date()
+    const userTimezoneAbbr = now.toLocaleTimeString('en-US', { 
+      timeZoneName: 'short' 
+    }).split(' ')[1]
+    
+    // For demo purposes, let's highlight EST as local time (you can change this)
+    // In real app, you would compare with actual user timezone
+    const isLocalTime = timezone === 'EST' || timezone === 'EDT'
+    
+    if (isLocalTime) {
+      return (
+        <span>
+          <span className="font-semibold" style={{ color: 'var(--blue-600)' }}>
+            {time}
+          </span>
+          <span className="ml-1 text-sm" style={{ color: 'var(--muted-text)' }}>
+            {timezone}
+          </span>
+        </span>
+      )
+    }
+    
+    return (
+      <span>
+        {time} <span className="text-gray-500">{timezone}</span>
+      </span>
+    )
+  }
   const [activeTab, setActiveTab] = useState('stops')
   const [selectedDriver, setSelectedDriver] = useState(null)
   const [mapView, setMapView] = useState('route') // route, photos, streetview
@@ -36,6 +70,18 @@ export default function RideDetailContent({ rideId }) {
   const [selectedState, setSelectedState] = useState('all')
   const [selectedCity, setSelectedCity] = useState('all')
   const [availableFilter, setAvailableFilter] = useState('available')
+  const [showEditTripModal, setShowEditTripModal] = useState(false)
+  const [editPickupAddress, setEditPickupAddress] = useState('')
+  const [editDropoffAddress, setEditDropoffAddress] = useState('')
+  const [editPickupTime, setEditPickupTime] = useState('')
+  const [editDropoffTime, setEditDropoffTime] = useState('')
+  const [rideDataState, setRideDataState] = useState(null)
+
+  // Load ride data on component mount
+  useEffect(() => {
+    const data = getRideData(rideId)
+    setRideDataState(data)
+  }, [rideId])
 
   // Mock data - replace with actual API call
   const getRideData = (id) => {
@@ -241,7 +287,7 @@ export default function RideDetailContent({ rideId }) {
     }
   }
 
-  const rideData = getRideData(rideId)
+  const rideData = rideDataState || getRideData(rideId)
 
   // Mock data for available drivers
   const availableDrivers = [
@@ -338,18 +384,36 @@ export default function RideDetailContent({ rideId }) {
     setSelectedNewDriver('')
   }
 
+  if (isLoading || !rideDataState) {
+    return <div className="p-6 text-center">Loading...</div>
+  }
+
   return (
     <div className="bg-white h-screen flex flex-col">
       {/* Header Section */}
       <div className="mb-6 px-6 pt-6">
         {/* Top Row - Title and Status */}
-        <div className="flex items-center space-x-3 mb-4">
-          <Car className="w-6 h-6 text-[var(--blue-600)]" />
-          <Route className="w-5 h-5 text-[var(--blue-600)]" />
-          <Clock className="w-5 h-5 text-[var(--blue-600)]" />
-          <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-          <StatusBadge status={rideData.status} fontSize="text-lg" />
-          <span className="text-sm font-medium text-gray-700">ETA: {rideData.eta}</span>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <Car className="w-6 h-6 text-[var(--blue-600)]" />
+            <Route className="w-5 h-5 text-[var(--blue-600)]" />
+            <Clock className="w-5 h-5 text-[var(--blue-600)]" />
+            <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
+            {rideData.status !== 'Assigned' && (
+              <StatusBadge status={rideData.status} fontSize="text-lg" />
+            )}
+            <span className="text-sm font-medium text-gray-700">
+              ETA: {formatTimeWithHighlight(rideData.eta, 'EST')}
+            </span>
+          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-500" />
+            </button>
+          )}
         </div>
 
         {/* Bottom Row - Tabs and Action Buttons - Centered */}
@@ -438,14 +502,28 @@ export default function RideDetailContent({ rideId }) {
             <Copy className="w-4 h-4" />
             <span>Duplicate</span>
           </Button>
-          <Button
-            variant="secondary"
-            onClick={handleManageTrip}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <Settings className="w-4 h-4" />
-            <span>Manage Trip</span>
-          </Button>
+            <Button
+              variant="secondary"
+              onClick={handleManageTrip}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Manage Trip</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setEditPickupAddress(rideData.pickup?.address || '')
+                setEditDropoffAddress(rideData.dropoff?.address || '')
+                setEditPickupTime(rideData.pickup?.scheduledTime || '')
+                setEditDropoffTime(rideData.dropoff?.scheduledTime || '')
+                setShowEditTripModal(true)
+              }}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+            >
+              <Edit className="w-4 h-4" />
+              <span>Edit Trip</span>
+            </Button>
           </div>
         </div>
       </div>
@@ -471,7 +549,9 @@ export default function RideDetailContent({ rideId }) {
                   </div>
                 </div>
               </div>
-              <StatusBadge status={rideData.status} />
+              {rideData.status !== 'Assigned' && (
+                <StatusBadge status={rideData.status} />
+              )}
             </div>
           </Card>
 
@@ -496,9 +576,23 @@ export default function RideDetailContent({ rideId }) {
 
           {/* Trip Details */}
           <Card className="p-4">
-            <div className="flex items-center mb-3">
-              <Route className="w-5 h-5 text-[var(--blue-600)] mr-2" />
-              <h2 className="text-lg font-semibold text-gray-900">Trip Details</h2>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center">
+                <Route className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Trip Details</h2>
+              </div>
+              <Button
+                variant="secondary"
+                onClick={() => router.push(`/routes/${rideData.route.id}`)}
+                className="text-xs px-3 py-1"
+                style={{ 
+                  backgroundColor: 'var(--blue-100)', 
+                  color: 'var(--blue-600)',
+                  border: '1px solid var(--blue-200)'
+                }}
+              >
+                View Route
+              </Button>
             </div>
             <div className="grid grid-cols-2 gap-y-3">
               <div className="text-sm text-gray-500">Route</div>
@@ -525,15 +619,21 @@ export default function RideDetailContent({ rideId }) {
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-green-600"><span className="w-2 h-2 rounded-full bg-green-600 mr-2"></span>Start</div>
-                <div className="font-medium text-gray-900">{rideData.pickup?.scheduledTime || '--'} <span className="text-gray-500">PDT</span></div>
+                <div className="font-medium text-gray-900">
+                  {formatTimeWithHighlight(rideData.pickup?.scheduledTime, 'EST')}
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-red-600"><span className="w-2 h-2 rounded-full bg-red-600 mr-2"></span>End</div>
-                <div className="font-medium text-gray-900">{rideData.dropoff?.scheduledTime || '--'} <span className="text-gray-500">PDT</span></div>
+                <div className="font-medium text-gray-900">
+                  {formatTimeWithHighlight(rideData.dropoff?.scheduledTime, 'EST')}
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-gray-600"><span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>Completed</div>
-                <div className="font-medium text-gray-900">{rideData.status === 'Completed' ? (rideData.dropoff?.actualTime || '--') : '--'}</div>
+                <div className="font-medium text-gray-900">
+                  {rideData.status === 'Completed' ? formatTimeWithHighlight(rideData.dropoff?.actualTime, 'EST') : '--'}
+                </div>
               </div>
             </div>
           </Card>
@@ -718,7 +818,13 @@ export default function RideDetailContent({ rideId }) {
                 <div className="p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Marcus Johnson</h3>
+                      <button 
+                        className="text-xl font-bold hover:underline cursor-pointer"
+                        style={{ color: 'var(--blue-600)' }}
+                        onClick={() => router.push('/students/STU001234')}
+                      >
+                        Marcus Johnson
+                      </button>
                       <p className="text-sm mt-1" style={{ color: 'var(--muted-text)' }}>Grade 10</p>
                     </div>
                     <span 
@@ -1295,7 +1401,13 @@ export default function RideDetailContent({ rideId }) {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-bold" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
+                      <button 
+                        className="font-bold hover:underline cursor-pointer"
+                        style={{ color: 'var(--blue-600)' }}
+                        onClick={() => router.push('/drivers/DRV001')}
+                      >
+                        Lily Tsegaye
+                      </button>
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4" style={{ color: 'var(--amber-500)' }} />
                         <span className="text-sm font-medium" style={{ color: 'var(--heading)' }}>4.96</span>
@@ -1619,12 +1731,14 @@ export default function RideDetailContent({ rideId }) {
                 >
                   accepted
                 </span>
-              <button
-                onClick={() => setShowManageTripModal(false)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-              >
-                  <X className="w-6 h-6 text-gray-500" />
-              </button>
+                {onClose && (
+                  <button
+                    onClick={onClose}
+                    className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                  >
+                    <X className="w-6 h-6 text-gray-500" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -1656,7 +1770,13 @@ export default function RideDetailContent({ rideId }) {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-bold text-lg" style={{ color: 'var(--heading)' }}>Lily Tsegaye</h4>
+                        <button 
+                          className="font-bold text-lg hover:underline cursor-pointer"
+                          style={{ color: 'var(--blue-600)' }}
+                          onClick={() => router.push('/drivers/DRV001')}
+                        >
+                          Lily Tsegaye
+                        </button>
                         <Check className="w-5 h-5" style={{ color: 'var(--green-600)' }} />
                       </div>
                       <p className="text-base mb-2" style={{ color: 'var(--muted-text)' }}>Current driver</p>
@@ -1987,6 +2107,130 @@ export default function RideDetailContent({ rideId }) {
                 }}
               >
                 Confirm
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Trip Modal */}
+      {showEditTripModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-[82rem] mx-4">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--blue-600)' }}
+                >
+                  <Edit className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Edit Trip</h2>
+              </div>
+              <button
+                onClick={() => setShowEditTripModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Edit Form */}
+            <div className="space-y-6">
+              {/* Pickup Address */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                  Pickup Address
+                </label>
+                <Input
+                  type="text"
+                  value={editPickupAddress}
+                  onChange={(e) => setEditPickupAddress(e.target.value)}
+                  placeholder="Enter pickup address"
+                  className="text-sm"
+                  width="w-full"
+                />
+              </div>
+
+              {/* Dropoff Address */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                  Dropoff Address
+                </label>
+                <Input
+                  type="text"
+                  value={editDropoffAddress}
+                  onChange={(e) => setEditDropoffAddress(e.target.value)}
+                  placeholder="Enter dropoff address"
+                  className="text-sm"
+                  width="w-full"
+                />
+              </div>
+
+              {/* Time Fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                    Pickup Time
+                  </label>
+                  <Input
+                    type="time"
+                    value={editPickupTime}
+                    onChange={(e) => setEditPickupTime(e.target.value)}
+                    className="text-sm"
+                    width="w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                    Dropoff Time
+                  </label>
+                  <Input
+                    type="time"
+                    value={editDropoffTime}
+                    onChange={(e) => setEditDropoffTime(e.target.value)}
+                    className="text-sm"
+                    width="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end gap-3 mt-8">
+              <Button
+                variant="secondary"
+                onClick={() => setShowEditTripModal(false)}
+                className="px-6 py-2"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  // Update the ride data with new values
+                  setRideDataState(prevData => ({
+                    ...prevData,
+                    pickup: {
+                      ...prevData.pickup,
+                      address: editPickupAddress,
+                      scheduledTime: editPickupTime
+                    },
+                    dropoff: {
+                      ...prevData.dropoff,
+                      address: editDropoffAddress,
+                      scheduledTime: editDropoffTime
+                    }
+                  }))
+                  setShowEditTripModal(false)
+                }}
+                className="px-6 py-2"
+                style={{ 
+                  backgroundColor: 'var(--blue-600)', 
+                  color: 'var(--on-primary)' 
+                }}
+              >
+                Save Changes
               </Button>
             </div>
           </div>
