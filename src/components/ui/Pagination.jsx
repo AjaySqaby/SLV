@@ -42,7 +42,7 @@ export default function Pagination({
               </option>
             ))}
           </select>
-          <span className="text-sm text-[var(--gray-700)]">items per page</span>
+          <span className="text-sm text-[var(--gray-700)] uppercase">Items per page</span>
         </div>
 
         <div className="flex items-center space-x-2">
