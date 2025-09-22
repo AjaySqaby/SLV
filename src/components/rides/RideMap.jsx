@@ -49,10 +49,18 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       const invalidate = () => map.invalidateSize();
       invalidate();
       const t = setTimeout(invalidate, 200);
-      window.addEventListener('resize', invalidate);
+      
+      // Check if we're in a browser environment
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', invalidate);
+        return () => {
+          clearTimeout(t);
+          window.removeEventListener('resize', invalidate);
+        };
+      }
+      
       return () => {
         clearTimeout(t);
-        window.removeEventListener('resize', invalidate);
       };
     }, [map]);
     return null;

@@ -29,10 +29,13 @@ export default function SearchableDropdown({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    // Check if we're in a browser environment
+    if (typeof document !== 'undefined') {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
   }, []);
 
   // Focus input when dropdown opens

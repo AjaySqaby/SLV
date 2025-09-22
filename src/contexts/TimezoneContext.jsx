@@ -24,6 +24,13 @@ export const TimezoneProvider = ({ children }) => {
         setIsDetecting(true);
         setDetectionError(null);
         
+        // Check if we're in a browser environment
+        if (typeof window === 'undefined') {
+          setUserTimezone('UTC');
+          setIsDetecting(false);
+          return;
+        }
+        
         // First try to get timezone from browser
         const browserTimezone = getUserTimezone();
         setUserTimezone(browserTimezone);

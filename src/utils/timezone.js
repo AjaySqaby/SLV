@@ -25,6 +25,10 @@ export const TIMEZONES = [
 // Get user's timezone automatically
 export const getUserTimezone = () => {
   try {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return 'UTC'; // Default to UTC on server side
+    }
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   } catch (error) {
     console.warn('Could not detect user timezone:', error);
@@ -182,6 +186,11 @@ export const getCurrentTimeInTimezone = (timezone) => {
 // Detect user's location and suggest appropriate timezone
 export const detectUserLocation = async () => {
   try {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+      return 'UTC'; // Default to UTC on server side
+    }
+    
     // Try to get location from browser
     const position = await new Promise((resolve, reject) => {
       if (!navigator.geolocation) {

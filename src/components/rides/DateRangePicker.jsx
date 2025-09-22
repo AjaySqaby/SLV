@@ -34,6 +34,11 @@ export default function DateRangePicker({ startDate, endDate, onDateRangeChange 
   
   // Attach/detach event
   useEffect(() => {
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      return;
+    }
+    
     if (show) document.addEventListener("mousedown", handleClickOutside);
     else document.removeEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);

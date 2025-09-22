@@ -1,7 +1,17 @@
 "use client";
+import dynamic from "next/dynamic";
 import PageLayout from "@/components/layout/page-layout"
-import RidesContent from "@/components/rides/rides-content"
 import { useState } from "react"
+
+// Dynamically import RidesContent to prevent SSR issues
+const RidesContent = dynamic(() => import("@/components/rides/rides-content"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-lg">Loading...</div>
+    </div>
+  )
+});
 
 export default function RidesPage() {
   const [headerSearchTerm, setHeaderSearchTerm] = useState("");

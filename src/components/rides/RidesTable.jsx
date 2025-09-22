@@ -33,6 +33,12 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
         setActiveRideIndex(null);
       }
     }
+    
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      return;
+    }
+    
     if (showActionMenu) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {

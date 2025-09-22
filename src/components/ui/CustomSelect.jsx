@@ -27,8 +27,11 @@ export default function CustomSelect({
         setOpen(false);
       }
     }
-    if (open) document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    // Check if we're in a browser environment
+    if (typeof document !== 'undefined') {
+      if (open) document.addEventListener("mousedown", handleClick);
+      return () => document.removeEventListener("mousedown", handleClick);
+    }
   }, [open]);
 
   const selected = options.find((opt) => opt.value === value);

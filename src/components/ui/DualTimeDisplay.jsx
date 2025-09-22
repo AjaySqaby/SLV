@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { convertRideTimeToUserTimezone, getTimezoneLabel, getShortTimezoneAbbreviation, getUserTimezone } from "@/utils/timezone";
 import { useTimezone } from "@/contexts/TimezoneContext";
 
@@ -13,6 +13,11 @@ export default function DualTimeDisplay({
   compact = true
 }) {
   const { userTimezone: contextUserTimezone } = useTimezone();
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   // Use provided userTimezone or fall back to context
   const effectiveUserTimezone = userTimezone || contextUserTimezone;
@@ -22,6 +27,16 @@ export default function DualTimeDisplay({
   
   // If both timezones are the same, just show the ride time
   if (effectiveRideTimezone === effectiveUserTimezone) {
+    return (
+      <span className={`${className}`}>
+        {showLabels && <span className="text-gray-600 mr-1">Time:</span>}
+        <span className="font-medium">{rideTime}</span>
+      </span>
+    );
+  }
+  
+  // During SSR or before client hydration, just show the ride time
+  if (!isClient) {
     return (
       <span className={`${className}`}>
         {showLabels && <span className="text-gray-600 mr-1">Time:</span>}

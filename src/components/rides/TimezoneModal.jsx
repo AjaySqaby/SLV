@@ -26,6 +26,11 @@ export default function TimezoneModal({ open, onClose, onSelect, originalTime = 
         onClose();
       }
     }
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      return;
+    }
+    
     if (open) document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
   }, [open, onClose]);
