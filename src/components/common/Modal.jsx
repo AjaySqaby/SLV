@@ -3,8 +3,14 @@ import React from "react";
 export default function Modal({ open, onClose, title, children, widthClass }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className={`bg-white rounded-2xl shadow-xl p-6 relative ${widthClass || 'min-w-[320px] max-w-full'}`}>
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+      onClick={onClose}
+    >
+      <div 
+        className={`bg-white rounded-2xl shadow-xl p-6 relative ${widthClass || 'min-w-[320px] max-w-full'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button

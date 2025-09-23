@@ -19,11 +19,15 @@ export default function BaseModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+      onClick={onClose}
+    >
       <div
         className={`bg-[var(--background)] rounded-2xl shadow-xl p-6 ${
           widthClass ? widthClass : sizeClasses[size]
         } relative ${className}`}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">{title}</h2>

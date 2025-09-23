@@ -550,8 +550,14 @@ export default function StudentProfilePage({ studentId }) {
       {/* Modals */}
       {/* Force No Show Modal */}
       {showForceNoShowModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowForceNoShowModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div 
@@ -695,8 +701,14 @@ export default function StudentProfilePage({ studentId }) {
 
       {/* Duplicate Trip Modal */}
       {showDuplicateTripModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowDuplicateTripModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div 
@@ -817,8 +829,14 @@ export default function StudentProfilePage({ studentId }) {
 
       {/* Manage Trip Modal */}
       {showManageTripModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowManageTripModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div 

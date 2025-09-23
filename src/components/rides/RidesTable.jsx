@@ -349,8 +349,14 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
 
       {/* Ride Detail Modal */}
       {showRideDetailModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl  !max-w-[82rem] mx-4 h-full overflow-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowRideDetailModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl  !max-w-[82rem] mx-4 h-full overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <RideDetailContent 
               rideId={selectedRideId} 
               onClose={() => setShowRideDetailModal(false)}

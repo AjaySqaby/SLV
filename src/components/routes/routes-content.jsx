@@ -18,6 +18,10 @@ import AddRouteModal from "./route-edit/AddRouteModal";
 import ScheduleRideModal from "./ScheduleRideModal";
 import BulkScheduleModal from "./BulkScheduleModal";
 import AutoGenerateModal from "./AutoGenerateModal";
+import RouteViewModal from "./RouteViewModal";
+import RouteEditModal from "./RouteEditModal";
+import RouteScheduleModal from "./RouteScheduleModal";
+import RouteActionsDropdown from "./RouteActionsDropdown";
 import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
@@ -30,7 +34,11 @@ export default function RoutesContent() {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [bulkScheduleModalOpen, setBulkScheduleModalOpen] = useState(false);
   const [autoGenerateModalOpen, setAutoGenerateModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [routeScheduleModalOpen, setRouteScheduleModalOpen] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [search, setSearch] = useState("");
   const [routes, setRoutes] = useState([
     {
@@ -127,15 +135,22 @@ export default function RoutesContent() {
     setTimeout(() => setCopySuccess(""), 1500);
   };
 
-  // Handler for viewing the route in eagle-eye
+  // Handler for viewing the route
   const handleViewRoute = (routeId) => {
-    router.push(`/eagle-eye?routeId=${routeId}`);
+    setSelectedRouteId(routeId);
+    setViewModalOpen(true);
+  };
+
+  // Handler for editing a route
+  const handleEditRoute = (routeId) => {
+    setSelectedRouteId(routeId);
+    setEditModalOpen(true);
   };
 
   // Handler for scheduling a route
   const handleScheduleRoute = (route) => {
     setSelectedRoute(route);
-    setScheduleModalOpen(true);
+    setRouteScheduleModalOpen(true);
   };
 
   // Handler for bulk scheduling
@@ -251,31 +266,12 @@ export default function RoutesContent() {
                      )}
                    </td>
                    <td className="px-6 py-4">
-                     <div className="flex gap-2">
-                       <Button
-                         variant="secondary"
-                         className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
-                         onClick={() => handleViewRoute(route.id)}
-                       >
-                         View
-                       </Button>
-                       <Button
-                         variant="secondary"
-                         className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
-                         onClick={() => {
-                           router.push(`/routes/edit/${route.id}`);
-                         }}
-                       >
-                         Edit
-                       </Button>
-                                               <Button
-                          variant="secondary"
-                          className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
-                          onClick={() => handleScheduleRoute(route)}
-                        >
-                          Schedule
-                        </Button>
-                     </div>
+                     <RouteActionsDropdown
+                       route={route}
+                       onView={handleViewRoute}
+                       onEdit={handleEditRoute}
+                       onSchedule={handleScheduleRoute}
+                     />
                    </td>
                  </tr>
               ))}
@@ -321,6 +317,42 @@ export default function RoutesContent() {
          <AutoGenerateModal
            isOpen={autoGenerateModalOpen}
            onClose={() => setAutoGenerateModalOpen(false)}
+         />
+       )}
+
+       {/* Route View Modal */}
+       {viewModalOpen && (
+         <RouteViewModal
+           isOpen={viewModalOpen}
+           onClose={() => {
+             setViewModalOpen(false);
+             setSelectedRouteId(null);
+           }}
+           routeId={selectedRouteId}
+         />
+       )}
+
+       {/* Route Edit Modal */}
+       {editModalOpen && (
+         <RouteEditModal
+           isOpen={editModalOpen}
+           onClose={() => {
+             setEditModalOpen(false);
+             setSelectedRouteId(null);
+           }}
+           routeId={selectedRouteId}
+         />
+       )}
+
+       {/* Route Schedule Modal */}
+       {routeScheduleModalOpen && (
+         <RouteScheduleModal
+           isOpen={routeScheduleModalOpen}
+           onClose={() => {
+             setRouteScheduleModalOpen(false);
+             setSelectedRoute(null);
+           }}
+           route={selectedRoute}
          />
        )}
      </div>

@@ -1244,8 +1244,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* View All Drivers Modal */}
       {showAllDrivers && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setShowAllDrivers(false)}
+        >
+          <div 
+            className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">All Near By Drivers</h2>
               <button
@@ -1330,8 +1336,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Force Start Modal */}
       {showForceStartModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowForceStartModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -1486,8 +1498,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Force Complete Modal */}
       {showForceCompleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowForceCompleteModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -1554,8 +1572,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Force No Show Modal */}
       {showForceNoShowModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowForceNoShowModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -1622,8 +1646,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Duplicate Trip Modal */}
       {showDuplicateTripModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowDuplicateTripModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -1702,8 +1732,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Trip Assignment Manager Modal */}
       {showManageTripModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm p-4"
+          onClick={() => setShowManageTripModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-8 w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header - Sticky */}
             <div className="flex items-center justify-between mb-8 sticky top-0 bg-white z-10 pb-4">
               <div className="flex items-center gap-4">
@@ -2115,8 +2151,14 @@ export default function RideDetailContent({ rideId, onClose }) {
 
       {/* Edit Trip Modal */}
       {showEditTripModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 w-[82rem] mx-4">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setShowEditTripModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-6 w-[82rem] mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
