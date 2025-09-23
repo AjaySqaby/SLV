@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { MoreHorizontal, Eye, Edit, Calendar } from 'lucide-react';
+import { MoreVertical, Eye, Edit, Calendar } from 'lucide-react';
 
 export default function RouteActionsDropdown({ 
   route, 
@@ -58,7 +58,7 @@ export default function RouteActionsDropdown({
         className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
         aria-label="More actions"
       >
-        <MoreHorizontal className="w-5 h-5" />
+        <MoreVertical className="w-5 h-5" />
       </button>
 
       {isOpen && (
