@@ -85,16 +85,6 @@ export default function DriverDetailContent({ driverId }) {
 
   return (
     <div className="space-y-6">
-      {/* Back Navigation */}
-      <div className="flex items-center">
-        <Link 
-          href="/drivers" 
-          className="flex items-center text-[var(--gray-500)] hover:text-[var(--gray-700)] transition-colors"
-        >
-          <ArrowLeft size={20} className="mr-2" />
-          Back to Drivers
-        </Link>
-      </div>
 
       {/* Driver Profile Header */}
       <DriverProfileHeader driverData={driverData} />

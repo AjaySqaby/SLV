@@ -5,7 +5,8 @@ export const useForm = (initialValues = {}, onSubmit) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = ({ name, value }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setValues((prev) => ({
       ...prev,
       [name]: value,

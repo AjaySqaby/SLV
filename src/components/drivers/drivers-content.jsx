@@ -15,6 +15,8 @@ import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import CustomSelect from "@/components/ui/CustomSelect";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
+import DriverActionsDropdown from "@/components/drivers/DriverActionsDropdown";
+import DriverDetailModal from "@/components/drivers/DriverDetailModal";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Link from "next/link";
 
@@ -61,6 +63,8 @@ export default function DriversContent() {
     "D-004": "On Leave",
   });
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
+  const [showDriverDetailModal, setShowDriverDetailModal] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState(null);
 
   const drivers = [
     {
@@ -135,6 +139,16 @@ export default function DriversContent() {
       }
     />
   );
+
+  const handleViewDriver = (driverId) => {
+    setSelectedDriverId(driverId);
+    setShowDriverDetailModal(true);
+  };
+
+  const handleEditDriver = (driverId) => {
+    // TODO: Implement edit driver functionality
+    console.log('Edit driver:', driverId);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -224,26 +238,13 @@ export default function DriversContent() {
                 <td className="py-4 px-4 text-sm text-gray-900 text-center">
                   {driver.totalRides}
                 </td>
-                <td className="py-4 px-4">
-                  <div className="flex gap-2">
-                    <Link href={`/drivers/${driver.id}`}>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                      >
-                        View
-                      </Button>
-                    </Link>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="text-[var(--gray-600)] border-[var(--gray-200)] hover:bg-[var(--gray-50)] hover:border-[var(--gray-300)]"
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </td>
+                 <td className="py-4 px-4">
+                   <DriverActionsDropdown
+                     driver={driver}
+                     onView={handleViewDriver}
+                     onEdit={handleEditDriver}
+                   />
+                 </td>
               </tr>
             ))}
           </tbody>
@@ -253,6 +254,15 @@ export default function DriversContent() {
       <AddDriverModal
         isOpen={showAddDriverModal}
         onClose={() => setShowAddDriverModal(false)}
+      />
+      
+      <DriverDetailModal
+        isOpen={showDriverDetailModal}
+        onClose={() => {
+          setShowDriverDetailModal(false);
+          setSelectedDriverId(null);
+        }}
+        driverId={selectedDriverId}
       />
     </div>
   );

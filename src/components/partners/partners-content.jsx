@@ -180,7 +180,7 @@ export default function PartnersContent() {
           
           <button
             onClick={() => setIsAddPartnerModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--blue-600)] text-[var(--button-text)] rounded-md hover:bg-[var(--blue-dark)]"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--blue-600)] text-white rounded-md"
           >
             <Plus size={18} />
             Add Partner
