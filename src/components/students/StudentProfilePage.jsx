@@ -160,38 +160,14 @@ export default function StudentProfilePage({ studentId }) {
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-sm" style={{ color: 'var(--muted-text)' }}>
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </button>
+         
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>{studentData.name}</h1>
             <StatusBadge status={studentData.status} />
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={handleForceNoShow}
-            className="flex items-center gap-2 px-4 py-2"
-            style={{ 
-              backgroundColor: 'var(--red-600)', 
-              color: 'var(--on-danger)' 
-            }}
-          >
-            <UserX className="w-4 h-4" />
-            Force No Show
-          </Button>
-          <Button
-            onClick={handleDuplicateTrip}
-            variant="secondary"
-            className="flex items-center gap-2 px-4 py-2"
-          >
-            <Copy className="w-4 h-4" />
-            Duplicate Trip
-          </Button>
-         
-        </div>
+       
       </div>
 
       {/* Info Banner */}

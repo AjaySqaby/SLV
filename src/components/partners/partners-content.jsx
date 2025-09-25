@@ -215,24 +215,23 @@ export default function PartnersContent() {
       </div>
 
       <div className="bg-[var(--background)] rounded-lg border--[var(--red)] shadow-sm border border-[var(--gray-100)]">
-        <div className="flex items-center justify-between">
-          <div className="mb-4 border-b border-[var(--gray-100) p-4">
-            <h2 className="text-2xl font-semibold">Partner Management</h2>
-            <p className="text-sm text-[var(--gray-500)]">
-              View and manage all partner organizations
-            </p>
-            <br />
-            <div className="flex">
+        <div className="p-4 border-b border-[var(--gray-100)]">
+          <h2 className="text-2xl font-semibold mb-2">Partner Management</h2>
+          <p className="text-sm text-[var(--gray-500)] mb-4">
+            View and manage all partner organizations
+          </p>
+          
+          {/* Search and Filter Section - Full Width */}
+          <div className="flex justify-between items-center gap-2">
+            <div className="relative w-full">
               <SearchInput
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search partners..."
-                width="w-[300px]"
+                width="w-full"
               />
             </div>
           </div>
-
-          
         </div>
         {/* <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} /> */}
 

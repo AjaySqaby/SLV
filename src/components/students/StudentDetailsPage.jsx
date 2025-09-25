@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import StudentProfileView from "./StudentProfileView"
 import StudentEditForm from "./StudentEditForm"
 
-export default function StudentDetailsPage({ params, forceViewModal }) {
+export default function StudentDetailsPage({ params, forceViewModal, isModal = false }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState(0)
 
@@ -87,14 +87,14 @@ export default function StudentDetailsPage({ params, forceViewModal }) {
     status: student.status || "Active",
     primaryAddress: student.address || "",
     secondaryAddress: "",
-    district: "",
-    campus: "",
+    district: student.district || "",
+    campus: student.campus || "",
     guardianName: student.guardian?.name || "",
     guardianEmail: student.guardian?.email || "",
     guardianPhone: student.guardian?.phone || "",
-    secondaryContactName: "",
-    secondaryContactEmail: "",
-    secondaryContactPhone: "",
+    secondaryName: "",
+    secondaryEmail: "",
+    secondaryPhone: "",
     notes: "",
   });
   const handleChange = (e) => {
@@ -103,7 +103,14 @@ export default function StudentDetailsPage({ params, forceViewModal }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: handle update logic
+    console.log("Updating student with data:", form);
+    // TODO: Implement actual API call to update student
+    alert("Student updated successfully!");
+    // Close modal if in modal mode
+    if (isModal) {
+      // This will be handled by parent component
+      console.log("Student updated, modal should close");
+    }
   };
   const gradeOptions = [
     { value: "9th Grade", label: "9th Grade" },
@@ -132,6 +139,7 @@ export default function StudentDetailsPage({ params, forceViewModal }) {
       handleSubmit={handleSubmit}
       gradeOptions={gradeOptions}
       statusOptions={statusOptions}
+      isModal={isModal}
     />
   );
 } 

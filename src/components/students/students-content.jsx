@@ -3,6 +3,10 @@ import {
   GraduationCap,
   Search,
   Plus,
+  MoreHorizontal,
+  Eye,
+  Edit,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
@@ -12,6 +16,9 @@ import Button from "../ui/Button";
 import AddStudentModal from './AddStudentModal';
 import CampusDetailModal from './CampusDetailModal';
 import DistrictDetailModal from './DistrictDetailModal';
+import StudentActionsDropdown from './StudentActionsDropdown';
+import StudentProfilePage from './StudentProfilePage';
+import StudentDetailsPage from './StudentDetailsPage';
 
 export default function StudentsContent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,6 +31,9 @@ export default function StudentsContent() {
   const [selectedCampusData, setSelectedCampusData] = useState(null);
   const [isDistrictModalOpen, setIsDistrictModalOpen] = useState(false);
   const [selectedDistrictData, setSelectedDistrictData] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const students = [
     {
       id: "S-001",
@@ -93,6 +103,21 @@ export default function StudentsContent() {
     setIsDistrictModalOpen(true);
   };
 
+  const handleViewStudent = (student) => {
+    setSelectedStudent(student);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEditStudent = (student) => {
+    setSelectedStudent(student);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedStudent(null);
+  };
+
   return (
     <div>
       <div className="flex items-center mb-6">
@@ -104,26 +129,24 @@ export default function StudentsContent() {
           <p className="text-gray-600 text-sm">Manage all students, create new profiles, and assign them to campuses and districts.</p>
         </div>
       </div>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-4">
+      {/* Search Section - Full Width */}
+      <div className="flex justify-between items-center mb-6 gap-2">
+        <div className="relative w-full">
           <SearchInput
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search students by name, ID, campus or district"
-            width="w-[400px]"
+            width="w-full"
           />
-         
         </div>
-        <div className="flex gap-3">
-         
-          <Button
-            variant="primary"
-            icon={<Plus size={18} />}
-            onClick={() => setAddModalOpen(true)}
-          >
-            Add New Student
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          icon={<Plus size={18} />}
+          onClick={() => setAddModalOpen(true)}
+          className="whitespace-nowrap"
+        >
+          Add New Student
+        </Button>
       </div>
       <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
         <table className="w-full">
@@ -172,22 +195,11 @@ export default function StudentsContent() {
                   />
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex gap-2">
-                                         <button
-                       className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors"
-                       onClick={() =>
-                         router.push(`/students/${student.id}`)
-                       }
-                     >
-                       View
-                     </button>
-                    <button
-                      className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)]"
-                      onClick={() => router.push(`/students/${student.id}`)}
-                    >
-                      Edit
-                    </button>
-                  </div>
+                  <StudentActionsDropdown
+                    student={student}
+                    onView={handleViewStudent}
+                    onEdit={handleEditStudent}
+                  />
                 </td>
               </tr>
             ))}
@@ -208,6 +220,63 @@ export default function StudentsContent() {
         onClose={() => setIsDistrictModalOpen(false)}
         districtData={selectedDistrictData}
       />
+      {/* View Modal - using existing StudentProfilePage */}
+      {isViewModalOpen && selectedStudent && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => {
+            setIsViewModalOpen(false);
+            setSelectedStudent(null);
+          }}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Student Details</h2>
+              <button
+                onClick={() => {
+                  setIsViewModalOpen(false);
+                  setSelectedStudent(null);
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-4">
+              <StudentProfilePage studentId={selectedStudent.id} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal - using existing StudentDetailsPage */}
+      {isEditModalOpen && selectedStudent && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={handleEditModalClose}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Edit Student</h2>
+              <button
+                onClick={handleEditModalClose}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-0">
+              <StudentDetailsPage params={{ id: selectedStudent.id }} forceViewModal={false} isModal={true} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

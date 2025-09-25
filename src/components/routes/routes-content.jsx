@@ -178,45 +178,43 @@ export default function RoutesContent() {
       </div>
 
       <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-[var(--purple-600)] to-[--blue] bg-clip-text text-transparent">
-              Routes Management
-            </h2>
-            <p className="text-[var(--muted-text)]">
-              Manage all transportation routes
-            </p>
+       
+
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search routes..."
+              width="w-full"
+            />
           </div>
-                     <div className="flex gap-3">
-             <SearchInput
-               value={search}
-               onChange={(e) => setSearch(e.target.value)}
-               placeholder="Search routes by ID, name or district"
-             />
-             <Button
-               className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)]"
-               onClick={() => setAddModalOpen(true)}
-             >
-               <Plus size={18} />
-               Add New Route
-             </Button>
-             <Button
-               variant="secondary"
-               className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50"
-               onClick={handleBulkSchedule}
-             >
-               <Calendar size={18} />
-               Bulk Schedule
-             </Button>
-             <Button
-               variant="secondary"
-               className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50"
-               onClick={handleAutoGenerate}
-             >
-               <RefreshCw size={18} />
-               Auto-Generate
-             </Button>
-           </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap"
+              onClick={() => setAddModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add New Route
+            </Button>
+            <Button
+              variant="secondary"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50 whitespace-nowrap"
+              onClick={handleBulkSchedule}
+            >
+              <Calendar size={18} />
+              Bulk Schedule
+            </Button>
+            <Button
+              variant="secondary"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50 whitespace-nowrap"
+              onClick={handleAutoGenerate}
+            >
+              <RefreshCw size={18} />
+              Auto-Generate
+            </Button>
+          </div>
         </div>
 
         <div className="overflow-x-auto">

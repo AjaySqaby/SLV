@@ -182,21 +182,15 @@ export default function DriversContent() {
         </div>
       </div>
 
-      {/* Search and Filter Section */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-4">
-          <div className="relative">
-            <SearchInput
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search drivers by name, ID or vehicle"
-              width="w-[400px]"
-            />
-          </div>
-
-          <Button variant="secondary" icon={<Filter size={18} />}>
-            Filter
-          </Button>
+      {/* Search Section */}
+      <div className="flex justify-between items-center mb-6 gap-2">
+        <div className="relative w-full">
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search drivers by name, ID or vehicle"
+            width="w-full"
+          />
         </div>
       </div>
 
