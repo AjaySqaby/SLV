@@ -28,9 +28,9 @@ import StudentsTab from '@/components/campus/details/StudentsTab'
 import RoutesTab from '@/components/campus/details/RoutesTab'
 import RidesTab from '@/components/campus/details/RidesTab'
 
-export default function CampusDetailContent({ campusId }) {
+export default function CampusDetailContent({ campusId, isModal = false, isEditMode = false }) {
   const [activeTab, setActiveTab] = useState(0)
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(isEditMode)
   const [editedCampusData, setEditedCampusData] = useState(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -55,6 +55,20 @@ export default function CampusDetailContent({ campusId }) {
       status: "Active"
     }
   })
+
+  // Initialize editedData when in edit mode or when isEditing becomes true
+  useEffect(() => {
+    if ((isEditMode || isEditing) && campusData) {
+      setEditedCampusData({ ...campusData })
+    }
+  }, [isEditMode, isEditing, campusData])
+
+  // Initialize editedCampusData if in edit mode and campusData is available
+  useEffect(() => {
+    if (isEditMode && campusData && !editedCampusData) {
+      setEditedCampusData({ ...campusData })
+    }
+  }, [isEditMode, campusData, editedCampusData])
 
   const students = [
     {
@@ -158,6 +172,8 @@ export default function CampusDetailContent({ campusId }) {
   }
 
   const currentData = isEditing ? editedCampusData : campusData
+  // Ensure currentData is never null
+  const safeCurrentData = currentData || campusData
 
   // Check for edit parameter in URL
   useEffect(() => {
@@ -191,18 +207,20 @@ export default function CampusDetailContent({ campusId }) {
   return (
     <div className="min-h-screen bg-[var(--gray-50)]">
       <div className="w-full px-6 pb-6">
-        {/* Back Navigation */}
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-2 text-[var(--blue-600)] hover:text-[var(--blue-700)] hover:bg-[var(--blue-50)] px-3 py-2 rounded-lg transition-all duration-200"
-            onClick={() => window.history.back()}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">Back to Campus</span>
-          </Button>
-        </div>
+        {/* Back Navigation - Only show if not in modal */}
+        {!isModal && (
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2 text-[var(--blue-600)] hover:text-[var(--blue-700)] hover:bg-[var(--blue-50)] px-3 py-2 rounded-lg transition-all duration-200"
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="font-medium">Back to Campus</span>
+            </Button>
+          </div>
+        )}
 
         {/* Header Section */}
         <div className="mb-8">
@@ -212,10 +230,10 @@ export default function CampusDetailContent({ campusId }) {
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-[var(--gray-900)]">{currentData.name}</h1>
+                <h1 className="text-3xl font-bold text-[var(--gray-900)]">{safeCurrentData.name}</h1>
                 <p className="text-[var(--gray-600)] flex items-center gap-2 mt-1">
                   <Building className="w-4 h-4" />
-                  {currentData.type} • {currentData.district}
+                  {safeCurrentData.type} • {safeCurrentData.district}
                 </p>
               </div>
             </div>
@@ -267,24 +285,24 @@ export default function CampusDetailContent({ campusId }) {
             <div className="flex flex-col items-center mb-6">
               <div className="w-20 h-20 bg-[var(--gray-200)] rounded-full flex items-center justify-center mb-4 shadow-inner">
                 <span className="text-2xl font-bold text-[var(--gray-700)]">
-                  {currentData.name.split(' ').map(n => n[0]).join('')}
+                  {safeCurrentData.name.split(' ').map(n => n[0]).join('')}
                 </span>
               </div>
               {isEditing ? (
                 <input
                   type="text"
-                  value={currentData.name}
+                  value={safeCurrentData.name}
                   onChange={(e) => handleFieldChange('name', e.target.value)}
                   className="text-xl font-semibold text-[var(--gray-900)] mb-1 border border-[var(--gray-300)] rounded px-2 py-1 text-center"
                 />
               ) : (
-                <h4 className="text-xl font-semibold text-[var(--gray-900)] mb-1">{currentData.name}</h4>
+                <h4 className="text-xl font-semibold text-[var(--gray-900)] mb-1">{safeCurrentData.name}</h4>
               )}
               <p className="text-[var(--gray-600)] flex items-center gap-1">
                 <Building className="w-4 h-4" />
                 {isEditing ? (
                   <select
-                    value={currentData.type}
+                    value={safeCurrentData.type}
                     onChange={(e) => handleFieldChange('type', e.target.value)}
                     className="border border-[var(--gray-300)] rounded px-2 py-1 text-sm"
                   >
@@ -293,7 +311,7 @@ export default function CampusDetailContent({ campusId }) {
                     <option value="High School">High School</option>
                   </select>
                 ) : (
-                  currentData.type
+                  safeCurrentData.type
                 )}
               </p>
             </div>
@@ -303,7 +321,7 @@ export default function CampusDetailContent({ campusId }) {
                 <Hash className="w-4 h-4 text-[var(--gray-500)]" />
                 <div className="flex-1">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Campus ID</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.id}</p>
+                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.id}</p>
                 </div>
               </div>
 
@@ -314,13 +332,13 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="text"
-                      value={currentData.district}
+                      value={safeCurrentData.district}
                       onChange={(e) => handleFieldChange('district', e.target.value)}
                       className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
                     <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]">
-                      {currentData.district}
+                      {safeCurrentData.district}
                     </p>
                   )}
                 </div>
@@ -333,12 +351,12 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="text"
-                      value={currentData.address}
+                      value={safeCurrentData.address}
                       onChange={(e) => handleFieldChange('address', e.target.value)}
                       className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{currentData.address}</p>
+                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.address}</p>
                   )}
                 </div>
               </div>
@@ -350,12 +368,12 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="number"
-                      value={currentData.students}
+                      value={safeCurrentData.students}
                       onChange={(e) => handleFieldChange('students', parseInt(e.target.value))}
                       className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.students}</p>
+                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.students}</p>
                   )}
                 </div>
               </div>
@@ -379,12 +397,12 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="text"
-                      value={currentData.principal.name}
+                      value={safeCurrentData.principal.name}
                       onChange={(e) => handlePrincipalFieldChange('name', e.target.value)}
                       className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm font-medium text-[var(--gray-900)]">{currentData.principal.name}</p>
+                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.principal.name}</p>
                   )}
                 </div>
               </div>
@@ -396,12 +414,12 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="tel"
-                      value={currentData.principal.phone}
+                      value={safeCurrentData.principal.phone}
                       onChange={(e) => handlePrincipalFieldChange('phone', e.target.value)}
                       className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{currentData.principal.phone}</p>
+                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.principal.phone}</p>
                   )}
                 </div>
               </div>
@@ -413,12 +431,12 @@ export default function CampusDetailContent({ campusId }) {
                   {isEditing ? (
                     <input
                       type="email"
-                      value={currentData.principal.email}
+                      value={safeCurrentData.principal.email}
                       onChange={(e) => handlePrincipalFieldChange('email', e.target.value)}
                       className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{currentData.principal.email}</p>
+                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.principal.email}</p>
                   )}
                 </div>
               </div>
@@ -455,7 +473,7 @@ export default function CampusDetailContent({ campusId }) {
                 <CheckCircle className="w-4 h-4 text-[var(--gray-500)]" />
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                  <StatusBadge status={currentData.transportation.status} />
+                  <StatusBadge status={safeCurrentData.transportation.status} />
                 </div>
               </div>
             </div>

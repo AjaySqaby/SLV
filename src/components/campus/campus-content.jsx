@@ -5,6 +5,10 @@ import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import StatusBadge from "@/components/ui/StatusBadge";
+import CampusActionsDropdown from "./CampusActionsDropdown";
+import CampusViewModal from "./CampusViewModal";
+import CampusEditModal from "./CampusEditModal";
+import AddCampusModal from "./AddCampusModal";
 
 function TimeInput({ label, value, onChange, name }) {
   return (
@@ -24,6 +28,10 @@ export default function CampusContent() {
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRef = useRef(null);
   const router = useRouter();
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedCampusId, setSelectedCampusId] = useState(null);
 
   const campuses = [
     {
@@ -75,6 +83,16 @@ export default function CampusContent() {
     );
   });
 
+  const handleViewCampus = (campus) => {
+    setSelectedCampusId(campus.id);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEditCampus = (campus) => {
+    setSelectedCampusId(campus.id);
+    setIsEditModalOpen(true);
+  };
+
 
 
   useEffect(() => {
@@ -107,25 +125,24 @@ export default function CampusContent() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <div className="relative">
+      {/* Search Section - Full Width */}
+      <div className="flex justify-between items-center mb-6 gap-2">
+        <div className="relative w-full">
           <SearchInput
             placeholder="Search campus by name, ID or type"
-            width="w-96"
+            width="w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-
-        <div className="flex gap-3">
-          <Button
-            variant="primary"
-            icon={<Plus size={18} />}
-            onClick={() => router.push("/campus/add")}
-          >
-            Add New Campus
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          icon={<Plus size={18} />}
+          onClick={() => setIsAddModalOpen(true)}
+          className="whitespace-nowrap"
+        >
+          Add New Campus
+        </Button>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
@@ -177,26 +194,46 @@ export default function CampusContent() {
                   />
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex gap-2">
-                    <button
-                      className="px-3 py-1 text-sm text-[var(--gray-600)] hover:text-[var(--gray-700)] border border-[var(--gray-300)] rounded"
-                      onClick={() => router.push(`/campus/${campus.id}`)}
-                    >
-                      View
-                    </button>
-                    <button
-                      className="px-3 py-1 text-sm text-[var(--gray-600)] hover:text-[var(--gray-700)] border border-[var(--gray-300)] rounded"
-                      onClick={() => router.push(`/campus/${campus.id}?edit=true`)}
-                    >
-                      Edit
-                    </button>
-                  </div>
+                  <CampusActionsDropdown
+                    campus={campus}
+                    onView={handleViewCampus}
+                    onEdit={handleEditCampus}
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Campus View Modal */}
+      <CampusViewModal
+        open={isViewModalOpen}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setSelectedCampusId(null);
+        }}
+        campusId={selectedCampusId}
+        isEditModal={false}
+      />
+
+      {/* Campus Edit Modal */}
+      <CampusEditModal
+        open={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedCampusId(null);
+        }}
+        campusId={selectedCampusId}
+      />
+
+      {/* Campus Add Modal */}
+      <AddCampusModal
+        open={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false);
+        }}
+      />
 
     </div>
   );

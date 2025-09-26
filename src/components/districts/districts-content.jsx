@@ -13,14 +13,13 @@ import {
   Eye
 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import SearchInput from "../ui/SearchInput";
 import Button from "../ui/Button";
+import AddDistrictModal from "./AddDistrictModal";
 
 export default function DistrictsContent() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
   // Mock data - replace with actual data from your API
   const districts = [
@@ -61,40 +60,41 @@ export default function DistrictsContent() {
   return (
     <div className="space-y-6">
       {/* Header Section */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-            <Building2 className="h-5 w-5 text-blue-600" />
-          </div>
-          <h1 className="text-2xl font-bold text-[var(--heading)]">School Districts</h1>
+      <div className="flex items-center mb-6">
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <Building2 className="h-5 w-5 text-blue-600" />
         </div>
-        <Link href="/districts/add">
-          <Button
-            variant="primary"
-            icon={<Plus className="h-4 w-4" />}
-          >
-            Add District
-          </Button>
-        </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--heading)]">School Districts</h1>
+          <p className="text-[var(--gray-600)] text-sm">
+            Manage all school districts and create new entries
+          </p>
+        </div>
+      </div>
+
+      {/* Search Section - Full Width */}
+      <div className="flex justify-between items-center mb-6 gap-2">
+        <div className="relative w-full">
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search districts..."
+            width="w-full"
+          />
+        </div>
+        <Button
+          variant="primary"
+          icon={<Plus className="h-4 w-4" />}
+          className="whitespace-nowrap"
+          onClick={() => setIsAddModalOpen(true)}
+        >
+          Add District
+        </Button>
       </div>
 
       {/* Main Content Card */}
       <div className="bg-white rounded-lg border border-[var(--card-border)] shadow-sm">
         <div className="p-6">
-          {/* Card Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-[var(--heading)]">All Districts</h2>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mb-6">
-            <SearchInput
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search districts..."
-              width="w-full max-w-md"
-            />
-          </div>
 
           {/* Table */}
           <div className="overflow-hidden">
@@ -130,15 +130,12 @@ export default function DistrictsContent() {
                       <Route className="h-4 w-4" />
                       {district.routes}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button className="p-1 hover:bg-[var(--hover-bg)] rounded transition-colors">
-                        <Eye className="h-4 w-4 text-[var(--muted-text)]" />
+                    <div className="flex flex-col gap-2">
+                      <button className="px-3 py-1 text-sm text-[var(--gray-600)] hover:text-[var(--gray-700)] border border-[var(--gray-300)] rounded hover:bg-[var(--gray-50)] transition-colors">
+                        View
                       </button>
-                      <button className="p-1 hover:bg-[var(--hover-bg)] rounded transition-colors">
-                        <Edit className="h-4 w-4 text-[var(--muted-text)]" />
-                      </button>
-                      <button className="p-1 hover:bg-[var(--hover-bg)] rounded transition-colors">
-                        <Trash2 className="h-4 w-4 text-[var(--muted-text)]" />
+                      <button className="px-3 py-1 text-sm text-[var(--gray-600)] hover:text-[var(--gray-700)] border border-[var(--gray-300)] rounded hover:bg-[var(--gray-50)] transition-colors">
+                        Edit
                       </button>
                     </div>
                   </div>
@@ -158,6 +155,12 @@ export default function DistrictsContent() {
           </div>
         </div>
       </div>
+
+      {/* Add District Modal */}
+      <AddDistrictModal
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
     </div>
   );
 }
