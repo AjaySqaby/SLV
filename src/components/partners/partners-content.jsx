@@ -237,25 +237,30 @@ export default function PartnersContent() {
 
         <div className="overflow-x-auto mt-5">
           <table className="w-full">
-            <thead>
-              <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--gray-100)]">
-                <th className="px-6 py-3 font-medium">Company Name</th>
-                <th className="px-6 py-3 font-medium">Contact</th>
-                <th className="px-6 py-3 font-medium">Location</th>
-                <th className="px-6 py-3 font-medium">Drivers</th>
-                <th className="px-6 py-3 font-medium">Routes</th>
-                <th className="px-6 py-3 font-medium">Rides</th>
-                <th className="px-6 py-3 font-medium"></th>
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Company Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Contact</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Location</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Drivers</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Routes</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Rides</th>
+                <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredPartners.map((partner) => (
                 <tr
                   key={partner.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)]"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
                 >
                   <td className="px-6 py-4">
-                    <span className="font-medium">{partner.name}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                        {filteredPartners.indexOf(partner) + 1}
+                      </div>
+                      <span className="font-medium">{partner.name}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-4">
                     <div>
@@ -278,12 +283,14 @@ export default function PartnersContent() {
                     <span className="text-[var(--gray-500)]">-</span>
                   </td>
                   <td className="px-6 py-4">
-                    <button
-                      onClick={() => openDeleteModal(partner)}
-                      className="text-[var(--gray-400)] hover:text-red-500"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => openDeleteModal(partner)}
+                        className="text-[var(--gray-400)] hover:text-red-500 p-2 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -9,12 +9,20 @@ import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import ProgressBar from "@/components/ui/ProgressBar";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
-import Link from "next/link";
+import OnboardingManageModal from "./OnboardingManageModal";
+import OnboardingActionsDropdown from "./OnboardingActionsDropdown";
 
 export default function OnboardingContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
+  const [showManageModal, setShowManageModal] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState(null);
+
+  const handleManageDriver = (driver) => {
+    setSelectedDriver(driver);
+    setShowManageModal(true);
+  };
 
   const onboardingData = [
     {
@@ -109,73 +117,71 @@ export default function OnboardingContent() {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center">
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <CheckCircle className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Driver Onboarding</h1>
-            <p className="text-gray-600 text-sm">
-              Track and manage the onboarding process for new drivers
-            </p>
-          </div>
+      <div className="flex items-center mb-6">
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <CheckCircle className="h-5 w-5 text-blue-600" />
         </div>
-
-        <div className="flex gap-3">
-          <Button
-            variant="primary"
-            onClick={() => setShowAddDriverModal(true)}
-          >
-            + Add New Driver
-          </Button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Driver Onboarding</h1>
+          <p className="text-[var(--gray-600)] text-sm">
+            Track and manage the onboarding process for new drivers
+          </p>
         </div>
       </div>
 
-      {/* Search and Filter Section */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-4">
-          <div className="relative">
-            <SearchInput
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by driver name or ID"
-              width="w-[400px]"
-            />
-          </div>
-
-          <Button variant="secondary" icon={<Filter size={18} />}>
-            Filter
-          </Button>
+      {/* Search Section - Full Width */}
+      <div className="flex justify-between items-center mb-6 gap-2">
+        <div className="relative w-full">
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by driver name or ID"
+            width="w-full"
+          />
         </div>
+        <Button variant="secondary" icon={<Filter size={18} />} className="whitespace-nowrap">
+          Filter
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => setShowAddDriverModal(true)}
+          className="whitespace-nowrap"
+        >
+          + Add New Driver
+        </Button>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Start Date</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Onboarding Progress</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver ID</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Start Date</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Onboarding Progress</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredData.map((driver) => (
-              <tr key={driver.id} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="py-4 px-4 text-sm font-medium text-gray-900">
-                  {driver.id}
+              <tr key={driver.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200">
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                      {filteredData.indexOf(driver) + 1}
+                    </div>
+                    <span className="font-medium">{driver.id}</span>
+                  </div>
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-900">
                   {driver.name}
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-gray-600">
                   {driver.startDate}
                 </td>
-                <td className="py-4 px-4">
+                <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="flex-1">
                       <ProgressBar
@@ -189,19 +195,16 @@ export default function OnboardingContent() {
                     </span>
                   </div>
                 </td>
-                <td className="py-4 px-4">
+                <td className="px-6 py-4">
                   {getStatusBadge(driver.status)}
                 </td>
-                <td className="py-4 px-4">
-                  <Link href={`/drivers/${driver.id}/onboarding`}>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                    >
-                      Manage
-                    </Button>
-                  </Link>
+                <td className="px-6 py-4">
+                  <div className="flex justify-center">
+                    <OnboardingActionsDropdown
+                      driver={driver}
+                      onManage={handleManageDriver}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
@@ -236,6 +239,15 @@ export default function OnboardingContent() {
        <AddDriverModal
          isOpen={showAddDriverModal}
          onClose={() => setShowAddDriverModal(false)}
+       />
+
+       <OnboardingManageModal
+         open={showManageModal}
+         onClose={() => {
+           setShowManageModal(false);
+           setSelectedDriver(null);
+         }}
+         driver={selectedDriver}
        />
      </div>
    );

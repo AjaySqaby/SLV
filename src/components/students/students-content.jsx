@@ -150,25 +150,32 @@ export default function StudentsContent() {
       </div>
       <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
         <table className="w-full">
-          <thead>
-            <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--gray-100)]">
-              <th className="px-6 py-3 font-medium">Student ID</th>
-              <th className="px-6 py-3 font-medium">Name</th>
-              <th className="px-6 py-3 font-medium">Grade</th>
-              <th className="px-6 py-3 font-medium">Campus</th>
-              <th className="px-6 py-3 font-medium">District</th>
-              <th className="px-6 py-3 font-medium">Address</th>
-              <th className="px-6 py-3 font-medium">Status</th>
-              <th className="px-6 py-3 font-medium">Actions</th>
+          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Student ID</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Grade</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Campus</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Address</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredStudents.map((student) => (
               <tr
                 key={student.id}
-                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)]"
+                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
               >
-                <td className="px-6 py-4 font-medium">{student.id}</td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                      {filteredStudents.indexOf(student) + 1}
+                    </div>
+                    <span className="font-medium">{student.id}</span>
+                  </div>
+                </td>
                 <td className="px-6 py-4 font-medium">{student.name}</td>
                 <td className="px-6 py-4">{student.grade}</td>
                 <td className="px-6 py-4">
@@ -195,11 +202,13 @@ export default function StudentsContent() {
                   />
                 </td>
                 <td className="px-6 py-4">
-                  <StudentActionsDropdown
-                    student={student}
-                    onView={handleViewStudent}
-                    onEdit={handleEditStudent}
-                  />
+                  <div className="flex justify-center">
+                    <StudentActionsDropdown
+                      student={student}
+                      onView={handleViewStudent}
+                      onEdit={handleEditStudent}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

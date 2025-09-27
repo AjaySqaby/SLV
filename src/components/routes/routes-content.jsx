@@ -219,26 +219,33 @@ export default function RoutesContent() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-                         <thead>
-               <tr className="text-left text-sm text-[var(--muted-text)] border-b border-[var(--card-border)]">
-                 <th className="px-6 py-3 font-medium">Route ID</th>
-                 <th className="px-6 py-3 font-medium">Name</th>
-                 <th className="px-6 py-3 font-medium">District</th>
-                 <th className="px-6 py-3 font-medium">Stops</th>
-                 <th className="px-6 py-3 font-medium">Distance</th>
-                 <th className="px-6 py-3 font-medium">Students</th>
-                 <th className="px-6 py-3 font-medium">Status</th>
-                 <th className="px-6 py-3 font-medium">Driver</th>
-                 <th className="px-6 py-3 font-medium">Actions</th>
+                         <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+               <tr>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Route ID</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Stops</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Distance</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Students</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+                 <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver</th>
+                 <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
                </tr>
              </thead>
             <tbody>
               {filteredRoutes.map((route) => (
-                                 <tr
-                   key={route.id}
-                   className="border-b border-[var(--card-border)] hover:bg-[var(--hover-bg)]"
-                 >
-                   <td className="px-6 py-4 font-medium">{route.id}</td>
+                <tr
+                  key={route.id}
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                >
+                   <td className="px-6 py-4">
+                     <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                         {filteredRoutes.indexOf(route) + 1}
+                       </div>
+                       <span className="font-medium">{route.id}</span>
+                     </div>
+                   </td>
                    <td className="px-6 py-4">{route.name}</td>
                    <td className="px-6 py-4">
                      <span className="text-blue-600 cursor-pointer hover:underline">
@@ -264,12 +271,14 @@ export default function RoutesContent() {
                      )}
                    </td>
                    <td className="px-6 py-4">
-                     <RouteActionsDropdown
-                       route={route}
-                       onView={handleViewRoute}
-                       onEdit={handleEditRoute}
-                       onSchedule={handleScheduleRoute}
-                     />
+                     <div className="flex justify-center">
+                       <RouteActionsDropdown
+                         route={route}
+                         onView={handleViewRoute}
+                         onEdit={handleEditRoute}
+                         onSchedule={handleScheduleRoute}
+                       />
+                     </div>
                    </td>
                  </tr>
               ))}

@@ -197,47 +197,54 @@ export default function DriversContent() {
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Contact</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Vehicle</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-700">Total Rides</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver ID</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Contact</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Vehicle</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Total Rides</th>
+              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredDrivers.map((driver) => (
-              <tr key={driver.id} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="py-4 px-4 text-sm font-medium text-gray-900">
-                  {driver.id}
+              <tr key={driver.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200">
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                      {filteredDrivers.indexOf(driver) + 1}
+                    </div>
+                    <span className="font-medium">{driver.id}</span>
+                  </div>
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-900">
                   {driver.name}
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-gray-600">
                   <div>
                     <div>{driver.phone}</div>
                     <div>{driver.email}</div>
                   </div>
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-900">
                   {driver.vehicle}
                 </td>
-                <td className="py-4 px-4">
+                <td className="px-6 py-4">
                   {getStatusBadge(driverStatuses[driver.id] || "Unknown")}
                 </td>
-                <td className="py-4 px-4 text-sm text-gray-900 text-center">
+                <td className="px-6 py-4 text-sm text-gray-900 text-center">
                   {driver.totalRides}
                 </td>
-                 <td className="py-4 px-4">
-                   <DriverActionsDropdown
-                     driver={driver}
-                     onView={handleViewDriver}
-                     onEdit={handleEditDriver}
-                   />
+                 <td className="px-6 py-4">
+                   <div className="flex justify-center">
+                     <DriverActionsDropdown
+                       driver={driver}
+                       onView={handleViewDriver}
+                       onEdit={handleEditDriver}
+                     />
+                   </div>
                  </td>
               </tr>
             ))}
