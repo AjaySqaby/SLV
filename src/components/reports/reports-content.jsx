@@ -104,7 +104,7 @@ export default function ReportsContent() {
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[var(--heading)] flex items-center gap-3">
+          <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
             <BarChart2 className="text-[var(--blue-500)]" size={32} />
             Reports & Analytics
           </h1>

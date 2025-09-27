@@ -173,14 +173,9 @@ export default function NotificationsPage() {
     <PageLayout activePage="Notifications" pageTitle="Notifications">
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-[var(--primary-bg)] rounded-lg">
-            <Bell className="w-6 h-6 text-[var(--primary)]" />
-          </div>
           <div>
-            <h1 className="text-3xl font-bold text-[var(--heading)]">Notifications</h1>
-            <p className="text-lg text-[var(--muted-text)] mt-1">
-              Manage and send notifications to drivers, parents, and campuses
-            </p>
+            <h1 className="text-3xl font-bold mb-8">Notifications</h1>
+           
           </div>
         </div>
 

@@ -113,15 +113,11 @@ export default function CampusContent() {
 
   return (
     <div className="p-6">
-      <div className="flex items-center mb-6">
-        <div className="w-10 h-10 bg-[var(--orange-100)] rounded-full flex items-center justify-center mr-4">
-          <Building className="h-5 w-5 text-[var(--orange-600)]" />
-        </div>
+      <div className="flex items-center ">
+       
         <div>
-          <h1 className="text-2xl font-bold">Campus Management</h1>
-          <p className="text-[var(--gray-600)] text-sm">
-            Manage all school campuses and create new entries
-          </p>
+          <h1 className="text-3xl font-bold mb-8">Campus Management</h1>
+         
         </div>
       </div>
 

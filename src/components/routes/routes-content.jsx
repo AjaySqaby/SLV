@@ -166,7 +166,7 @@ export default function RoutesContent() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Routes Management</h1>
+        <h1 className="text-3xl font-bold mb-8">Routes Management</h1>
         <Button
           variant="ghost"
           className="flex items-center gap-2 text-[var(--muted-text)]"

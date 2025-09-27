@@ -169,12 +169,10 @@ export default function PartnersContent() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div>
-          {/* <h1 className="text-3xl font-bold text-[var(--blue-600)]">
-            Partners Dashboard
+       <h1 className="text-3xl font-bold mb-8">
+            Partners
           </h1>
-          <p className="text-[var(--gray-600)]">
-            Manage your transportation partners and their details
-          </p> */}
+        
         </div>
         <div className="flex gap-3">
           

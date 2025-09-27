@@ -155,14 +155,10 @@ export default function DriversContent() {
       {/* Header Section */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <Users className="h-5 w-5 text-purple-600" />
-          </div>
+         
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Driver Management</h1>
-            <p className="text-gray-600 text-sm">
-              Manage all drivers, create new profiles, and assign vehicles
-            </p>
+            <h1 className="text-3xl font-bold mb-8">Driver Management</h1>
+           
           </div>
         </div>
 

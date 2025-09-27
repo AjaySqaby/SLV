@@ -30,7 +30,7 @@ export default function EagleEyeHeader() {
           <ArrowLeft size={18} className="mr-1" />
           <span>Back</span>
         </Button> */}
-        <h1 className="text-xl font-bold">Eagle Eye Live View</h1>
+        <h1 className="text-3xl font-bold mb-8">Eagle Eye Live View</h1>
       </div>
       <Button
         variant="primary"

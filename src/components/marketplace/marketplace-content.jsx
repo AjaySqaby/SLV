@@ -122,15 +122,11 @@ export default function MarketplaceContent() {
     <div className="p-6">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-[var(--primary-bg)] rounded-lg">
-            <ShoppingBag className="w-6 h-6 text-[var(--primary)]" />
-          </div>
-          <h1 className="text-3xl font-bold text-[var(--heading)]">Ride Marketplace</h1>
+        <div className="flex items-center gap-3">
+        
+          <h1 className="text-3xl font-bold">Marketplace</h1>
         </div>
-        <p className="text-lg text-[var(--muted-text)]">
-          Available rejected rides that need drivers
-        </p>
+      
       </div>
 
       {/* Rides Grid - 2 cards per row */}
