@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { X, MapPin, Clock, User, Car, Calendar, Map, Save, Plus, Trash2 } from 'lucide-react';
+import { X, MapPin, Clock, User, Car, Calendar, Map, Save, Plus, Trash2, Route, Star, CheckCircle, Users, Navigation } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
@@ -44,11 +44,11 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
 
   const renderBasicInfo = () => (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Route Information</h3>
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Information</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Route Name
             </label>
             <Input
@@ -58,7 +58,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               District
             </label>
             <Input
@@ -68,7 +68,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Status
             </label>
             <Select
@@ -81,36 +81,36 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Route ID
             </label>
             <Input
               value={routeId || "RT-30842"}
               disabled
-              className="bg-gray-50"
+              className="bg-[var(--gray-100)]"
             />
           </div>
         </div>
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Route Statistics</h3>
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Statistics</h3>
         <div className="grid grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">5</div>
-            <div className="text-sm text-gray-600">Stops</div>
+          <div className="text-center p-4 bg-[var(--blue-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--blue-600)]">5</div>
+            <div className="text-sm text-[var(--muted-text)]">Stops</div>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">12.4</div>
-            <div className="text-sm text-gray-600">Miles</div>
+          <div className="text-center p-4 bg-[var(--green-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--green-600)]">12.4</div>
+            <div className="text-sm text-[var(--muted-text)]">Miles</div>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">7</div>
-            <div className="text-sm text-gray-600">Students</div>
+          <div className="text-center p-4 bg-[var(--purple-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--purple-600)]">7</div>
+            <div className="text-sm text-[var(--muted-text)]">Students</div>
           </div>
-          <div className="text-center p-4 bg-orange-50 rounded-lg">
-            <div className="text-2xl font-bold text-orange-600">25</div>
-            <div className="text-sm text-gray-600">Minutes</div>
+          <div className="text-center p-4 bg-[var(--amber-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--amber-600)]">25</div>
+            <div className="text-sm text-[var(--muted-text)]">Minutes</div>
           </div>
         </div>
       </Card>
@@ -120,10 +120,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderRouteStops = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Route Stops</h3>
+        <h3 className="text-lg font-semibold text-[var(--primary-black)]">Route Stops</h3>
         <Button
           variant="secondary"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] transition-all duration-200"
         >
           <Plus className="w-4 h-4" />
           Add Stop
@@ -131,16 +131,16 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
       </div>
 
       {[1, 2, 3, 4, 5].map((stopId) => (
-        <Card key={stopId} className="p-6">
+        <Card key={stopId} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
           <div className="flex items-start gap-4">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold ${
-              stopId <= 4 ? 'bg-green-500' : 'bg-orange-500'
+              stopId <= 4 ? 'bg-[var(--green)]' : 'bg-[var(--orange)]'
             }`}>
               {stopId}
             </div>
             <div className="flex-1 grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
                   Address
                 </label>
                 <Input
@@ -149,7 +149,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
                   Type
                 </label>
                 <Select
@@ -161,7 +161,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
                   Time
                 </label>
                 <Input
@@ -170,7 +170,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
                   Students
                 </label>
                 <Input
@@ -182,7 +182,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             <Button
               variant="ghost"
               size="sm"
-              className="text-red-600 hover:text-red-700"
+              className="text-[var(--red-600)] hover:text-[var(--red-800)] hover:bg-[var(--red-100)] transition-all duration-200"
             >
               <Trash2 className="w-4 h-4" />
             </Button>
@@ -194,11 +194,11 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
 
   const renderSchedule = () => (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Route Schedule</h3>
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Schedule</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Start Time
             </label>
             <Input
@@ -208,7 +208,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               End Time
             </label>
             <Input
@@ -218,7 +218,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Operating Days
             </label>
             <div className="flex gap-4">
@@ -237,20 +237,20 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         </div>
       </Card>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Route Duration</h3>
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Duration</h3>
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">25</div>
-            <div className="text-sm text-gray-600">Total Minutes</div>
+          <div className="text-center p-4 bg-[var(--blue-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--blue-600)]">25</div>
+            <div className="text-sm text-[var(--muted-text)]">Total Minutes</div>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">20</div>
-            <div className="text-sm text-gray-600">Travel Time</div>
+          <div className="text-center p-4 bg-[var(--green-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--green-600)]">20</div>
+            <div className="text-sm text-[var(--muted-text)]">Travel Time</div>
           </div>
-          <div className="text-center p-4 bg-orange-50 rounded-lg">
-            <div className="text-2xl font-bold text-orange-600">5</div>
-            <div className="text-sm text-gray-600">Stop Time</div>
+          <div className="text-center p-4 bg-[var(--amber-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="text-2xl font-bold text-[var(--amber-600)]">5</div>
+            <div className="text-sm text-[var(--muted-text)]">Stop Time</div>
           </div>
         </div>
       </Card>
@@ -259,11 +259,11 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
 
   const renderAssignment = () => (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Driver Assignment</h3>
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Driver Assignment</h3>
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-blue-600" />
+          <div className="w-12 h-12 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
+            <User className="w-6 h-6 text-[var(--blue-600)]" />
           </div>
           <div className="flex-1">
             <Select
@@ -277,18 +277,18 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-[var(--muted-text)]">
           <p>Rating: 4.9/5.0</p>
           <p>Experience: 3 years</p>
           <p>Status: Available</p>
         </div>
       </Card>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Vehicle Assignment</h3>
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Vehicle Assignment</h3>
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <Car className="w-6 h-6 text-green-600" />
+          <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+            <Car className="w-6 h-6 text-[var(--green-600)]" />
           </div>
           <div className="flex-1">
             <Select
@@ -302,7 +302,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-[var(--muted-text)]">
           <p>Vehicle ID: RT-30845</p>
           <p>Capacity: 8 passengers</p>
           <p>Status: Available</p>
@@ -321,35 +321,38 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Route className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Edit Route #{routeId || "RT-30842"}</h2>
-              <p className="text-gray-600">Modify route details and configuration</p>
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Edit Route #{routeId || "RT-30842"}</h2>
+              <p className="text-[var(--muted-text)]">Modify route details and configuration</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
           >
-            <X className="w-6 h-6 text-gray-500" />
+            <X className="w-6 h-6 text-[var(--gray-500)]" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200">
+        <div className="flex mt-2 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
             >
               {tab.label}
             </button>
@@ -365,7 +368,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
+        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
           <Button
             variant="secondary"
             onClick={onClose}
@@ -373,7 +376,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             Cancel
           </Button>
           <Button
-            className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+            className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2"
             onClick={handleSave}
           >
             <Save className="w-4 h-4" />

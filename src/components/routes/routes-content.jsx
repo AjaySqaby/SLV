@@ -21,6 +21,7 @@ import AutoGenerateModal from "./AutoGenerateModal";
 import RouteViewModal from "./RouteViewModal";
 import RouteEditModal from "./RouteEditModal";
 import RouteScheduleModal from "./RouteScheduleModal";
+import ScheduleRouteModal from "./ScheduleRouteModal";
 import RouteActionsDropdown from "./RouteActionsDropdown";
 import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
@@ -37,6 +38,7 @@ export default function RoutesContent() {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [routeScheduleModalOpen, setRouteScheduleModalOpen] = useState(false);
+  const [scheduleRouteModalOpen, setScheduleRouteModalOpen] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [search, setSearch] = useState("");
@@ -141,6 +143,12 @@ export default function RoutesContent() {
     setViewModalOpen(true);
   };
 
+  // Handler for table row click
+  const handleRowClick = (routeId) => {
+    setSelectedRouteId(routeId);
+    setViewModalOpen(true);
+  };
+
   // Handler for editing a route
   const handleEditRoute = (routeId) => {
     setSelectedRouteId(routeId);
@@ -149,8 +157,8 @@ export default function RoutesContent() {
 
   // Handler for scheduling a route
   const handleScheduleRoute = (route) => {
-    setSelectedRoute(route);
-    setRouteScheduleModalOpen(true);
+    setSelectedRouteId(route.id);
+    setScheduleRouteModalOpen(true);
   };
 
   // Handler for bulk scheduling
@@ -192,7 +200,7 @@ export default function RoutesContent() {
           </div>
           <div className="flex gap-3 flex-shrink-0">
             <Button
-              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap"
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
               onClick={() => setAddModalOpen(true)}
             >
               <Plus size={18} />
@@ -200,7 +208,7 @@ export default function RoutesContent() {
             </Button>
             <Button
               variant="secondary"
-              className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50 whitespace-nowrap"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
               onClick={handleBulkSchedule}
             >
               <Calendar size={18} />
@@ -208,7 +216,7 @@ export default function RoutesContent() {
             </Button>
             <Button
               variant="secondary"
-              className="text-sm flex items-center justify-center font-medium gap-2 border border-gray-300 bg-white hover:bg-gray-50 whitespace-nowrap"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
               onClick={handleAutoGenerate}
             >
               <RefreshCw size={18} />
@@ -236,9 +244,10 @@ export default function RoutesContent() {
               {filteredRoutes.map((route) => (
                 <tr
                   key={route.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                  onClick={() => handleRowClick(route.id)}
                 >
-                   <td className="px-6 py-4">
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <div className="flex items-center gap-3">
                        <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                          {filteredRoutes.indexOf(route) + 1}
@@ -246,22 +255,22 @@ export default function RoutesContent() {
                        <span className="font-medium">{route.id}</span>
                      </div>
                    </td>
-                   <td className="px-6 py-4">{route.name}</td>
-                   <td className="px-6 py-4">
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.name}</td>
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <span className="text-blue-600 cursor-pointer hover:underline">
                        {route.district}
                      </span>
                    </td>
-                   <td className="px-6 py-4">{route.stops}</td>
-                   <td className="px-6 py-4">{route.distance}</td>
-                   <td className="px-6 py-4">{route.students}</td>
-                   <td className="px-6 py-4">
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.stops}</td>
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.distance}</td>
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.students}</td>
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <StatusBadge
                        status={route.status}
                        type={route.status === "Active" ? "active" : "inactive"}
                      />
                    </td>
-                   <td className="px-6 py-4">
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      {route.driver ? (
                        route.driver
                      ) : (
@@ -270,7 +279,7 @@ export default function RoutesContent() {
                        </span>
                      )}
                    </td>
-                   <td className="px-6 py-4">
+                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <div className="flex justify-center">
                        <RouteActionsDropdown
                          route={route}
@@ -360,6 +369,18 @@ export default function RoutesContent() {
              setSelectedRoute(null);
            }}
            route={selectedRoute}
+         />
+       )}
+
+       {/* Schedule Route Modal */}
+       {scheduleRouteModalOpen && (
+         <ScheduleRouteModal
+           isOpen={scheduleRouteModalOpen}
+           onClose={() => {
+             setScheduleRouteModalOpen(false);
+             setSelectedRouteId(null);
+           }}
+           routeId={selectedRouteId}
          />
        )}
      </div>
