@@ -60,18 +60,18 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center p-6 border-b border-[var(--gray-200)]">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Bulk Schedule Rides</h2>
-            <p className="text-sm text-gray-600 mt-1">Create rides for all active routes for the selected week.</p>
+            <h2 className="text-xl font-bold text-[var(--primary-black)]">Bulk Schedule Rides</h2>
+            <p className="text-sm text-[var(--muted-text)] mt-1">Create rides for all active routes for the selected week.</p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-[var(--gray-400)] hover:text-[var(--gray-600)] transition-colors"
           >
             <X size={20} />
           </button>
@@ -81,7 +81,7 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
         <div className="p-6">
           {/* Week Selection */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-900 mb-3">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">
               Select Week
             </label>
             
@@ -90,7 +90,7 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
               <Button
                 variant="secondary"
                 onClick={goToPreviousWeek}
-                className="flex items-center gap-2 border border-gray-300 bg-white hover:bg-gray-50"
+                className="flex items-center gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--gray-50)]"
               >
                 <ChevronLeft size={16} />
                 Previous Week
@@ -98,7 +98,7 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
               <Button
                 variant="secondary"
                 onClick={goToNextWeek}
-                className="flex items-center gap-2 border border-gray-300 bg-white hover:bg-gray-50"
+                className="flex items-center gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--gray-50)]"
               >
                 Next Week
                 <ChevronRight size={16} />
@@ -106,19 +106,27 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
             </div>
 
             {/* Current Week Display */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div className="font-semibold text-gray-900 text-lg">
+            <div className="bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-lg p-4">
+              <div className="font-semibold text-[var(--primary-black)] text-lg">
                 {formatWeekRange()}
               </div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-[var(--muted-text)] mt-1">
                 Will schedule {activeRoutesCount} active routes for this week
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
+        {/* Footer - Fixed at bottom right */}
+        <div 
+          className="flex gap-3 z-10"
+          style={{
+            width: 'auto',
+            position: 'fixed',
+            bottom: '59px',
+            right: '340px'
+          }}
+        >
           <Button
             variant="secondary"
             onClick={onClose}
@@ -127,9 +135,8 @@ export default function BulkScheduleModal({ isOpen, onClose }) {
             Cancel
           </Button>
           <Button
-            variant="primary"
+            className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
             onClick={handleScheduleAllRoutes}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700"
           >
             Schedule All Routes
           </Button>

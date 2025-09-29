@@ -72,13 +72,14 @@ export default function ScheduleRouteModal({ isOpen, onClose, routeId }) {
                     Date
                   </label>
                   <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                     <Input
                       type="date"
                       value={formData.date}
                       onChange={(e) => handleInputChange('date', e.target.value)}
                       placeholder="dd-mm-yyyy"
+                      className="pl-10"
                     />
-                    <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                   </div>
                 </div>
                 <div>
@@ -101,12 +102,13 @@ export default function ScheduleRouteModal({ isOpen, onClose, routeId }) {
                     Start Time
                   </label>
                   <div className="relative">
+                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                     <Input
                       type="time"
                       value={formData.startTime}
                       onChange={(e) => handleInputChange('startTime', e.target.value)}
+                      className="pl-10"
                     />
-                    <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                   </div>
                 </div>
                 <div>
@@ -114,12 +116,13 @@ export default function ScheduleRouteModal({ isOpen, onClose, routeId }) {
                     End Time
                   </label>
                   <div className="relative">
+                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                     <Input
                       type="time"
                       value={formData.endTime}
                       onChange={(e) => handleInputChange('endTime', e.target.value)}
+                      className="pl-10"
                     />
-                    <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--gray-400)]" />
                   </div>
                 </div>
               </div>

@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, Plus, GripVertical, Trash2, Clock, Calendar, ChevronDown } from "lucide-react";
+import { X, Plus, GripVertical, Trash2, Clock, Calendar, ChevronDown, Route, User, Car, DollarSign, CreditCard } from "lucide-react";
 import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
+import Toggle from "@/components/ui/Toggle";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
@@ -162,18 +165,17 @@ export default function AddRouteModal({ isOpen, onClose }) {
     const renderBasicInfo = () => (
     <div className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-2">Route ID</label>
-        <input 
-          type="text" 
-          placeholder="Enter route ID" 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Route ID</label>
+        <Input
+          type="text"
+          placeholder="Enter route ID"
           value={formData.routeId}
           onChange={(e) => setFormData(prev => ({ ...prev, routeId: e.target.value }))}
         />
       </div>
       
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-3">Route Type</label>
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Route Type</label>
         <div className="space-y-3">
           <label className="flex items-center">
             <input 
@@ -182,7 +184,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
               value="roundTrip"
               checked={formData.routeType === "roundTrip"}
               onChange={(e) => setFormData(prev => ({ ...prev, routeType: e.target.value }))}
-              className="mr-2 h-4 w-4 text-blue-600" 
+              className="mr-2 h-4 w-4 text-[var(--primary)]" 
             />
             <span className="font-medium">Round Trip Route</span>
           </label>
@@ -193,7 +195,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
               value="oneWay"
               checked={formData.routeType === "oneWay"}
               onChange={(e) => setFormData(prev => ({ ...prev, routeType: e.target.value }))}
-              className="mr-2 h-4 w-4 text-blue-600" 
+              className="mr-2 h-4 w-4 text-[var(--primary)]" 
             />
             <span className="font-medium">One Way Route</span>
           </label>
@@ -203,26 +205,26 @@ export default function AddRouteModal({ isOpen, onClose }) {
       {/* Round Trip Details - Only shown when roundTrip is selected */}
       {formData.routeType === "roundTrip" && (
         <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-3">Round Trip Routes</h3>
+          <h3 className="text-lg font-medium text-[var(--primary-black)] mb-3">Round Trip Routes</h3>
           <div className="space-y-4">
             {/* Top Row - Route Optimization */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow-sm">
-              <h4 className="font-medium text-yellow-900">Route Optimization</h4>
-              <span className="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded mt-1">Auto-Generated</span>
-              <p className="text-sm text-yellow-700 mt-2">The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
+            <div className="bg-[var(--amber-100)] border border-[var(--amber-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
+              <h4 className="font-medium text-[var(--amber-900)]">Route Optimization</h4>
+              <span className="inline-block bg-[var(--amber-200)] text-[var(--amber-800)] text-xs px-2 py-1 rounded mt-1">Auto-Generated</span>
+              <p className="text-sm text-[var(--amber-700)] mt-2">The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
             </div>
             
             {/* Bottom Row - Morning and Afternoon Routes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-sm">
-                <h4 className="font-medium text-blue-900">Morning Route</h4>
-                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-1">Home → School</span>
-                <p className="text-sm text-blue-700 mt-2">Pick up students from addresses and drop off at campus</p>
+              <div className="bg-[var(--blue-100)] border border-[var(--blue-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <h4 className="font-medium text-[var(--blue-900)]">Morning Route</h4>
+                <span className="inline-block bg-[var(--blue-200)] text-[var(--blue-800)] text-xs px-2 py-1 rounded mt-1">Home → School</span>
+                <p className="text-sm text-[var(--blue-700)] mt-2">Pick up students from addresses and drop off at campus</p>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-sm">
-                <h4 className="font-medium text-green-900">Afternoon Route</h4>
-                <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mt-1">School → Home</span>
-                <p className="text-sm text-green-700 mt-2">Pick up students from campus and drop off at addresses</p>
+              <div className="bg-[var(--green-100)] border border-[var(--green-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <h4 className="font-medium text-[var(--green-900)]">Afternoon Route</h4>
+                <span className="inline-block bg-[var(--green-200)] text-[var(--green-800)] text-xs px-2 py-1 rounded mt-1">School → Home</span>
+                <p className="text-sm text-[var(--green-700)] mt-2">Pick up students from campus and drop off at addresses</p>
               </div>
             </div>
           </div>
@@ -233,7 +235,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
       {formData.routeType === "oneWay" && (
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-3">Route Direction</label>
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Route Direction</label>
             <div className="space-y-3">
               <label className="flex items-center">
                 <input 
@@ -242,7 +244,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                   value="morning"
                   checked={formData.oneWayDirection === "morning"}
                   onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
-                  className="mr-2 h-4 w-4 text-blue-600" 
+                  className="mr-2 h-4 w-4 text-[var(--primary)]" 
                 />
                 <span className="font-medium">Morning Route</span>
               </label>
@@ -253,7 +255,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                   value="midday"
                   checked={formData.oneWayDirection === "midday"}
                   onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
-                  className="mr-2 h-4 w-4 text-blue-600" 
+                  className="mr-2 h-4 w-4 text-[var(--primary)]" 
                 />
                 <span className="font-medium">Midday Route</span>
               </label>
@@ -264,7 +266,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                   value="afternoon"
                   checked={formData.oneWayDirection === "afternoon"}
                   onChange={(e) => setFormData(prev => ({ ...prev, oneWayDirection: e.target.value }))}
-                  className="mr-2 h-4 w-4 text-blue-600" 
+                  className="mr-2 h-4 w-4 text-[var(--primary)]" 
                 />
                 <span className="font-medium">Afternoon Route</span>
               </label>
@@ -274,7 +276,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
           {/* Drop-off Location Section - Only show for Midday Route */}
           {formData.oneWayDirection === "midday" && (
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-3">Drop-off Location</label>
+              <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Drop-off Location</label>
               <div className="space-y-3">
                 <label className="flex items-center">
                   <input 
@@ -283,7 +285,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                     value="school"
                     checked={formData.dropoffLocation === "school"}
                     onChange={(e) => setFormData(prev => ({ ...prev, dropoffLocation: e.target.value }))}
-                    className="mr-2 h-4 w-4 text-blue-600" 
+                    className="mr-2 h-4 w-4 text-[var(--primary)]" 
                   />
                   <span className="font-medium">Drop off at School</span>
                 </label>
@@ -294,7 +296,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                     value="home"
                     checked={formData.dropoffLocation === "home"}
                     onChange={(e) => setFormData(prev => ({ ...prev, dropoffLocation: e.target.value }))}
-                    className="mr-2 h-4 w-4 text-blue-600" 
+                    className="mr-2 h-4 w-4 text-[var(--primary)]" 
                   />
                   <span className="font-medium">Drop off at Home</span>
                 </label>
@@ -305,10 +307,10 @@ export default function AddRouteModal({ isOpen, onClose }) {
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-2">Route Description</label>
-        <textarea 
-          rows={3} 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Route Description</label>
+        <Input
+          as="textarea"
+          rows={3}
           value={formData.routeDescription}
           onChange={(e) => setFormData(prev => ({ ...prev, routeDescription: e.target.value }))}
           placeholder={
@@ -327,55 +329,49 @@ export default function AddRouteModal({ isOpen, onClose }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">District</label>
-          <select 
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">District</label>
+          <Select
             value={formData.district}
-            onChange={(e) => {
-              setFormData(prev => ({ ...prev, district: e.target.value, campus: "" }));
+            onChange={(value) => {
+              setFormData(prev => ({ ...prev, district: value, campus: "" }));
               setSelectedStudents([]);
             }}
-          >
-            <option value="">Select district</option>
-            <option value="86022-Z">86022-Z</option>
-            <option value="75044-A">75044-A</option>
-          </select>
+            options={[
+              { value: "", label: "Select district" },
+              { value: "86022-Z", label: "86022-Z" },
+              { value: "75044-A", label: "75044-A" }
+            ]}
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">Campus</label>
-          <select 
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Campus</label>
+          <Select
             value={formData.campus}
-            onChange={(e) => {
-              setFormData(prev => ({ ...prev, campus: e.target.value }));
+            onChange={(value) => {
+              setFormData(prev => ({ ...prev, campus: value }));
               setSelectedStudents([]);
             }}
             disabled={!formData.district}
-          >
-            <option value="">
-              {formData.district ? "Select a campus" : "Select a district first"}
-            </option>
-            {formData.district === "86022-Z" && (
-              <>
-                <option value="west-campus">West Campus</option>
-                <option value="east-campus">East Campus</option>
-                <option value="main-campus">Main Campus</option>
-              </>
-            )}
-            {formData.district === "75044-A" && (
-              <>
-                <option value="north-campus">North Campus</option>
-                <option value="south-campus">South Campus</option>
-                <option value="central-campus">Central Campus</option>
-              </>
-            )}
-          </select>
+            options={[
+              { value: "", label: formData.district ? "Select a campus" : "Select a district first" },
+              ...(formData.district === "86022-Z" ? [
+                { value: "west-campus", label: "West Campus" },
+                { value: "east-campus", label: "East Campus" },
+                { value: "main-campus", label: "Main Campus" }
+              ] : []),
+              ...(formData.district === "75044-A" ? [
+                { value: "north-campus", label: "North Campus" },
+                { value: "south-campus", label: "South Campus" },
+                { value: "central-campus", label: "Central Campus" }
+              ] : [])
+            ]}
+          />
         </div>
       </div>
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <label className="block text-sm font-medium text-gray-900">Students</label>
+          <label className="block text-sm font-medium text-[var(--primary-black)]">Students</label>
           <Button 
             variant="primary" 
             className="flex items-center gap-2 text-sm"
@@ -389,15 +385,15 @@ export default function AddRouteModal({ isOpen, onClose }) {
         {formData.campus ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">Select Students</label>
+              <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Select Students</label>
               <div className="relative student-dropdown">
                 <button
                   type="button"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white flex items-center justify-between"
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md text-left focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent bg-white flex items-center justify-between"
                   onClick={() => setShowStudentDropdown(!showStudentDropdown)}
                 >
-                  <span className="text-gray-500">Search and select students</span>
-                  <ChevronDown size={16} className="text-gray-400" />
+                  <span className="text-[var(--muted-text)]">Search and select students</span>
+                  <ChevronDown size={16} className="text-[var(--gray-400)]" />
                 </button>
                 
                 {showStudentDropdown && (
@@ -477,99 +473,119 @@ export default function AddRouteModal({ isOpen, onClose }) {
   const renderSchedule = () => (
     <div className="space-y-6">
              <div>
-         <label className="block text-sm font-medium text-gray-900 mb-3">Operating Days</label>
+         <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Operating Days</label>
                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].map((day) => (
-              <label key={day} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all duration-200">
-                <input 
-                  type="checkbox" 
+              <div key={day} className="flex items-center p-3 border border-[var(--gray-200)] rounded-lg hover:bg-[var(--gray-50)] cursor-pointer transition-all duration-200">
+                <Toggle
                   checked={operatingDays[day]}
-                  onChange={(e) => {
+                  onChange={(checked) => {
                     setOperatingDays(prev => ({
                       ...prev,
-                      [day]: e.target.checked
+                      [day]: checked
                     }));
                   }}
-                  className="mr-3 h-5 w-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" 
+                  className="mr-3"
                 />
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-[var(--primary-black)]">
                   {day.charAt(0).toUpperCase() + day.slice(1)}
                 </span>
-              </label>
+              </div>
             ))}
           </div>
        </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-3">Effective Date Range</label>
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Effective Date Range</label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Start Date *</label>
+            <label className="block text-xs text-[var(--muted-text)] mb-1">Start Date *</label>
             <div className="relative">
-              <input type="text" defaultValue="08/13/2025" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                defaultValue="08/13/2025"
+              />
+              <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--gray-400)]" />
             </div>
           </div>
           <div>
-            <label className="block text-xs text-gray-600 mb-1">End Date</label>
+            <label className="block text-xs text-[var(--muted-text)] mb-1">End Date</label>
             <div className="relative">
-              <input type="text" placeholder="Select end date" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Select end date"
+              />
+              <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--gray-400)]" />
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-3">Default Times</label>
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-3">Default Times</label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="relative">
-            <label className="block text-xs text-gray-600 mb-1">Default Pickup Time</label>
+            <label className="block text-xs text-[var(--muted-text)] mb-1">Default Pickup Time</label>
             <div className="relative">
-              <input type="time" defaultValue="07:30" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <Clock size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Clock size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--gray-400)]" />
+              <Input
+                type="time"
+                defaultValue="07:30"
+                className="pl-10"
+              />
             </div>
           </div>
           <div className="relative">
-            <label className="block text-xs text-gray-600 mb-1">Default Dropoff Time</label>
+            <label className="block text-xs text-[var(--muted-text)] mb-1">Default Dropoff Time</label>
             <div className="relative">
-              <input type="time" defaultValue="15:30" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <Clock size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Clock size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--gray-400)]" />
+              <Input
+                type="time"
+                defaultValue="15:30"
+                className="pl-10"
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-900 mb-2">Schedule Exceptions</label>
-        <p className="text-xs text-gray-600 mb-3">Add dates when rides should not run (holidays, teacher work days, etc.)</p>
+        <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Schedule Exceptions</label>
+        <p className="text-xs text-[var(--muted-text)] mb-3">Add dates when rides should not run (holidays, teacher work days, etc.)</p>
         
         <div className="space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="relative">
-              <label className="block text-xs text-gray-600 mb-1">Select Dates</label>
+              <label className="block text-xs text-[var(--muted-text)] mb-1">Select Dates</label>
               <div className="relative">
-                <input type="text" placeholder="Select dates" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Select dates"
+                />
+                <Calendar size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--gray-400)]" />
               </div>
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1">Exception Type</label>
-              <div className="relative">
-                <select defaultValue="No School" className="w-full px-3 py-2 border border-gray-300 rounded-md appearance-none bg-white">
-                  <option value="No School">No School</option>
-                  <option value="Holiday">Holiday</option>
-                  <option value="Teacher Work Day">Teacher Work Day</option>
-                </select>
-                <ChevronDown size={16} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              <label className="block text-xs text-[var(--muted-text)] mb-1">Exception Type</label>
+              <Select
+                value="No School"
+                onChange={(value) => console.log(value)}
+                options={[
+                  { value: "No School", label: "No School" },
+                  { value: "Holiday", label: "Holiday" },
+                  { value: "Teacher Work Day", label: "Teacher Work Day" }
+                ]}
+              />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1">Description</label>
-              <input type="text" placeholder="e.g., Teacher In-service Day, Early Release, etc." className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+              <label className="block text-xs text-[var(--muted-text)] mb-1">Description</label>
+              <Input
+                type="text"
+                placeholder="e.g., Teacher In-service Day, Early Release, etc."
+              />
             </div>
           </div>
-          <Button variant="primary" className="flex items-center gap-2 text-sm">
+          <Button className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2 text-sm">
             <Plus size={16} />
             Add Exception
           </Button>
@@ -600,7 +616,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                        type="text"
                        value={stop.name}
                        placeholder="e.g., Community Center"
-                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                       className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
                        readOnly
                      />
                    </div>
@@ -610,7 +626,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                        type="text"
                        value={stop.address}
                        placeholder="Enter full address"
-                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                       className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
                        readOnly
                      />
                    </div>
@@ -651,7 +667,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                        value={newStop.name}
                        onChange={(e) => setNewStop(prev => ({ ...prev, name: e.target.value }))}
                        placeholder="e.g., Community Center"
-                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                       className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
                      />
                    </div>
                    <div className="flex-1">
@@ -661,7 +677,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                        value={newStop.address}
                        onChange={(e) => setNewStop(prev => ({ ...prev, address: e.target.value }))}
                        placeholder="Enter full address"
-                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                       className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
                      />
                    </div>
                    <div className="relative">
@@ -748,7 +764,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                 <input 
                   type="text" 
                   placeholder="Enter monitor's full name" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" 
                 />
               </div>
               <div>
@@ -756,7 +772,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                 <input 
                   type="email" 
                   placeholder="monitor@email.com" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" 
                 />
               </div>
               <div>
@@ -764,7 +780,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                 <input 
                   type="text" 
                   placeholder="Enter monitor's drop off address" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" 
                 />
                 <p className="text-xs text-gray-500 mt-1">Leave blank to use pickup address for drop off</p>
               </div>
@@ -777,7 +793,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                 <input 
                   type="tel" 
                   placeholder="(555) 123-4567" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" 
                 />
               </div>
               <div>
@@ -785,7 +801,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
                 <input 
                   type="text" 
                   placeholder="Enter monitor's pickup address" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                  className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-md focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" 
                 />
               </div>
             </div>
@@ -1133,30 +1149,42 @@ export default function AddRouteModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Add New Route</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <X size={20} />
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Route className="w-6 h-6 text-[var(--primary)]" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Add New Route</h2>
+              <p className="text-[var(--muted-text)]">Create a new route configuration</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+          >
+            <X className="w-6 h-6 text-[var(--gray-500)]" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200">
-          <div className="flex space-x-8 px-6">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`py-4 px-2 font-medium text-sm border-b-2 transition-colors ${
-                  activeTab === tab
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        <div className="flex mt-2 ml-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === tab ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === tab ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === tab ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* Content */}
@@ -1165,11 +1193,12 @@ export default function AddRouteModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
-          <Button variant="secondary" onClick={onClose} className="px-4 py-2">
+        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
+          <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="primary" className="px-4 py-2 bg-blue-600 hover:bg-blue-700">
+          <Button className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2">
+            <Route className="w-4 h-4" />
             Create Route
           </Button>
         </div>

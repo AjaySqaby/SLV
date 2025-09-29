@@ -4,6 +4,8 @@ import { X, ChevronDown } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import Button from "@/components/ui/Button";
+import Select from "@/components/ui/Select";
+import Input from "@/components/ui/Input";
 
 const customStyles = `
   .auto-generate-picker .rdp-day_selected,
@@ -60,62 +62,56 @@ export default function AutoGenerateModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center p-6 border-b border-[var(--gray-200)]">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Automatic Ride Generation</h2>
-            <p className="text-sm text-gray-600 mt-1">Generate rides automatically based on active routes.</p>
+            <h2 className="text-xl font-bold text-[var(--primary-black)]">Automatic Ride Generation</h2>
+            <p className="text-sm text-[var(--muted-text)] mt-1">Generate rides automatically based on active routes.</p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-[var(--gray-400)] hover:text-[var(--gray-600)] transition-colors"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 pb-24">
           {/* Generation Frequency */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Generation Frequency
             </label>
-            <div className="relative">
-              <select
-                value={generationFrequency}
-                onChange={(e) => setGenerationFrequency(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
-              >
-                {frequencyOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
-            </div>
+            <Select
+              value={generationFrequency}
+              onChange={setGenerationFrequency}
+              options={frequencyOptions.map(option => ({
+                value: option,
+                label: option
+              }))}
+            />
           </div>
 
           {/* Starting Period */}
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
               Starting Period
             </label>
             <div className="relative">
-              <button
-                type="button"
+              <Input
+                type="text"
+                value={formatDate(selectedDate)}
                 onClick={() => setShowCalendar(!showCalendar)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-left focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              >
-                {formatDate(selectedDate)}
-              </button>
+                readOnly
+                className="cursor-pointer"
+              />
               
               {showCalendar && (
-                <div className="absolute z-10 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+                <div className="absolute z-10 mt-1 bg-white border border-[var(--gray-200)] rounded-lg shadow-lg p-4">
                   <style>{customStyles}</style>
                   <DayPicker
                     mode="single"
@@ -133,9 +129,9 @@ export default function AutoGenerateModal({ isOpen, onClose }) {
           </div>
 
           {/* Summary */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <h3 className="font-medium text-gray-900 mb-3">Summary</h3>
-            <div className="space-y-2 text-sm text-gray-600">
+          <div className="bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
+            <h3 className="font-medium text-[var(--primary-black)] mb-3">Summary</h3>
+            <div className="space-y-2 text-sm text-[var(--muted-text)]">
               <div>Period: {formatPeriod()}</div>
               <div>Active Routes: {activeRoutes}</div>
               <div>Estimated Rides: ~{estimatedRides}</div>
@@ -144,21 +140,22 @@ export default function AutoGenerateModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            className="px-4 py-2"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleGenerateRides}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700"
-          >
-            Generate Rides
-          </Button>
+        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="secondary"
+              onClick={onClose}
+              className="px-4 py-2"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
+              onClick={handleGenerateRides}
+            >
+              Generate Rides
+            </Button>
+          </div>
         </div>
       </div>
     </div>
