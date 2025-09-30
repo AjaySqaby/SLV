@@ -151,9 +151,9 @@ export default function DriversContent() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div>
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
          
           <div>
@@ -195,7 +195,7 @@ export default function DriversContent() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto  rounded-lg shadow-sm border border-gray-200 p-6">
         <table className="w-full">
           <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
             <tr>

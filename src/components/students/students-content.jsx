@@ -123,7 +123,7 @@ export default function StudentsContent() {
       <div className="flex items-center">
        
         <div>
-          <h1 className="text-3xl font-bold mb-8">Students Management</h1>
+          <h1 className="text-3xl font-bold mb-6">Students Management</h1>
            </div>
       </div>
       {/* Search Section - Full Width */}

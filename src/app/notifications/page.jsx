@@ -172,9 +172,9 @@ export default function NotificationsPage() {
   return (
     <PageLayout activePage="Notifications" pageTitle="Notifications">
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3">
           <div>
-            <h1 className="text-3xl font-bold mb-8">Notifications</h1>
+            <h1 className="text-3xl font-bold mb-6">Notifications</h1>
            
           </div>
         </div>

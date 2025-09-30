@@ -22,7 +22,7 @@ export default function SearchFilters({
   ];
 
   return (
-    <div className="py-4 bg-[var(--surface-bg)] border-b border-[var(--border)] w-full">
+    <div className="p-4  w-full">
       <div className="relative mb-4 w-full">
         <Search className="absolute left-3 top-2.5 h-5 w-5 text-[var(--muted-text)]" />
         <Input

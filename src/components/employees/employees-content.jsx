@@ -104,7 +104,7 @@ export default function EmployeesContent() {
       <div className="flex items-center">
        
         <div>
-          <h1 className="text-3xl font-bold mb-8">Employee Management</h1>
+          <h1 className="text-3xl font-bold mb-2">Employee Management</h1>
         
         </div>
       </div>

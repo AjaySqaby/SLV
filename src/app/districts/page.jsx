@@ -3,7 +3,7 @@ import DistrictsContent from "@/components/districts/districts-content";
 
 export default function DistrictsPage() {
   return (
-    <PageLayout activePage="Districts" pageTitle="School Districts">
+    <PageLayout activePage="Districts" pageTitle="Districts Management ">
       <DistrictsContent />
     </PageLayout>
   );

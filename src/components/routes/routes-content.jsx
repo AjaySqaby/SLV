@@ -173,7 +173,7 @@ export default function RoutesContent() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-2">
         <h1 className="text-3xl font-bold mb-8">Routes Management</h1>
         <Button
           variant="ghost"

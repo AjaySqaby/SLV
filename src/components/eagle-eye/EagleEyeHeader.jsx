@@ -20,7 +20,7 @@ export default function EagleEyeHeader() {
   };
 
   return (
-    <div className="bg-[var(--surface-bg)] border-b border-[var(--border)] py-3  flex items-center justify-between">
+    <div className=" py-3  flex items-center justify-between">
       <div className="flex items-center">
         {/* <Button 
           variant="primary" 

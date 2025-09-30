@@ -112,11 +112,11 @@ export default function CampusContent() {
   }, [openMenuId]);
 
   return (
-    <div className="p-6">
+    <div>
       <div className="flex items-center ">
        
         <div>
-          <h1 className="text-3xl font-bold mb-8">Campus Management</h1>
+          <h1 className="text-3xl font-bold mb-6">Campus Management</h1>
          
         </div>
       </div>

@@ -63,7 +63,7 @@ export default function DistrictsContent() {
       <div className="flex items-center">
        
         <div>
-          <h1 className="text-3xl font-bold mb-8">School Districts</h1>
+          <h1 className="text-3xl font-bold mb-2">Districts Management </h1>
          
         </div>
       </div>
