@@ -3,6 +3,15 @@ import {
   Filter,
   CheckCircle,
   AlertCircle,
+  Plus,
+  MoreVertical,
+  Eye,
+  Edit,
+  Trash2,
+  User,
+  Calendar,
+  TrendingUp,
+  Clock
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "@/components/ui/SearchInput";
@@ -115,17 +124,34 @@ export default function OnboardingContent() {
   });
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="space-y-6">
       {/* Header Section */}
-      <div className="flex items-center mb-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-8">Onboarding</h1>
+          <h1 className="text-3xl font-bold text-[var(--primary-black)]">Driver Onboarding</h1>
+          <p className="text-[var(--muted-text)] mt-1">Manage driver onboarding process and track progress</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2"
+            icon={<TrendingUp className="h-4 w-4" />}
+          >
+            View Reports
+          </Button>
+          <Button
+            className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
+            icon={<Plus className="h-4 w-4" />}
+            onClick={() => setShowAddDriverModal(true)}
+          >
+            Add New Driver
+          </Button>
         </div>
       </div>
 
-      {/* Search Section - Full Width */}
-      <div className="flex justify-between items-center mb-6 gap-2">
-        <div className="relative w-full">
+      {/* Search and Filter Section */}
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
           <SearchInput
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -133,20 +159,17 @@ export default function OnboardingContent() {
             width="w-full"
           />
         </div>
-        <Button variant="secondary" icon={<Filter size={18} />} className="whitespace-nowrap">
-          Filter
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => setShowAddDriverModal(true)}
+        <Button 
+          variant="secondary" 
+          icon={<Filter className="h-4 w-4" />} 
           className="whitespace-nowrap"
         >
-          + Add New Driver
+          Filter
         </Button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Main Content Card */}
+      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
         <table className="w-full">
           <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
             <tr>
@@ -160,8 +183,12 @@ export default function OnboardingContent() {
           </thead>
           <tbody>
             {filteredData.map((driver) => (
-              <tr key={driver.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200">
-                <td className="px-6 py-4">
+              <tr 
+                key={driver.id} 
+                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                onClick={() => handleManageDriver(driver)}
+              >
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                       {filteredData.indexOf(driver) + 1}
@@ -169,13 +196,13 @@ export default function OnboardingContent() {
                     <span className="font-medium">{driver.id}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-[var(--heading)] hover:bg-[var(--gray-100)] transition-all duration-200">
                   {driver.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">
                   {driver.startDate}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex items-center gap-3">
                     <div className="flex-1">
                       <ProgressBar
@@ -184,12 +211,12 @@ export default function OnboardingContent() {
                         color={getProgressColor(driver.progress)}
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-700 min-w-[40px]">
+                    <span className="text-sm font-medium text-[var(--heading)] min-w-[40px]">
                       {driver.progress}%
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   {getStatusBadge(driver.status)}
                 </td>
                 <td className="px-6 py-4">
@@ -208,27 +235,30 @@ export default function OnboardingContent() {
 
       {/* Empty State */}
       {filteredData.length === 0 && (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="h-8 w-8 text-gray-400" />
+        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] p-12">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <User className="h-8 w-8 text-[var(--muted-text)]" />
+            </div>
+            <h3 className="text-lg font-semibold text-[var(--heading)] mb-2">No drivers found</h3>
+            <p className="text-[var(--muted-text)] mb-6">
+              {searchQuery || statusFilter 
+                ? "Try adjusting your search or filter criteria"
+                : "Get started by adding your first driver to the onboarding process"
+              }
+            </p>
+            {!searchQuery && !statusFilter && (
+              <Button
+                className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                icon={<Plus className="h-4 w-4" />}
+                onClick={() => setShowAddDriverModal(true)}
+              >
+                Add New Driver
+              </Button>
+            )}
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No drivers found</h3>
-          <p className="text-gray-600 mb-4">
-            {searchQuery || statusFilter 
-              ? "Try adjusting your search or filter criteria"
-              : "Get started by adding your first driver to the onboarding process"
-            }
-          </p>
-                     {!searchQuery && !statusFilter && (
-             <Button
-               variant="primary"
-               onClick={() => setShowAddDriverModal(true)}
-             >
-               Add New Driver
-             </Button>
-           )}
-                 </div>
-       )}
+        </div>
+      )}
 
        <AddDriverModal
          isOpen={showAddDriverModal}
