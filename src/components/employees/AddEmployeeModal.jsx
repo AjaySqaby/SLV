@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { X, Users, User, Mail, Phone, Building2 } from "lucide-react";
+import { X, Users, User, Mail, Phone, Building2, MapPin, GraduationCap, Settings } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
@@ -80,84 +80,109 @@ export default function AddEmployeeModal({ open, onClose }) {
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
           {/* Form Content */}
           <form onSubmit={handleSubmit} className="space-y-6">
-              {/* First Name and Last Name - Two Columns */}
-              <div className="grid grid-cols-2 gap-6">
-                <Input
-                  label="First Name"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  placeholder="Enter first name"
-                  required
-                  icon={<User className="h-4 w-4 text-[var(--muted-text)]" />}
-                />
-                
-                <Input
-                  label="Last Name"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  placeholder="Enter last name"
-                  required
-                  icon={<User className="h-4 w-4 text-[var(--muted-text)]" />}
-                />
+              {/* Personal Information Section */}
+              <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="font-semibold text-[var(--primary-black)]">Personal Information</div>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <Input
+                    label="First Name"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    placeholder="Enter first name"
+                    required
+                    icon={<User className="h-4 w-4 text-[var(--muted-text)]" />}
+                  />
+                  
+                  <Input
+                    label="Last Name"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    placeholder="Enter last name"
+                    required
+                    icon={<User className="h-4 w-4 text-[var(--muted-text)]" />}
+                  />
+                </div>
               </div>
 
-              {/* District - Single Column */}
-              <Select
-                label="District"
-                name="district"
-                value={formData.district}
-                onChange={handleInputChange}
-                options={districts}
-                placeholder="Select a district"
-                required
-              />
+              {/* Work Information Section */}
+              <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5 text-[var(--green-600)]" />
+                  </div>
+                  <div className="font-semibold text-[var(--primary-black)]">Work Information</div>
+                </div>
+                <div className="space-y-6">
+                  <Select
+                    label="District"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleInputChange}
+                    options={districts}
+                    placeholder="Select a district"
+                    required
+                  />
 
-              {/* Campus - Single Column */}
-              <Select
-                label="Campus (Optional for district-level employees)"
-                name="campus"
-                value={formData.campus}
-                onChange={handleInputChange}
-                options={campuses}
-                placeholder="Select a campus"
-                helperText="Leave empty for district-level employees"
-              />
+                  <Select
+                    label="Campus (Optional for district-level employees)"
+                    name="campus"
+                    value={formData.campus}
+                    onChange={handleInputChange}
+                    options={campuses}
+                    placeholder="Select a campus"
+                    helperText="Leave empty for district-level employees"
+                  />
 
-              {/* Title - Single Column */}
-              <Input
-                label="Title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="Enter job title"
-                required
-                icon={<Building2 className="h-4 w-4 text-[var(--muted-text)]" />}
-              />
+                  <Input
+                    label="Job Title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder="Enter job title"
+                    required
+                    icon={<Building2 className="h-4 w-4 text-[var(--muted-text)]" />}
+                  />
+                </div>
+              </div>
 
-              {/* Email - Single Column */}
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Enter email address"
-                required
-                icon={<Mail className="h-4 w-4 text-[var(--muted-text)]" />}
-              />
-
-              {/* Phone Number - Single Column */}
-              <Input
-                label="Phone Number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Enter phone number"
-                required
-                icon={<Phone className="h-4 w-4 text-[var(--muted-text)]" />}
-              />
+              {/* Contact Information Section */}
+              <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="font-semibold text-[var(--primary-black)]">Contact Information</div>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <Input
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter email address"
+                    required
+                    icon={<Mail className="h-4 w-4 text-[var(--muted-text)]" />}
+                  />
+                  
+                  <Input
+                    label="Phone Number"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="Enter phone number"
+                    required
+                    icon={<Phone className="h-4 w-4 text-[var(--muted-text)]" />}
+                  />
+                </div>
+              </div>
 
             </form>
         </div>
