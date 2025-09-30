@@ -132,10 +132,9 @@ export default function CampusContent() {
           />
         </div>
         <Button
-          variant="primary"
+          className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
           icon={<Plus size={18} />}
           onClick={() => setIsAddModalOpen(true)}
-          className="whitespace-nowrap"
         >
           Add New Campus
         </Button>
@@ -159,9 +158,10 @@ export default function CampusContent() {
             {filteredCampuses.map((campus) => (
               <tr
                 key={campus.id}
-                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                onClick={() => handleViewCampus(campus.id)}
               >
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                       {filteredCampuses.indexOf(campus) + 1}
@@ -169,8 +169,8 @@ export default function CampusContent() {
                     <span className="font-medium">{campus.id}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-medium">{campus.name}</td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{campus.name}</td>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
                       campus.type === "High School"
@@ -183,14 +183,14 @@ export default function CampusContent() {
                     {campus.type}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <span className="text-[var(--blue-600)]">
                     {campus.district}
                   </span>
                 </td>
-                <td className="px-6 py-4">{campus.address}</td>
-                <td className="px-6 py-4 font-medium">{campus.students}</td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{campus.address}</td>
+                <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{campus.students}</td>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <StatusBadge
                     status={campus.status}
                     type={campus.status === "Active" ? "active" : "inactive"}

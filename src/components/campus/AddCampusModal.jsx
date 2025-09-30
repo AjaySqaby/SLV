@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import Tabs from "@/components/ui/Tabs";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { Switch } from "@headlessui/react";
-import { Check, Building, Upload, X } from "lucide-react";
+import { Check, Building, Upload, X, MapPin, GraduationCap, Clock, Calendar, Users, Settings } from "lucide-react";
 
 function TimeInput({ label, value, onChange, name }) {
   return (
@@ -123,53 +122,74 @@ export default function AddCampusModal({ open, onClose }) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-[var(--orange-100)] rounded-full flex items-center justify-center">
-              <Building className="h-5 w-5 text-[var(--orange-600)]" />
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Building className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">Add New Campus</h2>
-              <p className="text-[var(--gray-600)] text-sm">
-                Add a new campus to the system or bulk upload multiple campuses.
-              </p>
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Add New Campus</h2>
+              <p className="text-[var(--muted-text)]">Create a new campus profile</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
           >
-            <X size={24} />
+            <X className="w-6 h-6 text-[var(--gray-500)]" />
           </button>
         </div>
 
         {/* Modal Content */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
           {/* Tabs */}
           <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] p-6">
-            <Tabs
-              tabs={[
-                { id: 0, label: "Add Single Campus" },
-                { id: 1, label: "Bulk Upload" },
-              ]}
-              activeTab={activeTab}
-              onChange={setActiveTab}
-            />
+            <div className="flex mt-2 ml-8">
+              {[
+                { id: 0, label: "Add Single Campus", icon: Building },
+                { id: 1, label: "Bulk Upload", icon: Upload },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg mr-1"
+                    style={{
+                      backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                      color: activeTab === tab.id ? 'white' : 'var(--gray-700)',
+                      borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                      fontSize: '14px'
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon className="w-4 h-4" />
+                      {tab.label}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
             
             <div className="mt-6">
               {activeTab === 0 && (
                 <form onSubmit={handleSave} className="space-y-8">
                   {/* Campus Details Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Campus Details</h3>
+                  <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
+                        <Building className="w-5 h-5 text-[var(--blue-600)]" />
+                      </div>
+                      <div className="font-semibold text-[var(--primary-black)]">Campus Details</div>
+                    </div>
                     <div className="grid grid-cols-2 gap-4">
                       <Input
                         label="Campus Name"
@@ -212,6 +232,18 @@ export default function AddCampusModal({ open, onClose }) {
                           <option value="Southside School District (75044-A)">Southside School District (75044-A)</option>
                         </select>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Address Information Section */}
+                  <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-[var(--green-600)]" />
+                      </div>
+                      <div className="font-semibold text-[var(--primary-black)]">Address Information</div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
                       <Input
                         label="Street Address"
                         name="address"
@@ -248,11 +280,18 @@ export default function AddCampusModal({ open, onClose }) {
                   </div>
 
                   {/* Campus Bell Schedule Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Campus Bell Schedule</h3>
-                    <p className="text-[var(--gray-600)] text-sm mb-4">
-                      Define when school starts and ends each day. This will be used for route planning.
-                    </p>
+                  <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-[var(--purple-600)]" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[var(--primary-black)]">Campus Bell Schedule</div>
+                        <p className="text-[var(--gray-600)] text-sm">
+                          Define when school starts and ends each day. This will be used for route planning.
+                        </p>
+                      </div>
+                    </div>
                     
                     <div className="space-y-4">
                       {Object.entries(form.schedule).map(([day, sched]) => (
@@ -325,11 +364,18 @@ export default function AddCampusModal({ open, onClose }) {
                   </div>
 
                   {/* Active Status Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Active Status</h3>
-                    <p className="text-[var(--gray-600)] text-sm mb-4">
-                      Set whether this campus is currently active.
-                    </p>
+                  <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
+                        <Settings className="w-5 h-5 text-[var(--amber-600)]" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[var(--primary-black)]">Active Status</div>
+                        <p className="text-[var(--gray-600)] text-sm">
+                          Set whether this campus is currently active.
+                        </p>
+                      </div>
+                    </div>
                     <div className="flex items-center">
                       <Switch
                         checked={form.active}
@@ -348,18 +394,6 @@ export default function AddCampusModal({ open, onClose }) {
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-4 border-t border-[var(--gray-200)]">
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={onClose}
-                    >
-                      Cancel
-                    </Button>
-                    <Button variant="primary" type="submit">
-                      Add Campus
-                    </Button>
-                  </div>
                 </form>
               )}
               {activeTab === 1 && (
@@ -395,22 +429,27 @@ export default function AddCampusModal({ open, onClose }) {
                     </ol>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex justify-end gap-3 pt-4 border-t border-[var(--gray-200)]">
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={onClose}
-                    >
-                      Cancel
-                    </Button>
-                    <Button variant="primary" icon={<Upload size={18} />}>
-                      Upload and Process
-                    </Button>
-                  </div>
                 </div>
               )}
             </div>
+          </div>
+        </div>
+        
+        {/* Fixed Footer Buttons */}
+        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+          <div className="flex justify-end gap-3">
+            <Button 
+              variant="secondary" 
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
+              onClick={handleSave}
+            >
+              Create Campus
+            </Button>
           </div>
         </div>
       </div>
