@@ -34,7 +34,7 @@ export default function EagleEyeHeader() {
       </div>
       <Button
         variant="primary"
-        className="flex items-center bg-[var(--blue)] text-white px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
+        className="flex items-center bg-[var(--blue)] text-white px-3 py-1 rounded-md text-base font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
         onClick={handleRefresh}
       >
         <RefreshCw size={18} className="mr-1" />

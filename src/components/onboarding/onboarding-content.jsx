@@ -140,7 +140,7 @@ export default function OnboardingContent() {
             View Reports
           </Button>
           <Button
-            className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
+            className="text-base bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
             icon={<Plus className="h-4 w-4" />}
             onClick={() => setShowAddDriverModal(true)}
           >

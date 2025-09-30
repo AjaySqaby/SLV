@@ -9,8 +9,8 @@ export default function Button({
   ...props
 }) {
   const variants = {
-    primary: "bg-[var(--primary)] text-[var(--on-primary)] hover:bg-[var(--primary-dark)]",
-    secondary: "bg-[var(--surface-bg)] text-[var(--muted-text)] border border-[var(--border)] hover:bg-[var(--hover-bg)]",
+    primary: "bg-[var(--primary)] text-base text-[var(--on-primary)] hover:bg-[var(--primary-dark)]",
+    secondary: "text-base bg-[var(--surface-bg)] text-[var(--muted-text)] border border-[var(--border)] hover:bg-[var(--hover-bg)]",
     outline: "bg-transparent text-[var(--muted-text)] border border-[var(--border)] hover:bg-[var(--hover-bg)]",
     danger: "bg-[var(--danger)] text-[var(--on-danger)] hover:bg-[var(--danger-dark)]",
     destructive: "bg-red-600 text-white hover:bg-red-700",

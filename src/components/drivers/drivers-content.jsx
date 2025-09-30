@@ -166,7 +166,7 @@ export default function DriversContent() {
           <Link href="/onboarding">
             <Button 
               variant="secondary" 
-              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
+              className="text-base flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
             >
               <FileText size={18} />
               Onboarding
@@ -174,7 +174,7 @@ export default function DriversContent() {
           </Link>
           <Button
             onClick={() => setShowAddDriverModal(true)}
-            className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+            className="text-base flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
           >
             <Plus size={18} />
             Add New Driver

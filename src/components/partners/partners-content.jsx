@@ -185,7 +185,7 @@ export default function PartnersContent() {
         <div className="flex gap-3">
           <button
             onClick={() => setIsAddPartnerModalOpen(true)}
-            className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
+            className="text-base flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
           >
             <Plus size={18} />
             Add Partner
