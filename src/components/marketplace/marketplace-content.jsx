@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { ShoppingBag, ChevronDown, DollarSign, Users, MapPin, Clock, Calendar, User, Phone, Star } from "lucide-react";
+import { ShoppingBag, ChevronDown, DollarSign, Users, MapPin, Clock, Calendar, User } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Card from "@/components/ui/Card";
+import SearchInput from "@/components/ui/SearchInput";
 
 export default function MarketplaceContent() {
   const [rides, setRides] = useState([
@@ -37,6 +38,7 @@ export default function MarketplaceContent() {
 
   const [fareUpdates, setFareUpdates] = useState({});
   const [expandedRides, setExpandedRides] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleFareUpdate = (rideId, newFare) => {
     setFareUpdates(prev => ({
@@ -87,6 +89,17 @@ export default function MarketplaceContent() {
     }));
   };
 
+  // Filter rides based on search query
+  const filteredRides = rides.filter((ride) => {
+    const matchesSearch =
+      ride.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ride.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ride.pickupAddress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ride.dropoffLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ride.reason.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
   // Sample available drivers data
   const availableDrivers = [
     {
@@ -119,19 +132,30 @@ export default function MarketplaceContent() {
   ];
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3">
-        
-          <h1 className="text-3xl font-bold">Marketplace</h1>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--primary-black)]">Marketplace</h1>
+          <p className="text-[var(--muted-text)] mt-1">Manage rejected rides and find available drivers</p>
         </div>
-      
+      </div>
+
+      {/* Search Section */}
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
+          <SearchInput
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search rides by ID, district, location, or reason"
+            width="w-full"
+          />
+        </div>
       </div>
 
       {/* Rides Grid - 2 cards per row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {rides.map((ride) => (
+        {filteredRides.map((ride) => (
           <Card key={ride.id} className="p-6">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3">
@@ -147,59 +171,69 @@ export default function MarketplaceContent() {
               </div>
             </div>
 
-            {/* Ride Details */}
-            <div className="space-y-4 mb-6">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-[var(--muted-text)]" />
-                <span className="text-[var(--heading)] font-medium">{ride.date}</span>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[var(--muted-text)] mt-0.5" />
-                  <div>
-                    <div className="text-[var(--heading)] font-medium">
-                      Pickup: {ride.pickupTime}
-                    </div>
-                    <div className="text-[var(--muted-text)] text-sm">
-                      {ride.pickupAddress}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[var(--muted-text)] mt-0.5" />
-                  <div>
-                    <div className="text-[var(--heading)] font-medium">
-                      Dropoff: {ride.dropoffTime}
-                    </div>
-                    <div className="text-[var(--muted-text)] text-sm">
-                      {ride.dropoffLocation}
-                    </div>
-                  </div>
-                </div>
-              </div>
+             {/* Ride Details */}
+             <div className="space-y-4 mb-6">
+               <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
+                   <Calendar className="w-6 h-6 text-[var(--blue-600)]" />
+                 </div>
+                 <span className="text-[var(--heading)] font-medium">{ride.date}</span>
+               </div>
+               
+               <div className="space-y-3">
+                 <div className="flex items-start gap-3">
+                   <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center mt-0.5">
+                     <Clock className="w-6 h-6 text-[var(--green-600)]" />
+                   </div>
+                   <div>
+                     <div className="text-[var(--heading)] font-medium">
+                       Pickup: {ride.pickupTime}
+                     </div>
+                     <div className="text-[var(--muted-text)] text-sm">
+                       {ride.pickupAddress}
+                     </div>
+                   </div>
+                 </div>
+                 
+                 <div className="flex items-start gap-3">
+                   <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center mt-0.5">
+                     <MapPin className="w-6 h-6 text-[var(--purple-600)]" />
+                   </div>
+                   <div>
+                     <div className="text-[var(--heading)] font-medium">
+                       Dropoff: {ride.dropoffTime}
+                     </div>
+                     <div className="text-[var(--muted-text)] text-sm">
+                       {ride.dropoffLocation}
+                     </div>
+                   </div>
+                 </div>
+               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-[var(--muted-text)]" />
-                  <span className="text-[var(--heading)] font-medium">
-                    {ride.students} students
-                  </span>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <DollarSign className="w-5 h-5 text-[var(--muted-text)]" />
-                  <span className="text-[var(--heading)] font-medium">
-                    Driver Fare: ${ride.driverFare}
-                  </span>
-                </div>
-                
-                <div className="text-sm text-[var(--muted-text)]">
-                  <span className="font-medium">Reason:</span> {ride.reason}
-                </div>
-              </div>
-            </div>
+               <div className="space-y-3">
+                 <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
+                     <Users className="w-6 h-6 text-[var(--amber-600)]" />
+                   </div>
+                   <span className="text-[var(--heading)] font-medium">
+                     {ride.students} students
+                   </span>
+                 </div>
+                 
+                 <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+                     <DollarSign className="w-6 h-6 text-[var(--green-600)]" />
+                   </div>
+                   <span className="text-[var(--heading)] font-medium">
+                     Driver Fare: ${ride.driverFare}
+                   </span>
+                 </div>
+                 
+                 <div className="text-sm text-[var(--muted-text)]">
+                   <span className="font-medium">Reason:</span> {ride.reason}
+                 </div>
+               </div>
+             </div>
 
             {/* Actions */}
             <div className="space-y-4 pt-4 border-t border-[var(--border)]">
@@ -261,15 +295,15 @@ export default function MarketplaceContent() {
                     <h3 className="text-lg font-semibold text-[var(--heading)]">Available Drivers</h3>
                   </div>
                   
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-[var(--primary-bg)] rounded-full flex items-center justify-center mx-auto mb-3">
-                      <User className="w-8 h-8 text-[var(--primary)]" />
-                    </div>
-                    <h4 className="text-lg font-medium text-[var(--heading)] mb-2">No Available Drivers</h4>
-                    <p className="text-[var(--muted-text)]">
-                      No available drivers found for this district.
-                    </p>
-                  </div>
+                   <div className="text-center py-8">
+                     <div className="w-20 h-20 bg-[var(--gray-100)] rounded-full flex items-center justify-center mx-auto mb-4">
+                       <User className="w-10 h-10 text-[var(--muted-text)]" />
+                     </div>
+                     <h4 className="text-lg font-medium text-[var(--heading)] mb-2">No Available Drivers</h4>
+                     <p className="text-[var(--muted-text)]">
+                       No available drivers found for this district.
+                     </p>
+                   </div>
                 </div>
               </div>
             </div>
@@ -277,20 +311,25 @@ export default function MarketplaceContent() {
         ))}
       </div>
 
-      {/* Empty State */}
-      {rides.length === 0 && (
-        <div className="text-center py-12">
-          <div className="p-4 bg-[var(--primary-bg)] rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-            <ShoppingBag className="w-8 h-8 text-[var(--primary)]" />
-          </div>
-          <h3 className="text-lg font-medium text-[var(--heading)] mb-2">
-            No rejected rides available
-          </h3>
-          <p className="text-[var(--muted-text)]">
-            All rides have been assigned or there are no rejected rides at the moment.
-          </p>
-        </div>
-      )}
+       {/* Empty State */}
+       {filteredRides.length === 0 && (
+         <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] p-12">
+           <div className="text-center">
+             <div className="w-20 h-20 bg-[var(--gray-100)] rounded-full flex items-center justify-center mx-auto mb-4">
+               <ShoppingBag className="w-10 h-10 text-[var(--muted-text)]" />
+             </div>
+             <h3 className="text-lg font-semibold text-[var(--heading)] mb-2">
+               {searchQuery ? 'No rides found' : 'No rejected rides available'}
+             </h3>
+             <p className="text-[var(--muted-text)]">
+               {searchQuery 
+                 ? 'Try adjusting your search criteria to find rides'
+                 : 'All rides have been assigned or there are no rejected rides at the moment.'
+               }
+             </p>
+           </div>
+         </div>
+       )}
     </div>
   );
 }
