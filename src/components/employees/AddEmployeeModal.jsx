@@ -50,36 +50,34 @@ export default function AddEmployeeModal({ open, onClose }) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-7xl "
+        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <Users className="h-5 w-5 text-blue-600" />
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Users className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">Add New Employee</h2>
-              <p className="text-[var(--gray-600)] text-sm">
-                Enter the employee details to create a new employee profile
-              </p>
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Add New Employee</h2>
+              <p className="text-[var(--muted-text)]">Create a new employee profile</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
           >
-            <X size={24} />
+            <X className="w-6 h-6 text-[var(--gray-500)]" />
           </button>
         </div>
 
         {/* Modal Content */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
           {/* Form Content */}
           <form onSubmit={handleSubmit} className="space-y-6">
               {/* First Name and Last Name - Two Columns */}
@@ -161,22 +159,25 @@ export default function AddEmployeeModal({ open, onClose }) {
                 icon={<Phone className="h-4 w-4 text-[var(--muted-text)]" />}
               />
 
-              {/* Footer Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-6 border-t border-[var(--border)]">
-                <Button
-                  variant="secondary"
-                  onClick={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                >
-                  Add Employee
-                </Button>
-              </div>
             </form>
+        </div>
+        
+        {/* Fixed Footer Buttons */}
+        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+          <div className="flex justify-end gap-3">
+            <Button 
+              variant="secondary" 
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
+              onClick={handleSubmit}
+            >
+              Add Employee
+            </Button>
+          </div>
         </div>
       </div>
     </div>

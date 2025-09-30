@@ -105,9 +105,8 @@ export default function EmployeesContent() {
           />
         </div>
         <Button
-          variant="primary"
+          className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
           icon={<Plus className="h-4 w-4" />}
-          className="whitespace-nowrap"
           onClick={() => setIsAddModalOpen(true)}
         >
           Add New Employee
@@ -135,9 +134,10 @@ export default function EmployeesContent() {
               filteredEmployees.map((employee) => (
                 <tr
                   key={employee.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                  onClick={() => handleViewEmployee(employee)}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                         {filteredEmployees.indexOf(employee) + 1}
@@ -145,28 +145,28 @@ export default function EmployeesContent() {
                       <span className="font-medium">{employee.id}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 font-medium">{employee.name}</td>
-                  <td className="px-6 py-4 text-[var(--muted-text)]">{employee.title}</td>
-                  <td className="px-6 py-4 text-[var(--muted-text)]">{employee.district}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{employee.name}</td>
+                  <td className="px-6 py-4 text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">{employee.title}</td>
+                  <td className="px-6 py-4 text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">{employee.district}</td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-2 text-[var(--muted-text)]">
                       <Building2 className="h-4 w-4" />
                       {employee.campus}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-2 text-[var(--muted-text)]">
                       <Mail className="h-4 w-4" />
                       {employee.email}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-2 text-[var(--muted-text)]">
                       <Phone className="h-4 w-4" />
                       {employee.phone}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
                       {employee.status}
                     </span>

@@ -51,14 +51,6 @@ export default function ServiceStep({
           className="w-full"
         />
       </div>
-      <div className="flex justify-end gap-3 w-full pt-4">
-        <Button variant="secondary" onClick={prevStep} className="w-32">
-          Previous
-        </Button>
-        <Button variant="primary" onClick={handleSubmit} className="w-32">
-          Submit
-        </Button>
-      </div>
     </div>
   );
 }

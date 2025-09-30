@@ -2,7 +2,6 @@
 
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import Button from "@/components/ui/Button";
 
 export default function InsuranceStep({
   formData,
@@ -84,14 +83,6 @@ export default function InsuranceStep({
           ]}
           className="w-full"
         />
-      </div>
-      <div className="flex justify-end gap-3 w-full pt-4">
-        <Button variant="secondary" onClick={prevStep} className="w-32">
-          Previous
-        </Button>
-        <Button variant="primary" onClick={nextStep} className="w-32">
-          Next
-        </Button>
       </div>
     </div>
   );

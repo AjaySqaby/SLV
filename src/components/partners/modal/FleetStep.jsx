@@ -1,7 +1,6 @@
 "use client"
 
 import Input from "@/components/ui/Input"
-import Button from "@/components/ui/Button"
 
 export default function FleetStep({ formData, handleChange, prevStep, nextStep }) {
   return (
@@ -48,14 +47,6 @@ export default function FleetStep({ formData, handleChange, prevStep, nextStep }
         />
       </div>
 
-      <div className="flex justify-end gap-3 w-full pt-4">
-        <Button variant="secondary" onClick={prevStep} className="w-32">
-          Previous
-        </Button>
-        <Button variant="primary" onClick={nextStep} className="w-32">
-          Next
-        </Button>
-      </div>
     </div>
   )
 } 

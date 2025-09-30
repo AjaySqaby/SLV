@@ -221,10 +221,7 @@ export default function PartnersContent() {
 
       <div className="bg-[var(--background)] rounded-lg shadow-sm border border-[var(--gray-100)]">
         <div className="p-4 border-b border-[var(--gray-100)]">
-          <h2 className="text-2xl font-semibold mb-2">Partner Management</h2>
-          <p className="text-sm text-[var(--gray-500)] mb-4">
-            View and manage all partner organizations
-          </p>
+         
           
           {/* Search and Filter Section - Full Width */}
           <div className="flex justify-between items-center gap-2">
