@@ -22,29 +22,31 @@ export default function DriverTabs({ tabs, activeTab, onTabChange }) {
   };
 
   return (
-    <nav className="flex justify-between px-6 pt-6">
+    <div className="flex mt-2 ml-8">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
-          className={`
-            px-6 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center gap-2 flex-1 justify-center
-            ${
-              activeTab === tab.id
-                ? "border-[var(--blue-500)] text-[var(--blue-600)] bg-[var(--blue-100)] rounded-t-lg"
-                : "border-transparent text-[var(--gray-500)] hover:text-[var(--gray-700)] hover:border-[var(--gray-300)] hover:bg-[var(--gray-50)]"
-            }
-          `}
+          className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+          style={{
+            backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+            color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+            borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+            marginRight: '4px',
+            fontSize: '14px'
+          }}
         >
-          {getTabIcon(tab.id)}
-          <span>{tab.label}</span>
-          {tab.count !== null && tab.count !== undefined && (
-            <span className="text-xs bg-[var(--gray-200)] text-[var(--gray-700)] px-2 py-0.5 rounded-full">
-              {tab.count}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {getTabIcon(tab.id)}
+            <span>{tab.label}</span>
+            {tab.count !== null && tab.count !== undefined && (
+              <span className="text-xs bg-[var(--gray-200)] text-[var(--gray-700)] px-2 py-0.5 rounded-full">
+                {tab.count}
+              </span>
+            )}
+          </div>
         </button>
       ))}
-    </nav>
+    </div>
   );
 }

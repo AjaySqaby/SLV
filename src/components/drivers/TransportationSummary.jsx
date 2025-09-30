@@ -3,7 +3,7 @@ import { RiRouteLine, RiTimeLine, RiFileTextLine, RiSettings3Line, RiFolderLine 
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 
-export default function TransportationSummary({ driverData }) {
+export default function TransportationSummary({ driverData, onManageDocuments }) {
   return (
     <div className="bg-gray-50 rounded-lg p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
@@ -45,12 +45,14 @@ export default function TransportationSummary({ driverData }) {
           <RiSettings3Line className="w-4 h-4" />
           Manage Vehicle Information
         </Button>
-        <Link href={`/drivers/${driverData.id}/documents`}>
-          <Button variant="secondary" className="w-full flex items-center justify-center gap-2">
-            <RiFolderLine className="w-4 h-4" />
-            Manage Documents
-          </Button>
-        </Link>
+        <Button 
+          variant="secondary" 
+          className="w-full flex items-center justify-center gap-2"
+          onClick={onManageDocuments}
+        >
+          <RiFolderLine className="w-4 h-4" />
+          Manage Documents
+        </Button>
       </div>
     </div>
   );

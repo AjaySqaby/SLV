@@ -34,28 +34,31 @@ export default function DriverActionsDropdown({
       icon: Eye,
       label: 'View',
       action: () => handleAction(() => onView(driver.id)),
-      className: 'text-gray-700 hover:bg-gray-50'
+      className: 'text-[var(--primary-black)] hover:bg-[var(--purple)] hover:text-white'
     },
     {
       icon: Edit,
       label: 'Edit',
       action: () => handleAction(() => onEdit(driver.id)),
-      className: 'text-gray-700 hover:bg-gray-50'
+      className: 'text-[var(--primary-black)] hover:bg-[var(--purple)] hover:text-white'
     }
   ];
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)] hover:text-white rounded-full transition-all duration-200"
         aria-label="More actions"
       >
         <MoreVertical className="w-5 h-5" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-[var(--background)] rounded-lg shadow-lg border border-[var(--card-border)] py-1 z-50">
           {menuItems.map((item, index) => {
             const IconComponent = item.icon;
             return (

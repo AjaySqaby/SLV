@@ -164,15 +164,19 @@ export default function DriversContent() {
 
         <div className="flex gap-3">
           <Link href="/onboarding">
-            <Button variant="secondary" icon={<FileText size={18} />}>
+            <Button 
+              variant="secondary" 
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
+            >
+              <FileText size={18} />
               Onboarding
             </Button>
           </Link>
           <Button
-            variant="primary"
-            icon={<Plus size={18} />}
             onClick={() => setShowAddDriverModal(true)}
+            className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
           >
+            <Plus size={18} />
             Add New Driver
           </Button>
         </div>
@@ -206,8 +210,8 @@ export default function DriversContent() {
           </thead>
           <tbody>
             {filteredDrivers.map((driver) => (
-              <tr key={driver.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200">
-                <td className="px-6 py-4">
+              <tr key={driver.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer" onClick={() => handleViewDriver(driver.id)}>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                       {filteredDrivers.indexOf(driver) + 1}
@@ -215,22 +219,22 @@ export default function DriversContent() {
                     <span className="font-medium">{driver.id}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-[var(--primary-black)] hover:bg-[var(--gray-100)] transition-all duration-200">
                   {driver.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div>
                     <div>{driver.phone}</div>
                     <div>{driver.email}</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-[var(--primary-black)] hover:bg-[var(--gray-100)] transition-all duration-200">
                   {driver.vehicle}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   {getStatusBadge(driverStatuses[driver.id] || "Unknown")}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                <td className="px-6 py-4 text-sm text-[var(--primary-black)] text-center hover:bg-[var(--gray-100)] transition-all duration-200">
                   {driver.totalRides}
                 </td>
                  <td className="px-6 py-4">
