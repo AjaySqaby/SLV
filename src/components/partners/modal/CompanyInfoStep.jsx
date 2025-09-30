@@ -71,14 +71,6 @@ export default function CompanyInfoStep({ formData, handleChange, onClose, nextS
           className="w-full"
         />
       </div>
-      <div className="flex justify-end gap-3 w-full pt-4">
-        <Button variant="secondary" type="button" onClick={onClose} className="w-32">
-          Cancel
-        </Button>
-        <Button variant="primary" type="button" onClick={nextStep} className="w-32">
-          Next
-        </Button>
-      </div>
     </div>
   );
 } 

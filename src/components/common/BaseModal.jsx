@@ -30,10 +30,10 @@ export default function BaseModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">{title}</h2>
+          <h2 className="text-lg font-semibold text-[var(--primary-black)]">{title}</h2>
           <button
             onClick={onClose}
-            className="text-[var(--gray-400)] hover:[var(--gray-700)] text-2xl font-bold px-2 rounded-full focus:outline-none"
+            className="text-[var(--gray-400)] hover:text-[var(--gray-600)] text-2xl font-bold px-2 rounded-full focus:outline-none transition-colors"
             aria-label="Close modal"
           >
             &times;

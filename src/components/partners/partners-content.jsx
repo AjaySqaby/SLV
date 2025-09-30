@@ -13,6 +13,7 @@ import { useState } from "react";
 import Tabs from "../ui/Tabs";
 import SearchInput from "../ui/SearchInput";
 import AddPartnerModal from "./AddPartnerModal";
+import PartnerViewModal from "./PartnerViewModal";
 import PartnerRowActions from "./PartnerRowActions";
 import { useRouter } from "next/navigation";
 import PartnerLoginModal from "./PartnerLoginModal";
@@ -22,6 +23,8 @@ export default function PartnersContent() {
   const [activeTab, setActiveTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddPartnerModalOpen, setIsAddPartnerModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [selectedPartnerId, setSelectedPartnerId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [partnerToDelete, setPartnerToDelete] = useState(null);
   const [partners, setPartners] = useState([
@@ -165,6 +168,11 @@ export default function PartnersContent() {
     }
   };
 
+  const handleRowClick = (partnerId) => {
+    setSelectedPartnerId(partnerId);
+    setViewModalOpen(true);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -175,10 +183,9 @@ export default function PartnersContent() {
         
         </div>
         <div className="flex gap-3">
-          
           <button
             onClick={() => setIsAddPartnerModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--blue-600)] text-white rounded-md"
+            className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
           >
             <Plus size={18} />
             Add Partner
@@ -188,10 +195,10 @@ export default function PartnersContent() {
 
       <div className="grid grid-cols-4 gap-6 mb-8">
         {partnerStats.map((stat, index) => (
-          <div
-            key={index}
-            className="bg-[var(--background)] p-6 rounded-lg shadow-sm border border-[var(--gray-100)]"
-          >
+            <div
+              key={index}
+              className="bg-[var(--background)] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-[var(--gray-100)]"
+            >
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[var(--gray-500)] text-sm mb-1">
@@ -212,7 +219,7 @@ export default function PartnersContent() {
         ))}
       </div>
 
-      <div className="bg-[var(--background)] rounded-lg border--[var(--red)] shadow-sm border border-[var(--gray-100)]">
+      <div className="bg-[var(--background)] rounded-lg shadow-sm border border-[var(--gray-100)]">
         <div className="p-4 border-b border-[var(--gray-100)]">
           <h2 className="text-2xl font-semibold mb-2">Partner Management</h2>
           <p className="text-sm text-[var(--gray-500)] mb-4">
@@ -250,9 +257,10 @@ export default function PartnersContent() {
               {filteredPartners.map((partner) => (
                 <tr
                   key={partner.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                  onClick={() => handleRowClick(partner.id)}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                         {filteredPartners.indexOf(partner) + 1}
@@ -260,7 +268,7 @@ export default function PartnersContent() {
                       <span className="font-medium">{partner.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div>
                       <div className="font-medium">{partner.contact.name}</div>
                       <div className="text-sm text-[var(--gray-500)]">
@@ -268,23 +276,26 @@ export default function PartnersContent() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <span>{partner.location}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <span className="text-[var(--gray-500)]">-</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <span className="text-[var(--gray-500)]">-</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <span className="text-[var(--gray-500)]">-</span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex justify-center">
                       <button
-                        onClick={() => openDeleteModal(partner)}
-                        className="text-[var(--gray-400)] hover:text-red-500 p-2 hover:bg-red-50 rounded-full transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDeleteModal(partner);
+                        }}
+                        className="text-[var(--gray-400)] hover:text-[var(--red-600)] p-2 hover:bg-[var(--red-100)] rounded-full transition-all duration-200"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -300,6 +311,14 @@ export default function PartnersContent() {
       <AddPartnerModal
         isOpen={isAddPartnerModalOpen}
         onClose={() => setIsAddPartnerModalOpen(false)}
+      />
+      <PartnerViewModal
+        isOpen={viewModalOpen}
+        onClose={() => {
+          setViewModalOpen(false);
+          setSelectedPartnerId(null);
+        }}
+        partnerId={selectedPartnerId}
       />
       <PartnerLoginModal
         isOpen={loginModalOpen}
