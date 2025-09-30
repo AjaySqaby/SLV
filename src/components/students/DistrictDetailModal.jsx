@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "@/components/common/Modal";
+// Remove Modal import - we'll create custom modal
 import Tabs from "@/components/ui/Tabs";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Button from "@/components/ui/Button";
@@ -20,6 +20,7 @@ import {
   User,
   Calendar,
   Globe,
+  X,
 } from "lucide-react";
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
@@ -368,30 +369,50 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
     }
   };
 
+  if (!open) return null;
+
   return (
-    <Modal open={open} onClose={onClose} widthClass="max-w-6xl w-full">
-      <div className="space-y-6">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+      <div className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <ArrowLeft 
-            className="w-5 h-5 text-[var(--gray-500)] cursor-pointer hover:text-[var(--gray-700)] transition-colors" 
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Building2 className="w-6 h-6 text-[var(--primary)]" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">{mockDistrictData.name}</h2>
+              <p className="text-[var(--muted-text)]">District Details</p>
+            </div>
+          </div>
+          <button
             onClick={onClose}
-          />
-          <Building2 className="w-5 h-5 text-[var(--blue-600)]" />
-          <h2 className="text-xl font-bold text-[var(--heading)]">
-            {mockDistrictData.name}
-          </h2>
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+          >
+            <X className="w-6 h-6 text-[var(--gray-500)]" />
+          </button>
         </div>
 
-        {/* District Details Card */}
-        <div className="bg-[var(--surface-bg)] rounded-lg border border-[var(--border)] p-6">
-          <h3 className="text-lg font-semibold text-[var(--heading)] mb-4">
-            District Details
-          </h3>
+        {/* Content */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+          <div className="space-y-6">
+
+            {/* District Details Card */}
+            <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+                  <Building2 className="w-8 h-8 text-[var(--green-600)]" />
+                </div>
+                <h3 className="text-lg font-semibold text-[var(--primary-black)]">
+                  District Details
+                </h3>
+              </div>
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <Hash className="w-4 h-4 text-[var(--gray-500)]" />
+                <div className="w-8 h-8 bg-[var(--gray-100)] rounded-full flex items-center justify-center">
+                  <Hash className="w-4 h-4 text-[var(--gray-600)]" />
+                </div>
                 <div>
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">ID</span>
                   <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.id}</p>
@@ -400,7 +421,9 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
             </div>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <Globe className="w-4 h-4 text-[var(--gray-500)]" />
+                <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
+                  <Globe className="w-4 h-4 text-[var(--blue-600)]" />
+                </div>
                 <div>
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Region</span>
                   <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.region}</p>
@@ -409,15 +432,17 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
             </div>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-[var(--gray-500)]" />
+                <div className="w-8 h-8 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-[var(--amber-600)]" />
+                </div>
                 <div>
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">City</span>
                   <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.city}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-4 h-4 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-[var(--green-600)] rounded-full"></div>
+                <div className="w-8 h-8 bg-[var(--green-100)] rounded-full flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[var(--green-600)] rounded-full"></div>
                 </div>
                 <div className="flex gap-2 items-center">
                   <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
@@ -430,16 +455,38 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="border-b border-[var(--border)]">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-        </div>
+            {/* Tabs */}
+            <div className="bg-white rounded-lg border border-[var(--gray-200)] shadow-sm">
+              <div className="flex mt-2 ml-8">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+                    style={{
+                      backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                      color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                      borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                      marginRight: '4px',
+                      fontSize: '14px'
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <tab.icon className="w-6 h-6" />
+                      <span>{tab.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
 
-        {/* Tab Content */}
-        <div className="pt-4">
-          {renderTabContent()}
+              {/* Tab Content */}
+              <div className="p-6">
+                {renderTabContent()}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </Modal>
+    </div>
   );
 }

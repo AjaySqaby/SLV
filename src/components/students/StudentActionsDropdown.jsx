@@ -32,26 +32,35 @@ export default function StudentActionsDropdown({ student, onView, onEdit }) {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)] rounded-full transition-colors"
         aria-label="More actions"
       >
-        <MoreVertical size={16} className="text-gray-600" />
+        <MoreVertical size={16} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px]">
+        <div className="absolute right-0 top-10 bg-[var(--background)] border border-[var(--card-border)] rounded-lg shadow-lg z-50 min-w-[120px]">
           <div className="py-1">
             <button
-              onClick={handleView}
-              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleView();
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-[var(--foreground)] hover:bg-[var(--purple)] flex items-center gap-2 transition-colors"
             >
               <Eye size={14} />
               View
             </button>
             <button
-              onClick={handleEdit}
-              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit();
+              }}
+              className="w-full px-4 py-2 text-left text-sm text-[var(--foreground)] hover:bg-[var(--purple)] flex items-center gap-2 transition-colors"
             >
               <Edit size={14} />
               Edit

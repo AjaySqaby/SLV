@@ -140,7 +140,7 @@ export default function StudentsContent() {
           variant="primary"
           icon={<Plus size={18} />}
           onClick={() => setAddModalOpen(true)}
-          className="whitespace-nowrap"
+          className="whitespace-nowrap bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] hover:from-[var(--primary-dark)] hover:to-[var(--primary)] text-white shadow-lg hover:shadow-xl transition-all duration-300"
         >
           Add New Student
         </Button>
@@ -163,9 +163,10 @@ export default function StudentsContent() {
             {filteredStudents.map((student) => (
               <tr
                 key={student.id}
-                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
+                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                onClick={() => handleViewStudent(student)}
               >
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
                       {filteredStudents.indexOf(student) + 1}
@@ -173,32 +174,38 @@ export default function StudentsContent() {
                     <span className="font-medium">{student.id}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-medium">{student.name}</td>
-                <td className="px-6 py-4">{student.grade}</td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{student.name}</td>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{student.grade}</td>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <span 
                     className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
-                    onClick={() => handleCampusClick(student.campus, student.district, student.address)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCampusClick(student.campus, student.district, student.address);
+                    }}
                   >
                     {student.campus}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <span 
                     className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
-                    onClick={() => handleDistrictClick(student.district)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDistrictClick(student.district);
+                    }}
                   >
                     {student.district}
                   </span>
                 </td>
-                <td className="px-6 py-4">{student.address}</td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{student.address}</td>
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <StatusBadge
                     status={student.status}
                     type={student.status === "Active" ? "active" : "inactive"}
                   />
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                   <div className="flex justify-center">
                     <StudentActionsDropdown
                       student={student}
@@ -229,29 +236,37 @@ export default function StudentsContent() {
       {/* View Modal - using existing StudentProfilePage */}
       {isViewModalOpen && selectedStudent && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => {
             setIsViewModalOpen(false);
             setSelectedStudent(null);
           }}
         >
           <div 
-            className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Student Details</h2>
+            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+                  <GraduationCap className="w-6 h-6 text-[var(--primary)]" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Student Details</h2>
+                  <p className="text-[var(--muted-text)]">{selectedStudent.name} - {selectedStudent.id}</p>
+                </div>
+              </div>
               <button
                 onClick={() => {
                   setIsViewModalOpen(false);
                   setSelectedStudent(null);
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
               >
-                <X size={24} />
+                <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
               <StudentProfilePage studentId={selectedStudent.id} />
             </div>
           </div>
@@ -261,24 +276,49 @@ export default function StudentsContent() {
       {/* Edit Modal - using existing StudentDetailsPage */}
       {isEditModalOpen && selectedStudent && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={handleEditModalClose}
         >
           <div 
-            className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Edit Student</h2>
+            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+                  <Edit className="w-6 h-6 text-[var(--primary)]" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Edit Student</h2>
+                  <p className="text-[var(--muted-text)]">{selectedStudent.name} - {selectedStudent.id}</p>
+                </div>
+              </div>
               <button
                 onClick={handleEditModalClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
               >
-                <X size={24} />
+                <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="p-0">
+            <div className="overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
               <StudentDetailsPage params={{ id: selectedStudent.id }} forceViewModal={false} isModal={true} />
+            </div>
+            
+            {/* Fixed Footer Buttons */}
+            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+              <div className="flex justify-end gap-3">
+                <Button 
+                  variant="secondary" 
+                  onClick={handleEditModalClose}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
+                >
+                  Save Changes
+                </Button>
+              </div>
             </div>
           </div>
         </div>

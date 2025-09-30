@@ -16,15 +16,11 @@ export default function StudentEditForm({ form, handleChange, handleSubmit, grad
           </>
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-[var(--background)] rounded-lg p-6 mb-4">
-            <StudentFormFields 
-              form={form}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex justify-end">
-            <Button variant="primary" type="submit">Update Student</Button>
-          </div>
+          <StudentFormFields 
+            form={form}
+            onChange={handleChange}
+          />
+        
         </form>
       </div>
     </div>
