@@ -11,11 +11,13 @@ import SearchInput from '@/components/ui/SearchInput'
 import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
 import { useRouter } from 'next/navigation'
+import RouteViewModal from '@/components/routes/RouteViewModal'
 
 export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
+  const [showRouteModal, setShowRouteModal] = useState(false)
   // Function to highlight local time
   const formatTimeWithHighlight = (time, timezone = 'PDT') => {
     if (!time || time === '--') return time
@@ -562,7 +564,13 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
           </Card>
 
           {/* Vehicle */}
-          <Card className="p-4">
+          <Card className="p-4 cursor-pointer"
+            onClick={() => {
+              if (onViewDriver) {
+                onViewDriver('D-001')
+              }
+            }}
+          >
             <div className="flex items-center mb-3">
               <Car className="w-5 h-5 text-[var(--blue-600)] mr-2" />
               <h2 className="text-lg font-semibold text-gray-900">Vehicle</h2>
@@ -589,7 +597,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               </div>
               <Button
                 variant="secondary"
-                onClick={() => router.push(`/routes/${rideData.route.id}`)}
+                onClick={() => setShowRouteModal(true)}
                 className="text-xs px-3 py-1"
                 style={{ 
                   backgroundColor: 'var(--blue-100)', 
@@ -2286,6 +2294,13 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
       )}
 
       {/* Driver modal is managed by parent; nothing to render here */}
+
+      {/* Route View Modal */}
+      <RouteViewModal
+        isOpen={showRouteModal}
+        onClose={() => setShowRouteModal(false)}
+        routeId={rideData?.route?.id}
+      />
     </div>
   )
 }
