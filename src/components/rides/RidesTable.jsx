@@ -8,6 +8,7 @@ import { Edit, CheckCircle, XCircle } from "lucide-react";
 import CompleteRideModal from "./CompleteRideModal";
 import CancelRideModal from "./CancelRideModal";
 import RideDetailContent from "./RideDetailContent";
+import DriverDetailModal from "@/components/drivers/DriverDetailModal";
 
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
@@ -24,6 +25,8 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
   const [selectedRide, setSelectedRide] = useState(null);
   const [showRideDetailModal, setShowRideDetailModal] = useState(false);
   const [selectedRideId, setSelectedRideId] = useState(null);
+  const [showDriverModal, setShowDriverModal] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState(null);
   const actionMenuRef = useRef();
 
   useEffect(() => {
@@ -350,20 +353,39 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
       {/* Ride Detail Modal */}
       {showRideDetailModal && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          className="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-center z-[9000] pt-6"
           onClick={() => setShowRideDetailModal(false)}
         >
           <div 
-            className="bg-white rounded-2xl  !max-w-[82rem] mx-4 h-full overflow-auto"
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <RideDetailContent 
               rideId={selectedRideId} 
               onClose={() => setShowRideDetailModal(false)}
+              onViewDriver={(driverId) => {
+                // close ride modal and open driver modal
+                setShowRideDetailModal(false);
+                setSelectedDriverId(driverId);
+                setTimeout(() => setShowDriverModal(true), 0);
+              }}
             />
           </div>
         </div>
       )}
+
+      {/* Driver Profile Modal - opens alone, with back to Ride Details */}
+      <DriverDetailModal
+        isOpen={showDriverModal}
+        onClose={() => {
+          setShowDriverModal(false);
+          // reopen ride detail after close
+          if (selectedRideId) {
+            setTimeout(() => setShowRideDetailModal(true), 0);
+          }
+        }}
+        driverId={selectedDriverId}
+      />
     </div>
   );
 }

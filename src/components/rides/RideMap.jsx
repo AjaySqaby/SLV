@@ -67,7 +67,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} !h-[92vh]`}>
       {/* Map/Satellite toggle */}
       <div className="absolute z-[1000] top-2 left-2 bg-white rounded-md shadow border border-gray-300 overflow-hidden flex">
         <button

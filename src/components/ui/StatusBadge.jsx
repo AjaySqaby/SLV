@@ -68,10 +68,10 @@ export default function StatusBadge({ status, fontSize = "text-xs" }) {
   
   return (
     <span 
-      className={`inline-flex items-center px-3 py-1 rounded-full ${fontSize} font-semibold`}
+      className={`inline-flex items-center px-3 w-max py-1 rounded-full ${fontSize} font-semibold`}
       style={{ 
         minHeight: '24px', 
-        minWidth: '60px',
+        minWidth: '87px',
         ...statusStyles
       }}
     >

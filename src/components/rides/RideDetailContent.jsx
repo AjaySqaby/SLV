@@ -12,7 +12,7 @@ import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
 import { useRouter } from 'next/navigation'
 
-export default function RideDetailContent({ rideId, onClose }) {
+export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -289,7 +289,7 @@ export default function RideDetailContent({ rideId, onClose }) {
 
   const rideData = rideDataState || getRideData(rideId)
 
-  // Mock data for available drivers
+
   const availableDrivers = [
     {
       id: 1,
@@ -533,7 +533,13 @@ export default function RideDetailContent({ rideId, onClose }) {
         {/* Left Sidebar - Clean Detail Stack */}
         <div className="col-span-3 min-w-0 space-y-4">
           {/* Driver */}
-          <Card className="p-4">
+          <Card className="p-4 cursor-pointer"
+            onClick={() => {
+              if (onViewDriver) {
+                onViewDriver('D-001')
+              }
+            }}
+          >
             <div className="flex items-center mb-3">
               <Users className="w-5 h-5 text-[var(--blue-600)] mr-2" />
               <h2 className="text-lg font-semibold text-gray-900">Driver</h2>
@@ -2278,6 +2284,8 @@ export default function RideDetailContent({ rideId, onClose }) {
           </div>
         </div>
       )}
+
+      {/* Driver modal is managed by parent; nothing to render here */}
     </div>
   )
 }
