@@ -1,12 +1,14 @@
 "use client";
 
 import { Search, Plus, Filter, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import RidesTabs from "./RidesTabs";
 import RidesTable from "./RidesTable";
 import FilterDropdown from "./FilterDropdown";
+import SearchableSelect from "@/components/ui/SearchableSelect";
+import { State, City } from "country-state-city";
 import DateRangePicker from "./DateRangePicker";
 import AddRideModal from "./AddRideModal";
 import Input from "@/components/ui/Input";
@@ -26,6 +28,16 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
+  const usStates = useMemo(() => State.getStatesOfCountry("US") || [], []);
+  const stateNames = useMemo(() => usStates.map((s) => s.name), [usStates]);
+  const cityNames = useMemo(() => {
+    if (!selectedState) return [];
+    const st = usStates.find((s) => s.name === selectedState);
+    if (!st) return [];
+    const list = City.getCitiesOfState("US", st.isoCode) || [];
+    return list.map((c) => c.name);
+  }, [selectedState, usStates]);
+
   const clearFilters = () => {
     setSearch("");
     setMainSearch("");
@@ -43,8 +55,8 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   };
 
 
-  const handleStateChange = (state) => {
-    setSelectedState(state);
+  const handleStateChange = (stateIso) => {
+    setSelectedState(stateIso);
     setSelectedCity(""); // Reset city when state changes
   };
 
@@ -75,24 +87,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [showFilters, setShowFilters] = useState(false);
   const [showAddRide, setShowAddRide] = useState(false);
 
-  // State and City options for driver filtering
-  const states = ["California", "Georgia", "Illinois", "Massachusetts", "Florida", "Texas", "Arizona", "Washington", "Oregon", "Colorado", "Tennessee", "Nevada", "Utah"];
-  const cities = {
-    "California": ["Oakland", "San Francisco", "Los Angeles"],
-    "Georgia": ["Atlanta"],
-    "Illinois": ["Chicago"],
-    "Massachusetts": ["Boston"],
-    "Florida": ["Miami"],
-    "Texas": ["Houston", "Austin"],
-    "Arizona": ["Phoenix"],
-    "Washington": ["Seattle"],
-    "Oregon": ["Portland"],
-    "Colorado": ["Denver"],
-    "Tennessee": ["Nashville"],
-    "Nevada": ["Las Vegas"],
-    "Utah": ["Salt Lake City"]
-  };
-
+  // Dynamic State and City options (USA) using country-state-city
   const rides = [
     {
       id: "1001",
@@ -214,7 +209,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       },
       dropoff: {
         scheduled: "09:35 AM",
-        arrived: "09:35 AM",
+        arrived: "10:15 AM",
         location: "145 Ralph McGill Blvd NE, Atlanta, GA 30308",
       },
       driver: {
@@ -1238,39 +1233,23 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           {filterType === "Driver" && (
             <div className="flex flex-col md:flex-row gap-4 items-end">
               <div className="w-full md:w-1/4">
-                <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-                  State
-                </label>
-                <select
+                <SearchableSelect
+                  label="State"
+                  options={stateNames}
                   value={selectedState}
-                  onChange={(e) => handleStateChange(e.target.value)}
-                  className="w-full bg-white border border-[var(--gray-300)] rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                >
-                  <option value="">All States</option>
-                  {states.map((state) => (
-                    <option key={state} value={state}>
-                      {state}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(v) => handleStateChange(v)}
+                  placeholder="All States"
+                />
               </div>
               <div className="w-full md:w-1/4">
-                <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-                  City
-                </label>
-                <select
+                <SearchableSelect
+                  label="City"
+                  options={cityNames}
                   value={selectedCity}
-                  onChange={(e) => handleCityChange(e.target.value)}
-                  className="w-full bg-white border border-[var(--gray-300)] rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  onChange={(v) => handleCityChange(v)}
+                  placeholder="All Cities"
                   disabled={!selectedState}
-                >
-                  <option value="">All Cities</option>
-                  {selectedState && cities[selectedState] && cities[selectedState].map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
               <div className="w-full md:w-1/2">
                 {/* Empty space to maintain alignment */}

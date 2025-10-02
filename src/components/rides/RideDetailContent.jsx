@@ -21,17 +21,17 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
   // Function to highlight local time
   const formatTimeWithHighlight = (time, timezone = 'PDT') => {
     if (!time || time === '--') return time
-    
+
     // Get user's local timezone abbreviation
     const now = new Date()
-    const userTimezoneAbbr = now.toLocaleTimeString('en-US', { 
-      timeZoneName: 'short' 
+    const userTimezoneAbbr = now.toLocaleTimeString('en-US', {
+      timeZoneName: 'short'
     }).split(' ')[1]
-    
+
     // For demo purposes, let's highlight EST as local time (you can change this)
     // In real app, you would compare with actual user timezone
     const isLocalTime = timezone === 'EST' || timezone === 'EDT'
-    
+
     if (isLocalTime) {
       return (
         <span>
@@ -44,7 +44,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         </span>
       )
     }
-    
+
     return (
       <span>
         {time} <span className="text-gray-500">{timezone}</span>
@@ -250,7 +250,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
       // Default ride data - make it dynamic based on common statuses
       const statuses = ["In Progress", "Upcoming", "Assigned", "Accepted"];
       const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-      
+
       return {
         id: id,
         status: randomStatus,
@@ -291,6 +291,39 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
   const rideData = rideDataState || getRideData(rideId)
 
+
+  // Calculate how many minutes late based on dropoff actual vs scheduled where applicable
+  const computeLateMinutes = () => {
+    const status = String(rideData?.status || '').toLowerCase()
+    if (!(status === 'late' || status === 'delayed')) return undefined
+    const scheduled = rideData?.dropoff?.scheduledTime
+    const actual = rideData?.dropoff?.actualTime
+    // If mock data has 'Running late', fall back to a sample number
+    if (!scheduled || !actual || /running late/i.test(String(actual))) {
+      return 40
+    }
+    try {
+      const parse = (t) => {
+        const m = String(t).match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i)
+        if (!m) return null
+        let h = parseInt(m[1], 10)
+        const min = parseInt(m[2], 10)
+        const ampm = m[3].toUpperCase()
+        if (ampm === 'PM' && h !== 12) h += 12
+        if (ampm === 'AM' && h === 12) h = 0
+        return h * 60 + min
+      }
+      const sMin = parse(scheduled)
+      const aMin = parse(actual)
+      if (sMin == null || aMin == null) return 40
+      const diff = aMin - sMin
+      return diff > 0 ? diff : undefined
+    } catch (_) {
+      return 40
+    }
+  }
+
+  const lateMinutes = computeLateMinutes()
 
   const availableDrivers = [
     {
@@ -401,9 +434,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             <Route className="w-5 h-5 text-[var(--blue-600)]" />
             <Clock className="w-5 h-5 text-[var(--blue-600)]" />
             <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-            {rideData.status !== 'Assigned' && (
-              <StatusBadge status={rideData.status} fontSize="text-lg" />
-            )}
+            <StatusBadge status={rideData.status} fontSize="text-lg" lateMinutes={lateMinutes} />
             <span className="text-sm font-medium text-gray-700">
               ETA: {formatTimeWithHighlight(rideData.eta, 'EST')}
             </span>
@@ -422,11 +453,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         <div className="flex items-center justify-center">
           <div className="flex items-center space-x-2">
             {/* Tabs */}
-            <button 
+            <button
               onClick={() => setActiveTab('stops')}
               className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{ 
-                backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)', 
+              style={{
+                backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)',
                 color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
                 border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
                 borderRadius: '12px'
@@ -437,11 +468,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               </div>
               TRIP STOPS
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('students')}
               className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-              style={{ 
-                backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)', 
+              style={{
+                backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)',
                 color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
                 border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
                 borderRadius: '12px'
@@ -449,11 +480,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             >
               STUDENTS
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('ridelog')}
               className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-              style={{ 
-                backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)', 
+              style={{
+                backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)',
                 color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
                 border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
                 borderRadius: '12px'
@@ -463,20 +494,20 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </button>
 
             {/* Action Buttons */}
-          <Button
-            variant="primary"
-            onClick={handleForceStart}
+            <Button
+              variant="primary"
+              onClick={handleForceStart}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--green-600)' }}
-          >
+            >
               <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
                 <Play className="w-2.5 h-2.5" />
               </div>
-            <span>Force Start</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleForceComplete}
+              <span>Force Start</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleForceComplete}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--secondary)' }}
             >
@@ -484,26 +515,26 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 <Check className="w-2.5 h-2.5" />
               </div>
               <span>Mark Complete</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleForceNoShow}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleForceNoShow}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
               style={{ backgroundColor: 'var(--red-600)' }}
-          >
+            >
               <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
                 <UserX className="w-2.5 h-2.5" />
               </div>
-            <span>Force No Show</span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleDuplicateRide}
-            className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-          >
-            <Copy className="w-4 h-4" />
-            <span>Duplicate</span>
-          </Button>
+              <span>Force No Show</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleDuplicateRide}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
+            >
+              <Copy className="w-4 h-4" />
+              <span>Duplicate</span>
+            </Button>
             <Button
               variant="secondary"
               onClick={handleManageTrip}
@@ -557,9 +588,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                 </div>
               </div>
-              {rideData.status !== 'Assigned' && (
-                <StatusBadge status={rideData.status} />
-              )}
+              <StatusBadge status={rideData.status} lateMinutes={lateMinutes} />
             </div>
           </Card>
 
@@ -599,8 +628,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 variant="secondary"
                 onClick={() => setShowRouteModal(true)}
                 className="text-xs px-3 py-1"
-                style={{ 
-                  backgroundColor: 'var(--blue-100)', 
+                style={{
+                  backgroundColor: 'var(--blue-100)',
                   color: 'var(--blue-600)',
                   border: '1px solid var(--blue-200)'
                 }}
@@ -674,502 +703,502 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         {/* Middle Column - Content */}
         <div className="col-span-4 min-w-0">
           <div className="space-y-4">
-        {/* Content Cards */}
-        <div>
-          {activeTab === 'stops' && (
-            <div className="space-y-6">
-              {/* Trip Route Summary Card */}
-              <div className="rounded-xl p-6" style={{ backgroundColor: 'var(--light-blue-bg)', border: '1px solid var(--blue-100)' }}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-500)' }}>
-                      <span className="text-white font-bold text-lg">TR</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold" style={{ color: 'var(--heading)' }}>Trip Route</h3>
-                      <p className="text-sm" style={{ color: 'var(--muted-text)' }}>2 stops • 1 student • 6.2 miles total</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Est. Duration</p>
-                    <p className="text-xl font-bold" style={{ color: 'var(--heading)' }}>25 min</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stops with vertical line */}
-              <div className="relative">
-                {/* Vertical line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
-                
-                <div className="space-y-8">
-                  {/* Stop 1 - Pickup */}
-                  <div className="relative">
-                    <div className="flex items-start gap-4">
-                      {/* Stop number circle */}
-                      <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--green-600)' }}>
-                        <span className="text-white font-bold text-lg">1</span>
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>1425 Oak Street Apt 204, Springfield, MA 01103</h4>
-                          <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
-                            <Eye className="w-4 h-4" />
-                            View Details
-                          </button>
-                        </div>
-                        
-                        <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
-                              <span className="text-white text-xs">🏠</span>
-                            </div>
-                            <span>Residential • Door-to-door pickup</span>
-                          </div>
-                          <div className="ml-6">
-                            <span>Scheduled 7:15 AM EST Pick up 1 student</span>
-                          </div>
-                        </div>
-                        
-                        {/* Student info */}
-                        <div className="mt-4 flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
-                            <User className="w-3 h-3 text-white" />
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <button 
-                              className="font-semibold hover:underline cursor-pointer"
-                              style={{ color: 'var(--blue-600)' }}
-                              onClick={() => router.push('/students/STU001234')}
-                            >
-                              Marcus Johnson
-                            </button>
-                            <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
-                            <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Stop 2 - Drop off */}
-                  <div className="relative">
-                    <div className="flex items-start gap-4">
-                      {/* Stop number circle */}
-                      <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--orange)' }}>
-                        <span className="text-white font-bold text-lg">2</span>
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>48:50 Riverside Drive, Boston, MA</h4>
-                          <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
-                            <Eye className="w-4 h-4" />
-                            View Details
-                          </button>
-                        </div>
-                        
-                        <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
-                              <span className="text-white text-xs">🏫</span>
-                            </div>
-                            <span>School Campus • Main entrance</span>
-                          </div>
-                          <div className="ml-6">
-                            <span>Scheduled 7:45 AM EST Drop off 1 student</span>
-                          </div>
-                        </div>
-                        
-                        {/* School info */}
-                        <div className="mt-4 flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
-                            <span className="text-white text-xs">🏫</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="font-semibold" style={{ color: 'var(--heading)' }}>Lincoln Academy High School</span>
-                            <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'students' && (
-            <div className="space-y-6">
-              {/* Search and Filter Section */}
-              <div className="space-y-4">
-                {/* Search Bar */}
-                <SearchInput
-                  placeholder="Search students"
-                  width="w-full"
-                  className="text-sm"
-                />
-
-                {/* Student Filter Dropdown */}
-                <Select
-                  options={[
-                    { value: 'all', label: 'All Students' },
-                    { value: 'pickup', label: 'Pickup Only' },
-                    { value: 'dropoff', label: 'Drop-off Only' }
-                  ]}
-                  value="all"
-                  onChange={(e) => console.log('Filter changed:', e.target.value)}
-                  placeholder="Select filter"
-                  className="text-sm"
-                  width="w-full"
-                />
-              </div>
-
-              {/* Student Detail Card */}
-              <div className="bg-white rounded-lg shadow-sm border overflow-hidden" style={{ borderColor: 'var(--gray-200)' }}>
-                {/* Student Header */}
-                <div className="p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <button 
-                        className="text-xl font-bold hover:underline cursor-pointer"
-                        style={{ color: 'var(--blue-600)' }}
-                        onClick={() => router.push('/students/STU001234')}
-                      >
-                        Marcus Johnson
-                      </button>
-                      <p className="text-sm mt-1" style={{ color: 'var(--muted-text)' }}>Grade 10</p>
-                    </div>
-                    <span 
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{ 
-                        backgroundColor: 'var(--gray-100)', 
-                        color: 'var(--muted-text)' 
-                      }}
-                    >
-                      Scheduled
-                    </span>
-                  </div>
-                </div>
-
-                {/* Pickup Section */}
-                <div className="relative">
-                  <div 
-                    className="p-6 rounded-t-lg"
-                    style={{ backgroundColor: 'var(--green-100)' }}
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Pickup Circle */}
-                      <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                        style={{ backgroundColor: 'var(--green-600)' }}
-                      >
-                        1
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Pickup</h4>
-                          <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                          <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:15 AM EST</span>
-                        </div>
-                        <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          1425 Oak Street Apt 204, Springfield, MA 01103
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Vertical Line */}
-                  <div 
-                    className="absolute left-6 top-16 w-0.5 h-16"
-                    style={{ backgroundColor: 'var(--green-600)' }}
-                  ></div>
-                </div>
-
-                {/* Dropoff Section */}
-                <div className="relative">
-                  <div 
-                    className="p-6"
-                    style={{ backgroundColor: 'var(--amber-100)' }}
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Dropoff Circle */}
-                      <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                        style={{ backgroundColor: 'var(--orange)' }}
-                      >
-                        2
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Dropoff</h4>
-                          <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                          <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:45 AM EST</span>
-                        </div>
-                        <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          Lincoln Academy High School
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Vertical Line */}
-                  <div 
-                    className="absolute left-6 top-16 w-0.5 h-16"
-                    style={{ backgroundColor: 'var(--orange)' }}
-                  ></div>
-                </div>
-
-                {/* Notes Section */}
-                <div className="relative">
-                  <div 
-                    className="p-6 rounded-b-lg"
-                    style={{ backgroundColor: 'var(--blue-100)' }}
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Notes Icon */}
-                      <div 
-                        className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: 'var(--blue-600)' }}
-                      >
-                        <FileText className="w-4 h-4 text-white" />
-                      </div>
-                      
-                      <div className="flex-1">
-                        <h4 className="font-semibold mb-2" style={{ color: 'var(--heading)' }}>Notes</h4>
-                        <p className="text-sm" style={{ color: 'var(--blue-600)' }}>
-                          Guardian requested pickup at main building entrance. Student requires wheelchair accessibility.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'ridelog' && (
-            <div className="space-y-6">
-              {/* Timeline Header */}
-              <div className="text-center">
-                <h3 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Timeline</h3>
-                <p className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>Ride activity and status updates</p>
-              </div>
-
-              {/* Timeline Events */}
-              <div className="relative">
-                {/* Vertical Line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--gray-200)' }}></div>
-                
+            {/* Content Cards */}
+            <div>
+              {activeTab === 'stops' && (
                 <div className="space-y-6">
-                  {/* Event 1 - Accepted */}
-                  <div className="relative flex items-start gap-4">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
-                      style={{ backgroundColor: 'var(--green-600)' }}
-                    >
-                      <Check className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
-                        <span 
-                          className="px-3 py-1 text-sm rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: 'var(--green-100)', 
-                            color: 'var(--green-600)' 
-                          }}
-                        >
-                          Accepted
-                        </span>
+                  {/* Trip Route Summary Card */}
+                  <div className="rounded-xl p-6" style={{ backgroundColor: 'var(--light-blue-bg)', border: '1px solid var(--blue-100)' }}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-500)' }}>
+                          <span className="text-white font-bold text-lg">TR</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold" style={{ color: 'var(--heading)' }}>Trip Route</h3>
+                          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>2 stops • 1 student • 6.2 miles total</p>
+                        </div>
                       </div>
-                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        <p>Mon Sep 15, 2025 at 4:30 PM EST (2:30 PM MST)</p>
-                        <p className="mt-1">Sarah Mitchell – driver</p>
+                      <div className="text-right">
+                        <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Est. Duration</p>
+                        <p className="text-xl font-bold" style={{ color: 'var(--heading)' }}>25 min</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Event 2 - Assigned */}
-                  <div className="relative flex items-start gap-4">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
-                      style={{ backgroundColor: 'var(--blue-600)' }}
-                    >
-                      <User className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
-                        <span 
-                          className="px-3 py-1 text-sm rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: 'var(--blue-100)', 
-                            color: 'var(--blue-600)' 
-                          }}
-                        >
-                          Assigned
-                        </span>
-                      </div>
-                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        <p>Mon Sep 15, 2025 at 4:25 PM EST (2:25 PM MST)</p>
-                        <p className="mt-1">David Johnson – admin</p>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Stops with vertical line */}
+                  <div className="relative">
+                    {/* Vertical line */}
+                    <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
 
-                  {/* Event 3 - Vehicle Assigned */}
-                  <div className="relative flex items-start gap-4">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
-                      style={{ backgroundColor: 'var(--blue-600)' }}
-                    >
-                      <Settings className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA448891 Ford Transit</h4>
-                        <span 
-                          className="px-3 py-1 text-sm rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: 'var(--blue-100)', 
-                            color: 'var(--blue-600)' 
-                          }}
-                        >
-                          Assigned
-                        </span>
-                      </div>
-                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        <p>Mon Sep 15, 2025</p>
-                        <p className="mt-1">System</p>
-                      </div>
-                    </div>
-                  </div>
+                    <div className="space-y-8">
+                      {/* Stop 1 - Pickup */}
+                      <div className="relative">
+                        <div className="flex items-start gap-4">
+                          {/* Stop number circle */}
+                          <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--green-600)' }}>
+                            <span className="text-white font-bold text-lg">1</span>
+                          </div>
 
-                  {/* Event 4 - Rejected */}
-                  <div className="relative flex items-start gap-4">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
-                      style={{ backgroundColor: 'var(--red-600)' }}
-                    >
-                      <X className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Robert Chen</h4>
-                        <span 
-                          className="px-3 py-1 text-sm rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: 'var(--red-100)', 
-                            color: 'var(--red-600)' 
-                          }}
-                        >
-                          Rejected
-                        </span>
-                      </div>
-                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        <p>Sun Sep 14, 2025 at 7:00 PM EST (5:00 PM MST)</p>
-                        <p className="mt-1">Robert Chen – driver</p>
-                      </div>
-                    </div>
-                  </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>1425 Oak Street Apt 204, Springfield, MA 01103</h4>
+                              <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                                <Eye className="w-4 h-4" />
+                                View Details
+                              </button>
+                            </div>
 
-                  {/* Event 5 - Vehicle Assigned */}
-                  <div className="relative flex items-start gap-4">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
-                      style={{ backgroundColor: 'var(--blue-600)' }}
-                    >
-                      <Car className="w-6 h-6 text-white" />
-                    </div>
-                    
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA92XY45 Honda Pilot</h4>
-                        <span 
-                          className="px-3 py-1 text-sm rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: 'var(--blue-100)', 
-                            color: 'var(--blue-600)' 
-                          }}
-                        >
-                          Assigned
-                        </span>
+                            <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                              <div className="flex items-center gap-2">
+                                <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                  <span className="text-white text-xs">🏠</span>
+                                </div>
+                                <span>Residential • Door-to-door pickup</span>
+                              </div>
+                              <div className="ml-6">
+                                <span>Scheduled 7:15 AM EST Pick up 1 student</span>
+                              </div>
+                            </div>
+
+                            {/* Student info */}
+                            <div className="mt-4 flex items-center gap-3">
+                              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                                <User className="w-3 h-3 text-white" />
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  className="font-semibold hover:underline cursor-pointer"
+                                  style={{ color: 'var(--blue-600)' }}
+                                  onClick={() => router.push('/students/STU001234')}
+                                >
+                                  Marcus Johnson
+                                </button>
+                                <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
+                                <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        <p>Sun Sep 14, 2025</p>
-                        <p className="mt-1">System</p>
+
+                      {/* Stop 2 - Drop off */}
+                      <div className="relative">
+                        <div className="flex items-start gap-4">
+                          {/* Stop number circle */}
+                          <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--orange)' }}>
+                            <span className="text-white font-bold text-lg">2</span>
+                          </div>
+
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>48:50 Riverside Drive, Boston, MA</h4>
+                              <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                                <Eye className="w-4 h-4" />
+                                View Details
+                              </button>
+                            </div>
+
+                            <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                              <div className="flex items-center gap-2">
+                                <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                  <span className="text-white text-xs">🏫</span>
+                                </div>
+                                <span>School Campus • Main entrance</span>
+                              </div>
+                              <div className="ml-6">
+                                <span>Scheduled 7:45 AM EST Drop off 1 student</span>
+                              </div>
+                            </div>
+
+                            {/* School info */}
+                            <div className="mt-4 flex items-center gap-3">
+                              <div className="w-6 h-6 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                <span className="text-white text-xs">🏫</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className="font-semibold" style={{ color: 'var(--heading)' }}>Lincoln Academy High School</span>
+                                <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {activeTab === 'students' && (
+                <div className="space-y-6">
+                  {/* Search and Filter Section */}
+                  <div className="space-y-4">
+                    {/* Search Bar */}
+                    <SearchInput
+                      placeholder="Search students"
+                      width="w-full"
+                      className="text-sm"
+                    />
+
+                    {/* Student Filter Dropdown */}
+                    <Select
+                      options={[
+                        { value: 'all', label: 'All Students' },
+                        { value: 'pickup', label: 'Pickup Only' },
+                        { value: 'dropoff', label: 'Drop-off Only' }
+                      ]}
+                      value="all"
+                      onChange={(e) => console.log('Filter changed:', e.target.value)}
+                      placeholder="Select filter"
+                      className="text-sm"
+                      width="w-full"
+                    />
+                  </div>
+
+                  {/* Student Detail Card */}
+                  <div className="bg-white rounded-lg shadow-sm border overflow-hidden" style={{ borderColor: 'var(--gray-200)' }}>
+                    {/* Student Header */}
+                    <div className="p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <button
+                            className="text-xl font-bold hover:underline cursor-pointer"
+                            style={{ color: 'var(--blue-600)' }}
+                            onClick={() => router.push('/students/STU001234')}
+                          >
+                            Marcus Johnson
+                          </button>
+                          <p className="text-sm mt-1" style={{ color: 'var(--muted-text)' }}>Grade 10</p>
+                        </div>
+                        <span
+                          className="px-3 py-1 text-xs rounded-full"
+                          style={{
+                            backgroundColor: 'var(--gray-100)',
+                            color: 'var(--muted-text)'
+                          }}
+                        >
+                          Scheduled
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Pickup Section */}
+                    <div className="relative">
+                      <div
+                        className="p-6 rounded-t-lg"
+                        style={{ backgroundColor: 'var(--green-100)' }}
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Pickup Circle */}
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                            style={{ backgroundColor: 'var(--green-600)' }}
+                          >
+                            1
+                          </div>
+
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Pickup</h4>
+                              <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:15 AM EST</span>
+                            </div>
+                            <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                              1425 Oak Street Apt 204, Springfield, MA 01103
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Vertical Line */}
+                      <div
+                        className="absolute left-6 top-16 w-0.5 h-16"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      ></div>
+                    </div>
+
+                    {/* Dropoff Section */}
+                    <div className="relative">
+                      <div
+                        className="p-6"
+                        style={{ backgroundColor: 'var(--amber-100)' }}
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Dropoff Circle */}
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                            style={{ backgroundColor: 'var(--orange)' }}
+                          >
+                            2
+                          </div>
+
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Dropoff</h4>
+                              <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:45 AM EST</span>
+                            </div>
+                            <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                              Lincoln Academy High School
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Vertical Line */}
+                      <div
+                        className="absolute left-6 top-16 w-0.5 h-16"
+                        style={{ backgroundColor: 'var(--orange)' }}
+                      ></div>
+                    </div>
+
+                    {/* Notes Section */}
+                    <div className="relative">
+                      <div
+                        className="p-6 rounded-b-lg"
+                        style={{ backgroundColor: 'var(--blue-100)' }}
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Notes Icon */}
+                          <div
+                            className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                            style={{ backgroundColor: 'var(--blue-600)' }}
+                          >
+                            <FileText className="w-4 h-4 text-white" />
+                          </div>
+
+                          <div className="flex-1">
+                            <h4 className="font-semibold mb-2" style={{ color: 'var(--heading)' }}>Notes</h4>
+                            <p className="text-sm" style={{ color: 'var(--blue-600)' }}>
+                              Guardian requested pickup at main building entrance. Student requires wheelchair accessibility.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'ridelog' && (
+                <div className="space-y-6">
+                  {/* Timeline Header */}
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Timeline</h3>
+                    <p className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>Ride activity and status updates</p>
+                  </div>
+
+                  {/* Timeline Events */}
+                  <div className="relative">
+                    {/* Vertical Line */}
+                    <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--gray-200)' }}></div>
+
+                    <div className="space-y-6">
+                      {/* Event 1 - Accepted */}
+                      <div className="relative flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                          style={{ backgroundColor: 'var(--green-600)' }}
+                        >
+                          <Check className="w-6 h-6 text-white" />
+                        </div>
+
+                        <div className="flex-1 pt-2">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--green-100)',
+                                color: 'var(--green-600)'
+                              }}
+                            >
+                              Accepted
+                            </span>
+                          </div>
+                          <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <p>Mon Sep 15, 2025 at 4:30 PM EST (2:30 PM MST)</p>
+                            <p className="mt-1">Sarah Mitchell – driver</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Event 2 - Assigned */}
+                      <div className="relative flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                          style={{ backgroundColor: 'var(--blue-600)' }}
+                        >
+                          <User className="w-6 h-6 text-white" />
+                        </div>
+
+                        <div className="flex-1 pt-2">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Sarah Mitchell</h4>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--blue-100)',
+                                color: 'var(--blue-600)'
+                              }}
+                            >
+                              Assigned
+                            </span>
+                          </div>
+                          <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <p>Mon Sep 15, 2025 at 4:25 PM EST (2:25 PM MST)</p>
+                            <p className="mt-1">David Johnson – admin</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Event 3 - Vehicle Assigned */}
+                      <div className="relative flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                          style={{ backgroundColor: 'var(--blue-600)' }}
+                        >
+                          <Settings className="w-6 h-6 text-white" />
+                        </div>
+
+                        <div className="flex-1 pt-2">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA448891 Ford Transit</h4>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--blue-100)',
+                                color: 'var(--blue-600)'
+                              }}
+                            >
+                              Assigned
+                            </span>
+                          </div>
+                          <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <p>Mon Sep 15, 2025</p>
+                            <p className="mt-1">System</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Event 4 - Rejected */}
+                      <div className="relative flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                          style={{ backgroundColor: 'var(--red-600)' }}
+                        >
+                          <X className="w-6 h-6 text-white" />
+                        </div>
+
+                        <div className="flex-1 pt-2">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Robert Chen</h4>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--red-100)',
+                                color: 'var(--red-600)'
+                              }}
+                            >
+                              Rejected
+                            </span>
+                          </div>
+                          <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <p>Sun Sep 14, 2025 at 7:00 PM EST (5:00 PM MST)</p>
+                            <p className="mt-1">Robert Chen – driver</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Event 5 - Vehicle Assigned */}
+                      <div className="relative flex items-start gap-4">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                          style={{ backgroundColor: 'var(--blue-600)' }}
+                        >
+                          <Car className="w-6 h-6 text-white" />
+                        </div>
+
+                        <div className="flex-1 pt-2">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>MA92XY45 Honda Pilot</h4>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--blue-100)',
+                                color: 'var(--blue-600)'
+                              }}
+                            >
+                              Assigned
+                            </span>
+                          </div>
+                          <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <p>Sun Sep 14, 2025</p>
+                            <p className="mt-1">System</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'documents' && (
+                <Card className="p-6 shadow-sm border border-gray-100">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Ride Documents</h3>
+                    <p className="text-sm text-gray-600">Important documents and forms related to this ride</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                      <div className="w-10 h-10 bg-[var(--blue-600)] rounded-lg flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">Ride Manifest</p>
+                        <p className="text-sm text-gray-500">Student pickup/dropoff list</p>
+                      </div>
+                      <Button size="sm" variant="outline">
+                        Download
+                      </Button>
+                    </div>
+
+                    <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                      <div className="w-10 h-10 bg-[var(--green-600)] rounded-lg flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">Safety Checklist</p>
+                        <p className="text-sm text-gray-500">Pre-ride vehicle inspection</p>
+                      </div>
+                      <Button size="sm" variant="outline">
+                        Download
+                      </Button>
+                    </div>
+
+                    <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
+                      <div className="w-10 h-10 bg-[var(--purple-600)] rounded-lg flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">Route Map</p>
+                        <p className="text-sm text-gray-500">Printable route directions</p>
+                      </div>
+                      <Button size="sm" variant="outline">
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              )}
             </div>
-          )}
-
-          {activeTab === 'documents' && (
-            <Card className="p-6 shadow-sm border border-gray-100">
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Ride Documents</h3>
-                <p className="text-sm text-gray-600">Important documents and forms related to this ride</p>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                  <div className="w-10 h-10 bg-[var(--blue-600)] rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Ride Manifest</p>
-                    <p className="text-sm text-gray-500">Student pickup/dropoff list</p>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    Download
-                  </Button>
-                </div>
-                
-                <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                  <div className="w-10 h-10 bg-[var(--green-600)] rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Safety Checklist</p>
-                    <p className="text-sm text-gray-500">Pre-ride vehicle inspection</p>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    Download
-                  </Button>
-                </div>
-                
-                <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors">
-                  <div className="w-10 h-10 bg-[var(--purple-600)] rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Route Map</p>
-                    <p className="text-sm text-gray-500">Printable route directions</p>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    Download
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          )}
-        </div>
-        </div>
+          </div>
         </div>
 
         {/* Right Side - Map and Controls */}
         <div className="col-span-5 min-w-0 h-full">
           <div className="h-full">
-          
+
             {/* Map Container */}
             <div className="h-full bg-gray-200 overflow-hidden">
               {mapView === 'route' && (
@@ -1181,7 +1210,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   mapView={mapView}
                 />
               )}
-              
+
               {mapView === 'photos' && (
                 <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                   <div className="text-center space-y-4">
@@ -1215,31 +1244,31 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                 </div>
               )}
-              
+
               {mapView === 'streetview' && (
                 <div className="w-full h-full bg-gradient-to-b from-blue-200 to-green-200 flex items-center justify-center relative overflow-hidden">
                   {/* Street View Simulation */}
                   <div className="absolute inset-0">
                     {/* Sky */}
                     <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-blue-300 to-blue-100"></div>
-                    
+
                     {/* Ground */}
                     <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-green-300 to-green-100"></div>
-                    
+
                     {/* Buildings */}
                     <div className="absolute bottom-1/3 left-1/4 w-16 h-20 bg-gray-400 rounded-t-lg shadow-lg"></div>
                     <div className="absolute bottom-1/3 right-1/4 w-20 h-24 bg-gray-500 rounded-t-lg shadow-lg"></div>
-                    
+
                     {/* Road */}
                     <div className="absolute bottom-0 left-0 right-0 h-16 bg-gray-600">
                       <div className="absolute top-1/2 left-0 right-0 h-1 bg-yellow-300"></div>
                     </div>
-                    
+
                     {/* Trees */}
                     <div className="absolute bottom-16 left-1/6 w-6 h-12 bg-green-600 rounded-t-full"></div>
                     <div className="absolute bottom-16 right-1/6 w-8 h-14 bg-green-700 rounded-t-full"></div>
                   </div>
-                  
+
                   <div className="relative z-10 text-center">
                     <div className="bg-white/90 px-4 py-2 rounded-lg shadow-lg">
                       <p className="text-sm font-medium text-gray-700">Street View</p>
@@ -1253,16 +1282,16 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         </div>
       </div>
 
-    
-   
+
+
 
       {/* View All Drivers Modal */}
       {showAllDrivers && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={() => setShowAllDrivers(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1350,18 +1379,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Force Start Modal */}
       {showForceStartModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => setShowForceStartModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--green-600)' }}
                 >
@@ -1378,15 +1407,15 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </div>
 
             {/* Admin Override Warning */}
-            <div 
+            <div
               className="p-4 rounded-lg border mb-6"
-              style={{ 
-                backgroundColor: 'var(--amber-100)', 
-                borderColor: 'var(--amber-500)' 
+              style={{
+                backgroundColor: 'var(--amber-100)',
+                borderColor: 'var(--amber-500)'
               }}
             >
               <div className="flex items-start gap-3">
-                <div 
+                <div
                   className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                   style={{ backgroundColor: 'var(--amber-500)' }}
                 >
@@ -1411,15 +1440,15 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             {/* Assigned Driver & Vehicle */}
             <div className="mb-6">
               <h3 className="font-bold mb-3" style={{ color: 'var(--heading)' }}>Assigned Driver & Vehicle</h3>
-              <div 
+              <div
                 className="p-4 rounded-lg border"
-                style={{ 
-                  backgroundColor: 'var(--gray-50)', 
-                  borderColor: 'var(--gray-200)' 
+                style={{
+                  backgroundColor: 'var(--gray-50)',
+                  borderColor: 'var(--gray-200)'
                 }}
               >
                 <div className="flex items-center gap-4">
-                  <div 
+                  <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--blue-100)' }}
                   >
@@ -1427,7 +1456,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <button 
+                      <button
                         className="font-bold hover:underline cursor-pointer"
                         style={{ color: 'var(--blue-600)' }}
                         onClick={() => router.push('/drivers/DRV001')}
@@ -1475,8 +1504,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 placeholder="Enter reason for force start..."
                 rows={3}
                 className="w-full px-4 py-3 rounded-lg border text-sm resize-none"
-                style={{ 
-                  borderColor: 'var(--gray-200)', 
+                style={{
+                  borderColor: 'var(--gray-200)',
                   backgroundColor: 'var(--surface-bg)',
                   color: 'var(--heading)'
                 }}
@@ -1498,9 +1527,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <Button
                 onClick={handleForceStartSubmit}
                 className="px-6 py-2"
-                style={{ 
-                  backgroundColor: 'var(--green-600)', 
-                  color: 'var(--on-success)' 
+                style={{
+                  backgroundColor: 'var(--green-600)',
+                  color: 'var(--on-success)'
                 }}
               >
                 Force Start Ride
@@ -1512,18 +1541,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Force Complete Modal */}
       {showForceCompleteModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => setShowForceCompleteModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-6 w-full max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--green-600)' }}
                 >
@@ -1547,11 +1576,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </div>
 
             {/* Action Summary */}
-            <div 
+            <div
               className="p-4 rounded-lg border mb-6"
-              style={{ 
-                backgroundColor: 'var(--green-100)', 
-                borderColor: 'var(--green-600)' 
+              style={{
+                backgroundColor: 'var(--green-100)',
+                borderColor: 'var(--green-600)'
               }}
             >
               <h3 className="font-bold mb-2" style={{ color: 'var(--green-600)' }}>Action Summary</h3>
@@ -1572,9 +1601,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <Button
                 onClick={handleForceCompleteSubmit}
                 className="px-6 py-2"
-                style={{ 
-                  backgroundColor: 'var(--green-600)', 
-                  color: 'var(--on-success)' 
+                style={{
+                  backgroundColor: 'var(--green-600)',
+                  color: 'var(--on-success)'
                 }}
               >
                 Force Complete
@@ -1586,18 +1615,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Force No Show Modal */}
       {showForceNoShowModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => setShowForceNoShowModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-6 w-full max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--red-600)' }}
                 >
@@ -1621,11 +1650,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </div>
 
             {/* Warning Section */}
-            <div 
+            <div
               className="p-4 rounded-lg border mb-6"
-              style={{ 
-                backgroundColor: 'var(--red-100)', 
-                borderColor: 'var(--red-600)' 
+              style={{
+                backgroundColor: 'var(--red-100)',
+                borderColor: 'var(--red-600)'
               }}
             >
               <h3 className="font-bold mb-2" style={{ color: 'var(--red-600)' }}>Warning</h3>
@@ -1646,9 +1675,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <Button
                 onClick={handleForceNoShowSubmit}
                 className="px-6 py-2"
-                style={{ 
-                  backgroundColor: 'var(--red-600)', 
-                  color: 'var(--on-danger)' 
+                style={{
+                  backgroundColor: 'var(--red-600)',
+                  color: 'var(--on-danger)'
                 }}
               >
                 Mark No Show
@@ -1660,18 +1689,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Duplicate Trip Modal */}
       {showDuplicateTripModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => setShowDuplicateTripModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-6 w-full max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--blue-600)' }}
                 >
@@ -1732,9 +1761,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <Button
                 onClick={handleDuplicateTripSubmit}
                 className="px-6 py-2"
-                style={{ 
-                  backgroundColor: 'var(--blue-600)', 
-                  color: 'var(--on-primary)' 
+                style={{
+                  backgroundColor: 'var(--blue-600)',
+                  color: 'var(--on-primary)'
                 }}
               >
                 Create Duplicate
@@ -1746,18 +1775,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Trip Assignment Manager Modal */}
       {showManageTripModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm p-4"
           onClick={() => setShowManageTripModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-8 w-full max-w-6xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header - Sticky */}
             <div className="flex items-center justify-between mb-8 sticky top-0 bg-white z-10 pb-4">
               <div className="flex items-center gap-4">
-                <div 
+                <div
                   className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
                   style={{ backgroundColor: 'var(--blue-600)' }}
                 >
@@ -1768,13 +1797,13 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   <p className="text-base mt-1" style={{ color: 'var(--muted-text)' }}>
                     Ride #{rideData.id} • Thu September 11, 2025
                   </p>
-              </div>
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <span 
+                <span
                   className="px-4 py-2 text-sm rounded-full font-semibold shadow-sm"
-                  style={{ 
-                    backgroundColor: 'var(--green-100)', 
+                  style={{
+                    backgroundColor: 'var(--green-100)',
                     color: 'var(--green-600)',
                     border: '1px solid var(--green-600)'
                   }}
@@ -1795,12 +1824,12 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             {/* Three Column Layout */}
             <div className="grid grid-cols-3 gap-8 mb-8">
               {/* Current Assignments - Blue Theme */}
-              <div 
+              <div
                 className="p-8 rounded-2xl shadow-sm"
                 style={{ backgroundColor: 'var(--light-blue-bg)', border: '2px solid var(--blue-100)' }}
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--blue-600)' }}
                   >
@@ -1808,11 +1837,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                   <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Current Assignments</h3>
                 </div>
-                
+
                 {/* Current Driver */}
                 <div className="mb-6">
                   <div className="flex items-center gap-4 mb-3">
-                    <div 
+                    <div
                       className="w-16 h-16 rounded-full flex items-center justify-center shadow-md overflow-hidden"
                       style={{ backgroundColor: 'var(--blue-100)' }}
                     >
@@ -1820,7 +1849,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <button 
+                        <button
                           className="font-bold text-lg hover:underline cursor-pointer"
                           style={{ color: 'var(--blue-600)' }}
                           onClick={() => router.push('/drivers/DRV001')}
@@ -1841,7 +1870,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 {/* Current Vehicle */}
                 <div>
                   <div className="flex items-center gap-4 mb-3">
-                    <div 
+                    <div
                       className="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
                       style={{ backgroundColor: 'var(--gray-100)' }}
                     >
@@ -1857,15 +1886,15 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     </div>
                   </div>
                 </div>
-            </div>
+              </div>
 
               {/* Driver Assignment - Green Theme */}
-              <div 
+              <div
                 className="p-8 rounded-2xl shadow-sm"
                 style={{ backgroundColor: 'var(--green-100)', border: '2px solid var(--green-600)' }}
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--green-600)' }}
                   >
@@ -1873,7 +1902,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                   <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Driver Assignment</h3>
                 </div>
-                
+
                 <div className="space-y-4 mb-6">
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
@@ -1887,7 +1916,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     />
                     <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Keep Current Driver</span>
                   </label>
-                  
+
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
                       type="radio"
@@ -1900,7 +1929,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     />
                     <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Assign New Driver</span>
                   </label>
-                  
+
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
                       type="radio"
@@ -1976,45 +2005,42 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => setAvailableFilter('available')}
-                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
-                          availableFilter === 'available' 
-                            ? 'text-white' 
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${availableFilter === 'available'
+                            ? 'text-white'
                             : 'text-gray-600'
-                        }`}
-                        style={{ 
-                          backgroundColor: availableFilter === 'available' 
-                            ? 'var(--green-600)' 
-                            : 'var(--gray-200)' 
+                          }`}
+                        style={{
+                          backgroundColor: availableFilter === 'available'
+                            ? 'var(--green-600)'
+                            : 'var(--gray-200)'
                         }}
                       >
                         Available Only
                       </button>
                       <button
                         onClick={() => setAvailableFilter('rated')}
-                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
-                          availableFilter === 'rated' 
-                            ? 'text-white' 
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${availableFilter === 'rated'
+                            ? 'text-white'
                             : 'text-gray-600'
-                        }`}
-                        style={{ 
-                          backgroundColor: availableFilter === 'rated' 
-                            ? 'var(--green-600)' 
-                            : 'var(--gray-200)' 
+                          }`}
+                        style={{
+                          backgroundColor: availableFilter === 'rated'
+                            ? 'var(--green-600)'
+                            : 'var(--gray-200)'
                         }}
                       >
                         High Rated (4.5+)
                       </button>
                       <button
                         onClick={() => setAvailableFilter('nearby')}
-                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
-                          availableFilter === 'nearby' 
-                            ? 'text-white' 
+                        className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${availableFilter === 'nearby'
+                            ? 'text-white'
                             : 'text-gray-600'
-                        }`}
-                        style={{ 
-                          backgroundColor: availableFilter === 'nearby' 
-                            ? 'var(--green-600)' 
-                            : 'var(--gray-200)' 
+                          }`}
+                        style={{
+                          backgroundColor: availableFilter === 'nearby'
+                            ? 'var(--green-600)'
+                            : 'var(--gray-200)'
                         }}
                       >
                         Nearby
@@ -2028,14 +2054,14 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                       </h4>
                       <div className="space-y-3">
                         {availableDrivers.map((driver) => (
-                          <div 
+                          <div
                             key={driver.id}
                             className="flex items-center gap-3 p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors cursor-pointer"
                           >
-                            <img 
-                              src={driver.image} 
-                              alt={driver.name} 
-                              className="w-10 h-10 rounded-full object-cover" 
+                            <img
+                              src={driver.image}
+                              alt={driver.name}
+                              className="w-10 h-10 rounded-full object-cover"
                             />
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
@@ -2053,11 +2079,11 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                                 {driver.vehicle}
                               </p>
                               <div className="flex items-center gap-2 mt-1">
-                                <span 
+                                <span
                                   className="px-2 py-0.5 text-xs rounded-full"
-                                  style={{ 
-                                    backgroundColor: 'var(--green-100)', 
-                                    color: 'var(--green-600)' 
+                                  style={{
+                                    backgroundColor: 'var(--green-100)',
+                                    color: 'var(--green-600)'
                                   }}
                                 >
                                   {driver.status}
@@ -2076,12 +2102,12 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               </div>
 
               {/* Vehicle Assignment - Purple Theme */}
-              <div 
+              <div
                 className="p-8 rounded-2xl shadow-sm"
                 style={{ backgroundColor: 'var(--primary-bg)', border: '2px solid var(--primary)' }}
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--primary)' }}
                   >
@@ -2089,7 +2115,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                   <h3 className="font-bold text-xl" style={{ color: 'var(--heading)' }}>Vehicle Assignment</h3>
                 </div>
-                
+
                 <div className="space-y-4">
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
@@ -2103,7 +2129,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     />
                     <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Keep Current Vehicle</span>
                   </label>
-                  
+
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
                       type="radio"
@@ -2116,7 +2142,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                     />
                     <span className="text-base font-semibold" style={{ color: 'var(--heading)' }}>Assign New Vehicle</span>
                   </label>
-                  
+
                   <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-white hover:bg-opacity-50 transition-colors">
                     <input
                       type="radio"
@@ -2139,8 +2165,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 variant="secondary"
                 onClick={() => setShowManageTripModal(false)}
                 className="px-8 py-3 text-base font-semibold rounded-xl shadow-sm"
-                style={{ 
-                  backgroundColor: 'var(--gray-100)', 
+                style={{
+                  backgroundColor: 'var(--gray-100)',
                   color: 'var(--heading)',
                   border: '2px solid var(--gray-200)'
                 }}
@@ -2150,8 +2176,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <Button
                 onClick={handleManageTripSubmit}
                 className="px-8 py-3 text-base font-semibold rounded-xl shadow-lg"
-                style={{ 
-                  backgroundColor: 'var(--green-600)', 
+                style={{
+                  backgroundColor: 'var(--green-600)',
                   color: 'var(--on-success)',
                   border: '2px solid var(--green-600)'
                 }}
@@ -2165,18 +2191,18 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
 
       {/* Edit Trip Modal */}
       {showEditTripModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
           onClick={() => setShowEditTripModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-2xl p-6 w-[82rem] mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--blue-600)' }}
                 >
@@ -2281,9 +2307,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   setShowEditTripModal(false)
                 }}
                 className="px-6 py-2"
-                style={{ 
-                  backgroundColor: 'var(--blue-600)', 
-                  color: 'var(--on-primary)' 
+                style={{
+                  backgroundColor: 'var(--blue-600)',
+                  color: 'var(--on-primary)'
                 }}
               >
                 Save Changes

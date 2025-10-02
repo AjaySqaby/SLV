@@ -9,6 +9,7 @@ import CompleteRideModal from "./CompleteRideModal";
 import CancelRideModal from "./CancelRideModal";
 import RideDetailContent from "./RideDetailContent";
 import DriverDetailModal from "@/components/drivers/DriverDetailModal";
+import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
@@ -28,6 +29,30 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const actionMenuRef = useRef();
+
+  const computeLateMinutes = (ride) => {
+    const status = String(ride?.status || '').toLowerCase();
+    if (!(status === 'late' || status === 'delayed')) return undefined;
+    const scheduled = ride?.dropoff?.scheduled;
+    // Prefer completed time if present, otherwise arrived
+    const actual = ride?.dropoff?.completed || ride?.dropoff?.arrived;
+    if (!scheduled || !actual) return 40;
+    const parse = (t) => {
+      const m = String(t).match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      if (!m) return null;
+      let h = parseInt(m[1], 10);
+      const min = parseInt(m[2], 10);
+      const ampm = m[3].toUpperCase();
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return h * 60 + min;
+    };
+    const sMin = parse(scheduled);
+    const aMin = parse(actual);
+    if (sMin == null || aMin == null) return 40;
+    const diff = aMin - sMin;
+    return diff > 0 ? diff : undefined;
+  };
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -222,30 +247,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
 
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`w-2 h-2 rounded-full ${ride.statusColor === "blue"
-                              ? "bg-[var(--green)]"
-                              : ride.statusColor === "[var(--warning)]"
-                                ? "bg-[var(--orange)]"
-                                : ride.statusColor === "[var(--red)]"
-                                  ? "bg-[var(--red)]"
-                                  : "bg-[var(--gray-500)]"
-                            }`}
-                        ></div>
-                        <span
-                          className={`text-xs font-medium ${ride.statusColor === "blue"
-                              ? "text-[var(--green)]"
-                              : ride.statusColor === "[var(--warning)]"
-                                ? "text-[var(--orange)]"
-                                : ride.statusColor === "[var(--red)]"
-                                  ? "text-[var(--red)]"
-                                  : "text-[var(--gray-500)]"
-                            }`}
-                        >
-                          {ride.status}
-                        </span>
-                      </div>
+                      <StatusBadge status={ride.status} lateMinutes={computeLateMinutes(ride)} />
                       <div className="relative">
                         <Button
                           className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)]"
@@ -304,19 +306,6 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div className="mt-2">
-                      <div
-                        className={`h-1 rounded-full ${ride.statusColor === "blue"
-                            ? "bg-[var(--green)]"
-                            : ride.statusColor === "[var(--warning)]"
-                              ? "bg-[var(--orange)]"
-                              : ride.statusColor === "[var(--red)]"
-                                ? "bg-[var(--red)]"
-                                : "bg-[var(--gray-500)]"
-                          }`}
-                        style={{ width: "60%" }}
-                      ></div>
                     </div>
                   </td>
                 </tr>
