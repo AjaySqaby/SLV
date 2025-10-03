@@ -105,8 +105,8 @@ export default function MapView() {
         ></iframe>
       </div>
 
-      {/* Driver Markers Overlay */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Driver Markers Overlay (clickable) */}
+      <div className="absolute inset-0">
         {mockDrivers.map((driver) => (
           <div key={driver.id} className="pointer-events-auto">
             {/* Driver Marker Container */}
