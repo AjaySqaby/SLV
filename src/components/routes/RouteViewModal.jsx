@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square } from 'lucide-react';
+import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import StatusBadge from '@/components/ui/StatusBadge';
@@ -188,8 +188,9 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             </div>
             <h3 className="text-base font-medium text-[var(--primary-black)]">Trip Details</h3>
           </div>
-          <button className="bg-[var(--blue-100)] text-[var(--blue-600)] px-3 py-1 rounded-full text-sm font-medium hover:bg-[var(--blue-200)] transition-colors">
-            View Route
+          <button className="bg-[var(--blue-100)] text-[var(--blue-600)] px-3 py-1 rounded-full text-sm font-medium hover:bg-[var(--blue-200)] transition-colors flex items-center gap-2">
+            <Eye className="w-4 h-4" />
+            <span>View Route</span>
           </button>
         </div>
         <div className="space-y-3">
@@ -426,7 +427,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -469,7 +470,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+        <div className="p-6 overflow-y-auto flex-1">
           {activeTab === 0 && renderOverview()}
           {activeTab === 1 && renderStops()}
           {activeTab === 2 && renderStudents()}
@@ -482,12 +483,18 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             variant="secondary"
             onClick={onClose}
           >
-            Close
+            <div className="flex items-center gap-2">
+              <X className="w-4 h-4" />
+              <span>Close</span>
+            </div>
           </Button>
           <Button
             className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
           >
-            Edit Route
+            <div className="flex items-center gap-2">
+              <Edit className="w-4 h-4" />
+              <span>Edit Route</span>
+            </div>
           </Button>
         </div>
       </div>
