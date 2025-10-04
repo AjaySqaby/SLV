@@ -50,6 +50,8 @@ export default function AddRouteModal({ isOpen, onClose }) {
   const [showStudentDropdown, setShowStudentDropdown] = useState(false);
   const [studentSearchQuery, setStudentSearchQuery] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [exceptionType, setExceptionType] = useState("No School");
+  const [customExceptionType, setCustomExceptionType] = useState("");
   
   // Partner data from screenshot
   const partners = [
@@ -567,15 +569,43 @@ export default function AddRouteModal({ isOpen, onClose }) {
             </div>
             <div>
               <label className="block text-xs text-[var(--muted-text)] mb-1">Exception Type</label>
-              <Select
-                value="No School"
-                onChange={(value) => console.log(value)}
-                options={[
-                  { value: "No School", label: "No School" },
-                  { value: "Holiday", label: "Holiday" },
-                  { value: "Teacher Work Day", label: "Teacher Work Day" }
-                ]}
-              />
+              {exceptionType === "__custom__" ? (
+                <input
+                  type="text"
+                  autoFocus
+                  value={customExceptionType}
+                  onChange={(e) => setCustomExceptionType(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (customExceptionType.trim()) {
+                        setExceptionType(customExceptionType.trim());
+                      }
+                    }
+                    if (e.key === 'Escape') {
+                      setExceptionType("");
+                    }
+                  }}
+                  onBlur={() => {
+                    if (customExceptionType.trim()) {
+                      setExceptionType(customExceptionType.trim());
+                    }
+                  }}
+                  placeholder="Type custom exception and press Enter"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none bg-white"
+                />
+              ) : (
+                <Select
+                  value={exceptionType}
+                  onChange={(e) => setExceptionType(e.target.value)}
+                  options={[
+                    ...(customExceptionType ? [{ value: customExceptionType, label: customExceptionType }] : []),
+                    { value: "No School", label: "No School" },
+                    { value: "Holiday", label: "Holiday" },
+                    { value: "Teacher Work Day", label: "Teacher Work Day" },
+                    { value: "__custom__", label: "Custom..." }
+                  ]}
+                />
+              )}
             </div>
             <div>
               <label className="block text-xs text-[var(--muted-text)] mb-1">Description</label>
@@ -740,12 +770,13 @@ export default function AddRouteModal({ isOpen, onClose }) {
   const renderMonitor = () => (
     <div className="space-y-6">
       <div>
-        <label className="flex items-center">
+        <label htmlFor="monitorAssignment" className="flex items-center">
           <input 
-            type="radio" 
+            id="monitorAssignment"
+            type="checkbox" 
             name="monitorAssignment" 
             checked={assignMonitor}
-            onChange={() => setAssignMonitor(true)}
+            onChange={(e) => setAssignMonitor(e.target.checked)}
             className="mr-2 h-4 w-4 text-blue-600" 
           />
           Assign a monitor to this route
@@ -756,6 +787,15 @@ export default function AddRouteModal({ isOpen, onClose }) {
       {assignMonitor ? (
         <div className="space-y-6">
           <h3 className="text-lg font-medium text-gray-900">Monitor Information</h3>
+          <div className="flex justify-end -mt-2">
+            <button
+              type="button"
+              onClick={() => setAssignMonitor(false)}
+              className="text-sm text-red-600 hover:text-red-700"
+            >
+              Remove monitor
+            </button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left Column */}
             <div className="space-y-4">
@@ -1145,7 +1185,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -1188,7 +1228,7 @@ export default function AddRouteModal({ isOpen, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <div className="p-6 overflow-y-auto flex-1">
           {renderTabContent()}
         </div>
 
