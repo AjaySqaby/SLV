@@ -10,6 +10,8 @@ import CancelRideModal from "./CancelRideModal";
 import RideDetailContent from "./RideDetailContent";
 import DriverDetailModal from "@/components/drivers/DriverDetailModal";
 import StatusBadge from "@/components/ui/StatusBadge";
+import HoverTooltip from "@/components/ui/HoverTooltip";
+import InProgressTooltipContent from "@/components/ui/InProgressTooltipContent";
 
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
@@ -247,7 +249,26 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
 
                   <td className="px-4 py-2 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <div className="flex items-center justify-between">
-                      <StatusBadge status={ride.status} lateMinutes={computeLateMinutes(ride)} />
+                      {String(ride.status).toLowerCase() === "in progress" ? (
+                        <HoverTooltip
+                          content={
+                            <InProgressTooltipContent
+                              nextStop={ride.nextStop?.address}
+                              scheduledTime={ride.dropoff?.scheduled}
+                              estimatedTime={ride.dropoff?.estimated}
+                              rideTimezone={ride.timezone}
+                              stops={ride.stops}
+                              stopsCount={ride.details?.stops}
+                            />
+                          }
+                        >
+                          <span>
+                            <StatusBadge status={ride.status} lateMinutes={computeLateMinutes(ride)} />
+                          </span>
+                        </HoverTooltip>
+                      ) : (
+                        <StatusBadge status={ride.status} lateMinutes={computeLateMinutes(ride)} />
+                      )}
                       <div className="relative">
                         <Button
                           className="p-2 text-[var(--gray-400)] hover:text-[var(--gray-600)] hover:bg-[var(--purple)]"
