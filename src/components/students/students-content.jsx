@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
+import Select from "../ui/Select";
 import { useRouter } from "next/navigation";
 import StatusBadge from "../ui/StatusBadge";
 import Button from "../ui/Button";
@@ -27,6 +28,7 @@ export default function StudentsContent() {
   const [districtFilter, setDistrictFilter] = useState("");
   const router = useRouter();
   const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
   const [isCampusModalOpen, setIsCampusModalOpen] = useState(false);
   const [selectedCampusData, setSelectedCampusData] = useState(null);
   const [isDistrictModalOpen, setIsDistrictModalOpen] = useState(false);
@@ -84,7 +86,8 @@ export default function StudentsContent() {
       !gradeFilter || student.grade.toString() === gradeFilter;
     const matchesCampus = !campusFilter || student.campus === campusFilter;
     const matchesDistrict = !districtFilter || student.district === districtFilter;
-    return matchesSearch && matchesGrade && matchesCampus && matchesDistrict;
+    const matchesStatus = !statusFilter || student.status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesSearch && matchesGrade && matchesCampus && matchesDistrict && matchesStatus;
   });
 
   const handleCampusClick = (campusName, district, address) => {
@@ -134,6 +137,14 @@ export default function StudentsContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search students by name, ID, campus or district"
             width="w-full"
+          />
+        </div>
+        <div className="w-48">
+          <Select
+            placeholder="Status"
+            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
           />
         </div>
         <Button

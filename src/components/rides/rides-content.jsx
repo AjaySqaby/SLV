@@ -1,14 +1,12 @@
 "use client";
 
-import { Search, Plus, Filter, X } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import RidesTabs from "./RidesTabs";
 import RidesTable from "./RidesTable";
 import FilterDropdown from "./FilterDropdown";
-import SearchableSelect from "@/components/ui/SearchableSelect";
-import { State, City } from "country-state-city";
 import DateRangePicker from "./DateRangePicker";
 import AddRideModal from "./AddRideModal";
 import Input from "@/components/ui/Input";
@@ -25,18 +23,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   const [mainSearch, setMainSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-
-  const usStates = useMemo(() => State.getStatesOfCountry("US") || [], []);
-  const stateNames = useMemo(() => usStates.map((s) => s.name), [usStates]);
-  const cityNames = useMemo(() => {
-    if (!selectedState) return [];
-    const st = usStates.find((s) => s.name === selectedState);
-    if (!st) return [];
-    const list = City.getCitiesOfState("US", st.isoCode) || [];
-    return list.map((c) => c.name);
-  }, [selectedState, usStates]);
+  
 
   const clearFilters = () => {
     setSearch("");
@@ -44,8 +31,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setStartDate();
     setEndDate();
     setFilterType("Driver");
-    setSelectedState("");
-    setSelectedCity("");
     setCurrentPage(1);
   };
 
@@ -54,15 +39,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setEndDate(end);
   };
 
-
-  const handleStateChange = (stateIso) => {
-    setSelectedState(stateIso);
-    setSelectedCity(""); // Reset city when state changes
-  };
-
-  const handleCityChange = (city) => {
-    setSelectedCity(city);
-  };
+  
 
   const handleItemsPerPageChange = (newItemsPerPage) => {
     setItemsPerPage(newItemsPerPage);
@@ -78,13 +55,10 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       setSearch("");
       setStartDate();
       setEndDate();
-      setSelectedState("");
-      setSelectedCity("");
       setActiveTab(0); // Reset to 'All' tab
       setCurrentPage(1);
     }
   }, [headerSearchTerm]);
-  const [showFilters, setShowFilters] = useState(false);
   const [showAddRide, setShowAddRide] = useState(false);
 
   // Dynamic State and City options (USA) using country-state-city
@@ -1032,15 +1006,29 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
       filteredRides = filteredRides.filter((ride) => {
         switch (filterType) {
           case "Driver":
-            return ride.driver.name.toLowerCase().includes(searchTerm);
+            // Also allow searching by partner when user is looking for a driver
+            return (
+              ride.driver.name.toLowerCase().includes(searchTerm) ||
+              ride.partner.toLowerCase().includes(searchTerm)
+            );
           case "Partners":
             return ride.partner.toLowerCase().includes(searchTerm);
           case "District":
             return ride.district.toLowerCase().includes(searchTerm);
           case "Campus":
-            return ride.district.toLowerCase().includes(searchTerm);
+            // No explicit campus field, approximate via pickup/dropoff locations
+            return (
+              (ride.pickup.location || "").toLowerCase().includes(searchTerm) ||
+              (ride.dropoff.location || "").toLowerCase().includes(searchTerm)
+            );
           case "Student":
-            return ride.details.students.toString().includes(searchTerm);
+            // Students can be searched by count, district, or campus-like locations
+            return (
+              ride.details.students.toString().includes(searchTerm) ||
+              ride.district.toLowerCase().includes(searchTerm) ||
+              (ride.pickup.location || "").toLowerCase().includes(searchTerm) ||
+              (ride.dropoff.location || "").toLowerCase().includes(searchTerm)
+            );
           case "Route":
             return ride.id.toLowerCase().includes(searchTerm);
           case "Ride ID":
@@ -1097,19 +1085,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     }
 
 
-    // Filter by selected state (only when filterType is "Driver")
-    if (selectedState && filterType === "Driver") {
-      filteredRides = filteredRides.filter((ride) => 
-        ride.driver.state === selectedState
-      );
-    }
-
-    // Filter by selected city (only when filterType is "Driver")
-    if (selectedCity && filterType === "Driver") {
-      filteredRides = filteredRides.filter((ride) => 
-        ride.driver.city === selectedCity
-      );
-    }
+    // State/City specific filters removed as per requirement
 
     return filteredRides;
   }
@@ -1124,7 +1100,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, mainSearch, startDate, endDate, activeTab, selectedState, selectedCity, itemsPerPage]);
+  }, [search, mainSearch, startDate, endDate, activeTab, itemsPerPage]);
 
   const filteredRides = getFilteredRides();
   const paginatedRides = getPaginatedRides();
@@ -1142,7 +1118,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           Add New Ride
         </Button>
       </div>
-      <div className="flex justify-between items-center mb-4 gap-2">
+      <div className="flex flex-col gap-3 mb-4">
         <div className="relative w-full">
           <Input
             type="text"
@@ -1153,35 +1129,30 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-[var(--gray-400)]" />
         </div>
-        <Button
-          onClick={() => setShowFilters((prev) => !prev)}
-          className={`flex hover:bg-[var(--purple)] text-[var(--primary-black)] items-center gap-2 ${
-            (search.trim() || mainSearch.trim() || startDate || endDate || selectedState || selectedCity) ? "bg-[var(--purple)] text-white" : ""
-          }`}
-          variant="secondary"
-        >
-          <Filter size={18} />
-          Filters
-          {(search.trim() || mainSearch.trim() || startDate || endDate || selectedState || selectedCity) && (
-            <span className="bg-white text-[var(--purple)] rounded-full w-5 h-5 text-xs flex items-center justify-center">
-              {(search.trim() ? 1 : 0) + (mainSearch.trim() ? 1 : 0) + ((startDate || endDate) ? 1 : 0) + (selectedState ? 1 : 0) + (selectedCity ? 1 : 0)}
-            </span>
-          )}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="ml-1"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </Button>
+        {/* Inline filters row (moved above status tabs) */}
+        <div className="flex flex-col md:flex-row gap-4 items-end">
+          <div className="w-full md:w-1/4">
+            <FilterDropdown value={filterType} onChange={setFilterType} />
+          </div>
+          <div className="w-full md:w-1/2">
+            <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
+              Search
+            </label>
+            <Input
+              placeholder={`Search by ${filterType} (e.g., District/Campus for students, Partner for drivers)`}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <div className="w-full md:w-1/4">
+            <DateRangePicker
+              startDate={startDate}
+              endDate={endDate}
+              onDateRangeChange={handleDateRangeChange}
+            />
+          </div>
+        </div>
       </div>
       <div className="mb-4">
         <RidesTabs
@@ -1190,74 +1161,6 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           tabCounts={tabCounts}
         />
       </div>
-      {showFilters && (
-        <div className="bg-background rounded-xl shadow px-6 py-4 mb-4 relative">
-          <Button
-            className="absolute top-2 right-2 text-xl z-50"
-            onClick={() => {
-              setShowFilters(false);
-              clearFilters();
-            }}
-            aria-label="Close filters"
-            variant="ghost"
-          >
-            <X />
-          </Button>
-          
-          {/* First row - Main filters */}
-          <div className="flex flex-col md:flex-row gap-4 items-end mb-4">
-            <div className="w-full md:w-1/4">
-              <FilterDropdown value={filterType} onChange={setFilterType} />
-            </div>
-            <div className="w-full md:w-1/2">
-              <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-                Search
-              </label>
-              <Input
-                placeholder={`Search by ${filterType}...`}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <div className="w-full md:w-1/4">
-              <DateRangePicker
-                startDate={startDate}
-                endDate={endDate}
-                onDateRangeChange={handleDateRangeChange}
-              />
-            </div>
-          </div>
-
-          {/* Second row - Driver specific filters */}
-          {filterType === "Driver" && (
-            <div className="flex flex-col md:flex-row gap-4 items-end">
-              <div className="w-full md:w-1/4">
-                <SearchableSelect
-                  label="State"
-                  options={stateNames}
-                  value={selectedState}
-                  onChange={(v) => handleStateChange(v)}
-                  placeholder="All States"
-                />
-              </div>
-              <div className="w-full md:w-1/4">
-                <SearchableSelect
-                  label="City"
-                  options={cityNames}
-                  value={selectedCity}
-                  onChange={(v) => handleCityChange(v)}
-                  placeholder="All Cities"
-                  disabled={!selectedState}
-                />
-              </div>
-              <div className="w-full md:w-1/2">
-                {/* Empty space to maintain alignment */}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
       <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
         <RidesTable 
           rides={paginatedRides}

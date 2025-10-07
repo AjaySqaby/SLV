@@ -1,12 +1,9 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
-import Tabs from "@/components/ui/Tabs";
 import Input from "@/components/ui/Input";
 import SearchableDropdown from "@/components/ui/SearchableDropdown";
 
 export default function SearchFilters({ 
-  activeTab, 
-  setActiveTab, 
   districts,
   schools,
   partners
@@ -14,12 +11,6 @@ export default function SearchFilters({
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [selectedPartner, setSelectedPartner] = useState(null);
-  const tabs = [
-    { id: 0, label: "All" },
-    { id: 1, label: "Districts" },
-    { id: 2, label: "Schools" },
-    { id: 3, label: "Partners" }
-  ];
 
   return (
     <div className="p-4  w-full">
@@ -31,39 +22,7 @@ export default function SearchFilters({
           className="pl-10 pr-4 py-2 w-full"
         />
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 w-full">
-        <SearchableDropdown
-          label="All Districts"
-          items={districts}
-          selectedItem={selectedDistrict}
-          onSelect={setSelectedDistrict}
-          placeholder="Search districts..."
-        />
-
-        <SearchableDropdown
-          label="All Schools"
-          items={schools}
-          selectedItem={selectedSchool}
-          onSelect={setSelectedSchool}
-          placeholder="Search schools..."
-        />
-
-        <SearchableDropdown
-          label="All Partners"
-          items={partners}
-          selectedItem={selectedPartner}
-          onSelect={setSelectedPartner}
-          placeholder="Search partners..."
-        />
-      </div>
-
       <div className="flex w-full items-center">
-        <Tabs 
-          tabs={tabs}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
         <div className="ml-auto flex items-center">
           <div className="flex items-center text-[var(--gray-600)]">
             <svg

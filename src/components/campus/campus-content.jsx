@@ -2,6 +2,7 @@
 import { Search, Plus, Building } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import SearchInput from "@/components/ui/SearchInput";
+import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -25,6 +26,7 @@ function TimeInput({ label, value, onChange, name }) {
 
 export default function CampusContent() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRef = useRef(null);
   const router = useRouter();
@@ -74,13 +76,15 @@ export default function CampusContent() {
 
   const filteredCampuses = campuses.filter((campus) => {
     const query = searchQuery.toLowerCase();
-    return (
+    const matchesText = (
       campus.id.toLowerCase().includes(query) ||
       campus.name.toLowerCase().includes(query) ||
       campus.type.toLowerCase().includes(query) ||
       campus.district.toLowerCase().includes(query) ||
       campus.address.toLowerCase().includes(query)
     );
+    const matchesStatus = !statusFilter || campus.status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesText && matchesStatus;
   });
 
   const handleViewCampus = (campus) => {
@@ -129,6 +133,14 @@ export default function CampusContent() {
             width="w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="w-48">
+          <Select
+            placeholder="Status"
+            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+            value={statusFilter}
+            onChange={(e)=>setStatusFilter(e.target.value)}
           />
         </div>
         <Button

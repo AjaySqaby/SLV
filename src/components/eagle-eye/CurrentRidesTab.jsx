@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Input from "@/components/ui/Input";
-import StatusFilterButton from "./sidebar/StatusFilterButton";
+import Select from "@/components/ui/Select";
 import RideCard from "./sidebar/RideCard";
 import { useState } from "react";
 
@@ -88,33 +88,18 @@ export default function CurrentRidesTab({
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">Status Filters</p>
-          <div className="grid grid-cols-2 gap-1.5">
-            <StatusFilterButton
-              label="All"
-              isActive={activeStatusFilter === "All"}
-              onClick={() => setActiveStatusFilter("All")}
-              colorVar="bg-[var(--secondary)]"
-            />
-            <StatusFilterButton
-              label="On Time"
-              isActive={activeStatusFilter === "On Time"}
-              onClick={() => setActiveStatusFilter("On Time")}
-              colorVar="bg-[var(--green-600)]"
-            />
-            <StatusFilterButton
-              label="Delayed"
-              isActive={activeStatusFilter === "Delayed"}
-              onClick={() => setActiveStatusFilter("Delayed")}
-              colorVar="bg-[var(--red)]"
-            />
-            <StatusFilterButton
-              label="Unassigned"
-              isActive={activeStatusFilter === "Unassigned"}
-              onClick={() => setActiveStatusFilter("Unassigned")}
-              colorVar="bg-[var(--blue)]"
-            />
-          </div>
+          <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">Status</p>
+          <Select
+            options={[
+              { value: "All", label: "All" },
+              { value: "On Time", label: "On Time" },
+              { value: "Delayed", label: "Delayed" },
+              { value: "Unassigned", label: "Unassigned" },
+            ]}
+            value={activeStatusFilter}
+            onChange={(e) => setActiveStatusFilter(e.target.value)}
+            width="w-full"
+          />
         </div>
       </div>
 

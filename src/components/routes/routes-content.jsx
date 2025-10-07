@@ -24,6 +24,7 @@ import RouteScheduleModal from "./RouteScheduleModal";
 import ScheduleRouteModal from "./ScheduleRouteModal";
 import RouteActionsDropdown from "./RouteActionsDropdown";
 import SearchInput from "@/components/ui/SearchInput";
+import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -42,6 +43,7 @@ export default function RoutesContent() {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [routes, setRoutes] = useState([
     {
       id: "RT-30842",
@@ -109,12 +111,14 @@ export default function RoutesContent() {
   // Filter routes based on search
   const filteredRoutes = routes.filter((route) => {
     const q = search.toLowerCase();
-    return (
+    const matchesText = (
       route.id.toLowerCase().includes(q) ||
       route.name.toLowerCase().includes(q) ||
       route.district.toLowerCase().includes(q) ||
       (route.driver && route.driver.toLowerCase().includes(q))
     );
+    const matchesStatus = !statusFilter || route.status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesText && matchesStatus;
   });
 
   // Handler for deleting a route
@@ -196,6 +200,18 @@ export default function RoutesContent() {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search routes..."
               width="w-full"
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[
+                { value: "", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Not Active", label: "Not Active" },
+              ]}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
             />
           </div>
           <div className="flex gap-3 flex-shrink-0">

@@ -98,7 +98,7 @@ export default function DriverCard({ driver }) {
         </div>
         
         {/* Nearby Info */}
-        <div className="grid grid-cols-2 gap-1 text-xs">
+          <div className="grid grid-cols-2 gap-1 text-xs">
           {driver.rejectedNearby > 0 && (
             <div className="text-red-600 font-medium flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
@@ -111,6 +111,12 @@ export default function DriverCard({ driver }) {
               {driver.unassignedNearby} unassigned
             </div>
           )}
+            {driver.onRide && (
+              <div className="text-purple-700 font-medium flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                Ends in {driver.endsInMinutes ?? 15} min
+              </div>
+            )}
         </div>
       </div>
 

@@ -35,6 +35,7 @@ const mockDrivers = [
     unassignedNearby: 0,
     ridesNearby: 0,
     onRide: true,
+    endsInMinutes: 12,
     lastActive: "",
   },
   {

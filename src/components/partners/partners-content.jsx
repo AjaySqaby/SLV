@@ -10,8 +10,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import Tabs from "../ui/Tabs";
 import SearchInput from "../ui/SearchInput";
+import Select from "../ui/Select";
 import AddPartnerModal from "./AddPartnerModal";
 import PartnerViewModal from "./PartnerViewModal";
 import PartnerRowActions from "./PartnerRowActions";
@@ -22,6 +22,7 @@ import DeleteModal from "../common/DeleteModal";
 export default function PartnersContent() {
   const [activeTab, setActiveTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [isAddPartnerModalOpen, setIsAddPartnerModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedPartnerId, setSelectedPartnerId] = useState(null);
@@ -134,11 +135,8 @@ export default function PartnersContent() {
       partner.contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       partner.contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       partner.location.toLowerCase().includes(searchQuery.toLowerCase());
-
-    if (activeTab === 0) return matchesSearch; // All Partners
-    if (activeTab === 1) return matchesSearch && partner.status === "Active";
-    if (activeTab === 2) return matchesSearch && partner.status === "Inactive";
-    return matchesSearch;
+    const matchesStatus = !statusFilter || partner.status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesSearch && matchesStatus;
   });
 
   const handleDeletePartner = (id) => {
@@ -231,6 +229,14 @@ export default function PartnersContent() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search partners..."
                 width="w-full"
+              />
+            </div>
+            <div className="w-48">
+              <Select
+                placeholder="Status"
+                options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+                value={statusFilter}
+                onChange={(e)=>setStatusFilter(e.target.value)}
               />
             </div>
           </div>

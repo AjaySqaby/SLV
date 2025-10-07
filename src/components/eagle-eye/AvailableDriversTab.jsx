@@ -8,10 +8,13 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
   const filteredDrivers = mockDrivers.filter((driver) => {
     if (driverFilter === "All") return true;
     if (driverFilter === "Ready") return driver.status === "Ready Now";
-    if (driverFilter === "On Ride") return driver.onRide;
-    if (driverFilter === "Offline") return driver.status === "Offline";
+    if (driverFilter === "Ending Soon") return driver.onRide; // show on-ride drivers
     return true;
   });
+
+  const sortedDrivers = driverFilter === "Ending Soon"
+    ? [...filteredDrivers].sort((a,b) => (a.endsInMinutes ?? 999) - (b.endsInMinutes ?? 999))
+    : filteredDrivers;
 
   return (
     <div className="flex flex-col h-full">
@@ -47,26 +50,20 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
             colorVar="bg-[var(--green-600)]"
           />
           <StatusFilterButton
-            label="On Ride"
-            isActive={driverFilter === "On Ride"}
-            onClick={() => setDriverFilter("On Ride")}
+            label="Ending Soon"
+            isActive={driverFilter === "Ending Soon"}
+            onClick={() => setDriverFilter("Ending Soon")}
             colorVar="bg-[var(--blue)]"
-          />
-          <StatusFilterButton
-            label="Offline"
-            isActive={driverFilter === "Offline"}
-            onClick={() => setDriverFilter("Offline")}
-            colorVar="bg-[var(--red)]"
           />
         </div>
       </div>
       <div className="flex-1 overflow-auto p-3 min-h-0">
-        {filteredDrivers.length === 0 ? (
+        {sortedDrivers.length === 0 ? (
           <div className="text-center text-gray-500 py-6 text-sm">
             No drivers found.
           </div>
         ) : (
-          filteredDrivers.map((driver) => (
+          sortedDrivers.map((driver) => (
             <DriverCard key={driver.id} driver={driver} />
           ))
         )}

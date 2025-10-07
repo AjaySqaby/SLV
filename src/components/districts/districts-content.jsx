@@ -14,12 +14,14 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
+import Select from "../ui/Select";
 import Button from "../ui/Button";
 import AddDistrictModal from "./AddDistrictModal";
 
 export default function DistrictsContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
   
   // Mock data - replace with actual data from your API
   const districts = [
@@ -53,8 +55,11 @@ export default function DistrictsContent() {
   ];
 
   const filteredDistricts = districts.filter((district) => {
-    return district.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = district.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
            district.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const status = district.status || "Active";
+    const matchesStatus = !statusFilter || status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesSearch && matchesStatus;
   });
 
   return (
@@ -76,6 +81,14 @@ export default function DistrictsContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search districts..."
             width="w-full"
+          />
+        </div>
+        <div className="w-48">
+          <Select
+            placeholder="Status"
+            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+            value={statusFilter}
+            onChange={(e)=>setStatusFilter(e.target.value)}
           />
         </div>
         <Button

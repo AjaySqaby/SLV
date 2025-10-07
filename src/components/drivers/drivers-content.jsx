@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "@/components/ui/SearchInput";
+import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import CustomSelect from "@/components/ui/CustomSelect";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
@@ -190,6 +191,14 @@ export default function DriversContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search drivers by name, ID or vehicle"
             width="w-full"
+          />
+        </div>
+        <div className="w-48">
+          <Select
+            placeholder="Status"
+            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"},{value:"On Leave",label:"On Leave"},{value:"Pending",label:"Pending"}]}
+            value={statusFilter}
+            onChange={(e)=>setStatusFilter(e.target.value)}
           />
         </div>
       </div>

@@ -17,12 +17,14 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
+import Select from "../ui/Select";
 import Button from "../ui/Button";
 import AddEmployeeModal from "./AddEmployeeModal";
 import EmployeeActionsDropdown from "./EmployeeActionsDropdown";
 
 export default function EmployeesContent() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -93,9 +95,11 @@ export default function EmployeesContent() {
   ];
 
   const filteredEmployees = employees.filter((employee) => {
-    return employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesText = employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.campus.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = !statusFilter || employee.status === (statusFilter === "Not Active" ? "Inactive" : "Active");
+    return matchesText && matchesStatus;
   });
 
   return (
@@ -117,6 +121,14 @@ export default function EmployeesContent() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search employees by name, title or campus"
             width="w-full"
+          />
+        </div>
+        <div className="w-48">
+          <Select
+            placeholder="Status"
+            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+            value={statusFilter}
+            onChange={(e)=>setStatusFilter(e.target.value)}
           />
         </div>
         <Button
