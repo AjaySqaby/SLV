@@ -66,29 +66,29 @@ export default function CurrentRidesTab({
 
             <div className="bg-gradient-to-b from-gray-50 to-white py-3 border-b border-gray-200 flex-shrink-0 shadow-sm">
         {/* <div className="flex items-center mb-2">
-          <div className="bg-blue-100 rounded-full p-1 mr-2">
-            <Search className="h-3 w-3 text-blue-600" />
+          <div className="bg-[var(--blue-100)] rounded-full p-1 mr-2">
+            <Search className="h-3 w-3 text-[var(--blue-600)]" />
           </div>
-          <h3 className="font-medium text-gray-800 text-xs">
+          <h3 className="font-medium text-[var(--heading)] text-xs">
             Filter & Search Rides
           </h3>
         </div> */}
         
         <div className="relative mb-3">
           <div className="absolute left-2.5 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
-            <Search className="h-3.5 w-3.5 text-gray-400" />
+            <Search className="h-3.5 w-3.5 text-[var(--gray-400)]" />
           </div>
           <Input
             type="text"
             placeholder="Search rides..."
-            className="pl-8 pr-3 py-2 text-xs border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-white w-full"
+            className="pl-8 pr-3 py-2 text-xs border-[var(--gray-300)] rounded-md shadow-sm focus:ring-1 focus:ring-[var(--blue-500)]/20 focus:border-[var(--blue-500)] transition-all duration-200 bg-[var(--surface-bg)] w-full"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-xs font-medium text-gray-600 uppercase tracking-wide">Status</p>
+          <p className="text-xs font-medium text-[var(--muted-text)] uppercase tracking-wide">Status</p>
           <Select
             options={[
               { value: "All", label: "All" },

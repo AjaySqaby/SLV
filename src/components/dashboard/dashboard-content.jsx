@@ -15,20 +15,6 @@ import Link from "next/link";
 export default function DashboardContent() {
   const cards = [
     {
-      icon: <Car size={24} />,
-      title: "Rides",
-      description: "Manage and track all ride activities",
-      color: "bg-blue",
-      href: "/rides",
-    },
-    {
-      icon: <Car size={24} />,
-      title: "Drivers",
-      description: "View and manage driver profiles",
-      color: "bg-green",
-      href: "/drivers",
-    },
-    {
       icon: <Eye size={24} />,
       title: "Eagle Eye",
       description: "Real-time tracking dashboard",
@@ -36,25 +22,18 @@ export default function DashboardContent() {
       href: "/eagle-eye",
     },
     {
+      icon: <Car size={24} />,
+      title: "Rides",
+      description: "Manage and track all ride activities",
+      color: "bg-blue",
+      href: "/rides",
+    },
+    {
       icon: <Map size={24} />,
       title: "Routes",
       description: "Manage transportation routes",
       color: "bg-[var(--amber-500)]",
       href: "/routes",
-    },
-    {
-      icon: <Users size={24} />,
-      title: "Partners",
-      description: "Manage partner organizations",
-      color: "bg-red",
-      href: "/partners",
-    },
-    {
-      icon: <GraduationCap size={24} />,
-      title: "Students",
-      description: "Student information and management",
-      color: "bg-blue",
-      href: "/students",
     },
     {
       icon: <Building2 size={24} />,
@@ -71,11 +50,25 @@ export default function DashboardContent() {
       href: "/campus",
     },
     {
-      icon: <BarChart2 size={24} />,
-      title: "Reports",
-      description: "View analytics and insights",
-      color: "bg-teal",
-      href: "/reports",
+      icon: <GraduationCap size={24} />,
+      title: "Students",
+      description: "Student information and management",
+      color: "bg-blue",
+      href: "/students",
+    },
+    {
+      icon: <Users size={24} />,
+      title: "Partners",
+      description: "Manage partner organizations",
+      color: "bg-red",
+      href: "/partners",
+    },
+    {
+      icon: <Car size={24} />,
+      title: "Drivers",
+      description: "View and manage driver profiles",
+      color: "bg-green",
+      href: "/drivers",
     },
     {
       icon: <Users size={24} />,
@@ -90,6 +83,13 @@ export default function DashboardContent() {
       description: "Driver onboarding progress",
       color: "bg-[var(--amber-500)]",
       href: "/onboarding",
+    },
+    {
+      icon: <BarChart2 size={24} />,
+      title: "Reports",
+      description: "View analytics and insights",
+      color: "bg-teal",
+      href: "/reports",
     },
   ];
 

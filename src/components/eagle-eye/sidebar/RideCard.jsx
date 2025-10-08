@@ -5,11 +5,16 @@ import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
 export default function RideCard({ ride, onViewRide }) {
   return (
-    <div className="p-3 bg-white rounded-lg shadow-sm mb-2 border border-[var(--gray-200)] hover:shadow-md transition-shadow">
+    <div
+      className="p-3 bg-[var(--primary-bg)] rounded-lg shadow-sm mb-2 border border-[var(--blue-100)] hover:shadow-md transition-shadow cursor-pointer"
+      onClick={() => onViewRide(ride.id)}
+    >
       {/* Header - Ride ID and Status */}
       <div className="flex items-center justify-between mb-2">
-        <div className="text-[var(--blue-600)] font-semibold text-sm">
-          #{ride.id}
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[var(--blue-100)] text-[var(--blue-600)]">
+            #{ride.id}
+          </span>
         </div>
         <StatusBadge
           status={ride.status}
@@ -25,7 +30,7 @@ export default function RideCard({ ride, onViewRide }) {
 
       {/* Driver Info - Compact Layout */}
       <div className="flex items-start gap-3 mb-2">
-        <div className="w-8 h-8 rounded-full flex-shrink-0 bg-gray-200 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full flex-shrink-0 bg-[var(--gray-100)] flex items-center justify-center">
           <img
             src={ride.driver.avatar || "/placeholder.svg"}
             alt={ride.driver.name}
@@ -40,14 +45,14 @@ export default function RideCard({ ride, onViewRide }) {
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-sm text-gray-900 truncate">
+          <div className="font-medium text-sm text-[var(--heading)] truncate">
             {ride.driver.name}
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-[var(--muted-text)]">
             <MapPin size={10} />
             <span className="truncate">{ride.driver.location}</span>
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-[var(--muted-text)]">
             <Phone size={10} />
             <span>{ride.driver.phone}</span>
           </div>
@@ -56,20 +61,23 @@ export default function RideCard({ ride, onViewRide }) {
 
       {/* ETA and Action */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 text-xs font-medium text-gray-700">
-          <Clock size={12} className="text-gray-400" />
+        <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
+          <Clock size={12} className="text-[var(--muted-text)]" />
           <span>ETA: </span>
           <DualTimeDisplay 
             rideTime={ride.eta}
             rideTimezone="America/Los_Angeles"
             showLabels={false}
-            className="text-xs font-medium text-gray-700"
+            className="text-xs font-medium text-[var(--heading)]"
           />
         </div>
         <Button
           variant="secondary"
-          className="px-3 py-1 text-xs text-purple-700 border border-purple-300 bg-white rounded hover:bg-purple-50 font-semibold"
-          onClick={() => onViewRide(ride.id)}
+          className="px-3 py-1 text-xs text-[var(--purple-700)] border border-[var(--purple)]/30 bg-[var(--surface-bg)] rounded hover:bg-[var(--primary-bg)] font-semibold"
+          onClick={(e) => {
+            e.stopPropagation();
+            onViewRide(ride.id);
+          }}
         >
           Details
         </Button>

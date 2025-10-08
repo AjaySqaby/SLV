@@ -72,7 +72,7 @@ export default function EagleEyeContent() {
             schools={schools}
             partners={partners}
           />
-          <MapView />
+          <MapView onViewRide={openRideModal} />
         </div>
 
         <Sidebar

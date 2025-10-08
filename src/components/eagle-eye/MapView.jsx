@@ -74,7 +74,7 @@ const mockDrivers = [
   }
 ];
 
-export default function MapView() {
+export default function MapView({ onViewRide }) {
   const [hoveredDriver, setHoveredDriver] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
 
@@ -125,7 +125,13 @@ export default function MapView() {
                   setHoveredDriver(null);
                 }
               }}
-              onClick={() => setSelectedDriver(driver)}
+              onClick={() => {
+                if (driver.rideId && onViewRide) {
+                  onViewRide(driver.rideId);
+                } else {
+                  setSelectedDriver(driver);
+                }
+              }}
             >
               {/* Marker Pin */}
               <div className="relative">
@@ -194,7 +200,11 @@ export default function MapView() {
                           className="text-blue-600 text-xs font-medium hover:text-blue-700 flex items-center hover:bg-blue-50 px-2 py-1 rounded transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedDriver(driver);
+                            if (driver.rideId && onViewRide) {
+                              onViewRide(driver.rideId);
+                            } else {
+                              setSelectedDriver(driver);
+                            }
                           }}
                         >
                           <Eye className="w-3 h-3 mr-1" />
