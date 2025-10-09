@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Polyline, useMap, ZoomControl, useMapE
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export default function RideMap({ pickup, dropoff, status = "In-progress", className = "" }) {
+export default function RideMap({ pickup, dropoff, status = "In-progress", className = "", embed = false }) {
   // Stable scalar coords (avoid object identity churn)
   const pickupLat = typeof pickup?.coords?.lat === 'number' ? pickup.coords.lat : 33.749;
   const pickupLng = typeof pickup?.coords?.lng === 'number' ? pickup.coords.lng : -84.388;
@@ -321,7 +321,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
   };
 
   return (
-    <div className={`relative ${className} ${isFullscreen ? 'fixed inset-0 z-[2000] bg-white' : '!h-[92vh]'}`}>
+    <div className={`relative ${className} ${isFullscreen ? 'fixed inset-0 z-[2000] bg-white' : (embed ? 'h-full' : '!h-[92vh]')}`}>
       {/* Map/Satellite toggle */}
       <div className="absolute z-[1000] top-2 left-2 bg-white rounded-md shadow border border-gray-300 overflow-hidden flex">
         <button
