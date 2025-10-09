@@ -252,9 +252,9 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     let finished = false;
     let lastPos = null;
 
-    // Constant-speed animation: 80 km/h along the path
+    // Constant-speed animation: 50 mph along the path
     const totalSegments = Math.max(1, points.length - 1);
-    const targetSpeedMps = (160 * 1000) / 3600; // 80 km/h
+    const targetSpeedMps = (50 * 1609.34) / 3600; // 50 mph
     const incPerSec = totalDistance > 0
       ? (targetSpeedMps * totalSegments) / totalDistance
       : totalSegments / 30; // fallback
@@ -391,7 +391,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
                 minWidth: 180
               }}>
                 <div><strong>Time:</strong> {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                <div style={{ marginTop: 4 }}><strong>Speed:</strong> 80 km/h ({(80 * 0.621371).toFixed(1)} mph)</div>
+                <div style={{ marginTop: 4 }}><strong>Speed:</strong> 50 mph</div>
                 <div style={{ marginTop: 4 }}><strong>Battery:</strong> {Math.max(5, Math.round(100 - (progressRatio * 70)))}%</div>
               </div>
             </Tooltip>
@@ -409,7 +409,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1100] w-[min(520px,95%)] bg-white/95 backdrop-blur rounded-md border border-gray-300 shadow p-2">
         <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
           <span>Live tracking</span>
-          <span>{(distanceLeft / 1000).toFixed(1)} km left • ETA ~ {Math.max(1, Math.ceil((distanceLeft / (80 * 1000)) * 60))} min @ 80 km/h</span>
+          <span>{(distanceLeft / 1609.34).toFixed(1)} mi left • ETA ~ {Math.max(1, Math.ceil((distanceLeft / (50 * 1609.34)) * 60))} min @ 50 mph</span>
         </div>
         <div className="w-full h-2 bg-gray-200 rounded">
           <div className="h-2 bg-emerald-500 rounded" style={{ width: `${Math.round(progressRatio * 100)}%` }} />
