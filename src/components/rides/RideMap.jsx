@@ -123,11 +123,14 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     iconSize: [34, 44],
     iconAnchor: [17, 42],
     html: `
-      <div style="width:34px;height:44px;filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));display:flex;align-items:center;justify-content:center;">
-        <svg width="34" height="44" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.925 0 1 4.925 1 11c0 7.5 11 21 11 21s11-13.5 11-21C23 4.925 18.075 0 12 0z" fill="#22c55e" stroke="#14532d" stroke-width="1"/>
-          <circle cx="12" cy="11" r="4.2" fill="#ffffff"/>
-        </svg>
+      <div style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35)); display:flex; align-items:center; gap:6px;">
+        <div style="width:34px;height:44px;display:flex;align-items:center;justify-content:center;">
+          <svg width="34" height="44" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.925 0 1 4.925 1 11c0 7.5 11 21 11 21s11-13.5 11-21C23 4.925 18.075 0 12 0z" fill="#22c55e" stroke="#14532d" stroke-width="1"/>
+            <circle cx="12" cy="11" r="4.2" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span style="background:#fff;border:1px solid #d1d5db;border-radius:14px;padding:2px 8px;font-size:11px;font-weight:700;color:#065f46;">PICK</span>
       </div>`
   }), []);
 
@@ -136,11 +139,14 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     iconSize: [34, 44],
     iconAnchor: [17, 42],
     html: `
-      <div style="width:34px;height:44px;filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));display:flex;align-items:center;justify-content:center;">
-        <svg width="34" height="44" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.925 0 1 4.925 1 11c0 7.5 11 21 11 21s11-13.5 11-21C23 4.925 18.075 0 12 0z" fill="#ef4444" stroke="#7f1d1d" stroke-width="1"/>
-          <circle cx="12" cy="11" r="4.2" fill="#ffffff"/>
-        </svg>
+      <div style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35)); display:flex; align-items:center; gap:6px;">
+        <div style="width:34px;height:44px;display:flex;align-items:center;justify-content:center;">
+          <svg width="34" height="44" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.925 0 1 4.925 1 11c0 7.5 11 21 11 21s11-13.5 11-21C23 4.925 18.075 0 12 0z" fill="#ef4444" stroke="#7f1d1d" stroke-width="1"/>
+            <circle cx="12" cy="11" r="4.2" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span style="background:#fff;border:1px solid #d1d5db;border-radius:14px;padding:2px 8px;font-size:11px;font-weight:700;color:#7f1d1d;">DROP</span>
       </div>`
   }), []);
 
@@ -246,10 +252,12 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     let finished = false;
     let lastPos = null;
 
-    // Time-based demo animation: traverse entire path in fixed duration
+    // Constant-speed animation: 80 km/h along the path
     const totalSegments = Math.max(1, points.length - 1);
-    const durationSec = Math.max(20, Math.min(60, Math.round(totalDistance / 300))); // ~300 m/sec visual speed
-    const incPerSec = totalSegments / durationSec;
+    const targetSpeedMps = (160 * 1000) / 3600; // 80 km/h
+    const incPerSec = totalDistance > 0
+      ? (targetSpeedMps * totalSegments) / totalDistance
+      : totalSegments / 30; // fallback
 
     let cursor = 0; // 0 .. totalSegments
 
@@ -383,7 +391,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
                 minWidth: 180
               }}>
                 <div><strong>Time:</strong> {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                <div style={{ marginTop: 4 }}><strong>Speed:</strong> {((carSpeedMps || 0) * 2.23694).toFixed(1)} mph</div>
+                <div style={{ marginTop: 4 }}><strong>Speed:</strong> 80 km/h ({(80 * 0.621371).toFixed(1)} mph)</div>
                 <div style={{ marginTop: 4 }}><strong>Battery:</strong> {Math.max(5, Math.round(100 - (progressRatio * 70)))}%</div>
               </div>
             </Tooltip>
@@ -401,7 +409,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1100] w-[min(520px,95%)] bg-white/95 backdrop-blur rounded-md border border-gray-300 shadow p-2">
         <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
           <span>Live tracking</span>
-          <span>{(distanceLeft / 1000).toFixed(1)} km left • ETA ~ {Math.max(1, Math.ceil((distanceLeft / (30 * 1000)) * 60))} min</span>
+          <span>{(distanceLeft / 1000).toFixed(1)} km left • ETA ~ {Math.max(1, Math.ceil((distanceLeft / (80 * 1000)) * 60))} min @ 80 km/h</span>
         </div>
         <div className="w-full h-2 bg-gray-200 rounded">
           <div className="h-2 bg-emerald-500 rounded" style={{ width: `${Math.round(progressRatio * 100)}%` }} />
