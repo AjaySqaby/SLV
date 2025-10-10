@@ -194,13 +194,18 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
   const [progressRatio, setProgressRatio] = useState(0); // 0..1
   const [distanceLeft, setDistanceLeft] = useState(0); // meters
   const [carSpeedMps, setCarSpeedMps] = useState(0); // instantaneous speed
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
 
-  const MapInteractionWatcher = ({ onUserInteract }) => {
+  const MapInteractionWatcher = ({ onStart, onEnd }) => {
     useMapEvents({
-      dragstart: onUserInteract,
-      zoomstart: onUserInteract,
-      touchstart: onUserInteract,
-      wheel: onUserInteract,
+      dragstart: onStart,
+      zoomstart: onStart,
+      movestart: onStart,
+      touchstart: onStart,
+      mousedown: onStart,
+      dragend: onEnd,
+      zoomend: onEnd,
+      moveend: onEnd,
     });
     return null;
   };
@@ -311,12 +316,13 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     </div>`
   }), [carHeading]);
 
-  const FollowCar = ({ position, enabled }) => {
+  const FollowCar = ({ position, enabled, interacting }) => {
     const map = useMap();
     useEffect(() => {
-      if (!enabled || !Array.isArray(position)) return;
-      map.setView(position, map.getZoom(), { animate: false });
-    }, [map, position, enabled]);
+      if (!enabled || interacting || !Array.isArray(position)) return;
+      // Recenter to the car without touching current zoom level
+      map.panTo(position, { animate: false });
+    }, [map, position, enabled, interacting]);
     return null;
   };
 
@@ -402,8 +408,8 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
 
         <BoundsOnce points={routePath} />
         <InvalidateSize />
-        <MapInteractionWatcher onUserInteract={() => setFollowCar(false)} />
-        <FollowCar position={carPosition} enabled={followCar} />
+        <MapInteractionWatcher onStart={() => { setIsUserInteracting(true); setFollowCar(false); }} onEnd={() => setIsUserInteracting(false)} />
+        <FollowCar position={carPosition} enabled={followCar} interacting={isUserInteracting} />
       </MapContainer>
       {/* Top progress/ETA overlay */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1100] w-[min(520px,95%)] bg-white/95 backdrop-blur rounded-md border border-gray-300 shadow p-2">
