@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import RideDetailModal from "./ride-detail-modal";
 
 export default function EagleEyeContent() {
-  const [activeTab, setActiveTab] = useState(0);
+  // Removed All/District/School/Partner tabs in favor of a single search bar
   const [activeStatusFilter, setActiveStatusFilter] = useState("All");
   const [showRideModal, setShowRideModal] = useState(false);
   const [selectedRideId, setSelectedRideId] = useState(null);
@@ -39,21 +39,7 @@ export default function EagleEyeContent() {
     },
   ];
 
-  const districts = [
-    "All Districts",
-    "Atlanta Public Schools",
-    "Fulton County Schools",
-    "DeKalb County Schools",
-  ];
-
-  const schools = [
-    "All Schools",
-    "Midtown High School",
-    "Buckhead Elementary",
-    "Downtown High School",
-  ];
-
-  const partners = ["All Partners", "Partner 1", "Partner 2", "Partner 3"];
+  // Legacy filter lists removed per requirement
 
   const openRideModal = (rideId) => {
     setSelectedRideId(rideId);
@@ -65,13 +51,7 @@ export default function EagleEyeContent() {
       <EagleEyeHeader />
       <div className="flex-1 flex min-h-0">
         <div className="flex-1 flex flex-col min-w-0">
-          <SearchFilters
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            districts={districts}
-            schools={schools}
-            partners={partners}
-          />
+          <SearchFilters />
           <MapView onViewRide={openRideModal} />
         </div>
 

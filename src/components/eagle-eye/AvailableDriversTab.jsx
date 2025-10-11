@@ -5,7 +5,9 @@ import DriverCard from "./sidebar/DriverCard";
 import { User } from "lucide-react";
 
 export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriverFilter }) {
-  const filteredDrivers = mockDrivers.filter((driver) => {
+  // Hide Offline drivers from the list entirely
+  const visibleDrivers = mockDrivers.filter((d) => d.status !== "Offline");
+  const filteredDrivers = visibleDrivers.filter((driver) => {
     if (driverFilter === "All") return true;
     if (driverFilter === "Ready") return driver.status === "Ready Now";
     if (driverFilter === "Ending Soon") return driver.onRide; // show on-ride drivers
@@ -24,7 +26,7 @@ export default function AvailableDriversTab({ mockDrivers, driverFilter, setDriv
           <span className="font-semibold text-purple-800 text-sm">Available Drivers</span>
         </div>
         <div className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-semibold">
-          {mockDrivers.length}
+          {visibleDrivers.length}
         </div>
       </div>
       <div className="p-3 border-b border-gray-200 flex-shrink-0">

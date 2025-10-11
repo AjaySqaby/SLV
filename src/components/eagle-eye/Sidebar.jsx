@@ -6,6 +6,7 @@ import { useState } from "react";
 import CurrentRidesTab from "./CurrentRidesTab";
 import AvailableDriversTab from "./AvailableDriversTab";
 
+// Exclude Offline drivers from Available Drivers per requirement
 const mockDrivers = [
   {
     id: "D1",
@@ -53,21 +54,7 @@ const mockDrivers = [
     onRide: false,
     lastActive: "",
   },
-  {
-    id: "D4",
-    name: "Jessica Martinez",
-    avatar: "/placeholder.svg?height=40&width=40",
-    vehicle: "Chevrolet Suburban",
-    location: "Buckhead",
-    phone: "510-555-4567",
-    status: "Offline",
-    distance: "1.1 miles away",
-    rejectedNearby: 1,
-    unassignedNearby: 1,
-    ridesNearby: 0,
-    onRide: false,
-    lastActive: "Last active 5 min ago",
-  },
+  // Offline drivers removed from the list shown in Available Drivers
 ];
 
 export default function Sidebar({
