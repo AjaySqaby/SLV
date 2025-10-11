@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -13,20 +13,18 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Pagination from "@/components/ui/Pagination";
 
-export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
+export default function RidesContent() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [filterType, setFilterType] = useState("Driver");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [search, setSearch] = useState("");
   const [mainSearch, setMainSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   
 
   const clearFilters = () => {
-    setSearch("");
     setMainSearch("");
     setStartDate();
     setEndDate();
@@ -46,19 +44,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
     setCurrentPage(1); // Reset to first page when changing items per page
   };
 
-  // Use header search term if provided
-  useEffect(() => {
-    console.log("Header search term changed:", headerSearchTerm);
-    if (headerSearchTerm !== undefined) {
-      setMainSearch(headerSearchTerm);
-      // Clear other filters when header search is used
-      setSearch("");
-      setStartDate();
-      setEndDate();
-      setActiveTab(0); // Reset to 'All' tab
-      setCurrentPage(1);
-    }
-  }, [headerSearchTerm]);
+  // Header search disabled on Rides page; only in-page search is used
   const [showAddRide, setShowAddRide] = useState(false);
 
   // Dynamic State and City options (USA) using country-state-city
@@ -1000,9 +986,9 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         filteredRides = rides;
     }
 
-    // Filter by search term (from filter panel)
-    if (search.trim()) {
-      const searchTerm = search.toLowerCase().trim();
+    // Filter by main search term (single search input via header)
+    if (mainSearch.trim()) {
+      const searchTerm = mainSearch.toLowerCase().trim();
       filteredRides = filteredRides.filter((ride) => {
         switch (filterType) {
           case "Driver":
@@ -1016,13 +1002,13 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
           case "District":
             return ride.district.toLowerCase().includes(searchTerm);
           case "Campus":
-            // No explicit campus field, approximate via pickup/dropoff locations
+            // Approximate campus via pickup/dropoff locations
             return (
               (ride.pickup.location || "").toLowerCase().includes(searchTerm) ||
               (ride.dropoff.location || "").toLowerCase().includes(searchTerm)
             );
           case "Student":
-            // Students can be searched by count, district, or campus-like locations
+            // Allow student-related search by count, district, or campus-like locations
             return (
               ride.details.students.toString().includes(searchTerm) ||
               ride.district.toLowerCase().includes(searchTerm) ||
@@ -1030,38 +1016,21 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
               (ride.dropoff.location || "").toLowerCase().includes(searchTerm)
             );
           case "Route":
-            return ride.id.toLowerCase().includes(searchTerm);
           case "Ride ID":
             return ride.id.toLowerCase().includes(searchTerm);
           default:
+            // Generic search across key fields
             return (
               ride.driver.name.toLowerCase().includes(searchTerm) ||
               ride.partner.toLowerCase().includes(searchTerm) ||
               ride.district.toLowerCase().includes(searchTerm) ||
-              ride.pickup.location.toLowerCase().includes(searchTerm) ||
-              ride.dropoff.location.toLowerCase().includes(searchTerm) ||
+              (ride.pickup.location || "").toLowerCase().includes(searchTerm) ||
+              (ride.dropoff.location || "").toLowerCase().includes(searchTerm) ||
               ride.status.toLowerCase().includes(searchTerm) ||
               ride.driver.vehicle.toLowerCase().includes(searchTerm) ||
               ride.id.toLowerCase().includes(searchTerm)
             );
         }
-      });
-    }
-
-    // Filter by main search term (general search)
-    if (mainSearch.trim()) {
-      const searchTerm = mainSearch.toLowerCase().trim();
-      filteredRides = filteredRides.filter((ride) => {
-        return (
-          ride.driver.name.toLowerCase().includes(searchTerm) ||
-          ride.partner.toLowerCase().includes(searchTerm) ||
-          ride.district.toLowerCase().includes(searchTerm) ||
-          ride.pickup.location.toLowerCase().includes(searchTerm) ||
-          ride.dropoff.location.toLowerCase().includes(searchTerm) ||
-          ride.status.toLowerCase().includes(searchTerm) ||
-          ride.driver.vehicle.toLowerCase().includes(searchTerm) ||
-          ride.id.toLowerCase().includes(searchTerm)
-        );
       });
     }
 
@@ -1100,7 +1069,7 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, mainSearch, startDate, endDate, activeTab, itemsPerPage]);
+  }, [mainSearch, startDate, endDate, activeTab, itemsPerPage]);
 
   const filteredRides = getFilteredRides();
   const paginatedRides = getPaginatedRides();
@@ -1119,33 +1088,23 @@ export default function RidesContent({ headerSearchTerm, onHeaderSearch }) {
         </Button>
       </div>
       <div className="flex flex-col gap-3 mb-4">
+        {/* In-page main search */}
         <div className="relative w-full">
           <Input
             type="text"
-            placeholder="Search rides..."
+            placeholder="Search by driver, partner, district, campus, or ride ID"
             value={mainSearch}
             onChange={(e) => setMainSearch(e.target.value)}
             className="pl-10 pr-4 w-full"
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-[var(--gray-400)]" />
         </div>
-        {/* Inline filters row (moved above status tabs) */}
+        {/* Filters above status tabs and below the search */}
         <div className="flex flex-col md:flex-row gap-4 items-end">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/3">
             <FilterDropdown value={filterType} onChange={setFilterType} />
           </div>
-          <div className="w-full md:w-1/2">
-            <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-              Search
-            </label>
-            <Input
-              placeholder={`Search by ${filterType} (e.g., District/Campus for students, Partner for drivers)`}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/3">
             <DateRangePicker
               startDate={startDate}
               endDate={endDate}

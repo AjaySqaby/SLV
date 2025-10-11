@@ -15,6 +15,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
   const [baseLayer, setBaseLayer] = useState('map'); // 'map' | 'sat'
 
   const [routePath, setRoutePath] = useState([[pickupLat, pickupLng], [dropoffLat, dropoffLng]]);
+  const initialCenter = useMemo(() => ([(pickupLat + dropoffLat) / 2, (pickupLng + dropoffLng) / 2]), [pickupLat, pickupLng, dropoffLat, dropoffLng]);
   const routeKeyRef = useRef('');
   const isDemoDefault = !pickup?.coords && !dropoff?.coords;
 
@@ -150,18 +151,16 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       </div>`
   }), []);
 
-  // Fit bounds only once per route (prevents zoom snapping during user interaction)
+  // Fit bounds only once per mount to avoid snapping back when route updates asynchronously
   const BoundsOnce = ({ points }) => {
     const map = useMap();
-    const fittedKeyRef = useRef(null);
-    const key = useMemo(() => points && points.length ? `${points.length}:${points[0][0]},${points[0][1]}->${points[points.length - 1][0]},${points[points.length - 1][1]}` : '', [points]);
+    const hasFittedRef = useRef(false);
     useEffect(() => {
-      if (!map || !points?.length) return;
-      if (fittedKeyRef.current === key) return;
+      if (!map || !points?.length || hasFittedRef.current) return;
       const bounds = L.latLngBounds(points.map(p => L.latLng(p[0], p[1])));
       map.fitBounds(bounds, { padding: [40, 40] });
-      fittedKeyRef.current = key;
-    }, [map, key, points]);
+      hasFittedRef.current = true;
+    }, [map, points]);
     return null;
   };
 
@@ -188,15 +187,29 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
     return null;
   };
 
+  // Ensure all zoom interactions are explicitly enabled (fixes cases where parent containers disable wheel)
+  const ZoomEnabler = () => {
+    const map = useMap();
+    useEffect(() => {
+      map.scrollWheelZoom?.enable();
+      map.touchZoom?.enable();
+      map.doubleClickZoom?.enable();
+      map.boxZoom?.enable();
+      map.keyboard?.enable();
+    }, [map]);
+    return null;
+  };
+
   // Interaction helpers
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [followCar, setFollowCar] = useState(true);
+  const [followCar, setFollowCar] = useState(false);
   const [progressRatio, setProgressRatio] = useState(0); // 0..1
   const [distanceLeft, setDistanceLeft] = useState(0); // meters
   const [carSpeedMps, setCarSpeedMps] = useState(0); // instantaneous speed
   const [isUserInteracting, setIsUserInteracting] = useState(false);
 
   const MapInteractionWatcher = ({ onStart, onEnd }) => {
+    const map = useMap();
     useMapEvents({
       dragstart: onStart,
       zoomstart: onStart,
@@ -206,7 +219,12 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       dragend: onEnd,
       zoomend: onEnd,
       moveend: onEnd,
+      baselayerchange: onStart,
+      overlayadd: onStart,
+      overlayremove: onStart,
     });
+    // Safety: cancel follow right away on mount in case parent toggles
+    useEffect(() => { onStart?.() }, []);
     return null;
   };
 
@@ -341,16 +359,19 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       </div>
 
       <MapContainer
-        className="w-full h-full"
+        className="w-full h-full overscroll-contain"
         style={{ minHeight: '100%', height: '100%', background: '#e5e7eb' }}
-        center={[(pickupLat + dropoffLat) / 2, (pickupLng + dropoffLng) / 2]}
+        center={initialCenter}
         zoom={13}
         scrollWheelZoom={true}
         touchZoom={true}
         doubleClickZoom={true}
         dragging={true}
         zoomControl={false}
+        wheelDebounceTime={0}
+        wheelPxPerZoomLevel={80}
       >
+        <ZoomEnabler />
         {baseLayer === 'map' ? (
           <TileLayer
             attribution='&copy; OpenStreetMap contributors'
@@ -411,8 +432,8 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
         <MapInteractionWatcher onStart={() => { setIsUserInteracting(true); setFollowCar(false); }} onEnd={() => setIsUserInteracting(false)} />
         <FollowCar position={carPosition} enabled={followCar} interacting={isUserInteracting} />
       </MapContainer>
-      {/* Top progress/ETA overlay */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1100] w-[min(520px,95%)] bg-white/95 backdrop-blur rounded-md border border-gray-300 shadow p-2">
+      {/* Top progress/ETA overlay (non-interactive so wheel passes through) */}
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-[1100] w-[min(520px,95%)] bg-white/95 backdrop-blur rounded-md border border-gray-300 shadow p-2 pointer-events-none">
         <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
           <span>Live tracking</span>
           <span>{(distanceLeft / 1609.34).toFixed(1)} mi left • ETA ~ {Math.max(1, Math.ceil((distanceLeft / (50 * 1609.34)) * 60))} min @ 50 mph</span>

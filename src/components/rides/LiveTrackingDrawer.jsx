@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { X, Maximize2, Clock, Battery, ArrowRight } from "lucide-react"
 import Button from '@/components/ui/Button'
+import RideMap from './RideMap'
 
 export default function LiveTrackingDrawer({ isOpen, onClose, rideId = "1001" }) {
   const [activeTab, setActiveTab] = useState("Live Tracking")
@@ -59,14 +60,7 @@ export default function LiveTrackingDrawer({ isOpen, onClose, rideId = "1001" })
         {/* Map */}
         <div className="flex-1 relative">
           <div className="absolute inset-0">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50470.03982405886!2d-122.43913217768056!3d37.77492951404811!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1621361323087!5m2!1sen!2sus"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-            ></iframe>
+            <RideMap embed />
           </div>
           <div className="absolute top-4 right-4 z-10">
             <Button className="bg-[var(--background)] p-2 rounded-md shadow-md" variant="ghost">

@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import PageLayout from "@/components/layout/page-layout"
 import { useState } from "react"
 
-// Dynamically import RidesContent to prevent SSR issues
 const RidesContent = dynamic(() => import("@/components/rides/rides-content"), {
   ssr: false,
   loading: () => (
@@ -22,8 +21,14 @@ export default function RidesPage() {
   };
 
   return (
-    <PageLayout activePage="Rides" pageTitle="Rides" onHeaderSearch={handleHeaderSearch}>
-      <RidesContent headerSearchTerm={headerSearchTerm} />
+    <PageLayout
+      activePage="Rides"
+      pageTitle="Rides"
+      onHeaderSearch={undefined}
+      headerSearchPlaceholder={undefined}
+      hideHeaderSearch
+    >
+      <RidesContent />
     </PageLayout>
   )
 }
