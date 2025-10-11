@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import Button from "@/components/ui/Button"
 import PersonalInfoStep from "./PersonalInfoStep"
@@ -48,9 +48,9 @@ const initialValues = {
   inspectionDocument: null,
 }
 
-export default function AddDriverModal({ isOpen, onClose }) {
+export default function AddDriverModal({ isOpen, onClose, initialValues: initialValuesProp, disableValidation = false }) {
   const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState(initialValues)
+  const [formData, setFormData] = useState({ ...initialValues, ...(initialValuesProp || {}) })
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -93,12 +93,13 @@ export default function AddDriverModal({ isOpen, onClose }) {
   }
 
   const nextStep = () => {
-    const errors = validateStep(currentStep)
-    if (Object.keys(errors).length > 0) {
-      console.log("Validation errors:", errors)
-      return
+    if (!disableValidation) {
+      const errors = validateStep(currentStep)
+      if (Object.keys(errors).length > 0) {
+        console.log("Validation errors:", errors)
+        return
+      }
     }
-
     if (currentStep < 3) {
       setCurrentStep((prev) => prev + 1)
     }
@@ -111,18 +112,19 @@ export default function AddDriverModal({ isOpen, onClose }) {
   }
 
   const handleSubmit = () => {
-    const errors = validateStep(currentStep)
-    if (Object.keys(errors).length > 0) {
-      console.log("Validation errors:", errors)
-      return
+    if (!disableValidation) {
+      const errors = validateStep(currentStep)
+      if (Object.keys(errors).length > 0) {
+        console.log("Validation errors:", errors)
+        return
+      }
     }
-
     console.log("Form submitted:", formData)
     onClose()
   }
 
   const resetForm = () => {
-    setFormData(initialValues)
+    setFormData({ ...initialValues, ...(initialValuesProp || {}) })
     setCurrentStep(1)
   }
 
@@ -130,6 +132,14 @@ export default function AddDriverModal({ isOpen, onClose }) {
     resetForm()
     onClose()
   }
+
+  // When modal opens, prefill with provided initial values if any
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ ...initialValues, ...(initialValuesProp || {}) })
+      setCurrentStep(1)
+    }
+  }, [isOpen, initialValuesProp])
 
   const renderStep = () => {
     switch (currentStep) {
@@ -169,11 +179,11 @@ export default function AddDriverModal({ isOpen, onClose }) {
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-center z-[9000] pt-6"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto border border-[var(--gray-200)] shadow-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
@@ -242,7 +252,7 @@ export default function AddDriverModal({ isOpen, onClose }) {
           </div>
 
           {/* Step Content */}
-          <div className="space-y-6" style={{ maxWidth: "800px", width: "100%", margin: "0 auto" }}>
+          <div className="space-y-6 max-w-7xl w-full mx-auto">
             {renderStep()}
           </div>
         </div>

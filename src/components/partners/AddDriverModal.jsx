@@ -3,6 +3,8 @@
 import { useForm } from "@/hooks/useForm"
 import BaseModal from "@/components/common/BaseModal"
 import FormBuilder from "@/components/common/FormBuilder"
+import Button from "@/components/ui/Button"
+import { UserPlus, Save, XCircle } from "lucide-react"
 import { STATES, PHONE_FORMAT, ZIP_CODE_FORMAT } from "@/constants/common"
 import { validatePhone, validateZipCode } from "@/utils/common"
 
@@ -114,7 +116,19 @@ export default function AddDriverModal({ isOpen, onClose }) {
   const { values, errors, isSubmitting, handleChange, handleSubmit: onSubmit, setError } = useForm(initialValues, handleSubmit)
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Add New Driver">
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Add New Driver"
+      widthClass="w-full !max-w-[82rem]"
+      className="max-h-[calc(100vh-3rem)] overflow-auto"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-[var(--primary-black)]">
+          <UserPlus className="w-5 h-5 text-[var(--primary)]" />
+          <span className="font-semibold">Driver Information</span>
+        </div>
+      </div>
       <FormBuilder
         fields={DRIVER_FORM_FIELDS}
         values={values}
@@ -122,10 +136,17 @@ export default function AddDriverModal({ isOpen, onClose }) {
         onSubmit={onSubmit}
         onCancel={onClose}
         submitLabel="Add Driver"
-        className="min-w-[350px] max-w-[400px]"
+        submitIcon={<Save className="w-4 h-4" />}
+        cancelIcon={<XCircle className="w-4 h-4" />}
+        hideActions
+        className="w-full"
         errors={errors}
         isSubmitting={isSubmitting}
       />
+      <div className="flex justify-end gap-3 mt-4">
+        <Button variant="secondary" onClick={onClose} icon={<XCircle className="w-4 h-4" />}>Cancel</Button>
+        <Button variant="primary" onClick={onSubmit} icon={<Save className="w-4 h-4" />}>Save Driver</Button>
+      </div>
     </BaseModal>
   )
 } 

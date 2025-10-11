@@ -3,13 +3,15 @@
 import { useState } from "react"
 import { useForm } from "@/hooks/useForm"
 import BaseModal from "@/components/common/BaseModal"
+import Button from "@/components/ui/Button"
+import { Building2, Save, XCircle } from "lucide-react"
 import CompanyInfoStep from "./modal/CompanyInfoStep"
 import InsuranceStep from "./modal/InsuranceStep"
 import FleetStep from "./modal/FleetStep"
 import ServiceStep from "./modal/ServiceStep"
 import { validateEmail, validatePhone } from "@/utils/common"
 
-const initialValues = {
+const DEFAULT_INITIAL_VALUES = {
   companyName: "",
   contactName: "",
   contactEmail: "",
@@ -37,7 +39,7 @@ const initialValues = {
   operatingHoursEnd: "",
 }
 
-export default function AddPartnerModal({ isOpen, onClose }) {
+export default function AddPartnerModal({ isOpen, onClose, initialValues: initialValuesProp, mode = "create" }) {
   const [currentStep, setCurrentStep] = useState(1)
 
   const validateStep = (values, step) => {
@@ -98,7 +100,7 @@ export default function AddPartnerModal({ isOpen, onClose }) {
     handleChange,
     handleSubmit: onSubmit,
     setError,
-  } = useForm(initialValues, handleSubmit)
+  } = useForm({ ...DEFAULT_INITIAL_VALUES, ...(initialValuesProp || {}) }, handleSubmit)
 
   const prevStep = () => {
     setCurrentStep((prev) => prev - 1)
@@ -160,8 +162,20 @@ export default function AddPartnerModal({ isOpen, onClose }) {
   }
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} title="Add New Partner" size="xl" widthClass="w-full max-w-[800px]">
-      <div className="space-y-6" style={{ maxWidth: "800px", width: "100%" }}>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={mode === "edit" ? "Edit Partner" : "Add New Partner"}
+      widthClass="w-full !max-w-[82rem]"
+      className="max-h-[calc(100vh-3rem)] overflow-auto"
+    >
+      <div className="space-y-6 w-full">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[var(--primary-black)]">
+            <Building2 className="w-5 h-5 text-[var(--primary)]" />
+            <span className="font-semibold">Company & Compliance</span>
+          </div>
+        </div>
         <div className="flex justify-center items-center mb-8">
           <div className="flex items-center space-x-4">
             {[1, 2, 3, 4].map((step, index) => (
@@ -199,38 +213,18 @@ export default function AddPartnerModal({ isOpen, onClose }) {
          {renderStep()}
          
          {/* Footer Buttons */}
-         <div className="flex justify-end gap-3 pt-6 border-t border-[var(--gray-200)]">
-           <button 
-             className="px-4 py-2 text-[var(--gray-700)] bg-[var(--gray-100)] hover:bg-[var(--gray-200)] rounded-lg transition-colors"
-             onClick={onClose}
-           >
-             Cancel
-           </button>
+          <div className="flex justify-end gap-3 pt-6 border-t border-[var(--gray-200)]">
+           <Button variant="secondary" onClick={onClose} icon={<XCircle className="w-4 h-4" />}>Cancel</Button>
            {currentStep > 1 && (
-             <button 
-               className="px-4 py-2 text-[var(--gray-700)] bg-[var(--gray-100)] hover:bg-[var(--gray-200)] rounded-lg transition-colors"
-               onClick={prevStep}
-             >
-               Previous
-             </button>
+             <Button variant="outline" onClick={prevStep}>Previous</Button>
            )}
-           {currentStep < 4 ? (
-             <button 
-               className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white rounded-lg transition-colors"
-               onClick={nextStep}
-             >
-               Next
-             </button>
+          {currentStep < 4 ? (
+             <Button variant="primary" onClick={nextStep}>Next</Button>
            ) : (
-             <button 
-               className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white rounded-lg transition-colors"
-               onClick={onSubmit}
-             >
-               Create Partner
-             </button>
+             <Button variant="primary" onClick={onSubmit} icon={<Save className="w-4 h-4" />}>{mode === "edit" ? "Save Changes" : "Create Partner"}</Button>
            )}
          </div>
-       </div>
-     </BaseModal>
+      </div>
+    </BaseModal>
   )
 }

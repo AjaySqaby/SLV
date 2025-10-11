@@ -1,10 +1,12 @@
 "use client";
 import { useState } from 'react';
-import { X, Building2, User, Mail, Phone, MapPin, Users, Route, Car, Star, CheckCircle, Calendar, Clock, DollarSign, FileText, Shield, Settings } from 'lucide-react';
+import { X, Building2, User, Mail, Phone, MapPin, Users, Route, Car, Star, CheckCircle, Calendar, Clock, DollarSign, FileText, Shield, Settings, Pencil } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import AddPartnerModal from './AddPartnerModal';
 
 export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [editOpen, setEditOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -47,6 +49,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     { id: 'overview', label: 'Overview' },
     { id: 'drivers', label: 'Drivers' },
     { id: 'routes', label: 'Routes' },
+    { id: 'documents', label: 'Documents' },
     { id: 'financial', label: 'Financial' }
   ];
 
@@ -228,6 +231,43 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     </div>
   );
 
+  const renderDocuments = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-[var(--primary-black)]">Documents</h3>
+          <button className="px-3 py-1 text-sm rounded-md bg-[var(--blue-600)] text-white hover:bg-[var(--blue)]">Upload</button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--gray-100)]">
+                <th className="px-6 py-3 font-medium">Document</th>
+                <th className="px-6 py-3 font-medium">Status</th>
+                <th className="px-6 py-3 font-medium">Expiry</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { name: 'Insurance Certificate', status: 'Pending Update', expiry: '2025-01-31' },
+                { name: 'W-9 Form', status: 'Current', expiry: '-' },
+                { name: 'Driver Roster', status: 'Current', expiry: '-' },
+              ].map((doc, i) => (
+                <tr key={i} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)]">
+                  <td className="px-6 py-3">{doc.name}</td>
+                  <td className="px-6 py-3">
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${doc.status === 'Current' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>{doc.status}</span>
+                  </td>
+                  <td className="px-6 py-3">{doc.expiry}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderFinancial = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -290,6 +330,8 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
         return renderDrivers();
       case 'routes':
         return renderRoutes();
+      case 'documents':
+        return renderDocuments();
       case 'financial':
         return renderFinancial();
       default:
@@ -303,7 +345,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-[95vw] h-[89vh] max-w-7xl mx-4 overflow-hidden relative"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -317,12 +359,24 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
               <p className="text-[var(--muted-text)]">{partner.name} - {partnerId || "CT"}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
-          >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setEditOpen(true)}
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+              aria-label="Edit partner"
+              title="Edit"
+            >
+              <Pencil className="w-5 h-5 text-[var(--gray-600)]" />
+            </button>
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+              aria-label="Close"
+              title="Close"
+            >
+              <X className="w-6 h-6 text-[var(--gray-500)]" />
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -350,24 +404,36 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
           {renderContent()}
         </div>
 
-        {/* Footer - Fixed at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="secondary"
-              onClick={onClose}
-            >
-              Close
-            </Button>
-            <Button
-              className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
-              onClick={() => console.log('Edit partner')}
-            >
-              Edit Partner
-            </Button>
-          </div>
-        </div>
+        {/* Footer removed as per design: only pencil icon in header */}
       </div>
+      {editOpen && (
+        <AddPartnerModal
+          isOpen={editOpen}
+          onClose={() => setEditOpen(false)}
+          mode="edit"
+          initialValues={{
+            companyName: partner.name,
+            contactName: partner.contact.name,
+            contactEmail: partner.contact.email,
+            contactPhone: partner.contact.phone,
+            companyAddress: partner.address,
+            city: partner.location.split(',')[0] || '',
+            state: partner.location.split(',')[1]?.trim() || '',
+            insuranceProvider: partner.insurance.provider,
+            naicNumber: partner.insurance.policyNumber,
+            generalLiabilityLimit: '',
+            autoLiabilityLimit: '',
+            workersCompInsurance: '',
+            sedans: String(partner.fleet.sedans || ''),
+            suvs: String(partner.fleet.suvs || ''),
+            buses: String(partner.fleet.buses || ''),
+            vans: String(partner.fleet.vans || ''),
+            serviceArea: partner.serviceArea,
+            operatingHoursStart: (partner.operatingHours || '').split(' - ')[0] || '',
+            operatingHoursEnd: (partner.operatingHours || '').split(' - ')[1] || '',
+          }}
+        />
+      )}
     </div>
   );
 }

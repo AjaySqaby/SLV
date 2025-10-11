@@ -12,6 +12,9 @@ export default function FormBuilder({
   cancelLabel = "Cancel",
   onCancel,
   className = "",
+  submitIcon,
+  cancelIcon,
+  hideActions = false,
 }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,16 +77,18 @@ export default function FormBuilder({
         </div>
       ))}
 
-      <div className="flex justify-end space-x-3">
-        {onCancel && (
-          <Button variant="secondary" type="button" onClick={onCancel}>
-            {cancelLabel}
+      {!hideActions && (
+        <div className="flex justify-end space-x-3">
+          {onCancel && (
+            <Button variant="secondary" type="button" onClick={onCancel} icon={cancelIcon}>
+              {cancelLabel}
+            </Button>
+          )}
+          <Button variant="primary" type="submit" icon={submitIcon}>
+            {submitLabel}
           </Button>
-        )}
-        <Button variant="primary" type="submit">
-          {submitLabel}
-        </Button>
-      </div>
+        </div>
+      )}
     </form>
   );
 } 

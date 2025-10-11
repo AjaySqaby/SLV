@@ -13,6 +13,7 @@ import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
 import Select from "../ui/Select";
 import AddPartnerModal from "./AddPartnerModal";
+import AddDriverModal from "@/components/drivers/AddDriverModal";
 import PartnerViewModal from "./PartnerViewModal";
 import PartnerRowActions from "./PartnerRowActions";
 import { useRouter } from "next/navigation";
@@ -85,6 +86,7 @@ export default function PartnersContent() {
     
   ]);
   const router = useRouter();
+  const [isAddDriverModalOpen, setIsAddDriverModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginPartner, setLoginPartner] = useState(null);
 
@@ -105,6 +107,7 @@ export default function PartnersContent() {
       } Inactive`,
       icon: <FileText className="text-[var(--blue)]" />,
       iconBg: "bg-[var(--blue-100)]",
+      href: "/partners"
     },
     {
       title: "Total Drivers",
@@ -112,6 +115,7 @@ export default function PartnersContent() {
       details: "",
       icon: <Users className="text-[var(--purple)]" />,
       iconBg: "bg-[var(--purple-100)]",
+      href: "/drivers"
     },
     {
       title: "Active Routes",
@@ -119,6 +123,7 @@ export default function PartnersContent() {
       details: "",
       icon: <MapPin className="text-[var(--green)]" />,
       iconBg: "bg-[var(--green-100)]",
+      href: "/routes"
     },
     {
       title: "Total Rides",
@@ -126,6 +131,7 @@ export default function PartnersContent() {
       details: "",
       icon: <Car className="text-[var(--orange)]" />,
       iconBg: "bg-[var(--orange-100)]",
+      href: "/rides"
     },
   ];
 
@@ -188,14 +194,22 @@ export default function PartnersContent() {
             <Plus size={18} />
             Add Partner
           </button>
+          <button
+            onClick={() => setIsAddDriverModalOpen(true)}
+            className="text-base flex items-center justify-center font-medium gap-2 bg-[var(--blue-600)] hover:bg-[var(--blue)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
+          >
+            <Plus size={18} />
+            Add Driver
+          </button>
         </div>
       </div>
 
       <div className="grid grid-cols-4 gap-6 mb-8">
         {partnerStats.map((stat, index) => (
-            <div
+            <button
               key={index}
-              className="bg-[var(--background)] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-[var(--gray-100)]"
+              onClick={() => stat.href && router.push(stat.href)}
+              className="text-left bg-[var(--background)] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-[var(--gray-100)] focus:outline-none"
             >
             <div className="flex justify-between items-start">
               <div>
@@ -213,7 +227,7 @@ export default function PartnersContent() {
                 {stat.icon}
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -283,13 +297,28 @@ export default function PartnersContent() {
                     <span>{partner.location}</span>
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <span className="text-[var(--gray-500)]">-</span>
+                    <button
+                      onClick={(e)=>{ e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); setActiveTab(0); /* modal handles click to drivers */ }}
+                      className="text-[var(--blue-600)] underline hover:opacity-80"
+                    >
+                      {partner.drivers}
+                    </button>
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <span className="text-[var(--gray-500)]">-</span>
+                    <button
+                      onClick={(e)=>{ e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); /* routes tab */ setActiveTab(0); }}
+                      className="text-[var(--blue-600)] underline hover:opacity-80"
+                    >
+                      {partner.routes}
+                    </button>
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <span className="text-[var(--gray-500)]">-</span>
+                    <button
+                      onClick={(e)=>{ e.stopPropagation(); router.push('/rides'); }}
+                      className="text-[var(--blue-600)] underline hover:opacity-80"
+                    >
+                      {partner.rides}
+                    </button>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex justify-center">
@@ -314,6 +343,11 @@ export default function PartnersContent() {
       <AddPartnerModal
         isOpen={isAddPartnerModalOpen}
         onClose={() => setIsAddPartnerModalOpen(false)}
+      />
+      <AddDriverModal
+        isOpen={isAddDriverModalOpen}
+        onClose={() => setIsAddDriverModalOpen(false)}
+        disableValidation
       />
       <PartnerViewModal
         isOpen={viewModalOpen}
