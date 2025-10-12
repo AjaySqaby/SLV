@@ -1,8 +1,10 @@
 import React from "react";
+import { RiArrowLeftLine, RiCloseLine } from "react-icons/ri";
 
 export default function BaseModal({
   isOpen,
   onClose,
+  onBack,
   title,
   children,
   size = "md",
@@ -30,13 +32,24 @@ export default function BaseModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-[var(--primary-black)]">{title}</h2>
+          <div className="flex items-center gap-2">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+                aria-label="Back"
+              >
+                <RiArrowLeftLine className="w-5 h-5" style={{ color: 'var(--gray-600)' }} />
+              </button>
+            )}
+            <h2 className="text-lg font-semibold text-[var(--primary-black)]">{title}</h2>
+          </div>
           <button
             onClick={onClose}
-            className="text-[var(--gray-400)] hover:text-[var(--gray-600)] text-2xl font-bold px-2 rounded-full focus:outline-none transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
             aria-label="Close modal"
           >
-            &times;
+            <RiCloseLine className="w-5 h-5" style={{ color: 'var(--gray-600)' }} />
           </button>
         </div>
         {children}

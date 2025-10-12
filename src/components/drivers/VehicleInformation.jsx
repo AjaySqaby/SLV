@@ -1,9 +1,12 @@
 "use client";
-import { RiCarLine, RiAddLine, RiCheckLine } from "react-icons/ri";
+import { useState } from "react";
+import { RiCarLine, RiAddLine, RiCheckLine, RiArrowLeftLine, RiCloseLine } from "react-icons/ri";
 import Button from "@/components/ui/Button";
+import BaseModal from "@/components/common/BaseModal";
 
 export default function VehicleInformation({ driverData }) {
   const { vehicle } = driverData;
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-gray-50 rounded-lg p-6">
@@ -23,11 +26,11 @@ export default function VehicleInformation({ driverData }) {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Vehicle */}
-          <div className="text-center p-4 bg-[var(--blue-100)] rounded-lg">
+          <button className="text-center p-4 bg-[var(--blue-100)] rounded-lg hover:opacity-90 transition" onClick={() => setOpen(true)}>
             <RiCarLine className="w-6 h-6 text-[var(--blue-500)] mx-auto mb-2" />
             <h3 className="text-sm font-medium text-gray-500 mb-1">Vehicle</h3>
             <p className="text-sm font-semibold text-gray-900">{vehicle.make} ({vehicle.year})</p>
-          </div>
+          </button>
 
           {/* License Plate */}
           <div className="text-center p-4 bg-[var(--green-100)] rounded-lg">
@@ -62,6 +65,33 @@ export default function VehicleInformation({ driverData }) {
           Add Another Vehicle
         </Button>
       </div>
+
+      {/* Vehicle Detail Modal (unified size via BaseModal) */}
+      <BaseModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onBack={() => setOpen(false)}
+        title="Vehicle Details"
+        size="xl"
+        widthClass="w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded border" style={{ borderColor: 'var(--gray-200)' }}>
+            <h4 className="text-sm font-semibold mb-2" style={{ color: 'var(--heading)' }}>Vehicle Overview</h4>
+            <div className="space-y-1 text-sm">
+              <div>Make/Model: {vehicle.make}</div>
+              <div>Year: {vehicle.year}</div>
+              <div>Type: {vehicle.type}</div>
+              <div>Color: {vehicle.color}</div>
+              <div>License Plate: {vehicle.licensePlate}</div>
+            </div>
+          </div>
+          <div className="p-4 rounded border" style={{ borderColor: 'var(--gray-200)' }}>
+            <h4 className="text-sm font-semibold mb-2" style={{ color: 'var(--heading)' }}>Documents</h4>
+            <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Insurance, Registration and Inspection details will appear here.</p>
+          </div>
+        </div>
+      </BaseModal>
     </div>
   );
 }

@@ -400,11 +400,15 @@ export default function DriverDetailContent({ driverId }) {
       {/* Driver Profile Header */}
       <DriverProfileHeader driverData={driverData} />
 
-      {/* Main Content */}
-      <div className="space-y-6">
-        <DriverInformation driverData={driverData} />
-        <VehicleInformation driverData={driverData} />
-        <TransportationSummary driverData={driverData} onManageDocuments={() => setShowDocumentsModal(true)} />
+      {/* Main Content - Compact cards in responsive grid */}
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-12 lg:col-span-6 space-y-4">
+          <DriverInformation driverData={driverData} />
+          <TransportationSummary driverData={driverData} onManageDocuments={() => setShowDocumentsModal(true)} />
+        </div>
+        <div className="col-span-12 lg:col-span-6 space-y-4">
+          <VehicleInformation driverData={driverData} />
+        </div>
       </div>
 
       {/* Tabs Section */}
@@ -420,7 +424,7 @@ export default function DriverDetailContent({ driverId }) {
         </div>
 
         {/* Tab Content */}
-        <div className="p-6">
+        <div className="p-4">
           {renderTabContent()}
         </div>
       </div>
@@ -431,18 +435,28 @@ export default function DriverDetailContent({ driverId }) {
           <div className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-[var(--primary)]" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Manage Documents</h2>
-                  <p className="text-[var(--muted-text)]">{driverData.name} - {driverData.id}</p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowDocumentsModal(false)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+                  aria-label="Back"
+                >
+                  <X className="w-6 h-6 text-[var(--gray-500)]" />
+                </button>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-[var(--primary)]" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-[var(--primary-black)]">Manage Documents</h2>
+                    <p className="text-[var(--muted-text)]">{driverData.name} - {driverData.id}</p>
+                  </div>
                 </div>
               </div>
               <button
                 onClick={() => setShowDocumentsModal(false)}
                 className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+                aria-label="Close"
               >
                 <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>

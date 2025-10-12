@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from 'react';
-import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit } from 'lucide-react';
+import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit, ArrowLeft } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import StatusBadge from '@/components/ui/StatusBadge';
+import DriverDetailModal from '@/components/drivers/DriverDetailModal';
+import StudentProfilePage from '@/components/students/StudentProfilePage';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [activeTab, setActiveTab] = useState(0);
+  const [showDriverModal, setShowDriverModal] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState(null);
+  const [showStudentModal, setShowStudentModal] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
 
   if (!isOpen) return null;
 
@@ -21,6 +27,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     students: 7,
     status: "Active",
     driver: "Sam Kebede",
+    driverId: "D-001",
     duration: "25 min",
     startTime: "8:00 AM",
     endTime: "8:25 AM",
@@ -148,7 +155,12 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             <User className="w-6 h-6 text-[var(--gray-600)]" />
           </div>
           <div className="flex-1">
-            <p className="font-semibold text-[var(--primary-black)] text-base">{routeData.driver}</p>
+            <button
+              className="font-semibold text-[var(--primary-black)] text-base hover:underline text-left"
+              onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
+            >
+              {routeData.driver}
+            </button>
             <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
               <Star className="w-4 h-4 text-[var(--amber-500)] fill-current" />
               <span>4.9 rating</span>
@@ -322,7 +334,12 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               <User className="w-5 h-5 text-[var(--blue-600)]" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-[var(--primary-black)]">{student.name}</h4>
+              <button
+                className="font-semibold text-[var(--primary-black)] hover:underline text-left"
+                onClick={() => { setSelectedStudentId(student.id); setShowStudentModal(true); }}
+              >
+                {student.name}
+              </button>
               <div className="flex items-center gap-2 text-sm text-[var(--muted-text)]">
                 <span>{student.grade}</span>
                 <span>•</span>
@@ -498,6 +515,52 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
           </Button>
         </div>
       </div>
+
+      {/* Driver Detail Modal */}
+      <DriverDetailModal
+        isOpen={showDriverModal}
+        onClose={() => { setShowDriverModal(false); setSelectedDriverId(null); }}
+        onBack={() => { setShowDriverModal(false); setSelectedDriverId(null); }}
+        driverId={selectedDriverId}
+      />
+
+      {/* Student Profile Modal */}
+      {showStudentModal && selectedStudentId && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[10000] backdrop-blur-sm"
+          onClick={() => { setShowStudentModal(false); setSelectedStudentId(null); }}
+        >
+          <div
+            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+                  <Users className="w-6 h-6 text-[var(--primary)]" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Student Details</h2>
+                  <p className="text-[var(--muted-text)]">{selectedStudentId}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => { setShowStudentModal(false); setSelectedStudentId(null); }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+                  aria-label="Back"
+                >
+                  {/* Using X as back is not ideal; prefer ArrowLeft, but keep consistency with imports above */}
+                  <X className="w-6 h-6 text-[var(--gray-500)]" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+              <StudentProfilePage studentId={selectedStudentId} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

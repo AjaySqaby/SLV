@@ -189,10 +189,10 @@ export default function StudentProfilePage({ studentId }) {
         </Button>
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-12 gap-6 p-6">
+      {/* Main Content - more compact layout */}
+      <div className="grid grid-cols-12 gap-4 p-6">
         {/* Left Column */}
-        <div className="col-span-5 space-y-6">
+        <div className="col-span-12 lg:col-span-5 space-y-4">
           {/* Profile Header */}
           <Card className="p-6">
             <div className="flex items-start gap-6">
@@ -234,7 +234,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Profile Details */}
-          <Card className="p-6">
+          <Card className="p-4">
             <h3 className="font-bold mb-4" style={{ color: 'var(--heading)' }}>Profile</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -256,7 +256,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* District */}
-          <Card className="p-6">
+          <Card className="p-4">
             <h3 className="font-bold mb-4" style={{ color: 'var(--heading)' }}>District</h3>
             <div className="space-y-2">
               <p className="text-sm font-medium" style={{ color: 'var(--blue-600)' }}>
@@ -269,7 +269,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Guardian Info */}
-          <Card className="p-6">
+          <Card className="p-4">
             <h3 className="font-bold mb-4" style={{ color: 'var(--heading)' }}>Guardian Info</h3>
             <div className="space-y-3">
               <p className="text-sm font-medium" style={{ color: 'var(--heading)' }}>
@@ -291,7 +291,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Schedule Info */}
-          <Card className="p-6">
+          <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <Calendar className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Schedule Info</h3>
@@ -307,7 +307,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Notes */}
-          <Card className="p-6">
+          <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Notes</h3>
@@ -330,9 +330,9 @@ export default function StudentProfilePage({ studentId }) {
         </div>
 
         {/* Right Column */}
-        <div className="col-span-7 space-y-6">
+        <div className="col-span-12 lg:col-span-7 space-y-4">
           {/* Transportation */}
-          <Card className="p-6">
+          <Card className="p-4">
             <h3 className="font-bold mb-4" style={{ color: 'var(--heading)' }}>Transportation</h3>
             <div className="flex items-center gap-4">
               <div 
@@ -353,7 +353,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Programs */}
-          <Card className="p-6">
+          <Card className="p-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Programs</h3>
               <Button variant="ghost" size="sm" style={{ color: 'var(--blue-600)' }}>
@@ -379,7 +379,7 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Rides */}
-          <Card className="p-6">
+          <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <Users className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Rides</h3>
@@ -439,14 +439,14 @@ export default function StudentProfilePage({ studentId }) {
           </Card>
 
           {/* Equipment & Special Needs */}
-          <Card className="p-6">
+          <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Equipment & Special Needs</h3>
             </div>
             
             {/* Accessibility */}
-            <div className="mb-4">
+            <div className="mb-3">
               <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Accessibility</h4>
               <div className="flex gap-2">
                 {studentData.specialNeeds.accessibility.map((item, index) => (
@@ -464,7 +464,7 @@ export default function StudentProfilePage({ studentId }) {
             </div>
 
             {/* Health Notes */}
-            <div className="mb-4">
+            <div className="mb-3">
               <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Health Notes</h4>
               <div className="space-y-2">
                 {studentData.specialNeeds.healthNotes.map((note, index) => (
@@ -483,7 +483,7 @@ export default function StudentProfilePage({ studentId }) {
             </div>
 
             {/* Behavior Notes */}
-            <div className="mb-4">
+            <div className="mb-3">
               <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Behavior Notes</h4>
               <div className="space-y-2">
                 {studentData.specialNeeds.behaviorNotes.map((note, index) => (

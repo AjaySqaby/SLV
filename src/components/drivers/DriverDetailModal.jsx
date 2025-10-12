@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import { RiArrowLeftLine } from "react-icons/ri";
 import BaseModal from "@/components/common/BaseModal";
 import DriverDetailContent from "./DriverDetailContent";
 
-export default function DriverDetailModal({ isOpen, onClose, driverId }) {
+export default function DriverDetailModal({ isOpen, onClose, driverId, onBack }) {
   if (!isOpen || !driverId) return null;
 
   return (
     <BaseModal 
       isOpen={isOpen} 
       onClose={onClose} 
+      onBack={onBack}
       title="Driver Details" 
       size="xl" 
       widthClass="w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"

@@ -29,6 +29,7 @@ import Button from "@/components/ui/Button";
 import IconButton from "@/components/ui/IconButton";
 import StatusBadge from "@/components/ui/StatusBadge";
 import DeleteModal from "@/components/common/DeleteModal";
+import AssignRouteDriverModal from "./AssignRouteDriverModal";
 
 export default function RoutesContent() {
   const router = useRouter();
@@ -90,6 +91,8 @@ export default function RoutesContent() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRouteId, setDeleteRouteId] = useState(null);
+  const [assignModalOpen, setAssignModalOpen] = useState(false);
+  const [assignContext, setAssignContext] = useState({ routeId: null, driverName: null });
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -151,6 +154,11 @@ export default function RoutesContent() {
   const handleRowClick = (routeId) => {
     setSelectedRouteId(routeId);
     setViewModalOpen(true);
+  };
+
+  const openAssignDriver = (route) => {
+    setAssignContext({ routeId: route.id, driverName: route.driver });
+    setAssignModalOpen(true);
   };
 
   // Handler for editing a route
@@ -279,29 +287,37 @@ export default function RoutesContent() {
                    </td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.stops}</td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.distance}</td>
-                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.students}</td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.students}</td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <StatusBadge
                        status={route.status}
                        type={route.status === "Active" ? "active" : "inactive"}
                      />
                    </td>
-                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                     {route.driver ? (
-                       route.driver
-                     ) : (
-                       <span className="text-blue-600 cursor-pointer hover:underline">
-                         Assign Driver
-                       </span>
-                     )}
-                   </td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    {route.driver ? (
+                      <button
+                        className="text-blue-600 hover:underline"
+                        onClick={(e) => { e.stopPropagation(); openAssignDriver(route); }}
+                      >
+                        {route.driver} (change)
+                      </button>
+                    ) : (
+                      <button
+                        className="text-blue-600 hover:underline"
+                        onClick={(e) => { e.stopPropagation(); openAssignDriver(route); }}
+                      >
+                        Assign Driver
+                      </button>
+                    )}
+                  </td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                      <div className="flex justify-center">
-                       <RouteActionsDropdown
+                      <RouteActionsDropdown
                          route={route}
                          onView={handleViewRoute}
                          onEdit={handleEditRoute}
-                         onSchedule={handleScheduleRoute}
+                        onSchedule={handleScheduleRoute}
                        />
                      </div>
                    </td>
@@ -323,6 +339,31 @@ export default function RoutesContent() {
         onDelete={confirmDeleteRoute}
         itemName={`route ${deleteRouteId}`}
       />
+      {assignModalOpen && (
+        <AssignRouteDriverModal
+          isOpen={assignModalOpen}
+          onClose={() => setAssignModalOpen(false)}
+          routeId={assignContext.routeId}
+          currentDriverId={null}
+          currentDriverName={assignContext.driverName}
+          driverOptions={[
+            { value: "D-001", label: "Sam Kebede" },
+            { value: "D-002", label: "John Doe" },
+            { value: "D-003", label: "Jane Smith" },
+          ]}
+          onApply={(payload) => {
+            // Simple optimistic UI update for demo: set name if assigned
+            if (payload.action === 'assign' && payload.driverId) {
+              const option = [{ value: "D-001", label: "Sam Kebede" }, { value: "D-002", label: "John Doe" }, { value: "D-003", label: "Jane Smith" }].find(o => o.value === payload.driverId);
+              setRoutes(prev => prev.map(r => r.id === payload.routeId ? { ...r, driver: option?.label || r.driver } : r));
+            }
+            if (payload.action === 'unassign') {
+              setRoutes(prev => prev.map(r => r.id === payload.routeId ? { ...r, driver: null } : r));
+            }
+            console.log('Apply driver assignment to route:', payload);
+          }}
+        />)
+      }
              {addModalOpen && (
          <AddRouteModal
            isOpen={addModalOpen}
