@@ -352,12 +352,12 @@ export default function StudentProfilePage({ studentId }) {
             </div>
           </Card>
 
-          {/* Programs */}
+          {/* Schedules (renamed from Programs) */}
           <Card className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Programs</h3>
+              <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Schedules</h3>
               <Button variant="ghost" size="sm" style={{ color: 'var(--blue-600)' }}>
-                View past programs
+                View past schedules
               </Button>
             </div>
             <div className="space-y-2">

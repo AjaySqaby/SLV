@@ -30,7 +30,7 @@ export default function RideDetailModal({
     { id: 1, label: "Live Tracking" },
     { id: 2, label: "Stops" },
     { id: 3, label: "Students" },
-    { id: 4, label: "Ride History" },
+    { id: 4, label: "Timeline" },
   ];
 
   if (!isOpen) return null;
