@@ -5,7 +5,7 @@ const mockDrivers = [
   {
     id: "D1",
     name: "Sarah Williams",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/picture.jpg",
     vehicle: "Honda Odyssey",
     location: "Midtown",
     address: "999 Peachtree St NE, Atlanta, GA 30309",
@@ -19,7 +19,7 @@ const mockDrivers = [
   {
     id: "D2", 
     name: "Michael Johnson",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/picture.jpg",
     vehicle: "Toyota Sienna",
     location: "West Midtown",
     address: "1234 West Peachtree St NW, Atlanta, GA 30309",
@@ -27,13 +27,13 @@ const mockDrivers = [
     status: "Ready Now",
     statusColor: "#16a34a",
     position: { top: "28%", left: "48%" },
-    rideId: null,
-    eta: null
+    rideId: "R222",
+    eta: "10 min"
   },
   {
     id: "D3",
     name: "David Thompson", 
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/picture.jpg",
     vehicle: "Ford Transit",
     location: "Downtown Atlanta",
     address: "456 Marietta St NW, Atlanta, GA 30313",
@@ -47,7 +47,7 @@ const mockDrivers = [
   {
     id: "D4",
     name: "Jessica Martinez",
-    avatar: "/placeholder.svg?height=40&width=40", 
+    avatar: "/picture.jpg", 
     vehicle: "Chevrolet Suburban",
     location: "Buckhead",
     address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
@@ -55,13 +55,13 @@ const mockDrivers = [
     status: "Ready Now",
     statusColor: "#16a34a",
     position: { top: "22%", left: "56%" },
-    rideId: null,
-    eta: null
+    rideId: "R444",
+    eta: "14 min"
   },
   {
     id: "D5",
     name: "Robert Chen",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/picture.jpg",
     vehicle: "Honda Pilot", 
     location: "Virginia Highland",
     address: "1234 N Highland Ave NE, Atlanta, GA 30306",
@@ -133,20 +133,24 @@ export default function MapView({ onViewRide }) {
                 }
               }}
             >
-              {/* Marker Pin */}
+              {/* Marker Pin with profile photo or initials */}
               <div className="relative">
                 <div 
-                  className="w-8 h-8 rounded-full border-3 border-white shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 relative z-10"
+                  className="w-10 h-10 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
                   style={{ backgroundColor: driver.statusColor }}
                 >
-                  <div style={{ color: '#ffffff' }}>
-                    {getStatusIcon(driver.status)}
-                  </div>
+                  {driver.avatar ? (
+                    <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-white text-xs font-semibold">
+                      {driver.name.split(' ').map(n => n[0]).join('').slice(0,2)}
+                    </span>
+                  )}
                 </div>
                 
                 {/* Marker Pin Point */}
                 <div 
-                  className="absolute top-6 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent relative z-10"
+                  className="absolute top-8 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent relative z-10"
                   style={{ borderTopColor: driver.statusColor }}
                 ></div>
               </div>
@@ -161,7 +165,13 @@ export default function MapView({ onViewRide }) {
                 >
                   <div className="flex items-start space-x-3">
                     <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                      <User className="w-6 h-6 text-gray-500" />
+                      {driver.avatar ? (
+                        <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" onError={(e)=>{e.currentTarget.style.display='none'}} />
+                      ) : (
+                        <span className="text-gray-700 text-sm font-semibold">
+                          {driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                        </span>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
@@ -252,8 +262,12 @@ export default function MapView({ onViewRide }) {
             
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User className="w-8 h-8 text-gray-500" />
+                <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                  {selectedDriver.avatar ? (
+                    <img src={selectedDriver.avatar} alt={selectedDriver.name} className="w-full h-full object-cover" onError={(e)=>{e.currentTarget.style.display='none'}} />
+                  ) : (
+                    <User className="w-8 h-8 text-gray-500" />
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg">{selectedDriver.name}</h3>
@@ -273,10 +287,17 @@ export default function MapView({ onViewRide }) {
               </div>
 
               <div className="flex space-x-3 pt-4">
-                <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-blue-700">
-                  View Full Details
-                </button>
-                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-700">
+                {selectedDriver.rideId && (
+                  <button
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-blue-700"
+                    onClick={() => {
+                      if (onViewRide) onViewRide(selectedDriver.rideId);
+                    }}
+                  >
+                    View Ride
+                  </button>
+                )}
+                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-700" onClick={() => { window.open(`tel:${selectedDriver.phone || ''}`, '_self'); }}>
                   Call Driver
                 </button>
               </div>

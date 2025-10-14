@@ -22,7 +22,9 @@ export default function RideCard({ ride, onViewRide }) {
             ride.status === "On Time"
               ? "active"
               : ride.status === "Delayed"
-              ? "error"
+              ? "warning"
+              : ride.status === "Rejected"
+              ? "inactive"
               : "default"
           }
         />
@@ -59,29 +61,39 @@ export default function RideCard({ ride, onViewRide }) {
         </div>
       </div>
 
-      {/* ETA and Action */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
-          <Clock size={12} className="text-[var(--muted-text)]" />
-          <span>ETA: </span>
-          <DualTimeDisplay 
-            rideTime={ride.eta}
-            rideTimezone="America/Los_Angeles"
-            showLabels={false}
-            className="text-xs font-medium text-[var(--heading)]"
-          />
+      {/* ETA and Actions */}
+      {ride.status === 'Rejected' ? (
+        <div className="space-y-2">
+          <div className="text-[10px] text-[var(--muted-text)]">Recovery Options</div>
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="secondary" className="px-2 py-1 text-xs" onClick={(e)=>{e.stopPropagation(); onViewRide(ride.id);}}>Manual Check</Button>
+            <Button className="px-2 py-1 text-xs" onClick={(e)=>{e.stopPropagation(); /* open smart suggestion drawer */}}>Smart Suggestion</Button>
+          </div>
         </div>
-        <Button
-          variant="secondary"
-          className="px-3 py-1 text-xs text-[var(--purple-700)] border border-[var(--purple)]/30 bg-[var(--surface-bg)] rounded hover:bg-[var(--primary-bg)] font-semibold"
-          onClick={(e) => {
-            e.stopPropagation();
-            onViewRide(ride.id);
-          }}
-        >
-          Details
-        </Button>
-      </div>
+      ) : (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
+            <Clock size={12} className="text-[var(--muted-text)]" />
+            <span>ETA: </span>
+            <DualTimeDisplay 
+              rideTime={ride.eta}
+              rideTimezone="America/Los_Angeles"
+              showLabels={false}
+              className="text-xs font-medium text-[var(--heading)]"
+            />
+          </div>
+          <Button
+            variant="secondary"
+            className="px-3 py-1 text-xs text-[var(--purple-700)] border border-[var(--purple)]/30 bg-[var(--surface-bg)] rounded hover:bg-[var(--primary-bg)] font-semibold"
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewRide(ride.id);
+            }}
+          >
+            Details
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

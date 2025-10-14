@@ -13,12 +13,10 @@ export default function CurrentRidesTab({
   const [search, setSearch] = useState("");
   const filteredRides = rides.filter((ride) => {
     let statusMatch = true;
-    if (activeStatusFilter === "On Time")
-      statusMatch = ride.status === "On Time";
-    else if (activeStatusFilter === "Delayed")
-      statusMatch = ride.status === "Delayed";
-    else if (activeStatusFilter === "Unassigned")
-      statusMatch = ride.status === "Unassigned";
+    if (activeStatusFilter === "On Time") statusMatch = ride.status === "On Time";
+    else if (activeStatusFilter === "Delayed") statusMatch = ride.status === "Delayed";
+    else if (activeStatusFilter === "Rejected") statusMatch = ride.status === "Rejected";
+    else if (activeStatusFilter === "Unassigned") statusMatch = ride.status === "Unassigned";
 
     const searchLower = search.toLowerCase();
     const searchMatch =
@@ -94,6 +92,7 @@ export default function CurrentRidesTab({
               { value: "All", label: "All" },
               { value: "On Time", label: "On Time" },
               { value: "Delayed", label: "Delayed" },
+              { value: "Rejected", label: "Rejected" },
               { value: "Unassigned", label: "Unassigned" },
             ]}
             value={activeStatusFilter}

@@ -37,6 +37,17 @@ export default function EagleEyeContent() {
       eta: "09:15 AM",
       status: "Delayed",
     },
+    {
+      id: "RT1003",
+      driver: {
+        name: "Unassigned",
+        avatar: "",
+        location: "",
+        phone: "",
+      },
+      eta: "--",
+      status: "Rejected",
+    },
   ];
 
   // Legacy filter lists removed per requirement
