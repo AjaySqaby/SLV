@@ -18,9 +18,11 @@ export default function AssignRouteDriverModal({
   onApply,
   schoolStart = "8:00 AM",
   schoolEnd = "3:00 PM",
+  initialMode,
+  initialSelectedDriver,
 }) {
-  const [mode, setMode] = useState("keep"); // keep | assign | unassign
-  const [selectedDriver, setSelectedDriver] = useState("");
+  const [mode, setMode] = useState(initialMode || "keep"); // keep | assign | unassign
+  const [selectedDriver, setSelectedDriver] = useState(initialSelectedDriver || "");
   const [scope, setScope] = useState("all"); // all | specific
   // US K-12: Show only school days (Mon-Fri)
   const [days, setDays] = useState({ Mon: false, Tue: false, Wed: false, Thu: false, Fri: false });

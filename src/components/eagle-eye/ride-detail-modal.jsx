@@ -32,6 +32,7 @@ export default function RideDetailModal({
     { id: 3, label: "Students" },
     { id: 4, label: "Timeline" },
   ];
+  const tabPanelClass = "pt-6 min-h-[28rem]";
 
   if (!isOpen) return null;
 
@@ -179,23 +180,23 @@ export default function RideDetailModal({
 
           <Tabs tabs={tabList} activeTab={activeTab} onChange={setActiveTab} />
 
-          <div className="pt-6">
+          <div className={tabPanelClass}>
             {activeTab === 0 && (
               <div className="grid grid-cols-2 gap-6">
                 <div className="bg-[var(--surface-bg)] p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-4">Driver Information</h3>
                   <div className="flex items-center mb-4">
-                    {rideData.driver.avatar ? (
+                    <div className="w-14 h-14 rounded-full mr-4 border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
                       <img
-                        src={rideData.driver.avatar}
+                        src={rideData.driver.avatar || "/picture.jpg"}
                         alt={rideData.driver.name}
-                        className="w-14 h-14 rounded-full object-cover mr-4 border border-[var(--gray-200)]"
+                        className="w-full h-full object-cover"
+                        onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
                       />
-                    ) : (
-                      <div className="w-14 h-14 rounded-full bg-[var(--gray-100)] flex items-center justify-center text-2xl font-bold text-[var(--primary)] mr-4 border border-[var(--gray-200)]">
-                        {rideData.driver.name.charAt(0)}
+                      <div data-fallback className="hidden w-full h-full flex items-center justify-center text-2xl font-bold text-[var(--primary)]">
+                        {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
                       </div>
-                    )}
+                    </div>
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-[var(--primary-black)]">{rideData.driver.name}</div>
                       <div className="text-sm text-[var(--muted-text)]">{rideData.driver.phone}</div>
@@ -304,7 +305,7 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 1 && (
-              <div>
+              <div className={tabPanelClass}>
                 <div className="bg-[var(--surface-muted)] rounded-lg overflow-hidden h-96 mb-6">
                   <RideMap
                     embed
@@ -367,7 +368,7 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 2 && (
-              <div className="space-y-6">
+              <div className={"space-y-6 "+tabPanelClass}>
                 {rideData.stops.map((stop, index) => (
                   <div
                     key={index}
@@ -419,11 +420,16 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 3 && (
-              <div className="space-y-6">
+              <div className={"space-y-6 "+tabPanelClass}>
                 {rideData.students.map((student, index) => (
                   <div key={index} className="flex items-center justify-between p-4 border-b border-[var(--surface-muted)]">
                     <div className="flex items-center">
-                      <img src={student.avatar || "/placeholder.svg"} alt={student.name} className="w-12 h-12 rounded-full mr-4 object-cover" />
+                      <div className="w-12 h-12 rounded-full mr-4 overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                        <img src={student.avatar || "/picture.jpg"} alt={student.name} className="w-full h-full object-cover" onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }} />
+                        <div data-fallback className="hidden w-full h-full flex items-center justify-center text-sm font-semibold text-[var(--heading)]">
+                          {student.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                        </div>
+                      </div>
                       <div>
                         <h4 className="font-medium">{student.name}</h4>
                         <p className="text-sm text-[var(--muted-text)]">Grade {student.grade} • ID: {student.id}</p>
@@ -438,7 +444,7 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 4 && (
-              <div className="space-y-6">
+              <div className={"space-y-6 "+tabPanelClass}>
                 {rideData.history.map((item, index) => (
                   <div key={index} className="flex">
                     <div className="mr-4">

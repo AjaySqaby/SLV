@@ -64,6 +64,7 @@ export default function Sidebar({
   onViewRide,
   sidebarTab,
   setSidebarTab,
+  onSmartSuggest,
 }) {
   const [driverFilter, setDriverFilter] = useState("All");
 
@@ -139,6 +140,7 @@ export default function Sidebar({
             activeStatusFilter={activeStatusFilter}
             setActiveStatusFilter={setActiveStatusFilter}
             onViewRide={onViewRide}
+            onSmartSuggest={onSmartSuggest}
           />
         )}
 

@@ -3,7 +3,7 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import Button from "@/components/ui/Button";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
-export default function RideCard({ ride, onViewRide }) {
+export default function RideCard({ ride, onViewRide, onSmartSuggest }) {
   return (
     <div
       className="p-3 bg-[var(--primary-bg)] rounded-lg shadow-sm mb-2 border border-[var(--blue-100)] hover:shadow-md transition-shadow cursor-pointer"
@@ -67,7 +67,7 @@ export default function RideCard({ ride, onViewRide }) {
           <div className="text-[10px] text-[var(--muted-text)]">Recovery Options</div>
           <div className="grid grid-cols-2 gap-2">
             <Button variant="secondary" className="px-2 py-1 text-xs" onClick={(e)=>{e.stopPropagation(); onViewRide(ride.id);}}>Manual Check</Button>
-            <Button className="px-2 py-1 text-xs" onClick={(e)=>{e.stopPropagation(); /* open smart suggestion drawer */}}>Smart Suggestion</Button>
+            <Button className="px-2 py-1 text-xs" onClick={(e)=>{e.stopPropagation(); onSmartSuggest?.(ride);}}>Smart Suggestion</Button>
           </div>
         </div>
       ) : (

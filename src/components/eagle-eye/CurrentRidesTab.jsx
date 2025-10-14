@@ -9,6 +9,7 @@ export default function CurrentRidesTab({
   activeStatusFilter,
   setActiveStatusFilter,
   onViewRide,
+  onSmartSuggest,
 }) {
   const [search, setSearch] = useState("");
   const filteredRides = rides.filter((ride) => {
@@ -130,7 +131,7 @@ export default function CurrentRidesTab({
         ) : (
           <div className="space-y-3">
             {filteredRides.map((ride) => (
-              <RideCard key={ride.id} ride={ride} onViewRide={onViewRide} />
+              <RideCard key={ride.id} ride={ride} onViewRide={onViewRide} onSmartSuggest={onSmartSuggest} />
             ))}
           </div>
         )}
