@@ -13,6 +13,7 @@ export default function EagleEyeContent() {
   const [activeStatusFilter, setActiveStatusFilter] = useState("All");
   const [showRideModal, setShowRideModal] = useState(false);
   const [selectedRideId, setSelectedRideId] = useState(null);
+  const [selectedRideStatus, setSelectedRideStatus] = useState(null);
   const [sidebarTab, setSidebarTab] = useState("rides");
   const [showSuggest, setShowSuggest] = useState(false);
   const [suggestRide, setSuggestRide] = useState(null);
@@ -57,8 +58,9 @@ export default function EagleEyeContent() {
 
   // Legacy filter lists removed per requirement
 
-  const openRideModal = (rideId) => {
+  const openRideModal = (rideId, status) => {
     setSelectedRideId(rideId);
+    setSelectedRideStatus(status || null);
     setShowRideModal(true);
   };
 
@@ -91,6 +93,7 @@ export default function EagleEyeContent() {
         isOpen={showRideModal}
         onClose={() => setShowRideModal(false)}
         rideId={selectedRideId}
+        rideStatus={selectedRideStatus || (rides.find(r=>r.id===selectedRideId)?.status) || 'In Progress'}
       />
 
       {/* Smart Suggestion Drawer */}

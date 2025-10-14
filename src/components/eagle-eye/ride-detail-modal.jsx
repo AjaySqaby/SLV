@@ -22,6 +22,7 @@ export default function RideDetailModal({
   isOpen,
   onClose,
   rideId = "SLV1001-75185",
+  rideStatus = "In Progress",
 }) {
   const [activeTab, setActiveTab] = useState(0);
   const RideMap = dynamic(() => import("@/components/rides/RideMap"), { ssr: false });
@@ -33,6 +34,7 @@ export default function RideDetailModal({
     { id: 4, label: "Timeline" },
   ];
   const tabPanelClass = "pt-6 min-h-[28rem]";
+  const statusType = rideStatus === 'On Time' ? 'active' : (rideStatus === 'Delayed' ? 'warning' : (rideStatus === 'Rejected' ? 'inactive' : 'active'));
 
   if (!isOpen) return null;
 
@@ -175,7 +177,7 @@ export default function RideDetailModal({
             {rideData.date} • Route: {rideData.route?.pickup?.address} → {rideData.route?.dropoff?.address}
           </div>
           <div className="flex items-center gap-4 mb-4">
-            <StatusBadge status={rideData.status} type="active" />
+            <StatusBadge status={rideStatus} type={statusType} />
           </div>
 
           <Tabs tabs={tabList} activeTab={activeTab} onChange={setActiveTab} />

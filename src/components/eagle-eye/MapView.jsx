@@ -127,7 +127,7 @@ export default function MapView({ onViewRide }) {
               }}
               onClick={() => {
                 if (driver.rideId && onViewRide) {
-                  onViewRide(driver.rideId);
+                  onViewRide(driver.rideId, driver.status === 'Delayed' ? 'Delayed' : 'On Time');
                 } else {
                   setSelectedDriver(driver);
                 }
@@ -210,8 +210,8 @@ export default function MapView({ onViewRide }) {
                           className="text-blue-600 text-xs font-medium hover:text-blue-700 flex items-center hover:bg-blue-50 px-2 py-1 rounded transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (driver.rideId && onViewRide) {
-                              onViewRide(driver.rideId);
+                          if (driver.rideId && onViewRide) {
+                              onViewRide(driver.rideId, driver.status === 'Delayed' ? 'Delayed' : 'On Time');
                             } else {
                               setSelectedDriver(driver);
                             }
