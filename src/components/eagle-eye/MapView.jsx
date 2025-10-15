@@ -17,7 +17,7 @@ const mockDrivers = [
     eta: "15 min"
   },
   {
-    id: "D2", 
+    id: "D2",
     name: "Michael Johnson",
     avatar: "/picture.jpg",
     vehicle: "Toyota Sienna",
@@ -32,7 +32,7 @@ const mockDrivers = [
   },
   {
     id: "D3",
-    name: "David Thompson", 
+    name: "David Thompson",
     avatar: "/picture.jpg",
     vehicle: "Ford Transit",
     location: "Downtown Atlanta",
@@ -47,7 +47,7 @@ const mockDrivers = [
   {
     id: "D4",
     name: "Jessica Martinez",
-    avatar: "/picture.jpg", 
+    avatar: "/picture.jpg",
     vehicle: "Chevrolet Suburban",
     location: "Buckhead",
     address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
@@ -62,7 +62,7 @@ const mockDrivers = [
     id: "D5",
     name: "Robert Chen",
     avatar: "/picture.jpg",
-    vehicle: "Honda Pilot", 
+    vehicle: "Honda Pilot",
     location: "Virginia Highland",
     address: "1234 N Highland Ave NE, Atlanta, GA 30306",
     phone: "510-555-5678",
@@ -112,8 +112,8 @@ export default function MapView({ onViewRide }) {
             {/* Driver Marker Container */}
             <div
               className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-              style={{ 
-                top: driver.position.top, 
+              style={{
+                top: driver.position.top,
                 left: driver.position.left,
                 zIndex: hoveredDriver?.id === driver.id ? 1000 : 10
               }}
@@ -135,7 +135,7 @@ export default function MapView({ onViewRide }) {
             >
               {/* Marker Pin with profile photo or initials */}
               <div className="relative">
-                <div 
+                <div
                   className="w-10 h-10 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
                   style={{ backgroundColor: driver.statusColor }}
                 >
@@ -143,13 +143,13 @@ export default function MapView({ onViewRide }) {
                     <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-white text-xs font-semibold">
-                      {driver.name.split(' ').map(n => n[0]).join('').slice(0,2)}
+                      {driver.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </span>
                   )}
                 </div>
-                
+
                 {/* Marker Pin Point */}
-                <div 
+                <div
                   className="absolute top-8 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent relative z-10"
                   style={{ borderTopColor: driver.statusColor }}
                 ></div>
@@ -157,7 +157,7 @@ export default function MapView({ onViewRide }) {
 
               {/* Hover Tooltip */}
               {hoveredDriver?.id === driver.id && (
-                <div 
+                <div
                   className="absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl border border-gray-200 p-4 min-w-[280px] animate-in fade-in zoom-in duration-200"
                   style={{ zIndex: 1001 }}
                   onMouseEnter={() => setHoveredDriver(driver)}
@@ -166,24 +166,24 @@ export default function MapView({ onViewRide }) {
                   <div className="flex items-start space-x-3">
                     <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
                       {driver.avatar ? (
-                        <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" onError={(e)=>{e.currentTarget.style.display='none'}} />
+                        <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
                       ) : (
                         <span className="text-gray-700 text-sm font-semibold">
-                          {driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                          {driver.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </span>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <h3 className="font-semibold text-gray-900 text-sm truncate">{driver.name}</h3>
-                        <span 
+                        <span
                           className="px-2 py-1 rounded-full text-xs font-medium text-white flex-shrink-0 ml-2"
                           style={{ backgroundColor: driver.statusColor }}
                         >
                           {driver.status}
                         </span>
                       </div>
-                      
+
                       <div className="space-y-1 text-xs text-gray-600">
                         <div className="flex items-center">
                           <Car className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
@@ -206,11 +206,11 @@ export default function MapView({ onViewRide }) {
                       </div>
 
                       <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 gap-2">
-                        <button 
+                        <button
                           className="text-blue-600 text-xs font-medium hover:text-blue-700 flex items-center hover:bg-blue-50 px-2 py-1 rounded transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
-                          if (driver.rideId && onViewRide) {
+                            if (driver.rideId && onViewRide) {
                               onViewRide(driver.rideId, driver.status === 'Delayed' ? 'Delayed' : 'On Time');
                             } else {
                               setSelectedDriver(driver);
@@ -220,7 +220,7 @@ export default function MapView({ onViewRide }) {
                           <Eye className="w-3 h-3 mr-1" />
                           View Details
                         </button>
-                        <button 
+                        <button
                           className="text-green-600 text-xs font-medium hover:text-green-700 flex items-center hover:bg-green-50 px-2 py-1 rounded transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -233,9 +233,9 @@ export default function MapView({ onViewRide }) {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Tooltip Arrow */}
-                  <div 
+                  <div
                     className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"
                     style={{ zIndex: 1002 }}
                   ></div>
@@ -252,19 +252,19 @@ export default function MapView({ onViewRide }) {
           <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Driver Details</h2>
-              <button 
+              <button
                 onClick={() => setSelectedDriver(null)}
                 className="text-gray-400 hover:text-gray-600"
               >
                 ✕
               </button>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                   {selectedDriver.avatar ? (
-                    <img src={selectedDriver.avatar} alt={selectedDriver.name} className="w-full h-full object-cover" onError={(e)=>{e.currentTarget.style.display='none'}} />
+                    <img src={selectedDriver.avatar} alt={selectedDriver.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
                   ) : (
                     <User className="w-8 h-8 text-gray-500" />
                   )}
@@ -274,7 +274,7 @@ export default function MapView({ onViewRide }) {
                   <p className="text-gray-600">{selectedDriver.vehicle}</p>
                 </div>
               </div>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />

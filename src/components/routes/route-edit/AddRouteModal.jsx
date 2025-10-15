@@ -7,6 +7,7 @@ import Select from "@/components/ui/Select";
 import Toggle from "@/components/ui/Toggle";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import RouteConfirmModal from "@/components/routes/RouteConfirmModal";
 
 export default function AddRouteModal({ isOpen, onClose }) {
   const [activeTab, setActiveTab] = useState("Basic Info");
@@ -28,6 +29,9 @@ export default function AddRouteModal({ isOpen, onClose }) {
     defaultDropoffTime: "15:30",
     additionalStops: []
   });
+  const [customPickupAddress, setCustomPickupAddress] = useState("");
+  const [customDropoffAddress, setCustomDropoffAddress] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [newStop, setNewStop] = useState({
     name: "",
@@ -201,6 +205,28 @@ export default function AddRouteModal({ isOpen, onClose }) {
             />
             <span className="font-medium">One Way Route</span>
           </label>
+        </div>
+      </div>
+
+      {/* Custom Pickup/Dropoff */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Custom Pickup Address (optional)</label>
+          <Input
+            type="text"
+            placeholder="Enter pickup address"
+            value={customPickupAddress}
+            onChange={(e) => setCustomPickupAddress(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Custom Dropoff Address (optional)</label>
+          <Input
+            type="text"
+            placeholder="Enter dropoff address"
+            value={customDropoffAddress}
+            onChange={(e) => setCustomDropoffAddress(e.target.value)}
+          />
         </div>
       </div>
 
@@ -1237,12 +1263,20 @@ export default function AddRouteModal({ isOpen, onClose }) {
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2">
+          <Button className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2" onClick={()=> setShowConfirm(true)}>
             <Route className="w-4 h-4" />
             Create Route
           </Button>
         </div>
       </div>
+      {showConfirm && (
+        <RouteConfirmModal
+          isOpen={showConfirm}
+          onClose={()=>setShowConfirm(false)}
+          routeDraft={{ ...formData, customPickupAddress, customDropoffAddress, additionalStops: formData.additionalStops }}
+          onConfirm={(payload)=>{ console.log('Route confirmed:', payload); setShowConfirm(false); onClose?.(); }}
+        />
+      )}
     </div>
   );
 }
