@@ -82,8 +82,8 @@ export default function PartnersContent() {
       rides: 83,
       status: "Inactive",
     },
-    
-    
+
+
   ]);
   const router = useRouter();
   const [isAddDriverModalOpen, setIsAddDriverModalOpen] = useState(false);
@@ -100,11 +100,9 @@ export default function PartnersContent() {
     {
       title: "Total Partners",
       value: partners.length.toString(),
-      details: `${
-        partners.filter((p) => p.status === "Active").length
-      } Active • ${
-        partners.filter((p) => p.status === "Inactive").length
-      } Inactive`,
+      details: `${partners.filter((p) => p.status === "Active").length
+        } Active • ${partners.filter((p) => p.status === "Inactive").length
+        } Inactive`,
       icon: <FileText className="text-[var(--blue)]" />,
       iconBg: "bg-[var(--blue-100)]",
       href: "/partners"
@@ -181,10 +179,10 @@ export default function PartnersContent() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div>
-       <h1 className="text-3xl font-bold mb-8">
+          <h1 className="text-3xl font-bold mb-8">
             Partners
           </h1>
-        
+
         </div>
         <div className="flex gap-3">
           <button
@@ -206,11 +204,11 @@ export default function PartnersContent() {
 
       <div className="grid grid-cols-4 gap-6 mb-8">
         {partnerStats.map((stat, index) => (
-            <button
-              key={index}
-              onClick={() => stat.href && router.push(stat.href)}
-              className="text-left bg-[var(--background)] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-[var(--gray-100)] focus:outline-none"
-            >
+          <button
+            key={index}
+            onClick={() => stat.href && router.push(stat.href)}
+            className="text-left bg-[var(--background)] p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-[var(--gray-100)] focus:outline-none"
+          >
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[var(--gray-500)] text-sm mb-1">
@@ -233,8 +231,8 @@ export default function PartnersContent() {
 
       <div className="bg-[var(--background)] rounded-lg shadow-sm border border-[var(--gray-100)]">
         <div className="p-4 border-b border-[var(--gray-100)]">
-         
-          
+
+
           {/* Search and Filter Section - Full Width */}
           <div className="flex justify-between items-center gap-2">
             <div className="relative w-full">
@@ -248,9 +246,9 @@ export default function PartnersContent() {
             <div className="w-48">
               <Select
                 placeholder="Status"
-                options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+                options={[{ value: "", label: "All" }, { value: "Active", label: "Active" }, { value: "Not Active", label: "Not Active" }]}
                 value={statusFilter}
-                onChange={(e)=>setStatusFilter(e.target.value)}
+                onChange={(e) => setStatusFilter(e.target.value)}
               />
             </div>
           </div>
@@ -298,7 +296,7 @@ export default function PartnersContent() {
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <button
-                      onClick={(e)=>{ e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); setActiveTab(0); /* modal handles click to drivers */ }}
+                      onClick={(e) => { e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); setActiveTab(0); /* modal handles click to drivers */ }}
                       className="text-[var(--blue-600)] underline hover:opacity-80"
                     >
                       {partner.drivers}
@@ -306,7 +304,7 @@ export default function PartnersContent() {
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <button
-                      onClick={(e)=>{ e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); /* routes tab */ setActiveTab(0); }}
+                      onClick={(e) => { e.stopPropagation(); setSelectedPartnerId(partner.id); setViewModalOpen(true); /* routes tab */ setActiveTab(0); }}
                       className="text-[var(--blue-600)] underline hover:opacity-80"
                     >
                       {partner.routes}
@@ -314,7 +312,7 @@ export default function PartnersContent() {
                   </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     <button
-                      onClick={(e)=>{ e.stopPropagation(); router.push('/rides'); }}
+                      onClick={(e) => { e.stopPropagation(); router.push('/rides'); }}
                       className="text-[var(--blue-600)] underline hover:opacity-80"
                     >
                       {partner.rides}

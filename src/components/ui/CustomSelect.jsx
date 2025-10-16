@@ -10,10 +10,14 @@ export default function CustomSelect({
   width = "w-44",
   placeholder = "Select an option",
   iconMap = {}, // { value: <Icon /> }
+  searchable = true,
+  searchPlaceholder = "Search...",
+  allowCreate = false,
 }) {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
+  const [query, setQuery] = useState("");
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -35,6 +39,9 @@ export default function CustomSelect({
   }, [open]);
 
   const selected = options.find((opt) => opt.value === value);
+  const filtered = options.filter((opt) =>
+    !query ? true : (opt.label || "").toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <div className={`relative ${width}`}>
@@ -58,13 +65,26 @@ export default function CustomSelect({
           ref={menuRef}
           className="absolute left-0 mt-2 z-30 w-full bg-[var(--background)] rounded-xl shadow-xl border border-[var(--gray-200)] py-1"
         >
-          {options.map((opt) => (
+          {searchable && (
+            <div className="px-3 py-2 border-b border-[var(--gray-200)]">
+              <input
+                type="text"
+                value={query}
+                onChange={(e)=> setQuery(e.target.value)}
+                placeholder={searchPlaceholder}
+                className="w-full px-3 py-2 border border-[var(--gray-300)] rounded-lg focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                autoFocus
+              />
+            </div>
+          )}
+          {filtered.map((opt) => (
             <button
               key={opt.value}
               className={`flex items-center w-full px-4 py-2 text-sm gap-2 text-left hover:bg-[var(--gray-50)] ${value === opt.value ? "font-semibold bg-gray-100" : ""}`}
               onClick={() => {
                 onChange({ target: { value: opt.value, name } });
                 setOpen(false);
+                setQuery("");
               }}
             >
               {value === opt.value && <Check size={16} className="text-[var(--green)] mr-1" />}
@@ -72,6 +92,18 @@ export default function CustomSelect({
               <span>{opt.label}</span>
             </button>
           ))}
+          {allowCreate && query && filtered.length === 0 && (
+            <button
+              className="w-full px-4 py-2 text-left text-sm text-[var(--blue-600)] hover:bg-[var(--blue-50)]"
+              onClick={() => {
+                onChange({ target: { value: query, name } });
+                setOpen(false);
+                setQuery("");
+              }}
+            >
+              Use "{query}"
+            </button>
+          )}
         </div>
       )}
     </div>
