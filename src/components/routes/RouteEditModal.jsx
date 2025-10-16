@@ -19,6 +19,17 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
     startTime: "8:00 AM",
     endTime: "8:25 AM"
   });
+  const [exceptions, setExceptions] = useState([]);
+  const [exceptionDate, setExceptionDate] = useState("");
+  const [exceptionType, setExceptionType] = useState("No School");
+  const [exceptionNotes, setExceptionNotes] = useState("");
+  const [stops, setStops] = useState([
+    { address: 'Stop 1 Address', type: 'pickup', time: '08:00', students: 2 },
+    { address: 'Stop 2 Address', type: 'pickup', time: '08:05', students: 1 },
+    { address: 'Stop 3 Address', type: 'pickup', time: '08:10', students: 1 },
+    { address: 'Stop 4 Address', type: 'pickup', time: '08:15', students: 1 },
+    { address: 'School Drop-off', type: 'dropoff', time: '08:25', students: 7 }
+  ]);
 
   if (!isOpen) return null;
 
@@ -26,7 +37,8 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
     { id: 0, label: "Basic Info" },
     { id: 1, label: "Route Stops" },
     { id: 2, label: "Schedule" },
-    { id: 3, label: "Assignment" }
+    { id: 3, label: "Assignment" },
+    { id: 4, label: "Exceptions" }
   ];
 
   const handleInputChange = (field, value) => {
@@ -124,19 +136,20 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         <Button
           variant="secondary"
           className="flex items-center gap-2 hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] transition-all duration-200"
+          onClick={() => setStops(prev => [...prev, { address: '', type: 'pickup', time: '08:30', students: 1 }])}
         >
           <Plus className="w-4 h-4" />
           Add Stop
         </Button>
       </div>
 
-      {[1, 2, 3, 4, 5].map((stopId) => (
-        <Card key={stopId} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      {stops.map((stop, index) => (
+        <Card key={index} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
           <div className="flex items-start gap-4">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold ${
-              stopId <= 4 ? 'bg-[var(--green)]' : 'bg-[var(--orange)]'
+              stop.type === 'dropoff' ? 'bg-[var(--orange)]' : 'bg-[var(--green)]'
             }`}>
-              {stopId}
+              {index + 1}
             </div>
             <div className="flex-1 grid grid-cols-2 gap-4">
               <div>
@@ -145,7 +158,8 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 </label>
                 <Input
                   placeholder="Enter stop address"
-                  defaultValue={stopId <= 4 ? `Stop ${stopId} Address` : "School Drop-off"}
+                  value={stop.address}
+                  onChange={(e)=> setStops(prev => prev.map((s,i)=> i===index ? { ...s, address: e.target.value } : s))}
                 />
               </div>
               <div>
@@ -153,7 +167,8 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                   Type
                 </label>
                 <Select
-                  value={stopId <= 4 ? "pickup" : "dropoff"}
+                  value={stop.type}
+                  onChange={(value)=> setStops(prev => prev.map((s,i)=> i===index ? { ...s, type: value } : s))}
                   options={[
                     { value: "pickup", label: "Pickup" },
                     { value: "dropoff", label: "Drop-off" }
@@ -166,7 +181,8 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 </label>
                 <Input
                   type="time"
-                  defaultValue={stopId <= 4 ? `08:${(stopId-1)*5}` : "08:25"}
+                  value={stop.time}
+                  onChange={(e)=> setStops(prev => prev.map((s,i)=> i===index ? { ...s, time: e.target.value } : s))}
                 />
               </div>
               <div>
@@ -175,7 +191,8 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 </label>
                 <Input
                   type="number"
-                  defaultValue={stopId <= 4 ? (stopId === 1 ? 2 : 1) : 7}
+                  value={stop.students}
+                  onChange={(e)=> setStops(prev => prev.map((s,i)=> i===index ? { ...s, students: Number(e.target.value) } : s))}
                 />
               </div>
             </div>
@@ -183,6 +200,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
               variant="ghost"
               size="sm"
               className="text-[var(--red-600)] hover:text-[var(--red-800)] hover:bg-[var(--red-100)] transition-all duration-200"
+              onClick={() => setStops(prev => prev.filter((_,i)=> i!==index))}
             >
               <Trash2 className="w-4 h-4" />
             </Button>
@@ -311,13 +329,81 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
     </div>
   );
 
+  const addException = () => {
+    if (!exceptionDate || !exceptionType) return;
+    setExceptions(prev => [...prev, { date: exceptionDate, type: exceptionType, notes: exceptionNotes }]);
+    setExceptionDate("");
+    setExceptionType("No School");
+    setExceptionNotes("");
+  };
+
+  const removeException = (idx) => {
+    setExceptions(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const renderExceptions = () => (
+    <div className="space-y-6">
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Exceptions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Date</label>
+            <Input type="date" value={exceptionDate} onChange={(e)=>setExceptionDate(e.target.value)} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Type</label>
+            <Select
+              value={exceptionType}
+              onChange={(e)=>setExceptionType(e.target.value)}
+              options={[
+                { value: "No School", label: "No School" },
+                { value: "Holiday", label: "Holiday" },
+                { value: "Teacher Work Day", label: "Teacher Work Day" },
+                { value: "Weather", label: "Weather" },
+                { value: "Other", label: "Other" },
+              ]}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Notes</label>
+            <Input type="text" value={exceptionNotes} onChange={(e)=>setExceptionNotes(e.target.value)} placeholder="Optional" />
+          </div>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <Button className="flex items-center gap-2" onClick={addException}>
+            <Plus className="w-4 h-4" />
+            Add Exception
+          </Button>
+        </div>
+      </Card>
+
+      {exceptions.length > 0 && (
+        <Card className="p-0 overflow-hidden">
+          <div className="divide-y" style={{ borderColor: 'var(--gray-200)' }}>
+            {exceptions.map((ex, idx) => (
+              <div key={idx} className="flex items-center justify-between p-4">
+                <div>
+                  <div className="font-medium text-[var(--primary-black)]">{ex.date} • {ex.type}</div>
+                  {ex.notes && <div className="text-sm text-[var(--muted-text)]">{ex.notes}</div>}
+                </div>
+                <Button variant="ghost" size="sm" className="text-[var(--red-600)] hover:text-[var(--red-800)] hover:bg-[var(--red-100)]" onClick={()=>removeException(idx)}>
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -360,15 +446,16 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+        <div className="p-6 overflow-y-auto flex-1">
           {activeTab === 0 && renderBasicInfo()}
           {activeTab === 1 && renderRouteStops()}
           {activeTab === 2 && renderSchedule()}
           {activeTab === 3 && renderAssignment()}
+          {activeTab === 4 && renderExceptions()}
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
+        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)] sticky bottom-0 bg-white">
           <Button
             variant="secondary"
             onClick={onClose}
