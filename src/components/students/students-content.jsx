@@ -7,6 +7,7 @@ import {
   Eye,
   Edit,
   X,
+  Maximize2,
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
@@ -36,6 +37,16 @@ export default function StudentsContent() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   const students = [
     {
       id: "S-001",
@@ -123,41 +134,51 @@ export default function StudentsContent() {
 
   return (
     <div>
-      <div className="flex items-center">
-       
-        <div>
-          <h1 className="text-3xl font-bold mb-6">Students Management</h1>
-           </div>
-      </div>
-      {/* Search Section - Full Width */}
-      <div className="flex justify-between items-center mb-6 gap-2">
-        <div className="relative w-full">
-          <SearchInput
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search students by name, ID, campus or district"
-            width="w-full"
-          />
-        </div>
-        <div className="w-48">
-          <Select
-            placeholder="Status"
-            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          />
-        </div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Students Management</h1>
         <Button
-          variant="primary"
-          icon={<Plus size={18} />}
-          onClick={() => setAddModalOpen(true)}
-          className="whitespace-nowrap bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] hover:from-[var(--primary-dark)] hover:to-[var(--primary)] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          variant="ghost"
+          className="flex items-center gap-2 text-[var(--muted-text)]"
+          onClick={handleFullscreen}
         >
-          Add New Student
+          <Maximize2 size={18} />
+          {isFullscreen ? "Exit Full Screen" : "Full Screen"}
         </Button>
       </div>
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
-        <table className="w-full">
+
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search students by name, ID, campus or district"
+              width="w-full"
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setAddModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add New Student
+            </Button>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
           <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Student ID</th>
@@ -229,6 +250,7 @@ export default function StudentsContent() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       <AddStudentModal
         isOpen={isAddModalOpen}
@@ -254,7 +276,7 @@ export default function StudentsContent() {
           }}
         >
           <div 
-            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
@@ -277,7 +299,7 @@ export default function StudentsContent() {
                 <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+            <div className="overflow-y-auto flex-1">
               <StudentProfilePage studentId={selectedStudent.id} />
             </div>
           </div>
@@ -291,7 +313,7 @@ export default function StudentsContent() {
           onClick={handleEditModalClose}
         >
           <div 
-            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
@@ -311,12 +333,12 @@ export default function StudentsContent() {
                 <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
+            <div className="overflow-y-auto flex-1 pb-24">
               <StudentDetailsPage params={{ id: selectedStudent.id }} forceViewModal={false} isModal={true} />
             </div>
             
             {/* Fixed Footer Buttons */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+            <div className="bg-white border-t border-[var(--gray-200)] p-6">
               <div className="flex justify-end gap-3">
                 <Button 
                   variant="secondary" 

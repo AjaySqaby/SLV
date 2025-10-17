@@ -13,7 +13,7 @@ export default function CampusViewModal({ open, onClose, campusId, isEditModal =
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-screen-xl max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -30,7 +30,7 @@ export default function CampusViewModal({ open, onClose, campusId, isEditModal =
         </div>
 
         {/* Modal Content - Use existing CampusDetailContent */}
-        <div className="p-0">
+        <div className="p-0 overflow-y-auto flex-1">
           <CampusDetailContent 
             campusId={campusId} 
             isModal={true}

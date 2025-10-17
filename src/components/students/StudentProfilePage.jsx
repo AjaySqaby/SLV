@@ -23,6 +23,27 @@ import {
   Check,
   X
 } from 'lucide-react'
+import { 
+  RiUserLine, 
+  RiPhoneLine, 
+  RiMailLine, 
+  RiMapPinLine, 
+  RiCalendarLine, 
+  RiTimeLine, 
+  RiCarLine, 
+  RiStarLine, 
+  RiAlertLine,
+  RiInformationLine,
+  RiFileTextLine,
+  RiBuildingLine,
+  RiGraduationCapLine,
+  RiGroupLine,
+  RiSettingsLine,
+  RiFileCopyLine,
+  RiUserUnfollowLine,
+  RiCheckLine,
+  RiCloseLine
+} from 'react-icons/ri'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
@@ -160,14 +181,11 @@ export default function StudentProfilePage({ studentId }) {
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
         <div className="flex items-center gap-4">
-         
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>{studentData.name}</h1>
             <StatusBadge status={studentData.status} />
           </div>
         </div>
-        
-       
       </div>
 
       {/* Info Banner */}
@@ -175,7 +193,7 @@ export default function StudentProfilePage({ studentId }) {
         className="p-4 mx-6 mt-4 rounded-lg flex items-center gap-3"
         style={{ backgroundColor: 'var(--blue-100)' }}
       >
-        <Info className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+        <RiInformationLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
         <span className="text-sm" style={{ color: 'var(--blue-600)' }}>
           Showing data from Sep 11, 2025. Updated profile exists.
         </span>
@@ -242,14 +260,14 @@ export default function StudentProfilePage({ studentId }) {
                 <span className="text-sm" style={{ color: 'var(--heading)' }}>{studentData.age}</span>
               </div>
               <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 mt-0.5" style={{ color: 'var(--muted-text)' }} />
+                <RiMapPinLine className="w-4 h-4 mt-0.5" style={{ color: 'var(--muted-text)' }} />
                 <div>
                   <span className="text-sm font-medium" style={{ color: 'var(--heading)' }}>Home Address:</span>
                   <p className="text-sm" style={{ color: 'var(--muted-text)' }}>{studentData.address}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Info className="w-4 h-4" style={{ color: 'var(--blue-600)' }} />
+                <RiInformationLine className="w-4 h-4" style={{ color: 'var(--blue-600)' }} />
                 <span className="text-sm" style={{ color: 'var(--heading)' }}>{studentData.serviceType}</span>
               </div>
             </div>
@@ -276,13 +294,13 @@ export default function StudentProfilePage({ studentId }) {
                 {studentData.guardian.name}
               </p>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                <RiPhoneLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
                 <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
                   {studentData.guardian.phone}
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                <RiMailLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
                 <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
                   {studentData.guardian.email}
                 </span>
@@ -293,7 +311,7 @@ export default function StudentProfilePage({ studentId }) {
           {/* Schedule Info */}
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+              <RiCalendarLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Schedule Info</h3>
             </div>
             <div className="space-y-2">
@@ -309,7 +327,7 @@ export default function StudentProfilePage({ studentId }) {
           {/* Notes */}
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+              <RiFileTextLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Notes</h3>
             </div>
             <div className="space-y-3">
@@ -339,7 +357,7 @@ export default function StudentProfilePage({ studentId }) {
                 className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--blue-100)' }}
               >
-                <Car className="w-6 h-6" style={{ color: 'var(--blue-600)' }} />
+                <RiCarLine className="w-6 h-6" style={{ color: 'var(--blue-600)' }} />
               </div>
               <div>
                 <p className="font-bold" style={{ color: 'var(--heading)' }}>
@@ -381,7 +399,7 @@ export default function StudentProfilePage({ studentId }) {
           {/* Rides */}
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
-              <Users className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+              <RiGroupLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Rides</h3>
             </div>
             <div className="flex items-center gap-4 mb-4">
@@ -441,7 +459,7 @@ export default function StudentProfilePage({ studentId }) {
           {/* Equipment & Special Needs */}
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+              <RiAlertLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
               <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Equipment & Special Needs</h3>
             </div>
             
@@ -540,7 +558,7 @@ export default function StudentProfilePage({ studentId }) {
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--red-600)' }}
                 >
-                  <UserX className="w-5 h-5 text-white" />
+                  <RiUserUnfollowLine className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Force No Show</h2>
               </div>
@@ -548,7 +566,7 @@ export default function StudentProfilePage({ studentId }) {
                 onClick={() => setShowForceNoShowModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <RiCloseLine className="w-6 h-6" />
               </button>
             </div>
 
@@ -599,7 +617,7 @@ export default function StudentProfilePage({ studentId }) {
                   value={noShowTime}
                   onChange={(e) => setNoShowTime(e.target.value)}
                   placeholder="--:--"
-                  icon={<Clock className="w-4 h-4" />}
+                  icon={<RiTimeLine className="w-4 h-4" />}
                   className="text-sm"
                   width="w-full"
                 />
@@ -632,7 +650,7 @@ export default function StudentProfilePage({ studentId }) {
               }}
             >
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-5 h-5 mt-0.5" style={{ color: 'var(--red-600)' }} />
+                <RiAlertLine className="w-5 h-5 mt-0.5" style={{ color: 'var(--red-600)' }} />
                 <div>
                   <p className="font-bold text-sm mb-1" style={{ color: 'var(--red-600)' }}>
                     Warning
@@ -691,7 +709,7 @@ export default function StudentProfilePage({ studentId }) {
                   className="w-10 h-10 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: 'var(--blue-100)' }}
                 >
-                  <Copy className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
+                  <RiFileCopyLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Duplicate Trip</h2>
@@ -704,7 +722,7 @@ export default function StudentProfilePage({ studentId }) {
                 onClick={() => setShowDuplicateTripModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <RiCloseLine className="w-6 h-6" />
               </button>
             </div>
 
@@ -719,7 +737,7 @@ export default function StudentProfilePage({ studentId }) {
                   value={duplicateDate}
                   onChange={(e) => setDuplicateDate(e.target.value)}
                   placeholder="dd-mm-yyyy"
-                  icon={<Calendar className="w-4 h-4" />}
+                  icon={<RiCalendarLine className="w-4 h-4" />}
                   className="text-sm"
                   width="w-full"
                 />
@@ -734,7 +752,7 @@ export default function StudentProfilePage({ studentId }) {
                   value={duplicateTime}
                   onChange={(e) => setDuplicateTime(e.target.value)}
                   placeholder="--:--"
-                  icon={<Clock className="w-4 h-4" />}
+                  icon={<RiTimeLine className="w-4 h-4" />}
                   className="text-sm"
                   width="w-full"
                 />
@@ -819,7 +837,7 @@ export default function StudentProfilePage({ studentId }) {
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: 'var(--blue-600)' }}
                 >
-                  <Settings className="w-5 h-5 text-white" />
+                  <RiSettingsLine className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-xl font-bold" style={{ color: 'var(--heading)' }}>Manage Trip</h2>
               </div>
@@ -827,7 +845,7 @@ export default function StudentProfilePage({ studentId }) {
                 onClick={() => setShowManageTripModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <RiCloseLine className="w-6 h-6" />
               </button>
             </div>
             <div className="mb-6">

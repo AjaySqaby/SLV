@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit, ArrowLeft } from 'lucide-react';
+import DateRangePicker from '@/components/rides/DateRangePicker';
+import RidesTable from '@/components/rides/RidesTable';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import StatusBadge from '@/components/ui/StatusBadge';
@@ -137,7 +139,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     { id: 0, label: "Route Overview" },
     { id: 1, label: "Route Stops" },
     { id: 2, label: "Students" },
-    { id: 3, label: "Map View" }
+    { id: 3, label: "Map View" },
+    { id: 4, label: "Rides" }
   ];
 
   const renderOverview = () => (
@@ -438,13 +441,70 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     </div>
   );
 
+  const [rideStart, setRideStart] = useState(null);
+  const [rideEnd, setRideEnd] = useState(null);
+  const routeRides = [
+    { id: 'R-2001', route: routeData.id, date: '04/01/2025', driver: 'Sam Kebede', status: 'Completed' },
+    { id: 'R-2002', route: routeData.id, date: '04/02/2025', driver: 'John Doe', status: 'In progress' },
+    { id: 'R-2003', route: routeData.id, date: '04/05/2025', driver: 'Jane Smith', status: 'Assigned' },
+  ];
+  const parseUsDate = (mmddyyyy) => {
+    if (!mmddyyyy) return null;
+    const parts = String(mmddyyyy).split('/');
+    if (parts.length !== 3) return new Date(mmddyyyy);
+    const [mm, dd, yyyy] = parts.map((v) => parseInt(v, 10));
+    return new Date(yyyy, mm - 1, dd);
+  };
+  const filteredRouteRides = routeRides.filter((r) => {
+    const d = parseUsDate(r.date);
+    if (!d || isNaN(d.getTime())) return false;
+    if (rideStart && d < new Date(rideStart.getFullYear(), rideStart.getMonth(), rideStart.getDate())) return false;
+    if (rideEnd && d > new Date(rideEnd.getFullYear(), rideEnd.getMonth(), rideEnd.getDate())) return false;
+    return true;
+  });
+
+  const renderRides = () => {
+    const ridesForTable = filteredRouteRides.map((r) => ({
+      id: r.id,
+      district: r.route,
+      date: r.date,
+      scheduledTime: '08:30 AM',
+      timezone: 'EST',
+      pickup: { scheduled: '08:30 AM', arrived: r.status === 'Completed' ? '08:35 AM' : '', confirmed: '08:20 AM', location: 'Downtown Pickup Point' },
+      dropoff: { scheduled: '09:30 AM', arrived: r.status === 'In progress' ? '09:10 AM' : '', completed: r.status === 'Completed' ? '09:25 AM' : '', location: 'Central High School' },
+      driver: { name: r.driver, vehicle: 'Toyota Sienna' },
+      details: { distance: '3.5 mi', duration: '30 min', stops: 2, students: 2 },
+      status: r.status,
+      nextStop: { address: 'Central High School' },
+      stops: [],
+    }));
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <h3 className="text-lg font-semibold text-[var(--primary-black)]">Rides</h3>
+          <div className="w-full md:w-80">
+            <DateRangePicker
+              startDate={rideStart}
+              endDate={rideEnd}
+              onDateRangeChange={(s, e) => {
+                setRideStart(s);
+                setRideEnd(e);
+              }}
+            />
+          </div>
+        </div>
+        <RidesTable rides={ridesForTable} />
+      </div>
+    );
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden flex flex-col"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -492,6 +552,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
           {activeTab === 1 && renderStops()}
           {activeTab === 2 && renderStudents()}
           {activeTab === 3 && renderMap()}
+          {activeTab === 4 && renderRides()}
         </div>
 
         {/* Footer */}
@@ -509,8 +570,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
           >
             <div className="flex items-center gap-2">
-              <Edit className="w-4 h-4" />
-              <span>Edit Route</span>
+              <CheckCircle className="w-4 h-4" />
+              <span>Save Route</span>
             </div>
           </Button>
         </div>

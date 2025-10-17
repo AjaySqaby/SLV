@@ -1,14 +1,16 @@
 "use client";
 import { useState } from 'react';
 import { X, Building2, User, Mail, Phone, MapPin, Users, Route, Car, Star, CheckCircle, Calendar, Clock, DollarSign, FileText, Shield, Settings, Pencil } from 'lucide-react';
+import DateRangePicker from '@/components/rides/DateRangePicker';
+import RidesTable from '@/components/rides/RidesTable';
 import Button from '@/components/ui/Button';
 import AddPartnerModal from './AddPartnerModal';
 
 export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
+  // Guard before any hooks to satisfy Rules of Hooks when modal is closed
+  if (!isOpen) return null;
   const [activeTab, setActiveTab] = useState('overview');
   const [editOpen, setEditOpen] = useState(false);
-
-  if (!isOpen) return null;
 
   // Mock partner data
   const partner = {
@@ -49,9 +51,32 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     { id: 'overview', label: 'Overview' },
     { id: 'drivers', label: 'Drivers' },
     { id: 'routes', label: 'Routes' },
+    { id: 'rides', label: 'Rides' },
     { id: 'documents', label: 'Documents' },
     { id: 'financial', label: 'Financial' }
   ];
+
+  const [rideStart, setRideStart] = useState(null);
+  const [rideEnd, setRideEnd] = useState(null);
+  const partnerRides = [
+    { id: 'R-1001', route: 'RT-30842', date: '04/02/2025', driver: 'Yonathan Mekonnen', status: 'In progress' },
+    { id: 'R-1002', route: 'RT-30843', date: '04/03/2025', driver: 'Michael Johnson', status: 'Assigned' },
+    { id: 'R-1003', route: 'RT-30841', date: '03/28/2025', driver: 'Sarah Lee', status: 'Completed' },
+  ];
+  const parseUsDate = (mmddyyyy) => {
+    if (!mmddyyyy) return null;
+    const parts = String(mmddyyyy).split('/');
+    if (parts.length !== 3) return new Date(mmddyyyy);
+    const [mm, dd, yyyy] = parts.map((v) => parseInt(v, 10));
+    return new Date(yyyy, mm - 1, dd);
+  };
+  const filteredPartnerRides = partnerRides.filter((r) => {
+    const d = parseUsDate(r.date);
+    if (!d || isNaN(d.getTime())) return false;
+    if (rideStart && d < new Date(rideStart.getFullYear(), rideStart.getMonth(), rideStart.getDate())) return false;
+    if (rideEnd && d > new Date(rideEnd.getFullYear(), rideEnd.getMonth(), rideEnd.getDate())) return false;
+    return true;
+  });
 
   const renderOverview = () => (
     <div className="space-y-6">
@@ -231,6 +256,41 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     </div>
   );
 
+  const renderRides = () => {
+    const ridesForTable = filteredPartnerRides.map((r) => ({
+      id: r.id,
+      district: r.route,
+      date: r.date,
+      scheduledTime: "08:30 AM",
+      timezone: "EST",
+      pickup: { scheduled: "08:30 AM", arrived: r.status === 'Completed' ? '08:35 AM' : '', confirmed: '08:20 AM', location: 'Downtown Pickup Point' },
+      dropoff: { scheduled: "09:30 AM", arrived: r.status === 'In progress' ? '09:10 AM' : '', completed: r.status === 'Completed' ? '09:25 AM' : '', location: 'Central High School' },
+      driver: { name: r.driver, vehicle: 'Toyota Sienna' },
+      details: { distance: '3.5 mi', duration: '30 min', stops: 2, students: 2 },
+      status: r.status,
+      nextStop: { address: 'Central High School' },
+      stops: [],
+    }));
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <h3 className="text-lg font-semibold text-[var(--primary-black)]">Rides</h3>
+          <div className="w-full md:w-80">
+            <DateRangePicker
+              startDate={rideStart}
+              endDate={rideEnd}
+              onDateRangeChange={(s, e) => {
+                setRideStart(s);
+                setRideEnd(e);
+              }}
+            />
+          </div>
+        </div>
+        <RidesTable rides={ridesForTable} />
+      </div>
+    );
+  };
+
   const renderDocuments = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
@@ -330,6 +390,8 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
         return renderDrivers();
       case 'routes':
         return renderRoutes();
+      case 'rides':
+        return renderRides();
       case 'documents':
         return renderDocuments();
       case 'financial':
@@ -345,7 +407,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -400,7 +462,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(85vh-200px)]">
+        <div className="p-6 overflow-y-auto flex-1">
           {renderContent()}
         </div>
 
