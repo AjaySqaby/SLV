@@ -95,6 +95,11 @@ export default function RoutesContent() {
   const [assignContext, setAssignContext] = useState({ routeId: null, driverName: null });
 
   useEffect(() => {
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      return;
+    }
+    
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
@@ -104,6 +109,11 @@ export default function RoutesContent() {
   }, []);
 
   const handleFullscreen = () => {
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      return;
+    }
+    
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
     } else {
@@ -138,6 +148,10 @@ export default function RoutesContent() {
 
   // Handler for copying the share link
   const handleShareRoute = (routeId) => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
     const link = `${window.location.origin}/eagle-eye?routeId=${routeId}`;
     navigator.clipboard.writeText(link);
     setCopySuccess("Link copied!");

@@ -10,6 +10,12 @@ export default function HoverTooltip({ content, children, className = "", width 
   const updatePosition = () => {
     const el = triggerRef.current;
     if (!el) return;
+    
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     const rect = el.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const desiredLeft = rect.left + rect.width / 2 - width / 2;
@@ -21,6 +27,12 @@ export default function HoverTooltip({ content, children, className = "", width 
 
   useEffect(() => {
     if (!open) return;
+    
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     updatePosition();
     const onScroll = () => updatePosition();
     const onResize = () => updatePosition();

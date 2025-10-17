@@ -6,6 +6,11 @@ export default function EagleEyeHeader() {
   const router = useRouter();
 
   const handleBack = () => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      router.push('/dashboard');
+      return;
+    }
     // Try to go back in browser history first
     if (window.history.length > 1) {
       router.back();
@@ -16,6 +21,10 @@ export default function EagleEyeHeader() {
   };
 
   const handleRefresh = () => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
     window.location.reload();
   };
 

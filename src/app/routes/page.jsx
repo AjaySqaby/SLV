@@ -1,5 +1,10 @@
+"use client"
+import dynamic from "next/dynamic"
 import PageLayout from "@/components/layout/page-layout"
-import RoutesContent from "@/components/routes/routes-content"
+
+const RoutesContent = dynamic(() => import("@/components/routes/routes-content"), {
+  ssr: false,
+})
 
 export default function RoutesPage() {
   return (

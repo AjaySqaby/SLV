@@ -108,7 +108,7 @@ export default function RouteEditSchedule() {
                       left: pickerRef.current?.getBoundingClientRect().left,
                       top:
                         pickerRef.current?.getBoundingClientRect().bottom +
-                        window.scrollY,
+                        (typeof window !== 'undefined' ? window.scrollY : 0),
                     }}
                   >
                     <DayPicker

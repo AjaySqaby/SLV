@@ -224,7 +224,10 @@ export default function MapView({ onViewRide }) {
                           className="text-green-600 text-xs font-medium hover:text-green-700 flex items-center hover:bg-green-50 px-2 py-1 rounded transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
-                            window.open(`tel:${driver.phone}`, '_self');
+                            // Check if we're in a browser environment
+                            if (typeof window !== 'undefined') {
+                              window.open(`tel:${driver.phone}`, '_self');
+                            }
                           }}
                         >
                           <Phone className="w-3 h-3 mr-1" />
@@ -297,7 +300,12 @@ export default function MapView({ onViewRide }) {
                     View Ride
                   </button>
                 )}
-                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-700" onClick={() => { window.open(`tel:${selectedDriver.phone || ''}`, '_self'); }}>
+                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-700" onClick={() => { 
+                  // Check if we're in a browser environment
+                  if (typeof window !== 'undefined') {
+                    window.open(`tel:${selectedDriver.phone || ''}`, '_self'); 
+                  }
+                }}>
                   Call Driver
                 </button>
               </div>
