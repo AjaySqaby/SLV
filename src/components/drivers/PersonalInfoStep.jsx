@@ -26,9 +26,6 @@ export default function PersonalInfoStep({ formData, handleChange, onClose, next
     { value: "PTS", label: "Premier Transit Solutions" },
   ]
 
-  const handleSelectChange = (name, value) => {
-    handleChange({ target: { name, value } })
-  }
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
@@ -218,7 +215,7 @@ export default function PersonalInfoStep({ formData, handleChange, onClose, next
           name="state"
           label="State"
           value={formData.state}
-          onChange={(val) => handleSelectChange("state", val)}
+          onChange={(e) => handleChange({ target: { name: "state", value: e.target.value } })}
           options={stateOptions}
         />
       </div>
@@ -227,7 +224,7 @@ export default function PersonalInfoStep({ formData, handleChange, onClose, next
         name="vendor"
         label="Vendor"
         value={formData.vendor}
-        onChange={(val) => handleSelectChange("vendor", val)}
+        onChange={(e) => handleChange({ target: { name: "vendor", value: e.target.value } })}
         options={vendorOptions}
       />
 

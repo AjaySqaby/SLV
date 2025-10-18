@@ -1,11 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import Input from "@/components/ui/Input"
 import Select from "@/components/ui/Select"
 import Button from "@/components/ui/Button"
-import { Upload, Calendar } from "lucide-react"
+import { Upload, Calendar, Plus, Trash2 } from "lucide-react"
 
 export default function DriverDocumentsStep({ formData, handleChange, prevStep, handleSubmit }) {
+  const [vehicleDocuments, setVehicleDocuments] = useState([
+    {
+      vehicleId: 1,
+      vehicleName: "Vehicle 1",
+      registrationDocument: null,
+      registrationValidFrom: "",
+      registrationValidTo: "",
+      registrationLicensePlate: "",
+      vinNumber: "",
+      inspectionDocument: null,
+    }
+  ]);
   const stateOptions = [
     { value: "", label: "Select state" },
     { value: "AL", label: "Alabama" },
@@ -67,6 +80,34 @@ export default function DriverDocumentsStep({ formData, handleChange, prevStep, 
   const handleFileUpload = (name, file) => {
     handleChange({ target: { name, value: file } })
   }
+
+  const addVehicleDocument = () => {
+    const newVehicle = {
+      vehicleId: vehicleDocuments.length + 1,
+      vehicleName: `Vehicle ${vehicleDocuments.length + 1}`,
+      registrationDocument: null,
+      registrationValidFrom: "",
+      registrationValidTo: "",
+      registrationLicensePlate: "",
+      vinNumber: "",
+      inspectionDocument: null,
+    };
+    setVehicleDocuments([...vehicleDocuments, newVehicle]);
+  };
+
+  const removeVehicleDocument = (index) => {
+    if (vehicleDocuments.length > 1) {
+      const updatedVehicles = vehicleDocuments.filter((_, i) => i !== index);
+      setVehicleDocuments(updatedVehicles);
+    }
+  };
+
+  const updateVehicleDocument = (index, field, value) => {
+    const updatedVehicles = vehicleDocuments.map((vehicle, i) => 
+      i === index ? { ...vehicle, [field]: value } : vehicle
+    );
+    setVehicleDocuments(updatedVehicles);
+  };
 
   const FileUploadArea = ({ title, name, description }) => (
     <div className="space-y-4">
@@ -160,62 +201,89 @@ export default function DriverDocumentsStep({ formData, handleChange, prevStep, 
         </div>
       </div>
 
-      {/* Primary Vehicle Registration Section */}
-      <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">Primary Vehicle Registration</h2>
-        <FileUploadArea
-          title="Upload Registration Document"
-          name="registrationDocument"
-          description="Click to upload or drag and drop"
-        />
-        <div className="grid grid-cols-4 gap-4">
-          <Input
-            label="Valid From"
-            type="date"
-            name="registrationValidFrom"
-            value={formData.registrationValidFrom}
-            onChange={handleChange}
-            placeholder="Pick a date"
-            className="w-full"
+      {/* Vehicle Registration & Inspection Sections */}
+      {vehicleDocuments.map((vehicle, index) => (
+        <div key={vehicle.vehicleId} className="space-y-6 border border-gray-200 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">{vehicle.vehicleName} Registration</h2>
+            {vehicleDocuments.length > 1 && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => removeVehicleDocument(index)}
+                className="text-red-600 hover:text-red-700"
+              >
+                <Trash2 className="w-4 h-4 mr-1" />
+                Remove
+              </Button>
+            )}
+          </div>
+          
+          <FileUploadArea
+            title="Upload Registration Document"
+            name={`registrationDocument_${index}`}
+            description="Click to upload or drag and drop"
           />
-          <Input
-            label="Valid To"
-            type="date"
-            name="registrationValidTo"
-            value={formData.registrationValidTo}
-            onChange={handleChange}
-            placeholder="Pick a date"
-            className="w-full"
-          />
-          <Input
-            label="License Plate Number"
-            type="text"
-            name="registrationLicensePlate"
-            value={formData.registrationLicensePlate}
-            onChange={handleChange}
-            placeholder="Enter license plate number"
-            className="w-full"
-          />
-          <Input
-            label="VIN Number"
-            type="text"
-            name="vinNumber"
-            value={formData.vinNumber}
-            onChange={handleChange}
-            placeholder="Enter VIN number"
-            className="w-full"
-          />
-        </div>
-      </div>
+          <div className="grid grid-cols-4 gap-4">
+            <Input
+              label="Valid From"
+              type="date"
+              name={`registrationValidFrom_${index}`}
+              value={vehicle.registrationValidFrom}
+              onChange={(e) => updateVehicleDocument(index, "registrationValidFrom", e.target.value)}
+              placeholder="Pick a date"
+              className="w-full"
+            />
+            <Input
+              label="Valid To"
+              type="date"
+              name={`registrationValidTo_${index}`}
+              value={vehicle.registrationValidTo}
+              onChange={(e) => updateVehicleDocument(index, "registrationValidTo", e.target.value)}
+              placeholder="Pick a date"
+              className="w-full"
+            />
+            <Input
+              label="License Plate Number"
+              type="text"
+              name={`registrationLicensePlate_${index}`}
+              value={vehicle.registrationLicensePlate}
+              onChange={(e) => updateVehicleDocument(index, "registrationLicensePlate", e.target.value)}
+              placeholder="Enter license plate number"
+              className="w-full"
+            />
+            <Input
+              label="VIN Number"
+              type="text"
+              name={`vinNumber_${index}`}
+              value={vehicle.vinNumber}
+              onChange={(e) => updateVehicleDocument(index, "vinNumber", e.target.value)}
+              placeholder="Enter VIN number"
+              className="w-full"
+            />
+          </div>
 
-      {/* Primary Vehicle Inspection Section */}
-      <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">Primary Vehicle Inspection</h2>
-        <FileUploadArea
-          title="Upload Inspection Document"
-          name="inspectionDocument"
-          description="Click to upload or drag and drop"
-        />
+          <div className="space-y-4">
+            <h3 className="text-md font-semibold text-gray-900">{vehicle.vehicleName} Inspection</h3>
+            <FileUploadArea
+              title="Upload Inspection Document"
+              name={`inspectionDocument_${index}`}
+              description="Click to upload or drag and drop"
+            />
+          </div>
+        </div>
+      ))}
+
+      {/* Add Another Vehicle Documents Button */}
+      <div className="flex justify-center">
+        <Button 
+          variant="secondary" 
+          className="text-sm px-4 py-2"
+          onClick={addVehicleDocument}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Another Vehicle Documents
+        </Button>
       </div>
 
       <div className="flex justify-between items-center pt-6 border-t border-gray-200">

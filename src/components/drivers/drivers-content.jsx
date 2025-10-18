@@ -264,6 +264,7 @@ export default function DriversContent() {
       <AddDriverModal
         isOpen={showAddDriverModal}
         onClose={() => setShowAddDriverModal(false)}
+        disableValidation={true}
       />
       
       <DriverDetailModal

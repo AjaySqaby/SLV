@@ -263,6 +263,7 @@ export default function OnboardingContent() {
        <AddDriverModal
          isOpen={showAddDriverModal}
          onClose={() => setShowAddDriverModal(false)}
+         disableValidation={true}
        />
 
        <OnboardingManageModal

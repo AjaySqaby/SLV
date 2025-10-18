@@ -1,10 +1,13 @@
 "use client";
+import { useState } from "react";
 import { RiEyeLine, RiEditLine, RiRouteLine, RiTimeLine, RiGroupLine, RiMapPinLine } from "react-icons/ri";
-import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
+import RouteViewModal from "@/components/routes/RouteViewModal";
 
 export default function AssignedRoutesTab({ driverId }) {
-  const router = useRouter();
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [showRouteModal, setShowRouteModal] = useState(false);
+  
   // Real data from user
   const assignedRoutes = [
     {
@@ -65,8 +68,8 @@ export default function AssignedRoutesTab({ driverId }) {
                         size="sm"
                         className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                         onClick={() => {
-                          console.log('Button clicked for route:', route.routeId);
-                          router.push(`/routes/${route.routeId}`);
+                          setSelectedRoute(route);
+                          setShowRouteModal(true);
                         }}
                       >
                         View
@@ -79,6 +82,13 @@ export default function AssignedRoutesTab({ driverId }) {
           </table>
         </div>
       )}
+
+      {/* Route Detail Modal - Using existing RouteViewModal */}
+      <RouteViewModal
+        isOpen={showRouteModal}
+        onClose={() => setShowRouteModal(false)}
+        routeId={selectedRoute?.routeId}
+      />
     </div>
   );
 }
