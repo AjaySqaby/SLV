@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { RiEyeLine, RiEditLine, RiRouteLine, RiTimeLine, RiGroupLine, RiMapPinLine } from "react-icons/ri";
 import Button from "@/components/ui/Button";
-import RouteViewModal from "@/components/routes/RouteViewModal";
+import dynamic from 'next/dynamic';
+
+const RouteViewModal = dynamic(() => import("@/components/routes/RouteViewModal"), {
+  ssr: false
+});
 
 export default function AssignedRoutesTab({ driverId }) {
   const [selectedRoute, setSelectedRoute] = useState(null);
@@ -83,7 +87,7 @@ export default function AssignedRoutesTab({ driverId }) {
         </div>
       )}
 
-      {/* Route Detail Modal - Using existing RouteViewModal */}
+      {/* Route Detail Modal - Using dynamic import with SSR disabled */}
       <RouteViewModal
         isOpen={showRouteModal}
         onClose={() => setShowRouteModal(false)}

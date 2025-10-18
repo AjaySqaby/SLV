@@ -35,7 +35,7 @@ export default function PersonalInfoStep({ formData, handleChange, onClose, next
     const file = e.target.files[0]
     if (file) {
       // Check if we're in a browser environment
-      if (typeof URL !== 'undefined' && URL.createObjectURL) {
+      if (typeof window !== 'undefined' && typeof URL !== 'undefined' && URL.createObjectURL) {
         handleChange({ target: { name: "avatar", value: URL.createObjectURL(file) } })
       }
     }
