@@ -13,11 +13,14 @@ import {
   Map,
   Camera,
   Eye,
+  Route,
+  Users,
+  GraduationCap,
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
-
+import { FaRoute } from "react-icons/fa";
 export default function RideDetailModal({
   isOpen,
   onClose,
@@ -33,7 +36,7 @@ export default function RideDetailModal({
     { id: 3, label: "Students" },
     { id: 4, label: "Timeline" },
   ];
-  const tabPanelClass = "pt-6 min-h-[28rem]";
+  const tabPanelClass = "pt-6";
   const statusType = rideStatus === 'On Time' ? 'active' : (rideStatus === 'Delayed' ? 'warning' : (rideStatus === 'Rejected' ? 'inactive' : 'active'));
 
   if (!isOpen) return null;
@@ -175,30 +178,44 @@ export default function RideDetailModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold">#{rideData.id}</h2>
-            <button onClick={onClose} className="text-[var(--muted-text)] hover:opacity-80">
-              <X size={18} />
+        <div className="mb-6 px-6 pt-6">
+          {/* Top Row - Title and Status */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <Car className="w-6 h-6 text-[var(--blue-600)]" />
+              <Route className="w-5 h-5 text-[var(--blue-600)]" />
+              <Clock className="w-5 h-5 text-[var(--blue-600)]" />
+              <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
+              <StatusBadge status={rideStatus} fontSize="text-lg" />
+              <span className="text-sm font-medium text-gray-700">
+                ETA: {rideData.ride.estimatedArrival}
+              </span>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-500" />
             </button>
-          </div>
-          <div className="text-sm text-[var(--muted-text)] mb-2">
-            {rideData.date} • Route: {rideData.route?.pickup?.address} → {rideData.route?.dropoff?.address}
-          </div>
-          <div className="flex items-center gap-4 mb-4">
-            <StatusBadge status={rideStatus} type={statusType} />
           </div>
 
           <Tabs tabs={tabList} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
 
+        <div className="px-6 pb-6 flex-1 overflow-y-auto">
           <div className={tabPanelClass}>
             {activeTab === 0 && (
-              <div className="grid grid-cols-2 gap-6">
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Driver Information</h3>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Driver Information</h3>
+                  </div>
                   <div className="flex items-center mb-4">
                     <div className="w-14 h-14 rounded-full mr-4 border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
                       <img
@@ -239,47 +256,118 @@ export default function RideDetailModal({
                   </div>
                 </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Vehicle Information</h3>
+                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
+                      <Car className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Vehicle Information</h3>
+                  </div>
                   <div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <p className="text-sm text-[var(--muted-text)]">Vehicle:</p>
-                      <p className="text-sm font-medium">{rideData.vehicle.name}</p>
-                      <p className="text-sm text-[var(--muted-text)]">License Plate:</p>
-                      <p className="text-sm font-medium">{rideData.vehicle.licensePlate}</p>
-                      <p className="text-sm text-[var(--muted-text)]">Capacity:</p>
-                      <p className="text-sm font-medium">{rideData.vehicle.capacity}</p>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center mr-3">
+                          <Car className="w-5 h-5 text-[var(--blue-600)]" />
+                        </div>
+                        <div className="flex-1 flex justify-between">
+                          <span className="text-sm text-[var(--muted-text)]">Vehicle:</span>
+                          <span className="text-sm font-medium">{rideData.vehicle.name}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center mr-3">
+                          <MapPin className="w-5 h-5 text-[var(--green-600)]" />
+                        </div>
+                        <div className="flex-1 flex justify-between">
+                          <span className="text-sm text-[var(--muted-text)]">License Plate:</span>
+                          <span className="text-sm font-medium">{rideData.vehicle.licensePlate}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center mr-3">
+                          <User className="w-5 h-5 text-[var(--purple-600)]" />
+                        </div>
+                        <div className="flex-1 flex justify-between">
+                          <span className="text-sm text-[var(--muted-text)]">Capacity:</span>
+                          <span className="text-sm font-medium">{rideData.vehicle.capacity}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Ride Information</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    <p className="text-sm text-[var(--muted-text)]">Status:</p>
-                    <p className="text-sm font-medium text-[var(--success)]">{rideData.ride.status}</p>
-                    <p className="text-sm text-[var(--muted-text)]">Pickup Time:</p>
-                    <div className="text-sm font-medium">
-                      <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
+                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                      <Clock className="w-5 h-5 text-white" />
                     </div>
-                    <p className="text-sm text-[var(--muted-text)]">Estimated Arrival:</p>
-                    <div className="text-sm font-medium">
-                      <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
+                    <h3 className="text-lg font-semibold">Ride Information</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center mr-3">
+                        <Clock className="w-5 h-5 text-[var(--green-600)]" />
+                      </div>
+                      <div className="flex-1 flex justify-between">
+                        <span className="text-sm text-[var(--muted-text)]">Status:</span>
+                        <span className="text-sm font-medium text-[var(--success)]">{rideData.ride.status}</span>
+                      </div>
                     </div>
-                    <p className="text-sm text-[var(--muted-text)]">Distance:</p>
-                    <p className="text-sm font-medium">{rideData.ride.distance}</p>
-                    <p className="text-sm text-[var(--muted-text)]">Duration:</p>
-                    <p className="text-sm font-medium">{rideData.ride.duration}</p>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center mr-3">
+                        <Clock className="w-5 h-5 text-[var(--blue-600)]" />
+                      </div>
+                      <div className="flex-1 flex justify-between">
+                        <span className="text-sm text-[var(--muted-text)]">Pickup Time:</span>
+                        <div className="text-sm font-medium">
+                          <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center mr-3">
+                        <Clock className="w-5 h-5 text-[var(--purple-600)]" />
+                      </div>
+                      <div className="flex-1 flex justify-between">
+                        <span className="text-sm text-[var(--muted-text)]">Estimated Arrival:</span>
+                        <div className="text-sm font-medium">
+                          <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center mr-3">
+                        <MapPin className="w-5 h-5 text-[var(--orange-600)]" />
+                      </div>
+                      <div className="flex-1 flex justify-between">
+                        <span className="text-sm text-[var(--muted-text)]">Distance:</span>
+                        <span className="text-sm font-medium">{rideData.ride.distance}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[var(--pink-100)] flex items-center justify-center mr-3">
+                        <Clock className="w-5 h-5 text-[var(--pink-600)]" />
+                      </div>
+                      <div className="flex-1 flex justify-between">
+                        <span className="text-sm text-[var(--muted-text)]">Duration:</span>
+                        <span className="text-sm font-medium">{rideData.ride.duration}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Route Information</h3>
+                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+                    <FaRoute  className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Route Information</h3>
+                  </div>
                   <div>
                     <div className="mb-4">
                       <div className="flex items-start">
-                        <div className="w-6 h-6 rounded-full bg-[var(--success)] flex items-center justify-center text-[var(--on-success)] mr-2 mt-1">
-                          <MapPin size={14} />
+                        <div className="w-8 h-8 rounded-full bg-[var(--success)] flex items-center justify-center text-[var(--on-success)] mr-3 mt-1">
+                          <MapPin size={16} />
                         </div>
                         <div>
                           <p className="text-sm font-medium">Pickup</p>
@@ -289,8 +377,8 @@ export default function RideDetailModal({
                     </div>
                     <div>
                       <div className="flex items-start">
-                        <div className="w-6 h-6 rounded-full bg-[var(--danger)] flex items-center justify-center text-[var(--on-danger)] mr-2 mt-1">
-                          <MapPin size={14} />
+                        <div className="w-8 h-8 rounded-full bg-[var(--danger)] flex items-center justify-center text-[var(--on-danger)] mr-3 mt-1">
+                          <MapPin size={16} />
                         </div>
                         <div>
                           <p className="text-sm font-medium">Dropoff</p>
@@ -301,18 +389,37 @@ export default function RideDetailModal({
                   </div>
                 </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg col-span-2">
-                  <h3 className="text-lg font-semibold mb-4">Students</h3>
+                <div className="bg-[var(--surface-bg)] p-6 rounded-lg col-span-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)] mt-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold">Students</h3>
+                  </div>
                   <div className="grid grid-cols-3 gap-4">
-                    {rideData.students.map((student, index) => (
-                      <div key={index} className="flex items-center">
-                        <User size={20} className="text-[var(--muted-text)] mr-2" />
-                        <div>
-                          <p className="text-sm font-medium">{student.name}</p>
-                          <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
+                    {rideData.students.map((student, index) => {
+                      const iconBackgroundColors = [
+                        'bg-[var(--blue-100)]',
+                        'bg-[var(--green-100)]', 
+                        'bg-[var(--purple-100)]'
+                      ];
+                      const iconColors = [
+                        'text-[var(--blue-600)]',
+                        'text-[var(--green-600)]',
+                        'text-[var(--purple-600)]'
+                      ];
+                      return (
+                        <div key={index} className="flex items-center">
+                          <div className={`w-10 h-10 rounded-full ${iconBackgroundColors[index]} flex items-center justify-center mr-3`}>
+                            <GraduationCap size={20} className={iconColors[index]} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">{student.name}</p>
+                            <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -460,10 +567,7 @@ export default function RideDetailModal({
             {activeTab === 4 && (
               <div className="space-y-6">
                 {/* Timeline Header */}
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Timeline</h3>
-                  <p className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>Ride activity and status updates</p>
-                </div>
+               
 
                 {/* Timeline Events */}
                 <div className="relative">
@@ -652,21 +756,21 @@ export default function RideDetailModal({
               </div>
             )}
           </div>
+        </div>
 
-          <div className="p-4 border-t border-[var(--border)] flex justify-center space-x-4 mt-6">
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Map size={18} />
-              <span>Route Map</span>
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Camera size={18} />
-              <span>Stop Photos</span>
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Eye size={18} />
-              <span>Street View</span>
-            </Button>
-          </div>
+        <div className="p-4 border-t border-[var(--border)] flex justify-center space-x-4">
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Map size={18} />
+            <span>Route Map</span>
+          </Button>
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Camera size={18} />
+            <span>Stop Photos</span>
+          </Button>
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Eye size={18} />
+            <span>Street View</span>
+          </Button>
         </div>
       </div>
     </div>
