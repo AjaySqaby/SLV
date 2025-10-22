@@ -17,7 +17,8 @@ import {
   CheckCircle,
   Edit3,
   Save,
-  X
+  X,
+  Calendar
 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
@@ -27,11 +28,13 @@ import Table from '@/components/ui/Table'
 import StudentsTab from '@/components/campus/details/StudentsTab'
 import RoutesTab from '@/components/campus/details/RoutesTab'
 import RidesTab from '@/components/campus/details/RidesTab'
+import HolidayExceptionsTab from '@/components/campus/details/HolidayExceptionsTab'
 
 export default function CampusDetailContent({ campusId, isModal = false, isEditMode = false }) {
   const [activeTab, setActiveTab] = useState(0)
   const [isEditing, setIsEditing] = useState(isEditMode)
   const [editedCampusData, setEditedCampusData] = useState(null)
+  const [holidays, setHolidays] = useState([])
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -127,10 +130,47 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
     },
   ]
 
+  // Mock holidays data
+  const mockHolidays = [
+    {
+      id: 1,
+      title: "Winter Break",
+      type: "no_school",
+      startDate: "2024-12-23",
+      endDate: "2024-12-31",
+      description: "Winter holiday break - no school",
+      affectsTransportation: true
+    },
+    {
+      id: 2,
+      title: "Teacher In-Service Day",
+      type: "no_school",
+      startDate: "2024-11-15",
+      endDate: "2024-11-15",
+      description: "Professional development day for teachers",
+      affectsTransportation: true
+    },
+    {
+      id: 3,
+      title: "Early Dismissal - Parent Conferences",
+      type: "schedule_change",
+      startDate: "2024-10-25",
+      endDate: "2024-10-25",
+      description: "Students dismissed 2 hours early for parent-teacher conferences",
+      affectsTransportation: true
+    }
+  ]
+
+  // Initialize holidays data
+  useEffect(() => {
+    setHolidays(mockHolidays)
+  }, [])
+
   const tabs = [
     { id: 0, label: "Students", icon: Users },
     { id: 1, label: "Routes", icon: Route },
-    { id: 2, label: "Rides", icon: Car }
+    { id: 2, label: "Rides", icon: Car },
+    { id: 3, label: "Holidays & Exceptions", icon: Calendar }
   ]
 
   const handleEditToggle = () => {
@@ -171,6 +211,25 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
     }))
   }
 
+  // Holiday management functions
+  const handleAddHoliday = (newHoliday) => {
+    const holiday = {
+      ...newHoliday,
+      id: Date.now(), // Simple ID generation
+    }
+    setHolidays(prev => [...prev, holiday])
+  }
+
+  const handleEditHoliday = (id, updatedHoliday) => {
+    setHolidays(prev => prev.map(holiday => 
+      holiday.id === id ? { ...updatedHoliday, id } : holiday
+    ))
+  }
+
+  const handleDeleteHoliday = (id) => {
+    setHolidays(prev => prev.filter(holiday => holiday.id !== id))
+  }
+
   const currentData = isEditing ? editedCampusData : campusData
   // Ensure currentData is never null
   const safeCurrentData = currentData || campusData
@@ -198,6 +257,16 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
 
       case 2:
         return <RidesTab rides={rides} />
+
+      case 3:
+        return (
+          <HolidayExceptionsTab 
+            holidays={holidays}
+            onAddHoliday={handleAddHoliday}
+            onEditHoliday={handleEditHoliday}
+            onDeleteHoliday={handleDeleteHoliday}
+          />
+        )
 
       default:
         return null;
