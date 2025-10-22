@@ -133,26 +133,38 @@ export default function RideDetailModal({
     ],
     history: [
       {
-        event: "Ride Created",
+        event: "Ride Created by System",
         time: "April 16, 2025, 8:00 AM",
         icon: "calendar",
       },
       {
-        event: "Driver Assigned",
+        event: "Driver Assigned by Mark",
         time: "April 16, 2025, 8:15 AM",
         details: "Driver Michael Davis was assigned to this ride",
         icon: "user",
       },
       {
-        event: "Ride Started",
+        event: "Ride Started by Michael",
         time: "April 16, 2025, 12:00 PM",
         icon: "car",
       },
       {
-        event: "First Stop Completed",
+        event: "First Stop Completed by Michael",
         time: "April 16, 2025, 12:15 PM",
         details: "2 students picked up",
         icon: "map-pin",
+      },
+      {
+        event: "Second Stop Completed by Michael",
+        time: "April 16, 2025, 12:30 PM",
+        details: "1 student picked up",
+        icon: "map-pin",
+      },
+      {
+        event: "Ride Completed by Michael",
+        time: "April 16, 2025, 1:15 PM",
+        details: "All students dropped off at school",
+        icon: "car",
       },
     ],
   };
@@ -446,22 +458,197 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 4 && (
-              <div className={"space-y-6 "+tabPanelClass}>
-                {rideData.history.map((item, index) => (
-                  <div key={index} className="flex">
-                    <div className="mr-4">
-                      {item.icon === "calendar" && <Calendar size={24} className="text-[var(--primary)]" />}
-                      {item.icon === "user" && <User size={24} className="text-[var(--primary)]" />}
-                      {item.icon === "car" && <Car size={24} className="text-[var(--primary)]" />}
-                      {item.icon === "map-pin" && <MapPin size={24} className="text-[var(--success)]" />}
+              <div className="space-y-6">
+                {/* Timeline Header */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Timeline</h3>
+                  <p className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>Ride activity and status updates</p>
+                </div>
+
+                {/* Timeline Events */}
+                <div className="relative">
+                  {/* Vertical Line */}
+                  <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--gray-200)' }}></div>
+
+                  <div className="space-y-6">
+                    {/* Event 1 - Ride Created */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--blue-600)' }}
+                      >
+                        <Calendar className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Created by System</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--blue-100)',
+                              color: 'var(--blue-600)'
+                            }}
+                          >
+                            Created
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 8:00 AM</p>
+                          <p className="mt-1">System</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1 pb-6 border-l border-[var(--border)] pl-4">
-                      <h3 className="font-medium">{item.event}</h3>
-                      <p className="text-sm text-[var(--muted-text)]">{item.time}</p>
-                      {item.details && <p className="text-sm text-[var(--muted-text)] mt-1">{item.details}</p>}
+
+                    {/* Event 2 - Driver Assigned */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--blue-600)' }}
+                      >
+                        <User className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Driver Assigned by Mark</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--blue-100)',
+                              color: 'var(--blue-600)'
+                            }}
+                          >
+                            Assigned
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 8:15 AM</p>
+                          <p className="mt-1">Mark – admin</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Event 3 - Ride Started */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      >
+                        <Car className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Started by Michael</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--green-100)',
+                              color: 'var(--green-600)'
+                            }}
+                          >
+                            Started
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 12:00 PM</p>
+                          <p className="mt-1">Michael – driver</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Event 4 - First Stop Completed */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      >
+                        <MapPin className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>First Stop Completed by Michael</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--green-100)',
+                              color: 'var(--green-600)'
+                            }}
+                          >
+                            Completed
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 12:15 PM</p>
+                          <p className="mt-1">Michael – driver</p>
+                          <p className="mt-1">2 students picked up</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Event 5 - Second Stop Completed */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      >
+                        <MapPin className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Second Stop Completed by Michael</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--green-100)',
+                              color: 'var(--green-600)'
+                            }}
+                          >
+                            Completed
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 12:30 PM</p>
+                          <p className="mt-1">Michael – driver</p>
+                          <p className="mt-1">1 student picked up</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Event 6 - Ride Completed */}
+                    <div className="relative flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10"
+                        style={{ backgroundColor: 'var(--green-600)' }}
+                      >
+                        <Car className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 pt-2">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Completed by Michael</h4>
+                          <span
+                            className="px-3 py-1 text-sm rounded-full font-medium"
+                            style={{
+                              backgroundColor: 'var(--green-100)',
+                              color: 'var(--green-600)'
+                            }}
+                          >
+                            Completed
+                          </span>
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                          <p>April 16, 2025, 1:15 PM</p>
+                          <p className="mt-1">Michael – driver</p>
+                          <p className="mt-1">All students dropped off at school</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             )}
           </div>
