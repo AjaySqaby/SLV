@@ -38,6 +38,7 @@ export default function StudentsContent() {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isBulkUploadModalOpen, setBulkUploadModalOpen] = useState(false);
 
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -167,6 +168,14 @@ export default function StudentsContent() {
             />
           </div>
           <div className="flex gap-3 flex-shrink-0">
+            <Button
+              variant="outline"
+              className="text-sm flex items-center justify-center font-medium gap-2 whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setBulkUploadModalOpen(true)}
+            >
+              <Plus size={18} />
+              Bulk Upload
+            </Button>
             <Button
               className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
               onClick={() => setAddModalOpen(true)}
@@ -350,6 +359,154 @@ export default function StudentsContent() {
                   className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
                 >
                   Save Changes
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Upload Modal */}
+      {isBulkUploadModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+          onClick={() => setBulkUploadModalOpen(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl w-[95vw] h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] max-w-7xl mx-4 overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--blue-600)' }}
+                  >
+                    <Plus className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Bulk Upload Students</h1>
+                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Upload multiple students via CSV file</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setBulkUploadModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Content Area */}
+            <div className="p-6 overflow-y-auto flex-1">
+              {/* Instructions */}
+              <div 
+                className="p-4 rounded-lg border mb-6"
+                style={{ 
+                  backgroundColor: 'var(--blue-100)',
+                  borderColor: 'var(--blue-200)'
+                }}
+              >
+                <div className="flex items-start gap-2">
+                  <div className="w-5 h-5 mt-0.5" style={{ color: 'var(--blue-600)' }}>
+                    <Plus className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm mb-1" style={{ color: 'var(--blue-600)' }}>
+                      Upload Instructions
+                    </p>
+                    <p className="text-sm" style={{ color: 'var(--blue-600)' }}>
+                      Upload a CSV file with student information. The file should include columns for: Name, Grade, Campus, District, Address, Phone, Email, and Guardian Name.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            {/* File Upload Area */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                Select CSV File
+              </label>
+              <div 
+                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                style={{ borderColor: 'var(--gray-300)' }}
+                onClick={() => document.getElementById('csvFileInput').click()}
+              >
+                <Plus className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--gray-400)' }} />
+                <p className="text-lg font-medium mb-2" style={{ color: 'var(--heading)' }}>
+                  Click to upload CSV file
+                </p>
+                <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                  or drag and drop your file here
+                </p>
+                <input
+                  id="csvFileInput"
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      console.log('File selected:', file.name);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Template Download */}
+            <div className="mb-6">
+              <p className="text-sm mb-2" style={{ color: 'var(--heading)' }}>
+                Need a template? Download our CSV template:
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+                onClick={() => {
+                  // Create and download CSV template
+                  const csvContent = "Name,Grade,Campus,District,Address,Phone,Email,Guardian Name\nJohn Doe,5th Grade,Lincoln Elementary,District A,123 Main St,(555) 123-4567,john@example.com,Jane Doe";
+                  const blob = new Blob([csvContent], { type: 'text/csv' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'student_template.csv';
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                }}
+              >
+                <Plus className="w-4 h-4" />
+                Download Template
+              </Button>
+            </div>
+
+            </div>
+
+            {/* Footer */}
+            <div className="bg-white border-t border-[var(--gray-200)] p-6">
+              <div className="flex justify-end gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => setBulkUploadModalOpen(false)}
+                  className="px-6 py-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    console.log('Bulk upload started')
+                    setBulkUploadModalOpen(false)
+                  }}
+                  className="px-6 py-2"
+                  style={{ 
+                    backgroundColor: 'var(--blue-600)', 
+                    color: 'var(--on-primary)' 
+                  }}
+                >
+                  Upload Students
                 </Button>
               </div>
             </div>

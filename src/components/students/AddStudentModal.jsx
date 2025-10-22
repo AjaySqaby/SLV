@@ -21,6 +21,12 @@ export default function AddStudentModal({ isOpen, onClose }) {
     emergencyContactPhone: '',
     medicalNotes: '',
     transportationNotes: '',
+    // Secondary Guardian fields
+    secondaryGuardianName: '',
+    secondaryGuardianPhone: '',
+    secondaryGuardianEmail: '',
+    secondaryGuardianRelationship: '',
+    hasSecondaryGuardian: false,
   });
 
   const handleChange = (e) => {
@@ -70,8 +76,14 @@ export default function AddStudentModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
-      <div className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
           <div className="flex items-center gap-4">
@@ -236,6 +248,74 @@ export default function AddStudentModal({ isOpen, onClose }) {
               required
             />
           </div>
+          
+          {/* Secondary Guardian Toggle */}
+          <div className="mt-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-[var(--gray-700)]">
+                Add Secondary Guardian
+              </label>
+              <Toggle
+                checked={studentForm.hasSecondaryGuardian}
+                onChange={(value) => handleToggleChange('hasSecondaryGuardian', value)}
+              />
+            </div>
+            <p className="text-sm text-[var(--muted-text)] mt-1">
+              Add a secondary parent/guardian for this student
+            </p>
+          </div>
+
+          {/* Secondary Guardian Fields */}
+          {studentForm.hasSecondaryGuardian && (
+            <div className="mt-4 p-4 rounded-lg border border-[var(--gray-200)] bg-[var(--gray-50)]">
+              <h4 className="font-medium text-[var(--primary-black)] mb-4">Secondary Guardian Information</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Secondary Guardian Name"
+                  name="secondaryGuardianName"
+                  value={studentForm.secondaryGuardianName}
+                  onChange={handleChange}
+                  required={studentForm.hasSecondaryGuardian}
+                />
+                <Input
+                  label="Secondary Guardian Phone"
+                  name="secondaryGuardianPhone"
+                  value={studentForm.secondaryGuardianPhone}
+                  onChange={handleChange}
+                  type="tel"
+                  required={studentForm.hasSecondaryGuardian}
+                />
+                <div className="md:col-span-2">
+                  <Input
+                    label="Secondary Guardian Email"
+                    name="secondaryGuardianEmail"
+                    value={studentForm.secondaryGuardianEmail}
+                    onChange={handleChange}
+                    type="email"
+                    required={studentForm.hasSecondaryGuardian}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Select
+                    label="Relationship to Student"
+                    name="secondaryGuardianRelationship"
+                    value={studentForm.secondaryGuardianRelationship}
+                    onChange={handleChange}
+                    options={[
+                      { value: '', label: 'Select relationship' },
+                      { value: 'parent', label: 'Parent' },
+                      { value: 'grandparent', label: 'Grandparent' },
+                      { value: 'aunt', label: 'Aunt' },
+                      { value: 'uncle', label: 'Uncle' },
+                      { value: 'sibling', label: 'Sibling' },
+                      { value: 'other', label: 'Other' }
+                    ]}
+                    required={studentForm.hasSecondaryGuardian}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
             {/* Additional Notes */}
