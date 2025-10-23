@@ -7,9 +7,9 @@ const mockDrivers = [
     name: "Sarah Williams",
     avatar: "/picture.jpg",
     vehicle: "Honda Odyssey",
+    plateNumber: "ABC-1234",
     location: "Midtown",
     address: "999 Peachtree St NE, Atlanta, GA 30309",
-    phone: "510-555-2345",
     status: "On Ride",
     statusColor: "#10b981", // Green for On Ride
     position: { top: "32%", left: "52%" },
@@ -21,9 +21,9 @@ const mockDrivers = [
     name: "Michael Johnson",
     avatar: "/picture.jpg",
     vehicle: "Toyota Sienna",
+    plateNumber: "XYZ-5678",
     location: "West Midtown",
     address: "1234 West Peachtree St NW, Atlanta, GA 30309",
-    phone: "510-555-1234",
     status: "Ready Now",
     statusColor: "#10b981", // Green for Ready Now
     position: { top: "28%", left: "48%" },
@@ -35,9 +35,9 @@ const mockDrivers = [
     name: "David Thompson",
     avatar: "/picture.jpg",
     vehicle: "Ford Transit",
+    plateNumber: "DEF-9012",
     location: "Downtown Atlanta",
     address: "456 Marietta St NW, Atlanta, GA 30313",
-    phone: "510-555-3456",
     status: "Delayed",
     statusColor: "#ef4444", // Red for Delayed
     position: { top: "45%", left: "54%" },
@@ -49,9 +49,9 @@ const mockDrivers = [
     name: "Jessica Martinez",
     avatar: "/picture.jpg",
     vehicle: "Chevrolet Suburban",
+    plateNumber: "GHI-3456",
     location: "Buckhead",
     address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
-    phone: "510-555-4567",
     status: "Ready Now",
     statusColor: "#10b981", // Green for Ready Now
     position: { top: "22%", left: "56%" },
@@ -63,9 +63,9 @@ const mockDrivers = [
     name: "Robert Chen",
     avatar: "/picture.jpg",
     vehicle: "Honda Pilot",
+    plateNumber: "JKL-7890",
     location: "Virginia Highland",
     address: "1234 N Highland Ave NE, Atlanta, GA 30306",
-    phone: "510-555-5678",
     status: "On Ride",
     statusColor: "#10b981", // Green for On Ride
     position: { top: "35%", left: "60%" },
@@ -197,22 +197,22 @@ export default function MapView({ onViewRide }) {
                       <div className="space-y-1 text-xs text-gray-600">
                         <div className="flex items-center">
                           <Car className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.vehicle}</span>
+                          <span className="truncate">{driver.vehicle} • {driver.plateNumber}</span>
                         </div>
                         <div className="flex items-center">
                           <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
                           <span className="truncate">{driver.address}</span>
                         </div>
-                        <div className="flex items-center">
-                          <Phone className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.phone}</span>
-                        </div>
                         {driver.rideId && (
                           <div className="flex items-center">
                             <Clock className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                            <span className="truncate">Ride {driver.rideId} • ETA {driver.eta}</span>
+                            <span className="truncate">Route {driver.rideId} • ETA {driver.eta}</span>
                           </div>
                         )}
+                        <div className="flex items-center">
+                          <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
+                          <span className="truncate">Next Stop: West Campus</span>
+                        </div>
                       </div>
 
                       <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 gap-2">
@@ -229,19 +229,6 @@ export default function MapView({ onViewRide }) {
                         >
                           <Eye className="w-3 h-3 mr-1" />
                           View Details
-                        </button>
-                        <button
-                          className="text-green-600 text-xs font-medium hover:text-green-700 flex items-center hover:bg-green-50 px-2 py-1 rounded transition-colors"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Check if we're in a browser environment
-                            if (typeof window !== 'undefined') {
-                              window.open(`tel:${driver.phone}`, '_self');
-                            }
-                          }}
-                        >
-                          <Phone className="w-3 h-3 mr-1" />
-                          Call Driver
                         </button>
                       </div>
                     </div>
@@ -290,12 +277,16 @@ export default function MapView({ onViewRide }) {
 
               <div className="space-y-2 text-sm">
                 <div className="flex items-center">
+                  <Car className="w-4 h-4 mr-2 text-gray-400" />
+                  <span>{selectedDriver.vehicle} • {selectedDriver.plateNumber}</span>
+                </div>
+                <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                   <span>{selectedDriver.address}</span>
                 </div>
                 <div className="flex items-center">
-                  <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                  <span>{selectedDriver.phone}</span>
+                  <MapPin className="w-4 h-4 mr-2 text-gray-400" />
+                  <span>Next Stop: West Campus</span>
                 </div>
               </div>
 
@@ -310,14 +301,6 @@ export default function MapView({ onViewRide }) {
                     View Ride
                   </button>
                 )}
-                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-green-700" onClick={() => { 
-                  // Check if we're in a browser environment
-                  if (typeof window !== 'undefined') {
-                    window.open(`tel:${selectedDriver.phone || ''}`, '_self'); 
-                  }
-                }}>
-                  Call Driver
-                </button>
               </div>
             </div>
           </div>

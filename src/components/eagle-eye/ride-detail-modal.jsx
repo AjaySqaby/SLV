@@ -263,7 +263,7 @@ export default function RideDetailModal({
                         <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
                           <img
                             src={rideData.driver.avatar || "/picture.jpg"}
-                            alt={rideData.driver.name}
+                        alt={rideData.driver.name}
                             className="w-full h-full object-cover"
                             onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
                           />
@@ -276,7 +276,7 @@ export default function RideDetailModal({
                       <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                       {/* Shadow */}
                       <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-300 opacity-50"></div>
-                    </div>
+                      </div>
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-[var(--primary-black)]">{rideData.driver.name}</div>
                       <div className="text-sm text-[var(--muted-text)]">{rideData.driver.phone}</div>
@@ -368,9 +368,9 @@ export default function RideDetailModal({
                       </div>
                       <div className="flex-1 flex justify-between">
                         <span className="text-sm text-[var(--muted-text)]">Pickup Time:</span>
-                        <div className="text-sm font-medium">
-                          <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
-                        </div>
+                    <div className="text-sm font-medium">
+                      <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
+                    </div>
                       </div>
                     </div>
                     <div className="flex items-center">
@@ -379,9 +379,9 @@ export default function RideDetailModal({
                       </div>
                       <div className="flex-1 flex justify-between">
                         <span className="text-sm text-[var(--muted-text)]">Estimated Arrival:</span>
-                        <div className="text-sm font-medium">
-                          <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
-                        </div>
+                    <div className="text-sm font-medium">
+                      <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
+                    </div>
                       </div>
                     </div>
                     <div className="flex items-center">
@@ -458,7 +458,7 @@ export default function RideDetailModal({
                         'text-[var(--purple-600)]'
                       ];
                       return (
-                        <div key={index} className="flex items-center">
+                      <div key={index} className="flex items-center">
                           {/* Map Pin Style Student Container */}
                           <div className="relative mr-3">
                             {/* Main Pin Container */}
@@ -473,11 +473,11 @@ export default function RideDetailModal({
                             {/* Shadow */}
                             <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
                           </div>
-                          <div>
-                            <p className="text-sm font-medium">{student.name}</p>
-                            <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
-                          </div>
+                        <div>
+                          <p className="text-sm font-medium">{student.name}</p>
+                          <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
                         </div>
+                      </div>
                       );
                     })}
                   </div>
@@ -852,26 +852,26 @@ export default function RideDetailModal({
                         </div>
                       </div>
                     </div>
+                    </div>
                   </div>
-                </div>
               </div>
             )}
           </div>
-        </div>
+          </div>
 
         <div className="p-4 border-t border-[var(--border)] flex justify-center space-x-4">
-          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-            <Map size={18} />
-            <span>Route Map</span>
-          </Button>
-          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-            <Camera size={18} />
-            <span>Stop Photos</span>
-          </Button>
-          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-            <Eye size={18} />
-            <span>Street View</span>
-          </Button>
+            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+              <Map size={18} />
+              <span>Route Map</span>
+            </Button>
+            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+              <Camera size={18} />
+              <span>Stop Photos</span>
+            </Button>
+            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+              <Eye size={18} />
+              <span>Street View</span>
+            </Button>
         </div>
       </div>
     </div>
