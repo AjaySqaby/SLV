@@ -92,73 +92,95 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
         </Button>
       </div>
 
-      {/* Holidays List */}
-      <div className="space-y-4">
-        {holidays.length === 0 ? (
-          <Card className="p-8 text-center">
-            <Calendar className="w-12 h-12 text-[var(--gray-400)] mx-auto mb-4" />
-            <h4 className="text-lg font-medium text-[var(--gray-900)] mb-2">No Holidays/Exceptions</h4>
-            <p className="text-[var(--gray-600)] mb-4">Add holidays and schedule changes to manage transportation</p>
-            <Button
-              variant="outline"
-              icon={<Plus className="w-4 h-4" />}
-              onClick={() => setShowAddModal(true)}
-            >
-              Add First Holiday
-            </Button>
-          </Card>
-        ) : (
-          holidays.map((holiday) => (
-            <Card key={holiday.id} className="p-4">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTypeColor(holiday.type)}`}>
-                    {getTypeIcon(holiday.type)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="font-semibold text-[var(--gray-900)]">{holiday.title}</h4>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(holiday.type)}`}>
-                        {getTypeLabel(holiday.type)}
-                      </span>
+      {/* Holidays Table */}
+      {holidays.length === 0 ? (
+        <div className="text-center py-8">
+          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h4 className="text-lg font-medium text-gray-900 mb-2">No Holidays/Exceptions</h4>
+          <p className="text-gray-600 mb-4">Add holidays and schedule changes to manage transportation</p>
+          <Button
+            variant="outline"
+            icon={<Plus className="w-4 h-4" />}
+            onClick={() => setShowAddModal(true)}
+          >
+            Add First Holiday
+          </Button>
+        </div>
+      ) : (
+        <table className="w-full text-sm border border-gray-200 rounded-lg">
+          <thead>
+            <tr className="bg-gray-50">
+              <th className="p-3 text-left font-semibold text-gray-700">Title</th>
+              <th className="p-3 text-left font-semibold text-gray-700">Type</th>
+              <th className="p-3 text-left font-semibold text-gray-700">Date Range</th>
+              <th className="p-3 text-left font-semibold text-gray-700">Transportation</th>
+              <th className="p-3 text-left font-semibold text-gray-700">Description</th>
+              <th className="p-3 text-center font-semibold text-gray-700">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {holidays.map((holiday) => (
+              <tr key={holiday.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(holiday.type)}`}>
+                      {getTypeIcon(holiday.type)}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-[var(--gray-600)] mb-2">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {holiday.startDate} {holiday.endDate && holiday.endDate !== holiday.startDate && `- ${holiday.endDate}`}
-                      </span>
-                      {holiday.affectsTransportation && (
-                        <span className="flex items-center gap-1 text-[var(--blue-600)]">
-                          <Clock className="w-4 h-4" />
-                          Affects Transportation
-                        </span>
-                      )}
-                    </div>
-                    {holiday.description && (
-                      <p className="text-sm text-[var(--gray-600)]">{holiday.description}</p>
-                    )}
+                    <span className="font-medium text-gray-900">{holiday.title}</span>
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={<Edit3 className="w-4 h-4" />}
-                    onClick={() => handleEditHoliday(holiday)}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={<Trash2 className="w-4 h-4" />}
-                    onClick={() => handleDeleteHoliday(holiday.id)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  />
-                </div>
-              </div>
-            </Card>
-          ))
-        )}
-      </div>
+                </td>
+                <td className="p-3">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(holiday.type)}`}>
+                    {getTypeLabel(holiday.type)}
+                  </span>
+                </td>
+                <td className="p-3">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>
+                      {holiday.startDate} 
+                      {holiday.endDate && holiday.endDate !== holiday.startDate && ` - ${holiday.endDate}`}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  {holiday.affectsTransportation ? (
+                    <span className="flex items-center gap-1 text-blue-600">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm">Affects</span>
+                    </span>
+                  ) : (
+                    <span className="text-gray-400 text-sm">No Impact</span>
+                  )}
+                </td>
+                <td className="p-3">
+                  <span className="text-gray-600 text-sm">
+                    {holiday.description || '-'}
+                  </span>
+                </td>
+                <td className="p-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<Edit3 className="w-4 h-4" />}
+                      onClick={() => handleEditHoliday(holiday)}
+                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<Trash2 className="w-4 h-4" />}
+                      onClick={() => handleDeleteHoliday(holiday.id)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       {/* Add/Edit Modal */}
       {showAddModal && (

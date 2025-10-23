@@ -550,16 +550,60 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
         </div>
 
         {/* Tabs */}
-        <div className="mb-6">
-          <Tabs
-            tabs={tabs}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-          />
-        </div>
+      
 
         {/* Tab Content */}
         <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] p-6">
+        <div className="flex items-center space-x-2 mb-6">
+            <button 
+              onClick={() => setActiveTab(0)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 0 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Users className="w-4 h-4" />
+              Students
+            </button>
+            <button 
+              onClick={() => setActiveTab(1)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 1 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Route className="w-4 h-4" />
+              Routes
+            </button>
+            <button 
+              onClick={() => setActiveTab(2)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 2 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Car className="w-4 h-4" />
+              Rides
+            </button>
+            <button 
+              onClick={() => setActiveTab(3)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 3 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Calendar className="w-4 h-4" />
+              Holidays & Exceptions
+            </button>
+          </div>
           {renderTabContent()}
         </div>
       </div>
