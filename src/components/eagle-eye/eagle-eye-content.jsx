@@ -25,7 +25,7 @@ export default function EagleEyeContent() {
       id: "RT1001",
       driver: {
         name: "Michael Davis",
-        avatar: "/picture.jpg",
+        avatar: "/driver1.jpg",
         location: "1221 Broadway",
         phone: "(510) 555-1234",
       },
@@ -37,7 +37,7 @@ export default function EagleEyeContent() {
       id: "RT1002",
       driver: {
         name: "Sophia Martinez",
-        avatar: "/picture.jpg",
+        avatar: "/driver2.jpg",
         location: "365 14th St",
         phone: "(510) 555-5678",
       },
@@ -114,9 +114,9 @@ export default function EagleEyeContent() {
             </div>
             <div className="p-4 space-y-3 overflow-y-auto max-h-[calc(100vh-140px)]">
               {[{
-                id: 'D1', name: 'Sarah Williams', distance: 0.6, status: 'Ready Now', minutesToDrop: 0, eta: '10 min', avatar: '/picture.jpg'
+                id: 'D1', name: 'Sarah Williams', distance: 0.6, status: 'Ready Now', minutesToDrop: 0, eta: '10 min', avatar: '/driver3.jpg'
               },{
-                id: 'D3', name: 'David Thompson', distance: 1.3, status: 'On Active Ride', minutesToDrop: 12, eta: '18 min', avatar: '/picture.jpg'
+                id: 'D3', name: 'David Thompson', distance: 1.3, status: 'On Active Ride', minutesToDrop: 12, eta: '18 min', avatar: '/driver4.jpg'
               }].map(d => (
                 <div key={d.id} className="p-3 border border-[var(--gray-200)] rounded-lg flex items-center gap-3">
                   <img src={d.avatar} alt={d.name} className="w-10 h-10 rounded-full object-cover" />

@@ -17,10 +17,85 @@ import {
   Users,
   GraduationCap,
 } from "lucide-react";
+import { FaPlay, FaUsers, FaHistory } from "react-icons/fa";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 import { FaRoute } from "react-icons/fa";
+// Mock drivers data (same as MapView)
+const mockDrivers = [
+  {
+    id: "D1",
+    name: "Sarah Williams",
+    avatar: "/driver1.jpg",
+    vehicle: "Honda Odyssey",
+    plateNumber: "ABC-1234",
+    location: "Midtown",
+    address: "999 Peachtree St NE, Atlanta, GA 30309",
+    status: "On Ride",
+    statusColor: "#10b981",
+    position: { top: "32%", left: "52%" },
+    rideId: "R123",
+    eta: "15 min"
+  },
+  {
+    id: "D2",
+    name: "Michael Johnson",
+    avatar: "/driver2.jpg",
+    vehicle: "Toyota Sienna",
+    plateNumber: "XYZ-5678",
+    location: "West Midtown",
+    address: "1234 West Peachtree St NW, Atlanta, GA 30309",
+    status: "Ready Now",
+    statusColor: "#10b981",
+    position: { top: "28%", left: "48%" },
+    rideId: "R222",
+    eta: "10 min"
+  },
+  {
+    id: "D3",
+    name: "David Thompson",
+    avatar: "/driver3.jpg",
+    vehicle: "Ford Transit",
+    plateNumber: "DEF-9012",
+    location: "Downtown Atlanta",
+    address: "456 Marietta St NW, Atlanta, GA 30313",
+    status: "Delayed",
+    statusColor: "#ef4444",
+    position: { top: "45%", left: "54%" },
+    rideId: "R456",
+    eta: "8 min"
+  },
+  {
+    id: "D4",
+    name: "Jessica Martinez",
+    avatar: "/driver4.jpg",
+    vehicle: "Chevrolet Suburban",
+    plateNumber: "GHI-3456",
+    location: "Buckhead",
+    address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
+    status: "Ready Now",
+    statusColor: "#10b981",
+    position: { top: "22%", left: "56%" },
+    rideId: "R444",
+    eta: "14 min"
+  },
+  {
+    id: "D5",
+    name: "Robert Chen",
+    avatar: "/driver5.webp",
+    vehicle: "Honda Pilot",
+    plateNumber: "JKL-7890",
+    location: "Virginia Highland",
+    address: "1234 N Highland Ave NE, Atlanta, GA 30306",
+    status: "On Ride",
+    statusColor: "#10b981",
+    position: { top: "35%", left: "60%" },
+    rideId: "R789",
+    eta: "12 min"
+  }
+];
+
 export default function RideDetailModal({
   isOpen,
   onClose,
@@ -28,6 +103,9 @@ export default function RideDetailModal({
   rideStatus = "In Progress",
 }) {
   const [activeTab, setActiveTab] = useState(0);
+
+  // Find the driver data based on rideId
+  const selectedDriver = mockDrivers.find(driver => driver.rideId === rideId) || mockDrivers[0];
 
   // Function to get status circle color based on ride status
   const getStatusCircleColor = (status) => {
@@ -54,44 +132,44 @@ export default function RideDetailModal({
   };
   const RideMap = dynamic(() => import("@/components/rides/RideMap"), { ssr: false });
   const tabList = [
-    { id: 0, label: "Overview" },
-    { id: 1, label: "Live Tracking" },
-    { id: 2, label: "Stops" },
-    { id: 3, label: "Students" },
-    { id: 4, label: "Timeline" },
+    { id: 0, label: "TRIP STOPS", icon: FaPlay },
+    { id: 1, label: "LIVE TRACKING", icon: Map },
+    { id: 2, label: "STOPS", icon: MapPin },
+    { id: 3, label: "STUDENTS", icon: FaUsers },
+    { id: 4, label: "TIMELINE", icon: FaHistory },
   ];
   const tabPanelClass = "pt-6";
   const statusType = rideStatus === 'On Time' ? 'active' : (rideStatus === 'Delayed' ? 'warning' : (rideStatus === 'Rejected' ? 'inactive' : 'active'));
 
   if (!isOpen) return null;
 
-  // Mock data (your original content)
+  // Dynamic data based on selected driver
   const rideData = {
     id: rideId,
     date: "05/01/2025, Thursday",
-    route: "Route SLV1001",
-    status: "In Progress",
+    route: `Route ${rideId}`,
+    status: selectedDriver.status,
     driver: {
-      name: "Michael Davis",
-      id: "DR-1001",
+      name: selectedDriver.name,
+      id: selectedDriver.id,
       phone: "(555) 123-4567",
-      avatar: "/placeholder.svg?height=80&width=80",
+      avatar: selectedDriver.avatar,
     },
     vehicle: {
-      name: "Toyota Sienna",
-      licensePlate: "ABC-1234",
+      name: selectedDriver.vehicle,
+      licensePlate: selectedDriver.plateNumber,
       capacity: "8 passengers",
     },
     ride: {
-      status: "On Time",
+      status: selectedDriver.status === "Delayed" ? "Delayed" : "On Time",
       pickupTime: "08:30 AM",
-      estimatedArrival: "09:00 AM",
+      estimatedArrival: selectedDriver.eta,
       distance: "12.5 miles",
       duration: "35 minutes",
     },
     route: {
       pickup: {
-        address: "1221 Broadway, Oakland, CA 94612",
+        address: selectedDriver.address,
       },
       dropoff: {
         address: "388 9th St, Oakland, CA 94607",
@@ -255,28 +333,20 @@ export default function RideDetailModal({
                     <h3 className="text-lg font-semibold">Driver Information</h3>
                   </div>
                   <div className="flex items-center mb-4">
-                    {/* Map Pin Style Profile Container */}
-                    <div className="relative mr-4">
-                      {/* Main Pin Container */}
-                      <div className="bg-white rounded-lg p-3 shadow-lg border border-[var(--gray-200)] relative">
-                        {/* Profile Picture */}
-                        <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                          <img
-                            src={rideData.driver.avatar || "/picture.jpg"}
-                        alt={rideData.driver.name}
-                            className="w-full h-full object-cover"
-                            onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-                          />
-                          <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-                            {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
-                          </div>
+                    {/* Simple Profile Picture */}
+                    <div className="mr-4">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                        <img
+                          src={rideData.driver.avatar || "/picture.jpg"}
+                          alt={rideData.driver.name}
+                          className="w-full h-full object-cover"
+                          onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                        />
+                        <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+                          {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
                         </div>
                       </div>
-                      {/* Pin Pointer */}
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-                      {/* Shadow */}
-                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-300 opacity-50"></div>
-                      </div>
+                    </div>
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-[var(--primary-black)]">{rideData.driver.name}</div>
                       <div className="text-sm text-[var(--muted-text)]">{rideData.driver.phone}</div>

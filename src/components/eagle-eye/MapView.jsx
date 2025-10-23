@@ -5,7 +5,7 @@ const mockDrivers = [
   {
     id: "D1",
     name: "Sarah Williams",
-    avatar: "/picture.jpg",
+    avatar: "/driver1.jpg",
     vehicle: "Honda Odyssey",
     plateNumber: "ABC-1234",
     location: "Midtown",
@@ -19,7 +19,7 @@ const mockDrivers = [
   {
     id: "D2",
     name: "Michael Johnson",
-    avatar: "/picture.jpg",
+    avatar: "/driver2.jpg",
     vehicle: "Toyota Sienna",
     plateNumber: "XYZ-5678",
     location: "West Midtown",
@@ -33,7 +33,7 @@ const mockDrivers = [
   {
     id: "D3",
     name: "David Thompson",
-    avatar: "/picture.jpg",
+    avatar: "/driver3.jpg",
     vehicle: "Ford Transit",
     plateNumber: "DEF-9012",
     location: "Downtown Atlanta",
@@ -47,7 +47,7 @@ const mockDrivers = [
   {
     id: "D4",
     name: "Jessica Martinez",
-    avatar: "/picture.jpg",
+    avatar: "/driver4.jpg",
     vehicle: "Chevrolet Suburban",
     plateNumber: "GHI-3456",
     location: "Buckhead",
@@ -61,7 +61,7 @@ const mockDrivers = [
   {
     id: "D5",
     name: "Robert Chen",
-    avatar: "/picture.jpg",
+    avatar: "/driver5.webp",
     vehicle: "Honda Pilot",
     plateNumber: "JKL-7890",
     location: "Virginia Highland",
