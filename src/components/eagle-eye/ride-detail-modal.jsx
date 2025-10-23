@@ -28,6 +28,30 @@ export default function RideDetailModal({
   rideStatus = "In Progress",
 }) {
   const [activeTab, setActiveTab] = useState(0);
+
+  // Function to get status circle color based on ride status
+  const getStatusCircleColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'on_time':
+      case 'completed':
+      case 'in_progress':
+      case 'started':
+      case 'assigned':
+        return 'bg-green-500'; // Green for on time
+      case 'delayed':
+      case 'late':
+        return 'bg-red-500'; // Red for delayed
+      case 'potential_delay':
+      case 'warning':
+        return 'bg-orange-500'; // Orange for potential delay
+      case 'unknown':
+      case 'not_started':
+      case 'pending':
+        return 'bg-black'; // Black for unknown
+      default:
+        return 'bg-gray-400'; // Default gray
+    }
+  };
   const RideMap = dynamic(() => import("@/components/rides/RideMap"), { ssr: false });
   const tabList = [
     { id: 0, label: "Overview" },
@@ -189,10 +213,24 @@ export default function RideDetailModal({
               <Route className="w-5 h-5 text-[var(--blue-600)]" />
               <Clock className="w-5 h-5 text-[var(--blue-600)]" />
               <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-              <StatusBadge status={rideStatus} fontSize="text-lg" />
-              <span className="text-sm font-medium text-gray-700">
-                ETA: {rideData.ride.estimatedArrival}
-              </span>
+              <div className="flex items-center gap-3">
+                <StatusBadge status={rideStatus} fontSize="text-lg" />
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-4 h-4 rounded-full border border-white shadow-sm"
+                    style={{
+                      backgroundColor: getStatusCircleColor(rideStatus) === 'bg-green-500' ? '#10b981' :
+                                      getStatusCircleColor(rideStatus) === 'bg-red-500' ? '#ef4444' :
+                                      getStatusCircleColor(rideStatus) === 'bg-orange-500' ? '#f97316' :
+                                      getStatusCircleColor(rideStatus) === 'bg-black' ? '#000000' :
+                                      '#6b7280'
+                    }}
+                  ></div>
+                  <span className="text-sm font-medium text-gray-700">
+                    ETA: {rideData.ride.estimatedArrival}
+                  </span>
+                </div>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -217,16 +255,27 @@ export default function RideDetailModal({
                     <h3 className="text-lg font-semibold">Driver Information</h3>
                   </div>
                   <div className="flex items-center mb-4">
-                    <div className="w-14 h-14 rounded-full mr-4 border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                      <img
-                        src={rideData.driver.avatar || "/picture.jpg"}
-                        alt={rideData.driver.name}
-                        className="w-full h-full object-cover"
-                        onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-                      />
-                      <div data-fallback className="hidden w-full h-full flex items-center justify-center text-2xl font-bold text-[var(--primary)]">
-                        {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                    {/* Map Pin Style Profile Container */}
+                    <div className="relative mr-4">
+                      {/* Main Pin Container */}
+                      <div className="bg-white rounded-lg p-3 shadow-lg border border-[var(--gray-200)] relative">
+                        {/* Profile Picture */}
+                        <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                          <img
+                            src={rideData.driver.avatar || "/picture.jpg"}
+                            alt={rideData.driver.name}
+                            className="w-full h-full object-cover"
+                            onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                          />
+                          <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+                            {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                          </div>
+                        </div>
                       </div>
+                      {/* Pin Pointer */}
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                      {/* Shadow */}
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-300 opacity-50"></div>
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-[var(--primary-black)]">{rideData.driver.name}</div>
@@ -410,8 +459,19 @@ export default function RideDetailModal({
                       ];
                       return (
                         <div key={index} className="flex items-center">
-                          <div className={`w-10 h-10 rounded-full ${iconBackgroundColors[index]} flex items-center justify-center mr-3`}>
-                            <GraduationCap size={20} className={iconColors[index]} />
+                          {/* Map Pin Style Student Container */}
+                          <div className="relative mr-3">
+                            {/* Main Pin Container */}
+                            <div className="bg-white rounded-lg p-2 shadow-lg border border-[var(--gray-200)] relative">
+                              {/* Student Icon */}
+                              <div className={`w-8 h-8 rounded-full ${iconBackgroundColors[index]} flex items-center justify-center`}>
+                                <GraduationCap size={16} className={iconColors[index]} />
+                              </div>
+                            </div>
+                            {/* Pin Pointer */}
+                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-white"></div>
+                            {/* Shadow */}
+                            <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
                           </div>
                           <div>
                             <p className="text-sm font-medium">{student.name}</p>
@@ -545,11 +605,22 @@ export default function RideDetailModal({
                 {rideData.students.map((student, index) => (
                   <div key={index} className="flex items-center justify-between p-4 border-b border-[var(--surface-muted)]">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-full mr-4 overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                        <img src={student.avatar || "/picture.jpg"} alt={student.name} className="w-full h-full object-cover" onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }} />
-                        <div data-fallback className="hidden w-full h-full flex items-center justify-center text-sm font-semibold text-[var(--heading)]">
-                          {student.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                      {/* Map Pin Style Student Container */}
+                      <div className="relative mr-4">
+                        {/* Main Pin Container */}
+                        <div className="bg-white rounded-lg p-2 shadow-lg border border-[var(--gray-200)] relative">
+                          {/* Student Profile Picture */}
+                          <div className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                            <img src={student.avatar || "/picture.jpg"} alt={student.name} className="w-full h-full object-cover" onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }} />
+                            <div data-fallback className="hidden w-full h-full flex items-center justify-center text-sm font-semibold text-[var(--heading)]">
+                              {student.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                            </div>
+                          </div>
                         </div>
+                        {/* Pin Pointer */}
+                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-white"></div>
+                        {/* Shadow */}
+                        <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
                       </div>
                       <div>
                         <h4 className="font-medium">{student.name}</h4>
@@ -587,15 +658,21 @@ export default function RideDetailModal({
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Created by System</h4>
-                          <span
-                            className="px-3 py-1 text-sm rounded-full font-medium"
-                            style={{
-                              backgroundColor: 'var(--blue-100)',
-                              color: 'var(--blue-600)'
-                            }}
-                          >
-                            Created
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full border border-white shadow-sm"
+                              style={{ backgroundColor: '#10b981' }}
+                            ></div>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--blue-100)',
+                                color: 'var(--blue-600)'
+                              }}
+                            >
+                              Created
+                            </span>
+                          </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
                           <p>April 16, 2025, 8:00 AM</p>
@@ -616,15 +693,21 @@ export default function RideDetailModal({
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Driver Assigned by Mark</h4>
-                          <span
-                            className="px-3 py-1 text-sm rounded-full font-medium"
-                            style={{
-                              backgroundColor: 'var(--blue-100)',
-                              color: 'var(--blue-600)'
-                            }}
-                          >
-                            Assigned
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full border border-white shadow-sm"
+                              style={{ backgroundColor: '#10b981' }}
+                            ></div>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--blue-100)',
+                                color: 'var(--blue-600)'
+                              }}
+                            >
+                              Assigned
+                            </span>
+                          </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
                           <p>April 16, 2025, 8:15 AM</p>
@@ -645,15 +728,21 @@ export default function RideDetailModal({
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Started by Michael</h4>
-                          <span
-                            className="px-3 py-1 text-sm rounded-full font-medium"
-                            style={{
-                              backgroundColor: 'var(--green-100)',
-                              color: 'var(--green-600)'
-                            }}
-                          >
-                            Started
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full border border-white shadow-sm"
+                              style={{ backgroundColor: '#10b981' }}
+                            ></div>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--green-100)',
+                                color: 'var(--green-600)'
+                              }}
+                            >
+                              Started
+                            </span>
+                          </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
                           <p>April 16, 2025, 12:00 PM</p>
@@ -674,15 +763,21 @@ export default function RideDetailModal({
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>First Stop Completed by Michael</h4>
-                          <span
-                            className="px-3 py-1 text-sm rounded-full font-medium"
-                            style={{
-                              backgroundColor: 'var(--green-100)',
-                              color: 'var(--green-600)'
-                            }}
-                          >
-                            Completed
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full border border-white shadow-sm"
+                              style={{ backgroundColor: '#10b981' }}
+                            ></div>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--green-100)',
+                                color: 'var(--green-600)'
+                              }}
+                            >
+                              Completed
+                            </span>
+                          </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
                           <p>April 16, 2025, 12:15 PM</p>
@@ -734,15 +829,21 @@ export default function RideDetailModal({
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Completed by Michael</h4>
-                          <span
-                            className="px-3 py-1 text-sm rounded-full font-medium"
-                            style={{
-                              backgroundColor: 'var(--green-100)',
-                              color: 'var(--green-600)'
-                            }}
-                          >
-                            Completed
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full border border-white shadow-sm"
+                              style={{ backgroundColor: '#10b981' }}
+                            ></div>
+                            <span
+                              className="px-3 py-1 text-sm rounded-full font-medium"
+                              style={{
+                                backgroundColor: 'var(--green-100)',
+                                color: 'var(--green-600)'
+                              }}
+                            >
+                              Completed
+                            </span>
+                          </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
                           <p>April 16, 2025, 1:15 PM</p>

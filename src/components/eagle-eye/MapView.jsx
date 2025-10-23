@@ -11,7 +11,7 @@ const mockDrivers = [
     address: "999 Peachtree St NE, Atlanta, GA 30309",
     phone: "510-555-2345",
     status: "On Ride",
-    statusColor: "#3b82f6",
+    statusColor: "#10b981", // Green for On Ride
     position: { top: "32%", left: "52%" },
     rideId: "R123",
     eta: "15 min"
@@ -25,7 +25,7 @@ const mockDrivers = [
     address: "1234 West Peachtree St NW, Atlanta, GA 30309",
     phone: "510-555-1234",
     status: "Ready Now",
-    statusColor: "#16a34a",
+    statusColor: "#10b981", // Green for Ready Now
     position: { top: "28%", left: "48%" },
     rideId: "R222",
     eta: "10 min"
@@ -39,7 +39,7 @@ const mockDrivers = [
     address: "456 Marietta St NW, Atlanta, GA 30313",
     phone: "510-555-3456",
     status: "Delayed",
-    statusColor: "#ef4444",
+    statusColor: "#ef4444", // Red for Delayed
     position: { top: "45%", left: "54%" },
     rideId: "R456",
     eta: "8 min"
@@ -53,7 +53,7 @@ const mockDrivers = [
     address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
     phone: "510-555-4567",
     status: "Ready Now",
-    statusColor: "#16a34a",
+    statusColor: "#10b981", // Green for Ready Now
     position: { top: "22%", left: "56%" },
     rideId: "R444",
     eta: "14 min"
@@ -67,7 +67,7 @@ const mockDrivers = [
     address: "1234 N Highland Ave NE, Atlanta, GA 30306",
     phone: "510-555-5678",
     status: "On Ride",
-    statusColor: "#3b82f6",
+    statusColor: "#10b981", // Green for On Ride
     position: { top: "35%", left: "60%" },
     rideId: "R789",
     eta: "12 min"
@@ -136,8 +136,17 @@ export default function MapView({ onViewRide }) {
               {/* Marker Pin with profile photo or initials */}
               <div className="relative">
                 <div
-                  className="w-10 h-10 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
-                  style={{ backgroundColor: driver.statusColor }}
+                  className="w-10 h-10 rounded-full shadow-lg flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
+                  style={{ 
+                    backgroundColor: 'white',
+                    border: `4px solid ${
+                      driver.status === 'On Ride' ? '#10b981' :
+                      driver.status === 'Ready Now' ? '#10b981' :
+                      driver.status === 'Delayed' ? '#ef4444' :
+                      driver.status === 'Unknown' ? '#000000' :
+                      '#6b7280'
+                    }`
+                  }}
                 >
                   {driver.avatar ? (
                     <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" />
@@ -147,6 +156,7 @@ export default function MapView({ onViewRide }) {
                     </span>
                   )}
                 </div>
+
 
                 {/* Marker Pin Point */}
                 <div

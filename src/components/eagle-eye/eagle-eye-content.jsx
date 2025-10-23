@@ -25,23 +25,25 @@ export default function EagleEyeContent() {
       id: "RT1001",
       driver: {
         name: "Michael Davis",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/picture.jpg",
         location: "1221 Broadway",
         phone: "(510) 555-1234",
       },
       eta: "08:30 AM",
       status: "On Time",
+      statusColor: "green", // Green for on time
     },
     {
       id: "RT1002",
       driver: {
         name: "Sophia Martinez",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/picture.jpg",
         location: "365 14th St",
         phone: "(510) 555-5678",
       },
       eta: "09:15 AM",
       status: "Delayed",
+      statusColor: "red", // Red for delayed
     },
     {
       id: "RT1003",
@@ -52,7 +54,8 @@ export default function EagleEyeContent() {
         phone: "",
       },
       eta: "--",
-      status: "Rejected",
+      status: "Unknown",
+      statusColor: "black", // Black for unknown
     },
   ];
 

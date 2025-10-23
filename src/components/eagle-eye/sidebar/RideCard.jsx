@@ -15,6 +15,17 @@ export default function RideCard({ ride, onViewRide, onSmartSuggest }) {
           <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[var(--blue-100)] text-[var(--blue-600)]">
             #{ride.id}
           </span>
+          {/* Status Circle Indicator */}
+          <div 
+            className="w-3 h-3 rounded-full border border-white shadow-sm"
+            style={{
+              backgroundColor: ride.statusColor === 'green' ? '#10b981' :
+                              ride.statusColor === 'red' ? '#ef4444' :
+                              ride.statusColor === 'orange' ? '#f97316' :
+                              ride.statusColor === 'black' ? '#000000' :
+                              '#6b7280'
+            }}
+          ></div>
         </div>
         <StatusBadge
           status={ride.status}
@@ -32,9 +43,9 @@ export default function RideCard({ ride, onViewRide, onSmartSuggest }) {
 
       {/* Driver Info - Compact Layout */}
       <div className="flex items-start gap-3 mb-2">
-        <div className="w-8 h-8 rounded-full flex-shrink-0 bg-[var(--gray-100)] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full flex-shrink-0 bg-[var(--gray-100)] flex items-center justify-center overflow-hidden">
           <img
-            src={ride.driver.avatar || "/placeholder.svg"}
+            src={ride.driver.avatar || "/picture.jpg"}
             alt={ride.driver.name}
             className="w-full h-full object-cover rounded-full"
             onError={(e) => {
