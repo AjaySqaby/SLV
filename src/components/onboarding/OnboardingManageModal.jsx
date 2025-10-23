@@ -164,21 +164,92 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="border-b border-[var(--gray-200)]">
-            <div className="flex space-x-8">
-              {driverData.steps.map((step) => (
-                <button
-                  key={step.id}
-                  onClick={() => setActiveTab(step.id)}
-                  className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === step.id
-                      ? 'border-[var(--blue-500)] text-[var(--blue-500)]'
-                      : 'border-transparent text-[var(--gray-500)] hover:text-[var(--gray-700)]'
-                  }`}
-                >
-                  {step.name}
-                </button>
-              ))}
+          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+            <div className="flex items-center space-x-2 mb-6 overflow-x-auto custom-scrollbar">
+              <button 
+                onClick={() => setActiveTab('background-check')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'background-check' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'background-check' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Background Check
+              </button>
+              <button 
+                onClick={() => setActiveTab('fingerprinting')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'fingerprinting' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'fingerprinting' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Fingerprinting
+              </button>
+              <button 
+                onClick={() => setActiveTab('document-collection')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'document-collection' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'document-collection' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Document Collection
+              </button>
+              <button 
+                onClick={() => setActiveTab('medical-drug-tests')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'medical-drug-tests' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'medical-drug-tests' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Medical & Drug Tests
+              </button>
+              <button 
+                onClick={() => setActiveTab('vehicle-inspection')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'vehicle-inspection' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'vehicle-inspection' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Vehicle Inspection
+              </button>
+              <button 
+                onClick={() => setActiveTab('training-assessments')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'training-assessments' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'training-assessments' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Training & Assessments
+              </button>
+              <button 
+                onClick={() => setActiveTab('summary')}
+                className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap ${
+                  activeTab === 'summary' 
+                    ? 'text-white' 
+                    : 'bg-gray-100 text-gray-600 border border-gray-200'
+                }`}
+                style={activeTab === 'summary' ? { backgroundColor: 'var(--primary)' } : {}}
+              >
+                <CheckCircle className="w-4 h-4" />
+                Summary
+              </button>
             </div>
           </div>
 
