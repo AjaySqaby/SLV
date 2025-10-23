@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit, ArrowLeft } from 'lucide-react';
+import { X, MapPin, Clock, User, Car, Calendar, Map, Eye, Route, Users, Navigation, Star, CheckCircle, AlertCircle, Play, Pause, Square, Edit, ArrowLeft, FileText, Hash, Timer, MapPin as MapPinIcon, Users as UsersIcon, UserCheck } from 'lucide-react';
 import DateRangePicker from '@/components/rides/DateRangePicker';
 import RidesTable from '@/components/rides/RidesTable';
 import Button from '@/components/ui/Button';
@@ -146,115 +146,169 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const renderOverview = () => (
     <div className="grid grid-cols-2 gap-6">
       {/* Driver Card */}
-      <div className="bg-white p-6 rounded-lg border border-[var(--gray-200)] shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-[var(--blue-600)]" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
+            <User className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-base font-medium text-[var(--primary-black)]">Driver</h3>
+          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Driver</h3>
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-[var(--gray-200)] rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-[var(--gray-600)]" />
+          <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+            <img
+              src="/driver1.jpg"
+              alt={routeData.driver}
+              className="w-full h-full object-cover"
+              onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+            />
+            <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+              {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
+            </div>
           </div>
           <div className="flex-1">
             <button
-              className="font-semibold text-[var(--primary-black)] text-base hover:underline text-left"
+              className="font-semibold text-lg hover:underline text-left"
+              style={{ color: '#111827' }}
               onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
             >
               {routeData.driver}
             </button>
-            <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
-              <Star className="w-4 h-4 text-[var(--amber-500)] fill-current" />
+            <div className="flex items-center gap-1 text-sm" style={{ color: '#6b7280' }}>
+              <Star className="w-4 h-4" style={{ color: '#f59e0b' }} fill="currentColor" />
               <span>4.9 rating</span>
             </div>
           </div>
-          <div className="bg-[var(--green-100)] text-[var(--green-600)] px-3 py-1 rounded-full text-sm font-medium">
+          <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>
             Completed
           </div>
         </div>
       </div>
 
       {/* Vehicle Card */}
-      <div className="bg-white p-6 rounded-lg border border-[var(--gray-200)] shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-            <Car className="w-4 h-4 text-[var(--blue-600)]" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
+            <Car className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-base font-medium text-[var(--primary-black)]">Vehicle</h3>
+          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Vehicle</h3>
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-[var(--gray-200)] rounded-full flex items-center justify-center">
-            <Car className="w-6 h-6 text-[var(--gray-600)]" />
+          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f3f4f6' }}>
+            <Car className="w-6 h-6" style={{ color: '#6b7280' }} />
           </div>
           <div className="flex-1">
-            <p className="font-semibold text-[var(--primary-black)] text-base">Chrysler Pacifica</p>
-            <p className="text-sm text-[var(--muted-text)]">ID: RT-30842</p>
+            <p className="font-semibold text-lg" style={{ color: '#111827' }}>Chrysler Pacifica</p>
+            <p className="text-sm" style={{ color: '#6b7280' }}>ID: RT-30842</p>
           </div>
         </div>
       </div>
 
       {/* Trip Details Card */}
-      <div className="bg-white p-6 rounded-lg border border-[var(--gray-200)] shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-              <Route className="w-4 h-4 text-[var(--blue-600)]" />
+            <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
+              <Route className="w-5 h-5 text-white" />
             </div>
-            <h3 className="text-base font-medium text-[var(--primary-black)]">Trip Details</h3>
+            <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Trip Details</h3>
           </div>
-          <button className="bg-[var(--blue-100)] text-[var(--blue-600)] px-3 py-1 rounded-full text-sm font-medium hover:bg-[var(--blue-200)] transition-colors flex items-center gap-2">
+          <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors" style={{ backgroundColor: '#dbeafe', color: '#1d4ed8' }}>
             <Eye className="w-4 h-4" />
             <span>View Route</span>
           </button>
         </div>
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Route:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.id}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+                <Hash className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Route:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.id}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Duration:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.duration}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
+                <Timer className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Duration:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.duration}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Distance:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.distance}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
+                <MapPinIcon className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Distance:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.distance}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Stops:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.stops.length}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                <MapPin className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Stops:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.stops.length}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Students:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.students.length}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+                <UsersIcon className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Students:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.students.length}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Available Seats:</span>
-            <span className="font-semibold text-[var(--primary-black)]">3</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#06b6d4' }}>
+                <UserCheck className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Available Seats:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>3</span>
           </div>
         </div>
       </div>
 
       {/* Schedule Card */}
-      <div className="bg-white p-6 rounded-lg border border-[var(--gray-200)] shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-            <Clock className="w-4 h-4 text-[var(--blue-600)]" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
+            <Clock className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-base font-medium text-[var(--primary-black)]">Schedule</h3>
+          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Schedule</h3>
         </div>
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Start Time:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.startTime}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
+                <Clock className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Start Time:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.startTime}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">End Time:</span>
-            <span className="font-semibold text-[var(--primary-black)]">{routeData.endTime}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+                <Clock className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>End Time:</span>
+            </div>
+            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.endTime}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[var(--muted-text)] text-sm">Status:</span>
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                <CheckCircle className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>Status:</span>
+            </div>
             <StatusBadge status={routeData.status} type="active" />
           </div>
         </div>
@@ -263,96 +317,197 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   );
 
   const renderStops = () => (
-    <div className="space-y-4">
-      {routeData.stops.map((stop, index) => (
-        <div key={stop.id} className="bg-white p-6 rounded-lg border border-[var(--gray-200)] shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="flex flex-col items-center">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${index === 0 ? 'bg-[var(--green)]' : 'bg-[var(--orange)]'
-                }`}>
-                {index + 1}
-              </div>
-              {index < routeData.stops.length - 1 && (
-                <div className="w-0.5 h-8 bg-[var(--blue-200)] mt-2"></div>
-              )}
-            </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
+    <div className="space-y-6">
+      {/* Stops with vertical line */}
+      <div className="relative">
+        {/* Vertical line */}
+        <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: '#dbeafe' }}></div>
+
+        <div className="space-y-8">
+          {routeData.stops.map((stop, index) => (
+            <div key={stop.id} className="relative">
+              <div className="flex items-start gap-4">
+                {/* Stop number circle */}
+                <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: index === 0 ? '#10b981' : '#f97316' }}>
+                  <span className="text-white font-bold text-lg">{index + 1}</span>
+                </div>
+
                 <div className="flex-1">
-                  <h4 className="font-bold text-[var(--primary-black)] text-base mb-3">
-                    {stop.address}
-                  </h4>
-                  <div className="space-y-2 text-sm text-[var(--muted-text)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-lg font-semibold" style={{ color: '#111827' }}>{stop.address}</h4>
+                    <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: '#3b82f6' }}>
+                      <Eye className="w-4 h-4" />
+                      View Details
+                    </button>
+                  </div>
+
+                  <div className="space-y-2 text-sm" style={{ color: '#6b7280' }}>
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-[var(--orange-500)]" />
+                      <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
+                        <span className="text-white text-xs">🏠</span>
+                      </div>
                       <span>{stop.typeIcon}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-[var(--muted-text)]" />
-                      <span>{stop.students} student{stop.students !== 1 ? 's' : ''}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-[var(--muted-text)]" />
+                    <div className="ml-6">
                       <span>Scheduled {stop.time} EST {index === 0 ? 'Pick up' : 'Drop off'} {stop.students} student{stop.students !== 1 ? 's' : ''}</span>
                     </div>
                   </div>
 
-                  {/* Student Information */}
-                  <div className="mt-4 flex items-center gap-2">
-                    <div className="w-6 h-6 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-                      <User className="w-3 h-3 text-[var(--purple-600)]" />
+                  {/* Student info */}
+                  <div className="mt-4 flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                      <User className="w-3 h-3 text-white" />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[var(--blue-600)] font-medium">Marcus Johnson</span>
-                      <span className="text-[var(--muted-text)] text-sm">Grade 10</span>
-                      <div className="bg-[var(--gray-100)] text-[var(--muted-text)] px-2 py-1 rounded-full text-xs">
-                        Scheduled
-                      </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        className="font-semibold hover:underline cursor-pointer"
+                        style={{ color: '#3b82f6' }}
+                      >
+                        Marcus Johnson
+                      </button>
+                      <span style={{ color: '#6b7280' }}>Grade 10</span>
+                      <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}>Scheduled</span>
                     </div>
                   </div>
-                </div>
-                <div className="text-right ml-4">
-                  <div className="text-sm font-medium text-[var(--primary-black)] mb-2">
-                    {stop.time}
-                  </div>
-                  <button className="flex items-center gap-1 text-sm text-[var(--blue-600)] hover:underline">
-                    <Eye className="w-4 h-4" />
-                    View Details
-                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 
   const renderStudents = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {routeData.students.map((student) => (
-        <Card key={student.id} className="p-4 border border-[var(--card-border)]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-[var(--blue-600)]" />
-            </div>
-            <div className="flex-1">
-              <button
-                className="font-semibold text-[var(--primary-black)] hover:underline text-left"
-                onClick={() => { setSelectedStudentId(student.id); setShowStudentModal(true); }}
-              >
-                {student.name}
-              </button>
-              <div className="flex items-center gap-2 text-sm text-[var(--muted-text)]">
-                <span>{student.grade}</span>
-                <span>•</span>
-                <span className="text-xs text-[var(--gray-500)]">{student.address}</span>
+    <div className="space-y-6">
+      {/* Student Detail Card */}
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        {/* Student Header */}
+        <div className="p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              {/* Simple Profile Picture */}
+              <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#f3f4f6' }}>
+                <User className="w-6 h-6" style={{ color: '#6b7280' }} />
+              </div>
+              <div>
+                <button
+                  className="text-xl font-bold hover:underline cursor-pointer"
+                  style={{ color: '#3b82f6' }}
+                  onClick={() => { setSelectedStudentId(routeData.students[0]?.id); setShowStudentModal(true); }}
+                >
+                  {routeData.students[0]?.name}
+                </button>
+                <p className="text-sm mt-1" style={{ color: '#6b7280' }}>{routeData.students[0]?.grade}</p>
               </div>
             </div>
-            <StatusBadge status={student.status} type="active" />
+            <span
+              className="px-3 py-1 text-xs rounded-full"
+              style={{
+                backgroundColor: '#f3f4f6',
+                color: '#6b7280'
+              }}
+            >
+              {routeData.students[0]?.status}
+            </span>
           </div>
-        </Card>
-      ))}
+        </div>
+
+        {/* Pickup Section */}
+        <div className="relative">
+          <div
+            className="p-6 rounded-t-lg"
+            style={{ backgroundColor: '#dcfce7' }}
+          >
+            <div className="flex items-start gap-4">
+              {/* Pickup Circle */}
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                style={{ backgroundColor: '#10b981' }}
+              >
+                1
+              </div>
+
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <h4 className="font-semibold" style={{ color: '#111827' }}>Pickup</h4>
+                  <Clock className="w-4 h-4" style={{ color: '#6b7280' }} />
+                  <span className="text-sm" style={{ color: '#6b7280' }}>8:00 AM EST</span>
+                </div>
+                <p className="text-sm" style={{ color: '#6b7280' }}>
+                  {routeData.stops[0]?.address}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Line */}
+          <div
+            className="absolute left-6 top-16 w-0.5 h-16"
+            style={{ backgroundColor: '#10b981' }}
+          ></div>
+        </div>
+
+        {/* Dropoff Section */}
+        <div className="relative">
+          <div
+            className="p-6"
+            style={{ backgroundColor: '#fef3c7' }}
+          >
+            <div className="flex items-start gap-4">
+              {/* Dropoff Circle */}
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                style={{ backgroundColor: '#f97316' }}
+              >
+                2
+              </div>
+
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <h4 className="font-semibold" style={{ color: '#111827' }}>Dropoff</h4>
+                  <Clock className="w-4 h-4" style={{ color: '#6b7280' }} />
+                  <span className="text-sm" style={{ color: '#6b7280' }}>8:25 AM EST</span>
+                </div>
+                <p className="text-sm" style={{ color: '#6b7280' }}>
+                  {routeData.stops[routeData.stops.length - 1]?.address}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Line */}
+          <div
+            className="absolute left-6 top-16 w-0.5 h-16"
+            style={{ backgroundColor: '#f97316' }}
+          ></div>
+        </div>
+
+        {/* Notes Section */}
+        <div className="relative">
+          <div
+            className="p-6 rounded-b-lg"
+            style={{ backgroundColor: '#dbeafe' }}
+          >
+            <div className="flex items-start gap-4">
+              {/* Notes Icon */}
+              <div
+                className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: '#3b82f6' }}
+              >
+                <FileText className="w-4 h-4 text-white" />
+              </div>
+
+              <div className="flex-1">
+                <h4 className="font-semibold mb-2" style={{ color: '#111827' }}>Notes</h4>
+                <p className="text-sm" style={{ color: '#3b82f6' }}>
+                  Guardian requested pickup at main building entrance. Student requires wheelchair accessibility.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -527,20 +682,24 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         </div>
 
         {/* Tabs */}
-        <div className="flex mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-2 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
-                borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
-                marginRight: '4px',
-                fontSize: '14px'
+                backgroundColor: activeTab === tab.id ? '#3b82f6' : '#f3f4f6',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
               }}
             >
+              {tab.id === 0 && <Route className="w-4 h-4" />}
+              {tab.id === 1 && <MapPin className="w-4 h-4" />}
+              {tab.id === 2 && <Users className="w-4 h-4" />}
+              {tab.id === 3 && <Map className="w-4 h-4" />}
+              {tab.id === 4 && <Car className="w-4 h-4" />}
               {tab.label}
             </button>
           ))}

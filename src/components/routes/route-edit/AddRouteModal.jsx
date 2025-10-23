@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, Plus, GripVertical, Trash2, Clock, Calendar, ChevronDown, Route, User, Car, DollarSign, CreditCard } from "lucide-react";
+import { X, Plus, GripVertical, Trash2, Clock, Calendar, ChevronDown, Route, User, Car, DollarSign, CreditCard, MapPin, Users, Eye, Settings } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
@@ -236,23 +236,23 @@ export default function AddRouteModal({ isOpen, onClose }) {
           <h3 className="text-lg font-medium text-[var(--primary-black)] mb-3">Round Trip Routes</h3>
           <div className="space-y-4">
             {/* Top Row - Route Optimization */}
-            <div className="bg-[var(--amber-100)] border border-[var(--amber-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-              <h4 className="font-medium text-[var(--amber-900)]">Route Optimization</h4>
-              <span className="inline-block bg-[var(--amber-200)] text-[var(--amber-800)] text-xs px-2 py-1 rounded mt-1">Auto-Generated</span>
-              <p className="text-sm text-[var(--amber-700)] mt-2">The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
+            <div className="rounded-lg p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200" style={{ backgroundColor: '#fef3c7' }}>
+              <h4 className="font-medium" style={{ color: '#92400e' }}>Route Optimization</h4>
+              <span className="inline-block text-xs px-2 py-1 rounded mt-1" style={{ backgroundColor: '#fbbf24', color: '#92400e' }}>Auto-Generated</span>
+              <p className="text-sm mt-2" style={{ color: '#b45309' }}>The system will automatically calculate the most efficient route order for both morning and afternoon trips to minimize travel time and distance.</p>
             </div>
             
             {/* Bottom Row - Morning and Afternoon Routes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-[var(--blue-100)] border border-[var(--blue-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-                <h4 className="font-medium text-[var(--blue-900)]">Morning Route</h4>
-                <span className="inline-block bg-[var(--blue-200)] text-[var(--blue-800)] text-xs px-2 py-1 rounded mt-1">Home → School</span>
-                <p className="text-sm text-[var(--blue-700)] mt-2">Pick up students from addresses and drop off at campus</p>
+              <div className="rounded-lg p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200" style={{ backgroundColor: '#dbeafe' }}>
+                <h4 className="font-medium" style={{ color: '#1e40af' }}>Morning Route</h4>
+                <span className="inline-block text-xs px-2 py-1 rounded mt-1" style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}>Home → School</span>
+                <p className="text-sm mt-2" style={{ color: '#1d4ed8' }}>Pick up students from addresses and drop off at campus</p>
               </div>
-              <div className="bg-[var(--green-100)] border border-[var(--green-200)] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200">
-                <h4 className="font-medium text-[var(--green-900)]">Afternoon Route</h4>
-                <span className="inline-block bg-[var(--green-200)] text-[var(--green-800)] text-xs px-2 py-1 rounded mt-1">School → Home</span>
-                <p className="text-sm text-[var(--green-700)] mt-2">Pick up students from campus and drop off at addresses</p>
+              <div className="rounded-lg p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200" style={{ backgroundColor: '#dcfce7' }}>
+                <h4 className="font-medium" style={{ color: '#166534' }}>Afternoon Route</h4>
+                <span className="inline-block text-xs px-2 py-1 rounded mt-1" style={{ backgroundColor: '#10b981', color: '#ffffff' }}>School → Home</span>
+                <p className="text-sm mt-2" style={{ color: '#15803d' }}>Pick up students from campus and drop off at addresses</p>
               </div>
             </div>
           </div>
@@ -1215,39 +1215,44 @@ export default function AddRouteModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-              <Route className="w-6 h-6 text-[var(--primary)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+              <Route className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Add New Route</h2>
-              <p className="text-[var(--muted-text)]">Create a new route configuration</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Add New Route</h2>
+              <p style={{ color: '#6b7280' }}>Create a new route configuration</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
           >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
+            <X className="w-6 h-6" style={{ color: '#6b7280' }} />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-2 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: activeTab === tab ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === tab ? 'var(--on-primary)' : 'var(--muted-text)',
-                borderBottom: activeTab === tab ? '2px solid var(--primary)' : 'none',
-                marginRight: '4px',
-                fontSize: '14px'
+                backgroundColor: activeTab === tab ? '#8b5cf6' : '#f3f4f6',
+                color: activeTab === tab ? '#ffffff' : '#6b7280',
+                border: activeTab === tab ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
               }}
             >
+              {tab === "Basic Info" && <Route className="w-4 h-4" />}
+              {tab === "Schedule" && <Clock className="w-4 h-4" />}
+              {tab === "Additional Stops" && <MapPin className="w-4 h-4" />}
+              {tab === "Monitor" && <Eye className="w-4 h-4" />}
+              {tab === "Driver" && <User className="w-4 h-4" />}
+              {tab === "Payment" && <DollarSign className="w-4 h-4" />}
               {tab}
             </button>
           ))}
@@ -1259,11 +1264,19 @@ export default function AddRouteModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
-          <Button variant="secondary" onClick={onClose}>
+        <div className="flex justify-end gap-3 p-6 border-t sticky bottom-0 bg-white" style={{ borderColor: '#e5e7eb' }}>
+          <Button 
+            variant="secondary" 
+            onClick={onClose}
+            className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+          >
             Cancel
           </Button>
-          <Button className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2" onClick={()=> setShowConfirm(true)}>
+          <Button 
+            className="flex items-center gap-2 text-white"
+            style={{ backgroundColor: '#8b5cf6' }}
+            onClick={()=> setShowConfirm(true)}
+          >
             <Route className="w-4 h-4" />
             Create Route
           </Button>

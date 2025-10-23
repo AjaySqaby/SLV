@@ -57,10 +57,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderBasicInfo = () => (
     <div className="space-y-6">
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Information</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Route Information</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               Route Name
             </label>
             <Input
@@ -70,7 +70,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               District
             </label>
             <Input
@@ -80,7 +80,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               Status
             </label>
             <Select
@@ -93,36 +93,36 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               Route ID
             </label>
             <Input
               value={routeId || "RT-30842"}
               disabled
-              className="bg-[var(--gray-100)]"
+              className="bg-gray-100"
             />
           </div>
         </div>
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Statistics</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Route Statistics</h3>
         <div className="grid grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-[var(--blue-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--blue-600)]">5</div>
-            <div className="text-sm text-[var(--muted-text)]">Stops</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#dbeafe' }}>
+            <div className="text-2xl font-bold" style={{ color: '#1d4ed8' }}>5</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Stops</div>
           </div>
-          <div className="text-center p-4 bg-[var(--green-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--green-600)]">12.4</div>
-            <div className="text-sm text-[var(--muted-text)]">Miles</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#dcfce7' }}>
+            <div className="text-2xl font-bold" style={{ color: '#166534' }}>12.4</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Miles</div>
           </div>
-          <div className="text-center p-4 bg-[var(--purple-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--purple-600)]">7</div>
-            <div className="text-sm text-[var(--muted-text)]">Students</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#f3e8ff' }}>
+            <div className="text-2xl font-bold" style={{ color: '#7c3aed' }}>7</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Students</div>
           </div>
-          <div className="text-center p-4 bg-[var(--amber-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--amber-600)]">25</div>
-            <div className="text-sm text-[var(--muted-text)]">Minutes</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#fef3c7' }}>
+            <div className="text-2xl font-bold" style={{ color: '#d97706' }}>25</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Minutes</div>
           </div>
         </div>
       </Card>
@@ -132,10 +132,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderRouteStops = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[var(--primary-black)]">Route Stops</h3>
+        <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Route Stops</h3>
         <Button
           variant="secondary"
-          className="flex items-center gap-2 hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] transition-all duration-200"
+          className="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all duration-200"
           onClick={() => setStops(prev => [...prev, { address: '', type: 'pickup', time: '08:30', students: 1 }])}
         >
           <Plus className="w-4 h-4" />
@@ -146,14 +146,15 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
       {stops.map((stop, index) => (
         <Card key={index} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
           <div className="flex items-start gap-4">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold ${
-              stop.type === 'dropoff' ? 'bg-[var(--orange)]' : 'bg-[var(--green)]'
-            }`}>
+            <div 
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold"
+              style={{ backgroundColor: stop.type === 'dropoff' ? '#f97316' : '#10b981' }}
+            >
               {index + 1}
             </div>
             <div className="flex-1 grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
                   Address
                 </label>
                 <Input
@@ -163,7 +164,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
                   Type
                 </label>
                 <Select
@@ -176,7 +177,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
                   Time
                 </label>
                 <Input
@@ -186,7 +187,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
                   Students
                 </label>
                 <Input
@@ -199,7 +200,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             <Button
               variant="ghost"
               size="sm"
-              className="text-[var(--red-600)] hover:text-[var(--red-800)] hover:bg-[var(--red-100)] transition-all duration-200"
+              className="text-red-600 hover:text-red-800 hover:bg-red-100 transition-all duration-200"
               onClick={() => setStops(prev => prev.filter((_,i)=> i!==index))}
             >
               <Trash2 className="w-4 h-4" />
@@ -213,10 +214,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderSchedule = () => (
     <div className="space-y-6">
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Schedule</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Route Schedule</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               Start Time
             </label>
             <Input
@@ -226,7 +227,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               End Time
             </label>
             <Input
@@ -236,7 +237,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
               Operating Days
             </label>
             <div className="flex gap-4">
@@ -256,19 +257,19 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
       </Card>
 
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Route Duration</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Route Duration</h3>
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-[var(--blue-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--blue-600)]">25</div>
-            <div className="text-sm text-[var(--muted-text)]">Total Minutes</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#dbeafe' }}>
+            <div className="text-2xl font-bold" style={{ color: '#1d4ed8' }}>25</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Total Minutes</div>
           </div>
-          <div className="text-center p-4 bg-[var(--green-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--green-600)]">20</div>
-            <div className="text-sm text-[var(--muted-text)]">Travel Time</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#dcfce7' }}>
+            <div className="text-2xl font-bold" style={{ color: '#166534' }}>20</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Travel Time</div>
           </div>
-          <div className="text-center p-4 bg-[var(--amber-100)] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="text-2xl font-bold text-[var(--amber-600)]">5</div>
-            <div className="text-sm text-[var(--muted-text)]">Stop Time</div>
+          <div className="text-center p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200" style={{ backgroundColor: '#fef3c7' }}>
+            <div className="text-2xl font-bold" style={{ color: '#d97706' }}>5</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Stop Time</div>
           </div>
         </div>
       </Card>
@@ -278,10 +279,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderAssignment = () => (
     <div className="space-y-6">
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Driver Assignment</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Driver Assignment</h3>
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-[var(--blue-600)]" />
+          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#dbeafe' }}>
+            <User className="w-6 h-6" style={{ color: '#1d4ed8' }} />
           </div>
           <div className="flex-1">
             <Select
@@ -295,7 +296,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
         </div>
-        <div className="text-sm text-[var(--muted-text)]">
+        <div className="text-sm" style={{ color: '#6b7280' }}>
           <p>Rating: 4.9/5.0</p>
           <p>Experience: 3 years</p>
           <p>Status: Available</p>
@@ -303,10 +304,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
       </Card>
 
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Vehicle Assignment</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Vehicle Assignment</h3>
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-            <Car className="w-6 h-6 text-[var(--green-600)]" />
+          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#dcfce7' }}>
+            <Car className="w-6 h-6" style={{ color: '#166534' }} />
           </div>
           <div className="flex-1">
             <Select
@@ -320,7 +321,7 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
         </div>
-        <div className="text-sm text-[var(--muted-text)]">
+        <div className="text-sm" style={{ color: '#6b7280' }}>
           <p>Vehicle ID: RT-30845</p>
           <p>Capacity: 8 passengers</p>
           <p>Status: Available</p>
@@ -344,14 +345,14 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderExceptions = () => (
     <div className="space-y-6">
       <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Exceptions</h3>
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Exceptions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Date</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>Date</label>
             <Input type="date" value={exceptionDate} onChange={(e)=>setExceptionDate(e.target.value)} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Type</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>Type</label>
             <Select
               value={exceptionType}
               onChange={(e)=>setExceptionType(e.target.value)}
@@ -365,12 +366,16 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[var(--primary-black)] mb-2">Notes</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>Notes</label>
             <Input type="text" value={exceptionNotes} onChange={(e)=>setExceptionNotes(e.target.value)} placeholder="Optional" />
           </div>
         </div>
         <div className="mt-4 flex justify-end">
-          <Button className="flex items-center gap-2" onClick={addException}>
+          <Button 
+            className="flex items-center gap-2 text-white"
+            style={{ backgroundColor: '#8b5cf6' }}
+            onClick={addException}
+          >
             <Plus className="w-4 h-4" />
             Add Exception
           </Button>
@@ -379,14 +384,14 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
 
       {exceptions.length > 0 && (
         <Card className="p-0 overflow-hidden">
-          <div className="divide-y" style={{ borderColor: 'var(--gray-200)' }}>
+          <div className="divide-y" style={{ borderColor: '#e5e7eb' }}>
             {exceptions.map((ex, idx) => (
               <div key={idx} className="flex items-center justify-between p-4">
                 <div>
-                  <div className="font-medium text-[var(--primary-black)]">{ex.date} • {ex.type}</div>
-                  {ex.notes && <div className="text-sm text-[var(--muted-text)]">{ex.notes}</div>}
+                  <div className="font-medium" style={{ color: '#111827' }}>{ex.date} • {ex.type}</div>
+                  {ex.notes && <div className="text-sm" style={{ color: '#6b7280' }}>{ex.notes}</div>}
                 </div>
-                <Button variant="ghost" size="sm" className="text-[var(--red-600)] hover:text-[var(--red-800)] hover:bg-[var(--red-100)]" onClick={()=>removeException(idx)}>
+                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-800 hover:bg-red-100" onClick={()=>removeException(idx)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -407,39 +412,43 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-              <Route className="w-6 h-6 text-[var(--primary)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+              <Route className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Edit Route #{routeId || "RT-30842"}</h2>
-              <p className="text-[var(--muted-text)]">Modify route details and configuration</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Edit Route #{routeId || "RT-30842"}</h2>
+              <p style={{ color: '#6b7280' }}>Modify route details and configuration</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
           >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
+            <X className="w-6 h-6" style={{ color: '#6b7280' }} />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-2 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
-                borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
-                marginRight: '4px',
-                fontSize: '14px'
+                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
               }}
             >
+              {tab.id === 0 && <Route className="w-4 h-4" />}
+              {tab.id === 1 && <MapPin className="w-4 h-4" />}
+              {tab.id === 2 && <Clock className="w-4 h-4" />}
+              {tab.id === 3 && <User className="w-4 h-4" />}
+              {tab.id === 4 && <Calendar className="w-4 h-4" />}
               {tab.label}
             </button>
           ))}
@@ -455,15 +464,17 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)] sticky bottom-0 bg-white">
+        <div className="flex justify-end gap-3 p-6 border-t sticky bottom-0 bg-white" style={{ borderColor: '#e5e7eb' }}>
           <Button
             variant="secondary"
             onClick={onClose}
+            className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
           >
             Cancel
           </Button>
           <Button
-            className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2"
+            className="flex items-center gap-2 text-white"
+            style={{ backgroundColor: '#8b5cf6' }}
             onClick={handleSave}
           >
             <Save className="w-4 h-4" />
