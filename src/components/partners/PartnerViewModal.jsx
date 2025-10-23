@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { X, Building2, User, Mail, Phone, MapPin, Users, Route, Car, Star, CheckCircle, Calendar, Clock, DollarSign, FileText, Shield, Settings, Pencil } from 'lucide-react';
+import { X, Building2, User, Mail, Phone, MapPin, Users, Route, Car, Star, CheckCircle, Calendar, Clock, DollarSign, FileText, Shield, Settings, Pencil, ShieldCheck, FileCheck, Users2 } from 'lucide-react';
 import DateRangePicker from '@/components/rides/DateRangePicker';
 import RidesTable from '@/components/rides/RidesTable';
 import Button from '@/components/ui/Button';
@@ -82,54 +82,66 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     <div className="space-y-6">
       {/* Partner Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-all duration-200">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-              <Building2 className="w-8 h-8 text-[var(--blue-600)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+              <Building2 className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-[var(--primary-black)]">Company Information</h3>
-              <p className="text-sm text-[var(--muted-text)]">Basic company details</p>
+              <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Company Information</h3>
+              <p className="text-sm" style={{ color: '#6b7280' }}>Basic company details</p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <Building2 className="w-4 h-4 text-[var(--gray-400)]" />
-              <span className="text-sm text-[var(--primary-black)]">{partner.name}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+                <Building2 className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#111827' }}>{partner.name}</span>
             </div>
             <div className="flex items-center gap-3">
-              <MapPin className="w-4 h-4 text-[var(--gray-400)]" />
-              <span className="text-sm text-[var(--muted-text)]">{partner.address}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
+                <MapPin className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>{partner.address}</span>
             </div>
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-4 h-4 text-[var(--green-600)]" />
-              <span className="text-sm text-[var(--green-600)] font-medium">{partner.status}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
+                <CheckCircle className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm font-medium" style={{ color: '#10b981' }}>{partner.status}</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-all duration-200">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-[var(--purple-600)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+              <User className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-[var(--primary-black)]">Contact Information</h3>
-              <p className="text-sm text-[var(--muted-text)]">Primary contact details</p>
+              <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Contact Information</h3>
+              <p className="text-sm" style={{ color: '#6b7280' }}>Primary contact details</p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <User className="w-4 h-4 text-[var(--gray-400)]" />
-              <span className="text-sm text-[var(--primary-black)]">{partner.contact.name}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                <User className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#111827' }}>{partner.contact.name}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-[var(--gray-400)]" />
-              <span className="text-sm text-[var(--muted-text)]">{partner.contact.email}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+                <Mail className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>{partner.contact.email}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-[var(--gray-400)]" />
-              <span className="text-sm text-[var(--muted-text)]">{partner.contact.phone}</span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#06b6d4' }}>
+                <Phone className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm" style={{ color: '#6b7280' }}>{partner.contact.phone}</span>
             </div>
           </div>
         </div>
@@ -137,58 +149,58 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
 
       {/* Statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-4 text-center shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center mx-auto mb-2">
-            <Users className="w-6 h-6 text-[var(--blue-600)]" />
+        <div className="bg-white rounded-lg border border-gray-100 p-4 text-center shadow-lg hover:shadow-xl transition-all duration-200">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#3b82f6' }}>
+            <Users className="w-6 h-6 text-white" />
           </div>
-          <div className="text-2xl font-bold text-[var(--primary-black)]">{partner.drivers}</div>
-          <div className="text-sm text-[var(--muted-text)]">Drivers</div>
+          <div className="text-2xl font-bold" style={{ color: '#111827' }}>{partner.drivers}</div>
+          <div className="text-sm" style={{ color: '#6b7280' }}>Drivers</div>
         </div>
 
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-4 text-center shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="w-8 h-8 bg-[var(--green-100)] rounded-full flex items-center justify-center mx-auto mb-2">
-            <Route className="w-6 h-6 text-[var(--green-600)]" />
+        <div className="bg-white rounded-lg border border-gray-100 p-4 text-center shadow-lg hover:shadow-xl transition-all duration-200">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#10b981' }}>
+            <Route className="w-6 h-6 text-white" />
           </div>
-          <div className="text-2xl font-bold text-[var(--primary-black)]">{partner.routes}</div>
-          <div className="text-sm text-[var(--muted-text)]">Routes</div>
+          <div className="text-2xl font-bold" style={{ color: '#111827' }}>{partner.routes}</div>
+          <div className="text-sm" style={{ color: '#6b7280' }}>Routes</div>
         </div>
 
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-4 text-center shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="w-8 h-8 bg-[var(--purple-100)] rounded-full flex items-center justify-center mx-auto mb-2">
-            <Car className="w-6 h-6 text-[var(--purple-600)]" />
+        <div className="bg-white rounded-lg border border-gray-100 p-4 text-center shadow-lg hover:shadow-xl transition-all duration-200">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#8b5cf6' }}>
+            <Car className="w-6 h-6 text-white" />
           </div>
-          <div className="text-2xl font-bold text-[var(--primary-black)]">{partner.rides}</div>
-          <div className="text-sm text-[var(--muted-text)]">Total Rides</div>
+          <div className="text-2xl font-bold" style={{ color: '#111827' }}>{partner.rides}</div>
+          <div className="text-sm" style={{ color: '#6b7280' }}>Total Rides</div>
         </div>
 
-        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-4 text-center shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="w-8 h-8 bg-[var(--amber-100)] rounded-full flex items-center justify-center mx-auto mb-2">
-            <Star className="w-6 h-6 text-[var(--amber-600)]" />
+        <div className="bg-white rounded-lg border border-gray-100 p-4 text-center shadow-lg hover:shadow-xl transition-all duration-200">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#f59e0b' }}>
+            <Star className="w-6 h-6 text-white" />
           </div>
-          <div className="text-2xl font-bold text-[var(--primary-black)]">{partner.rating}</div>
-          <div className="text-sm text-[var(--muted-text)]">Rating</div>
+          <div className="text-2xl font-bold" style={{ color: '#111827' }}>{partner.rating}</div>
+          <div className="text-sm" style={{ color: '#6b7280' }}>Rating</div>
         </div>
       </div>
 
       {/* Fleet Information */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold text-[var(--primary-black)] mb-4">Fleet Information</h3>
+      <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-all duration-200">
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#111827' }}>Fleet Information</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center p-3 bg-[var(--blue-100)] rounded-lg">
-            <div className="text-xl font-bold text-[var(--blue-600)]">{partner.fleet.sedans}</div>
-            <div className="text-sm text-[var(--muted-text)]">Sedans</div>
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#dbeafe' }}>
+            <div className="text-xl font-bold" style={{ color: '#1d4ed8' }}>{partner.fleet.sedans}</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Sedans</div>
           </div>
-          <div className="text-center p-3 bg-[var(--green-100)] rounded-lg">
-            <div className="text-xl font-bold text-[var(--green-600)]">{partner.fleet.suvs}</div>
-            <div className="text-sm text-[var(--muted-text)]">SUVs</div>
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#dcfce7' }}>
+            <div className="text-xl font-bold" style={{ color: '#166534' }}>{partner.fleet.suvs}</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>SUVs</div>
           </div>
-          <div className="text-center p-3 bg-[var(--purple-100)] rounded-lg">
-            <div className="text-xl font-bold text-[var(--purple-600)]">{partner.fleet.buses}</div>
-            <div className="text-sm text-[var(--muted-text)]">Buses</div>
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#f3e8ff' }}>
+            <div className="text-xl font-bold" style={{ color: '#7c3aed' }}>{partner.fleet.buses}</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Buses</div>
           </div>
-          <div className="text-center p-3 bg-[var(--amber-100)] rounded-lg">
-            <div className="text-xl font-bold text-[var(--amber-600)]">{partner.fleet.vans}</div>
-            <div className="text-sm text-[var(--muted-text)]">Vans</div>
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#fef3c7' }}>
+            <div className="text-xl font-bold" style={{ color: '#d97706' }}>{partner.fleet.vans}</div>
+            <div className="text-sm" style={{ color: '#6b7280' }}>Vans</div>
           </div>
         </div>
       </div>
@@ -293,15 +305,15 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
 
   const renderDocuments = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-all duration-200">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-[var(--primary-black)]">Documents</h3>
-          <button className="px-3 py-1 text-sm rounded-md bg-[var(--blue-600)] text-white hover:bg-[var(--blue)]">Upload</button>
+          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Documents</h3>
+          <button className="px-3 py-1 text-sm rounded-md text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: '#3b82f6' }}>Upload</button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--gray-100)]">
+              <tr className="text-left text-sm border-b" style={{ color: '#6b7280', borderColor: '#e5e7eb' }}>
                 <th className="px-6 py-3 font-medium">Document</th>
                 <th className="px-6 py-3 font-medium">Status</th>
                 <th className="px-6 py-3 font-medium">Expiry</th>
@@ -309,16 +321,23 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
             </thead>
             <tbody>
               {[
-                { name: 'Insurance Certificate', status: 'Pending Update', expiry: '2025-01-31' },
-                { name: 'W-9 Form', status: 'Current', expiry: '-' },
-                { name: 'Driver Roster', status: 'Current', expiry: '-' },
+                { name: 'Insurance Certificate', status: 'Pending Update', expiry: '2025-01-31', icon: ShieldCheck, bgColor: '#ef4444' },
+                { name: 'W-9 Form', status: 'Current', expiry: '-', icon: FileCheck, bgColor: '#10b981' },
+                { name: 'Driver Roster', status: 'Current', expiry: '-', icon: Users2, bgColor: '#8b5cf6' },
               ].map((doc, i) => (
-                <tr key={i} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)]">
-                  <td className="px-6 py-3">{doc.name}</td>
+                <tr key={i} className="border-b hover:bg-gray-50 transition-colors" style={{ borderColor: '#e5e7eb' }}>
+                  <td className="px-6 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: doc.bgColor }}>
+                        <doc.icon className="w-3 h-3 text-white" />
+                      </div>
+                      <span style={{ color: '#111827' }}>{doc.name}</span>
+                    </div>
+                  </td>
                   <td className="px-6 py-3">
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${doc.status === 'Current' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>{doc.status}</span>
                   </td>
-                  <td className="px-6 py-3">{doc.expiry}</td>
+                  <td className="px-6 py-3" style={{ color: '#6b7280' }}>{doc.expiry}</td>
                 </tr>
               ))}
             </tbody>
@@ -411,51 +430,56 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-[var(--primary)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+              <Building2 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Partner Details</h2>
-              <p className="text-[var(--muted-text)]">{partner.name} - {partnerId || "CT"}</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Partner Details</h2>
+              <p style={{ color: '#6b7280' }}>{partner.name} - {partnerId || "CT"}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setEditOpen(true)}
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Edit partner"
               title="Edit"
             >
-              <Pencil className="w-5 h-5 text-[var(--gray-600)]" />
+              <Pencil className="w-5 h-5" style={{ color: '#6b7280' }} />
             </button>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               aria-label="Close"
               title="Close"
             >
-              <X className="w-6 h-6 text-[var(--gray-500)]" />
+              <X className="w-6 h-6" style={{ color: '#6b7280' }} />
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-2 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
-                borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
-                marginRight: '4px',
-                fontSize: '14px'
+                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
               }}
             >
+              {tab.id === 'overview' && <Building2 className="w-4 h-4" />}
+              {tab.id === 'drivers' && <Users className="w-4 h-4" />}
+              {tab.id === 'routes' && <Route className="w-4 h-4" />}
+              {tab.id === 'rides' && <Car className="w-4 h-4" />}
+              {tab.id === 'documents' && <FileText className="w-4 h-4" />}
+              {tab.id === 'financial' && <DollarSign className="w-4 h-4" />}
               {tab.label}
             </button>
           ))}
