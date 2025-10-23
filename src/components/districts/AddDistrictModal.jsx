@@ -494,21 +494,43 @@ export default function AddDistrictModal({ open, onClose }) {
 
             {/* Tabs */}
             <div className="px-6 pt-6">
-              <div className="flex space-x-2 mb-6">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                      activeTab === tab.id
-                        ? 'bg-[var(--primary)] text-white shadow-sm'
-                        : 'bg-white text-[var(--heading)] border border-[var(--border)] hover:bg-[var(--gray-50)]'
-                    }`}
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
+              <div className="flex items-center space-x-2 mb-6">
+                <button 
+                  onClick={() => setActiveTab(0)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 0 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Building2 className="w-4 h-4" />
+                  Basic Info
+                </button>
+                <button 
+                  onClick={() => setActiveTab(1)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 1 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Holidays
+                </button>
+                <button 
+                  onClick={() => setActiveTab(2)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 2 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Sun className="w-4 h-4" />
+                  Summer School
+                </button>
               </div>
             </div>
 
