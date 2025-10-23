@@ -1,8 +1,11 @@
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge"
 import { FaBus } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export default function RoutesTab({ routes }) {
+  const router = useRouter();
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -23,14 +26,18 @@ export default function RoutesTab({ routes }) {
         </thead>
         <tbody>
           {routes.map((r) => (
-            <tr key={r.id} className="border-b">
+            <tr 
+              key={r.id} 
+              className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
+              onClick={() => router.push('/routes')}
+            >
               <td className="p-2 font-medium">{r.id}</td>
               <td className="p-2">
                 <span className="flex items-center gap-2">
                   <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
                     <FaBus className="text-blue-500 w-4 h-4" />
                   </span>
-                  <span>{r.name}</span>
+                  <span className="font-semibold">{r.name}</span>
                 </span>
               </td>
               <td className="p-2">{r.stops}</td>
@@ -39,7 +46,19 @@ export default function RoutesTab({ routes }) {
               <td className="p-2">
                 <StatusBadge status={r.status} type={r.status === "Active" ? "active" : "inactive"} />
               </td>
-              <td className="p-2"><Button size="sm" variant="secondary">View</Button></td>
+              <td className="p-2">
+                <Button 
+                  size="sm" 
+                  variant="secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push('/routes');
+                  }}
+                  className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                >
+                  View
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>

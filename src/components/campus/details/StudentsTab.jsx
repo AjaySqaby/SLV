@@ -38,14 +38,18 @@ export default function StudentsTab({ students }) {
         </thead>
         <tbody>
           {filteredStudents.map((s) => (
-            <tr key={s.id} className="border-b">
+            <tr 
+              key={s.id} 
+              className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
+              onClick={() => router.push('/students')}
+            >
               <td className="p-2 font-medium">{s.id}</td>
               <td className="p-2">
                 <span className="flex items-center gap-2">
                   <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
                     <AiOutlineUser className="text-blue-500 w-4 h-4" />
                   </span>
-                  <span>{s.name}</span>
+                  <span className="font-semibold">{s.name}</span>
                 </span>
               </td>
               <td className="p-2">{s.grade}</td>
@@ -59,7 +63,11 @@ export default function StudentsTab({ students }) {
                 <Button 
                   size="sm" 
                   variant="secondary"
-                  onClick={() => router.push(`/students/${s.id}`)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push('/students');
+                  }}
+                  className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
                 >
                   View
                 </Button>

@@ -6,8 +6,10 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
+import { useRouter } from 'next/navigation'
 
 export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEditHoliday, onDeleteHoliday }) {
+  const router = useRouter()
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingHoliday, setEditingHoliday] = useState(null)
   const [newHoliday, setNewHoliday] = useState({
@@ -120,13 +122,17 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
           </thead>
           <tbody>
             {holidays.map((holiday) => (
-              <tr key={holiday.id} className="border-b border-gray-100 hover:bg-gray-50">
+              <tr 
+                key={holiday.id} 
+                className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={() => router.push('/campus')}
+              >
                 <td className="p-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(holiday.type)}`}>
                       {getTypeIcon(holiday.type)}
                     </div>
-                    <span className="font-medium text-gray-900">{holiday.title}</span>
+                    <span className="font-semibold text-gray-900">{holiday.title}</span>
                   </div>
                 </td>
                 <td className="p-3">
@@ -164,14 +170,20 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
                       variant="ghost"
                       size="sm"
                       icon={<Edit3 className="w-4 h-4" />}
-                      onClick={() => handleEditHoliday(holiday)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditHoliday(holiday);
+                      }}
                       className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                     />
                     <Button
                       variant="ghost"
                       size="sm"
                       icon={<Trash2 className="w-4 h-4" />}
-                      onClick={() => handleDeleteHoliday(holiday.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteHoliday(holiday.id);
+                      }}
                       className="text-red-600 hover:text-red-700 hover:bg-red-50"
                     />
                   </div>

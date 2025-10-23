@@ -295,7 +295,7 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-[var(--orange-600)] rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center shadow-lg">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <div>
