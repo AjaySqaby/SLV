@@ -1,26 +1,34 @@
-"use client";
-
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
-  ArrowLeft, 
   User, 
   Phone, 
   Mail, 
   MapPin, 
-  Calendar, 
   Clock, 
   Car, 
+  Calendar, 
+  Map, 
+  Eye, 
+  Route, 
+  Users, 
+  GraduationCap, 
+  FileText, 
+  AlertTriangle, 
+  Info, 
+  Save, 
+  Plus, 
+  Trash2, 
+  Navigation, 
   Star, 
-  AlertTriangle,
-  Info,
-  FileText,
-  Building,
-  GraduationCap,
-  Users,
-  Settings,
-  Copy,
-  UserX,
-  Check,
+  CheckCircle, 
+  ArrowLeft, 
+  Hash, 
+  Timer, 
+  Users2, 
+  UserCheck, 
+  Building2, 
+  Shield,
   X
 } from 'lucide-react'
 import { 
@@ -49,150 +57,179 @@ import Select from '@/components/ui/Select'
 import Input from '@/components/ui/Input'
 
 export default function StudentProfilePage({ studentId }) {
-  const [activeTab, setActiveTab] = useState('upcoming')
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState('routes')
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showAddGuardianModal, setShowAddGuardianModal] = useState(false)
+  const [showBlockDriverModal, setShowBlockDriverModal] = useState(false)
   const [newGuardian, setNewGuardian] = useState({
     name: '',
     phone: '',
     email: '',
     relationship: ''
   })
+  const [newBlockedDriver, setNewBlockedDriver] = useState({
+    name: '',
+    reason: ''
+  })
 
-  // Mock student data
+  // Mock student data - exact from screenshot
   const studentData = {
     id: studentId,
-    name: "Lily Tsegaye",
+    name: "Emma Johnson",
     status: "Active",
-    age: "--",
-    address: "2030 25th Ave N Apt 156, Nashville, TN 37208, USA",
-    serviceType: "Direct Service",
-    district: "Metro Nashville Public Schools",
-    studentId: "STU001234",
+    grade: "Grade 9",
+    campus: "Riverdale High",
+    district: "Northside School District",
+    address: "123 Lake St, Riverdale, GA",
+    studentId: "S-001",
     guardian: {
-      name: "SARAH JOHNSON (primary)",
-      phone: "(217) 555-0156",
-      email: "sarah.johnson@email.com"
+      name: "Robert Johnson",
+      phone: "(404) 555-1234",
+      email: "rjohnson@example.com"
     },
-    secondaryGuardian: {
-      name: "MICHAEL JOHNSON (secondary)",
-      phone: "(217) 555-0157",
-      email: "michael.johnson@email.com"
-    },
-    schedule: {
-      bellTimes: "8:50 AM - 3:15 PM",
-      earlyRelease: "Every Wednesday 2:00 PM"
-    },
-    notes: [
-      "Please ensure wheelchair is properly secured",
-      "Student prefers window seat on both sides"
-    ],
     transportation: {
-      partner: "Safe Ride Transport Co.",
-      logo: "SAFE RIDE TRANSPORT CO."
+      assignedRoutes: 1,
+      scheduledRides: 2,
+      status: "Active"
     },
-    programs: {
-      year: "SY 2025-26",
-      school: "Lincoln Elementary School",
-      grade: "Grade 12",
-      serviceAddress: "2030 25th Ave N Apt 156, Nashville, TN 37208, USA",
-      pickup: "Mon-Fri",
-      dropoff: "Mon-Fri"
-    },
+    // Routes data
+    assignedRoutes: [
+      {
+        id: "RT-30842",
+        name: "North District Route",
+        stops: 5,
+        distance: "12.4 mi",
+        status: "Active"
+      }
+    ],
+    
+    // Rides data
     upcomingRides: [
       {
-        id: 1,
-        date: "Tue Sep 16, 2025",
-        time: "7:00-7:30 AM",
-        status: "Scheduled",
-        route: "Brookhaven → MNPS",
-        driver: "Jamal R.",
-        vehicle: "Ford Transit 250"
+        id: "RD-12345",
+        date: "May 20, 2025",
+        driver: "John Smith",
+        route: "North District Route",
+        status: "Scheduled"
       },
       {
-        id: 2,
-        date: "Tue Sep 16, 2025",
-        time: "2:30-3:05 PM",
-        status: "Scheduled",
-        route: "MNPS → Brookhaven",
-        driver: "Jamal R.",
-        vehicle: "Ford Transit 250"
+        id: "RD-12346", 
+        date: "May 21, 2025",
+        driver: "Jane Doe",
+        route: "North District Route",
+        status: "Scheduled"
       }
     ],
-    pastRides: [
+    
+    // Drivers data
+    approvedDrivers: [
       {
-        id: 4,
-        date: "Mon, Sep 15, 2025",
-        time: "2:30-3:05 PM",
-        status: "Completed",
-        route: "MNPS → Brookhaven",
-        driver: "Ana S.",
-        vehicle: "Sprinter 12p"
+        id: "DRV-5432",
+        name: "John Smith",
+        rating: "4.8",
+        ridesCompleted: 24,
+        status: "Active"
       },
       {
-        id: 5,
-        date: "Mon, Sep 15, 2025",
-        time: "7:00-7:32 AM",
-        status: "Completed",
-        route: "Brookhaven → MNPS",
-        driver: "Ana S.",
-        vehicle: "Sprinter 12p"
-      },
-      {
-        id: 6,
-        date: "Fri, Sep 12, 2025",
-        time: "2:30-3:10 PM",
-        status: "Completed",
-        route: "MNPS → Brookhaven",
-        driver: "Marcus T.",
-        vehicle: "SUV"
+        id: "DRV-7654",
+        name: "Jane Doe", 
+        rating: "4.9",
+        ridesCompleted: 36,
+        status: "Active"
       }
     ],
-    specialNeeds: {
-      accessibility: ["Wheelchair Accessible", "Safety Harness Required"],
-      healthNotes: ["Requires assistance boarding", "Inhaler on bus"],
-      behaviorNotes: ["Prefers window seat", "Needs verbal reminders"],
-      indicationNotes: ["Service animal present", "Needs verbal cues"]
-    }
+    
+    // Blocked Drivers data
+    blockedDrivers: [
+      {
+        id: "DRV-1234",
+        name: "Robert Wilson",
+        reason: "Inappropriate behavior"
+      }
+    ]
   }
 
   const handleManageTrip = () => {
     setShowManageTripModal(true)
   }
 
+  const handleAddGuardian = () => {
+    setShowAddGuardianModal(true)
+  }
+
+  // Modal handlers
+  const handleViewRoute = (routeId) => {
+    // Show route details in modal or navigate to routes page
+    router.push('/routes')
+  }
+
+  const handleViewRide = (rideId) => {
+    // Show ride details in modal or navigate to rides page  
+    router.push('/rides')
+  }
+
+  const handleViewDriver = (driverId) => {
+    // Show driver details in modal or navigate to drivers page
+    router.push('/drivers')
+  }
+
+  // Block/Unblock driver handlers
+  const handleBlockDriver = (driverId) => {
+    // Add to blocked drivers list
+    const driver = studentData.approvedDrivers.find(d => d.id === driverId)
+    if (driver) {
+      studentData.blockedDrivers.push({
+        id: driverId,
+        name: driver.name,
+        reason: 'Blocked by admin'
+      })
+      // Remove from approved drivers
+      studentData.approvedDrivers = studentData.approvedDrivers.filter(d => d.id !== driverId)
+    }
+  }
+
+  const handleUnblockDriver = (driverId) => {
+    // Remove from blocked drivers
+    const driver = studentData.blockedDrivers.find(d => d.id === driverId)
+    if (driver) {
+      studentData.approvedDrivers.push({
+        id: driverId,
+        name: driver.name,
+        rating: '4.5',
+        ridesCompleted: 0,
+        status: 'Active'
+      })
+      studentData.blockedDrivers = studentData.blockedDrivers.filter(d => d.id !== driverId)
+    }
+  }
+
+  const handleAddBlockedDriver = () => {
+    if (newBlockedDriver.name && newBlockedDriver.reason) {
+      studentData.blockedDrivers.push({
+        id: `DRV-${Date.now()}`,
+        name: newBlockedDriver.name,
+        reason: newBlockedDriver.reason
+      })
+      setNewBlockedDriver({ name: '', reason: '' })
+      setShowBlockDriverModal(false)
+    }
+  }
+
   return (
     <div className="bg-transparent min-h-screen">
-      {/* Student Profile Header - Redesigned to match Driver Profile */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 p-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-              <img
-                src={studentData.avatar || "/picture.jpg"}
-                alt={studentData.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden');
-                }}
-              />
-              <div data-fallback className="hidden w-full h-full flex items-center justify-center text-2xl font-bold text-[var(--primary)]">
-                {studentData.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+           
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+                <Users className="w-8 h-8 text-white" />
               </div>
-            </div>
-            <div className="flex-1">
-              <div className="font-semibold text-2xl text-[var(--primary-black)]">{studentData.name}</div>
-              <div className="text-sm text-[var(--muted-text)]">Student ID: {studentData.id}</div>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <RiStarLine 
-                      key={i} 
-                      className={`w-4 h-4 ${i < 4 ? 'text-[var(--amber-500)]' : 'text-[var(--gray-300)]'}`} 
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-[var(--muted-text)]">4.0</span>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{studentData.name}</h1>
+                {/* <p className="text-sm text-gray-600">Student Profile</p> */}
               </div>
             </div>
           </div>
@@ -204,7 +241,7 @@ export default function StudentProfilePage({ studentId }) {
                 size="sm"
                 className="flex items-center gap-2"
               >
-                <RiPhoneLine className="w-4 h-4" />
+                <FileText className="w-4 h-4" />
                 Text
               </Button>
               <Button
@@ -223,452 +260,494 @@ export default function StudentProfilePage({ studentId }) {
       {/* Main Content */}
       <div className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Profile Header */}
-            <Card className="p-6">
-              <div className="flex items-start gap-6">
-                <div className="w-20 h-20 rounded-full overflow-hidden">
-                  <img 
-                    src="/picture.jpg" 
-                    alt={studentData.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--heading)' }}>
-                    {studentData.name}
-                  </h2>
-                  <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                    Student ID: {studentData.studentId}
-                  </p>
-                </div>
+          {/* Student Information Card */}
+          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+                <User className="w-8 h-8 text-white" />
               </div>
-            </Card>
-
-            {/* Guardian Info */}
-            <Card className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Guardian Info</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2"
-                  onClick={() => setShowAddGuardianModal(true)}
-                >
-                  <RiUserLine className="w-4 h-4" />
-                  Add Guardian
-                </Button>
-              </div>
-              <div className="space-y-4">
-                {/* Primary Guardian */}
-                <div className="p-3 rounded-lg border" style={{ borderColor: 'var(--gray-200)' }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium px-2 py-1 rounded-full text-white" style={{ backgroundColor: 'var(--blue-500)' }}>
-                      Primary
-                    </span>
-                    <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700">
-                      <RiCloseLine className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <p className="text-sm font-medium" style={{ color: 'var(--heading)' }}>
-                    {studentData.guardian.name}
-                  </p>
-                  <div className="flex items-center gap-3 mt-2">
-                    <RiPhoneLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                    <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                      {studentData.guardian.phone}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 mt-1">
-                    <RiMailLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                    <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                      {studentData.guardian.email}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Secondary Guardian (if exists) */}
-                {studentData.secondaryGuardian && (
-                  <div className="p-3 rounded-lg border" style={{ borderColor: 'var(--gray-200)' }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium px-2 py-1 rounded-full text-white" style={{ backgroundColor: 'var(--green-500)' }}>
-                        Secondary
-                      </span>
-                      <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700">
-                        <RiCloseLine className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <p className="text-sm font-medium" style={{ color: 'var(--heading)' }}>
-                      {studentData.secondaryGuardian.name}
-                    </p>
-                    <div className="flex items-center gap-3 mt-2">
-                      <RiPhoneLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                      <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        {studentData.secondaryGuardian.phone}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <RiMailLine className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                      <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        {studentData.secondaryGuardian.email}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Card>
-
-            {/* Schedule Info */}
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <RiCalendarLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
-                <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Schedule Info</h3>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm" style={{ color: 'var(--heading)' }}>
-                  Bell Times: {studentData.schedule.bellTimes}
-                </p>
-                <p className="text-sm" style={{ color: 'var(--heading)' }}>
-                  Early Release: {studentData.schedule.earlyRelease}
-                </p>
-              </div>
-            </Card>
-
-            {/* Schedules (renamed from Programs) */}
-            <Card className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Schedules</h3>
-                <Button variant="ghost" size="sm" style={{ color: 'var(--blue-600)' }}>
-                  View past schedules
-                </Button>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium" style={{ color: 'var(--heading)' }}>
-                  {studentData.programs.year}: {studentData.programs.school} • {studentData.programs.grade}
-                </p>
-                <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                  Service Address: {studentData.programs.serviceAddress}
-                </p>
-                <div className="flex items-center gap-4 mt-3">
-                  <span className="text-sm" style={{ color: 'var(--heading)' }}>
-                    Pickup: {studentData.programs.pickup}
-                  </span>
-                  <span className="text-sm" style={{ color: 'var(--heading)' }}>
-                    Dropoff: {studentData.programs.dropoff}
-                  </span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Rides */}
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <RiGroupLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
-                <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Rides</h3>
-              </div>
-              <div className="flex items-center gap-4 mb-4">
-                <button 
-                  className={`text-sm font-medium pb-2 ${activeTab === 'upcoming' ? 'border-b-2' : ''}`}
-                  style={{ 
-                    color: activeTab === 'upcoming' ? 'var(--blue-600)' : 'var(--muted-text)',
-                    borderColor: activeTab === 'upcoming' ? 'var(--blue-600)' : 'transparent'
-                  }}
-                  onClick={() => setActiveTab('upcoming')}
-                >
-                  Upcoming
-                </button>
-                <button 
-                  className={`text-sm font-medium pb-2 ${activeTab === 'past' ? 'border-b-2' : ''}`}
-                  style={{ 
-                    color: activeTab === 'past' ? 'var(--blue-600)' : 'var(--muted-text)',
-                    borderColor: activeTab === 'past' ? 'var(--blue-600)' : 'transparent'
-                  }}
-                  onClick={() => setActiveTab('past')}
-                >
-                  Past
-                </button>
-              </div>
-              <div className="space-y-3">
-                {(activeTab === 'upcoming' ? studentData.upcomingRides : studentData.pastRides).map((ride) => (
-                  <div key={ride.id} className="p-4 rounded-lg border" style={{ borderColor: 'var(--gray-200)' }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-4">
-                        <div>
-                          <p className="text-sm font-medium" style={{ color: 'var(--heading)' }}>
-                            {ride.date}
-                          </p>
-                          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                            {ride.time}
-                          </p>
-                        </div>
-                      </div>
-                      <StatusBadge status={ride.status} />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        Route: {ride.route}
-                      </p>
-                      <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        Driver: {ride.driver}
-                      </p>
-                      <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                        Vehicle: {ride.vehicle}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            {/* Equipment & Special Needs */}
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <RiAlertLine className="w-5 h-5" style={{ color: 'var(--blue-600)' }} />
-                <h3 className="font-bold" style={{ color: 'var(--heading)' }}>Equipment & Special Needs</h3>
-              </div>
-              
-              {/* Accessibility */}
-              <div className="mb-3">
-                <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Accessibility</h4>
-                <div className="flex gap-2">
-                  {studentData.specialNeeds.accessibility.map((item, index) => (
-                    <span 
-                      key={index}
-                      className="px-3 py-1 text-xs rounded-full text-white"
-                      style={{ 
-                        backgroundColor: index === 0 ? 'var(--blue-500)' : 'var(--green-500)'
-                      }}
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Health Notes */}
-              <div className="mb-3">
-                <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Health Notes</h4>
-                <div className="space-y-2">
-                  {studentData.specialNeeds.healthNotes.map((note, index) => (
-                    <div 
-                      key={index}
-                      className="p-2 rounded text-sm"
-                      style={{ 
-                        backgroundColor: 'var(--amber-100)',
-                        color: 'var(--heading)'
-                      }}
-                    >
-                      {note}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Behavior Notes */}
-              <div className="mb-3">
-                <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Behavior Notes</h4>
-                <div className="space-y-2">
-                  {studentData.specialNeeds.behaviorNotes.map((note, index) => (
-                    <div 
-                      key={index}
-                      className="p-2 rounded text-sm"
-                      style={{ 
-                        backgroundColor: 'var(--orange-100)',
-                        color: 'var(--heading)'
-                      }}
-                    >
-                      {note}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Indication Notes */}
               <div>
-                <h4 className="font-medium mb-2" style={{ color: 'var(--heading)' }}>Indication Notes</h4>
-                <div className="space-y-2">
-                  {studentData.specialNeeds.indicationNotes.map((note, index) => (
-                    <div 
-                      key={index}
-                      className="p-2 rounded text-sm"
-                      style={{ 
-                        backgroundColor: 'var(--yellow-100)',
-                        color: 'var(--heading)'
-                      }}
-                    >
-                      {note}
-                    </div>
-                  ))}
-                </div>
+                <h3 className="text-lg font-semibold text-gray-900">Student Information</h3>
               </div>
-            </Card>
-          </div>
-
-          {/* Right Column */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Transportation */}
-            <Card className="p-4">
-              <h3 className="font-bold mb-4" style={{ color: 'var(--heading)' }}>Transportation</h3>
-              <div className="flex items-center gap-4">
-                <div
-                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold"
-                  style={{ backgroundColor: 'var(--blue-600)' }}
-                >
-                  {studentData.transportation.partner.charAt(0)}
+            </div>
+            
+            {/* <div className="flex items-center gap-4 mb-4">
+              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                <span className="text-lg font-semibold text-gray-600">EJ</span>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900">{studentData.name}</h4>
+                <p className="text-sm text-gray-600">{studentData.grade}</p>
+              </div>
+            </div> */}
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
+                  <User className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium" style={{ color: 'var(--heading)' }}>
-                    {studentData.transportation.partner}
-                  </p>
-                  <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                    Transportation Partner
-                  </p>
+                  <p className="text-sm text-gray-600">ID</p>
+                  <p className="text-sm font-medium text-gray-900">{studentData.studentId}</p>
                 </div>
               </div>
-            </Card>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                  <GraduationCap className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Campus</p>
+                  <p className="text-sm font-medium text-blue-600 cursor-pointer hover:underline">{studentData.campus}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
+                  <CheckCircle className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">District</p>
+                  <p className="text-sm font-medium text-blue-600 cursor-pointer hover:underline">{studentData.district}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
+                  <MapPin className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Address</p>
+                  <p className="text-sm font-medium text-gray-900">{studentData.address}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Guardian Information Card */}
+          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Guardian Information</h3>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
+                  <User className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Name</p>
+                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.name}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+                  <Phone className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Phone</p>
+                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.phone}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#06b6d4' }}>
+                  <Mail className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Email</p>
+                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.email}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Transportation Details Card */}
+          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
+                <Car className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Transportation Details</h3>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3b82f6' }}>
+                  <Route className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600">Assigned Routes</p>
+                  <p className="text-sm font-medium text-gray-900 mt-1">{studentData.transportation.assignedRoutes}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
+                  <Clock className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600">Scheduled Rides</p>
+                  <p className="text-sm font-medium text-gray-900 mt-1">{studentData.transportation.scheduledRides}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
+                  <CheckCircle className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600">Status</p>
+                  <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700 mt-1">
+                    {studentData.transportation.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs Section */}
+        <div className="mt-6 bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+          <div className="flex items-center space-x-2 mb-6">
+            <button 
+              onClick={() => setActiveTab('routes')}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 'routes' 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 'routes' ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Route className="w-4 h-4" />
+              Routes
+            </button>
+            <button 
+              onClick={() => setActiveTab('rides')}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 'rides' 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 'rides' ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Clock className="w-4 h-4" />
+              Rides
+              <span className="ml-1 px-2 py-1 text-xs font-medium rounded-full bg-white text-purple-600">2</span>
+            </button>
+            <button 
+              onClick={() => setActiveTab('drivers')}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 'drivers' 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 'drivers' ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Users className="w-4 h-4" />
+              Drivers
+            </button>
+            <button 
+              onClick={() => setActiveTab('blocked')}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 'blocked' 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 'blocked' ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Shield className="w-4 h-4" />
+              Blocked Drivers
+            </button>
+          </div>
+
+          {/* Dynamic Content based on active tab */}
+          <div>
+            {activeTab === 'routes' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Route className="w-5 h-5 text-purple-600" />
+                    Assigned Routes ({studentData.assignedRoutes.length})
+                  </h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route ID</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Stops</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Distance</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentData.assignedRoutes.map((route, index) => (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewRoute(route.id)}>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{route.id}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{route.name}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{route.stops}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{route.distance}</td>
+                          <td className="py-4 px-6">
+                            <div className="flex flex-col items-start">
+                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                                {route.status}
+                              </span>
+                              <div className="w-full h-px bg-gray-200 mt-1"></div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleViewRoute(route.id)
+                              }}
+                            >
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'rides' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-purple-600" />
+                    Upcoming Rides ({studentData.upcomingRides.length})
+                  </h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Ride ID</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentData.upcomingRides.map((ride, index) => (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewRide(ride.id)}>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{ride.id}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{ride.date}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{ride.driver}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{ride.route}</td>
+                          <td className="py-4 px-6">
+                            <div className="flex flex-col items-start">
+                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                                {ride.status}
+                              </span>
+                              <div className="w-full h-px bg-gray-200 mt-1"></div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleViewRide(ride.id)
+                              }}
+                            >
+                              View
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'drivers' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Users className="w-5 h-5 text-purple-600" />
+                    Approved Drivers ({studentData.approvedDrivers.length})
+                  </h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver ID</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Rating</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Rides Completed</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentData.approvedDrivers.map((driver, index) => (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewDriver(driver.id)}>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{driver.id}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{driver.name}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900 flex items-center gap-1">
+                            {driver.rating} <Star className="w-4 h-4 text-yellow-500" />
+                          </td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{driver.ridesCompleted}</td>
+                          <td className="py-4 px-6">
+                            <div className="flex flex-col items-start">
+                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                                {driver.status}
+                              </span>
+                              <div className="w-full h-px bg-gray-200 mt-1"></div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleBlockDriver(driver.id)
+                              }}
+                            >
+                              Block
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'blocked' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-red-600" />
+                    Blocked Drivers
+                  </h2>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => setShowBlockDriverModal(true)}
+                  >
+                    <Plus className="w-4 h-4" />
+                    Block Driver
+                  </Button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver ID</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Reason</th>
+                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentData.blockedDrivers.map((driver, index) => (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{driver.id}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{driver.name}</td>
+                          <td className="py-4 px-6 text-sm text-gray-900">{driver.reason}</td>
+                          <td className="py-4 px-6 text-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                              onClick={() => handleUnblockDriver(driver.id)}
+                            >
+                              <Trash2 className="w-4 h-4 mr-1" />
+                              Remove
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Modals */}
-      {/* Add Guardian Modal */}
-      {showAddGuardianModal && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
-          onClick={() => setShowAddGuardianModal(false)}
-        >
-          <div 
-            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: 'var(--blue-600)' }}
-                  >
-                    <RiUserLine className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold" style={{ color: 'var(--heading)' }}>Add Secondary Guardian</h1>
-                    <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Add a secondary parent/guardian for this student</p>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowAddGuardianModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+      {/* Block Driver Modal */}
+      {showBlockDriverModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Block Driver</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowBlockDriverModal(false)}
               >
-                <RiCloseLine className="w-6 h-6" />
-              </button>
+                <X className="w-4 h-4" />
+              </Button>
             </div>
-
-            {/* Content Area */}
-            <div className="p-6 overflow-y-auto flex-1">
-              {/* Form Fields */}
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
-                    Full Name
-                  </label>
-                  <Input
-                    type="text"
-                    value={newGuardian.name}
-                    onChange={(e) => setNewGuardian({...newGuardian, name: e.target.value})}
-                    placeholder="Enter guardian's full name"
-                    className="text-sm"
-                    width="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
-                    Phone Number
-                  </label>
-                  <Input
-                    type="tel"
-                    value={newGuardian.phone}
-                    onChange={(e) => setNewGuardian({...newGuardian, phone: e.target.value})}
-                    placeholder="(555) 123-4567"
-                    icon={<RiPhoneLine className="w-4 h-4" />}
-                    className="text-sm"
-                    width="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    value={newGuardian.email}
-                    onChange={(e) => setNewGuardian({...newGuardian, email: e.target.value})}
-                    placeholder="guardian@example.com"
-                    icon={<RiMailLine className="w-4 h-4" />}
-                    className="text-sm"
-                    width="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
-                    Relationship
-                  </label>
-                  <Select
-                    value={newGuardian.relationship}
-                    onChange={(e) => setNewGuardian({...newGuardian, relationship: e.target.value})}
-                    options={[
-                      { value: '', label: 'Select relationship' },
-                      { value: 'parent', label: 'Parent' },
-                      { value: 'grandparent', label: 'Grandparent' },
-                      { value: 'aunt', label: 'Aunt' },
-                      { value: 'uncle', label: 'Uncle' },
-                      { value: 'sibling', label: 'Sibling' },
-                      { value: 'other', label: 'Other' }
-                    ]}
-                    className="text-sm"
-                    width="w-full"
-                  />
-                </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
+                <Input
+                  value={newBlockedDriver.name}
+                  onChange={(e) => setNewBlockedDriver({...newBlockedDriver, name: e.target.value})}
+                  placeholder="Enter driver name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Reason</label>
+                <Input
+                  value={newBlockedDriver.reason}
+                  onChange={(e) => setNewBlockedDriver({...newBlockedDriver, reason: e.target.value})}
+                  placeholder="Enter reason for blocking"
+                />
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="bg-white border-t border-[var(--gray-200)] p-6">
-              <div className="flex justify-end gap-3">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setShowAddGuardianModal(false)
-                    setNewGuardian({ name: '', phone: '', email: '', relationship: '' })
-                  }}
-                  className="px-6 py-2"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    console.log('Guardian added:', newGuardian)
-                    setShowAddGuardianModal(false)
-                    setNewGuardian({ name: '', phone: '', email: '', relationship: '' })
-                  }}
-                  className="px-6 py-2"
-                  style={{ 
-                    backgroundColor: 'var(--blue-600)', 
-                    color: 'var(--on-primary)' 
-                  }}
-                >
-                  Add Guardian
-                </Button>
-              </div>
+            
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowBlockDriverModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddBlockedDriver}
+                className="bg-red-600 text-white hover:bg-red-700"
+              >
+                Block Driver
+              </Button>
             </div>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
