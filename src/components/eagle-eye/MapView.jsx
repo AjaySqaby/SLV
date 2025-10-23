@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Phone, Car, Clock, User, Eye } from 'lucide-react';
+import { MapPin, Phone, Car, Clock, User, Eye, Hash } from 'lucide-react';
 
 const mockDrivers = [
   {
@@ -136,33 +136,46 @@ export default function MapView({ onViewRide }) {
               {/* Marker Pin with profile photo or initials */}
               <div className="relative">
                 <div
-                  className="w-10 h-10 rounded-full shadow-lg flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
+                  className="w-14 h-14 rounded-full shadow-2xl flex items-center justify-center overflow-hidden transition-all duration-200 hover:scale-110 relative z-10"
                   style={{ 
                     backgroundColor: 'white',
-                    border: `4px solid ${
+                    border: `5px solid ${
                       driver.status === 'On Ride' ? '#10b981' :
                       driver.status === 'Ready Now' ? '#10b981' :
                       driver.status === 'Delayed' ? '#ef4444' :
                       driver.status === 'Unknown' ? '#000000' :
                       '#6b7280'
-                    }`
+                    }`,
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3), 0 4px 10px rgba(0, 0, 0, 0.2)'
                   }}
                 >
                   {driver.avatar ? (
                     <img src={driver.avatar} alt={driver.name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-white text-xs font-semibold">
+                    <span className="text-white text-sm font-semibold">
                       {driver.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </span>
                   )}
                 </div>
 
-
-                {/* Marker Pin Point */}
-                <div
-                  className="absolute top-8 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent relative z-10"
-                  style={{ borderTopColor: driver.statusColor }}
-                ></div>
+                {/* Enhanced Marker Pin Point with shadow */}
+                <div className="absolute top-14 left-1/2 transform -translate-x-1/2 relative z-10">
+                  <div
+                    className="w-0 h-0 border-l-6 border-r-6 border-t-8 border-transparent"
+                    style={{ 
+                      borderTopColor: driver.status === 'On Ride' ? '#10b981' :
+                      driver.status === 'Ready Now' ? '#10b981' :
+                      driver.status === 'Delayed' ? '#ef4444' :
+                      driver.status === 'Unknown' ? '#000000' :
+                      '#6b7280'
+                    }}
+                  ></div>
+                  {/* Shadow for the arrow */}
+                  <div
+                    className="absolute top-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-8 border-transparent opacity-30"
+                    style={{ borderTopColor: '#000000' }}
+                  ></div>
+                </div>
               </div>
 
               {/* Hover Tooltip */}
@@ -197,7 +210,11 @@ export default function MapView({ onViewRide }) {
                       <div className="space-y-1 text-xs text-gray-600">
                         <div className="flex items-center">
                           <Car className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.vehicle} • {driver.plateNumber}</span>
+                          <span className="truncate">{driver.vehicle}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Hash className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
+                          <span className="truncate">{driver.plateNumber}</span>
                         </div>
                         <div className="flex items-center">
                           <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
@@ -278,7 +295,11 @@ export default function MapView({ onViewRide }) {
               <div className="space-y-2 text-sm">
                 <div className="flex items-center">
                   <Car className="w-4 h-4 mr-2 text-gray-400" />
-                  <span>{selectedDriver.vehicle} • {selectedDriver.plateNumber}</span>
+                  <span>{selectedDriver.vehicle}</span>
+                </div>
+                <div className="flex items-center">
+                  <Hash className="w-4 h-4 mr-2 text-gray-400" />
+                  <span>{selectedDriver.plateNumber}</span>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />
