@@ -16,6 +16,9 @@ import {
   Route,
   Users,
   GraduationCap,
+  FileText,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
 import { FaPlay, FaUsers, FaHistory } from "react-icons/fa";
 import Button from "@/components/ui/Button";
@@ -162,63 +165,42 @@ export default function RideDetailModal({
     },
     ride: {
       status: selectedDriver.status === "Delayed" ? "Delayed" : "On Time",
-      pickupTime: "08:30 AM",
-      estimatedArrival: selectedDriver.eta,
-      distance: "12.5 miles",
-      duration: "35 minutes",
+      pickupTime: "7:15 AM",
+      estimatedArrival: "7:45 AM",
+      distance: "6.2 miles",
+      duration: "30 minutes",
     },
     route: {
       pickup: {
         address: selectedDriver.address,
       },
       dropoff: {
-        address: "388 9th St, Oakland, CA 94607",
+        address: "Lincoln Academy High School, 48:50 Riverside Drive, Boston, MA",
       },
     },
     students: [
       {
-        name: "John Smith",
-        grade: 4,
+        name: "Marcus Johnson",
+        grade: 10,
         id: "ST-1234",
-        status: "Picked up",
-        avatar: "/placeholder.svg?height=60&width=60",
-      },
-      {
-        name: "Emma Johnson",
-        grade: 2,
-        id: "ST-2345",
-        status: "Picked up",
-        avatar: "/placeholder.svg?height=60&width=60",
-      },
-      {
-        name: "Michael Lee",
-        grade: 3,
-        id: "ST-3456",
-        status: "Waiting",
-        avatar: "/placeholder.svg?height=60&width=60",
+        status: "Scheduled",
+        avatar: "/picture.jpg",
       },
     ],
     stops: [
       {
         type: "Pickup Stop",
         status: "Completed",
-        address: "1221 Broadway, Oakland, CA 94612",
-        time: "12:15 PM",
-        students: ["John Smith", "Emma Johnson"],
-      },
-      {
-        type: "Stop 2",
-        status: "In Progress",
-        address: "456 Oak St, San Francisco CA",
-        eta: "12:45 PM",
-        students: ["Michael Lee"],
+        address: selectedDriver.address,
+        time: "7:15 AM",
+        students: ["Marcus Johnson"],
       },
       {
         type: "Dropoff - School",
         status: "Upcoming",
-        address: "388 9th St, Oakland, CA 94607",
-        eta: "1:15 PM",
-        students: [],
+        address: "Lincoln Academy High School, 48:50 Riverside Drive, Boston, MA",
+        eta: "7:45 AM",
+        students: ["Marcus Johnson"],
       },
     ],
     events: [
@@ -226,50 +208,45 @@ export default function RideDetailModal({
         type: "Speeding Event",
         time: "7:32 AM",
         details: "Speed: 45mph in 35mph zone",
-        location: "Peachtree St NE, Atlanta, GA",
+        location: selectedDriver.address,
         severity: "high",
       },
       {
         type: "Hard Braking",
         time: "7:41 AM",
         details: "Sudden deceleration detected",
+        location: "Riverside Drive, Boston, MA",
         severity: "medium",
       },
     ],
     history: [
       {
         event: "Ride Created by System",
-        time: "April 16, 2025, 8:00 AM",
+        time: "April 16, 2025, 7:00 AM",
         icon: "calendar",
       },
       {
-        event: "Driver Assigned by Mark",
-        time: "April 16, 2025, 8:15 AM",
-        details: "Driver Michael Davis was assigned to this ride",
+        event: `Driver Assigned by Mark`,
+        time: "April 16, 2025, 7:05 AM",
+        details: `Driver ${selectedDriver.name} was assigned to this ride`,
         icon: "user",
       },
       {
-        event: "Ride Started by Michael",
-        time: "April 16, 2025, 12:00 PM",
+        event: `Ride Started by ${selectedDriver.name}`,
+        time: "April 16, 2025, 7:15 AM",
         icon: "car",
       },
       {
-        event: "First Stop Completed by Michael",
-        time: "April 16, 2025, 12:15 PM",
-        details: "2 students picked up",
-        icon: "map-pin",
-      },
-      {
-        event: "Second Stop Completed by Michael",
-        time: "April 16, 2025, 12:30 PM",
+        event: `Pickup Completed by ${selectedDriver.name}`,
+        time: "April 16, 2025, 7:15 AM",
         details: "1 student picked up",
         icon: "map-pin",
       },
       {
-        event: "Ride Completed by Michael",
-        time: "April 16, 2025, 1:15 PM",
-        details: "All students dropped off at school",
-        icon: "car",
+        event: `Dropoff Completed by ${selectedDriver.name}`,
+        time: "April 16, 2025, 7:45 AM",
+        details: "1 student dropped off at school",
+        icon: "map-pin",
       },
     ],
   };
@@ -294,14 +271,14 @@ export default function RideDetailModal({
               <div className="flex items-center gap-3">
                 <StatusBadge status={rideStatus} fontSize="text-lg" />
                 <div className="flex items-center gap-2">
-                  <div 
+                  <div
                     className="w-4 h-4 rounded-full border border-white shadow-sm"
                     style={{
                       backgroundColor: getStatusCircleColor(rideStatus) === 'bg-green-500' ? '#10b981' :
-                                      getStatusCircleColor(rideStatus) === 'bg-red-500' ? '#ef4444' :
-                                      getStatusCircleColor(rideStatus) === 'bg-orange-500' ? '#f97316' :
-                                      getStatusCircleColor(rideStatus) === 'bg-black' ? '#000000' :
-                                      '#6b7280'
+                        getStatusCircleColor(rideStatus) === 'bg-red-500' ? '#ef4444' :
+                          getStatusCircleColor(rideStatus) === 'bg-orange-500' ? '#f97316' :
+                            getStatusCircleColor(rideStatus) === 'bg-black' ? '#000000' :
+                              '#6b7280'
                     }}
                   ></div>
                   <span className="text-sm font-medium text-gray-700">
@@ -318,7 +295,31 @@ export default function RideDetailModal({
             </button>
           </div>
 
-          <Tabs tabs={tabList} activeTab={activeTab} onChange={setActiveTab} />
+          {/* Custom Tabs matching RideDetailContent design */}
+          <div className="flex items-center space-x-2">
+            {tabList.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                style={{
+                  backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === tab.id ? 'none' : '1px solid var(--gray-200)',
+                  borderRadius: '12px'
+                }}
+              >
+                {tab.id === 0 ? (
+                  <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                    <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                  </div>
+                ) : (
+                  tab.icon && <tab.icon className="w-4 h-4" />
+                )}
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="px-6 pb-6 flex-1 overflow-y-auto">
@@ -340,10 +341,10 @@ export default function RideDetailModal({
                           src={rideData.driver.avatar || "/picture.jpg"}
                           alt={rideData.driver.name}
                           className="w-full h-full object-cover"
-                          onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                          onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
                         />
                         <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-                          {rideData.driver.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                          {rideData.driver.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </div>
                       </div>
                     </div>
@@ -438,9 +439,9 @@ export default function RideDetailModal({
                       </div>
                       <div className="flex-1 flex justify-between">
                         <span className="text-sm text-[var(--muted-text)]">Pickup Time:</span>
-                    <div className="text-sm font-medium">
-                      <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
-                    </div>
+                        <div className="text-sm font-medium">
+                          <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center">
@@ -449,9 +450,9 @@ export default function RideDetailModal({
                       </div>
                       <div className="flex-1 flex justify-between">
                         <span className="text-sm text-[var(--muted-text)]">Estimated Arrival:</span>
-                    <div className="text-sm font-medium">
-                      <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
-                    </div>
+                        <div className="text-sm font-medium">
+                          <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center">
@@ -478,7 +479,7 @@ export default function RideDetailModal({
                 <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-                    <FaRoute  className="w-5 h-5 text-white" />
+                      <FaRoute className="w-5 h-5 text-white" />
                     </div>
                     <h3 className="text-lg font-semibold">Route Information</h3>
                   </div>
@@ -519,7 +520,7 @@ export default function RideDetailModal({
                     {rideData.students.map((student, index) => {
                       const iconBackgroundColors = [
                         'bg-[var(--blue-100)]',
-                        'bg-[var(--green-100)]', 
+                        'bg-[var(--green-100)]',
                         'bg-[var(--purple-100)]'
                       ];
                       const iconColors = [
@@ -528,7 +529,7 @@ export default function RideDetailModal({
                         'text-[var(--purple-600)]'
                       ];
                       return (
-                      <div key={index} className="flex items-center">
+                        <div key={index} className="flex items-center">
                           {/* Map Pin Style Student Container */}
                           <div className="relative mr-3">
                             {/* Main Pin Container */}
@@ -543,11 +544,11 @@ export default function RideDetailModal({
                             {/* Shadow */}
                             <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
                           </div>
-                        <div>
-                          <p className="text-sm font-medium">{student.name}</p>
-                          <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
+                          <div>
+                            <p className="text-sm font-medium">{student.name}</p>
+                            <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
+                          </div>
                         </div>
-                      </div>
                       );
                     })}
                   </div>
@@ -557,58 +558,101 @@ export default function RideDetailModal({
 
             {activeTab === 1 && (
               <div className={tabPanelClass}>
-                <div className="bg-[var(--surface-muted)] rounded-lg overflow-hidden h-96 mb-6">
-                  <RideMap
-                    embed
-                    className="h-96"
-                    pickup={{ coords: { lat: 33.7489, lng: -84.3880 } }}
-                    dropoff={{ coords: { lat: 33.7740, lng: -84.3510 } }}
-                    status="In-progress"
-                  />
+                {/* Map Section */}
+                <div className="bg-white rounded-lg border overflow-hidden mb-6" style={{ borderColor: 'var(--gray-200)' }}>
+                  <div className="h-96 relative">
+                    <RideMap
+                      embed
+                      className="h-96"
+                      pickup={{ coords: { lat: 33.7489, lng: -84.3880 } }}
+                      dropoff={{ coords: { lat: 33.7740, lng: -84.3510 } }}
+                      status="In-progress"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 flex items-center">
-                    <MapPin size={18} className="mr-2" />
+
+                {/* Route Events Section */}
+                <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold mb-6 flex items-center" style={{ color: 'var(--heading)' }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: 'var(--blue-600)' }}>
+                      <MapPin className="w-4 h-4 text-white" />
+                    </div>
                     Route Events
+                    <div className="ml-auto">
+                      <span className="px-3 py-1 text-sm rounded-full" style={{ backgroundColor: 'var(--blue-100)', color: 'var(--blue-700)' }}>
+                        {rideData.events.length} Events
+                      </span>
+                    </div>
                   </h3>
+                  
                   <div className="space-y-4">
                     {rideData.events.map((event, index) => (
                       <div
                         key={index}
-                        className={`p-4 rounded-lg ${
-                          event.severity === "high"
-                            ? "bg-[var(--danger-bg)] border border-[var(--danger-bg)]"
-                            : "bg-[var(--warning-bg)] border border-[var(--warning-bg)]"
-                        }`}
+                        className="p-4 rounded-lg shadow-sm"
+                        style={{
+                          backgroundColor: event.severity === "high" ? '#fef2f2' : '#fff7ed'
+                        }}
                       >
-                        <div className="flex items-start">
+                        <div className="flex items-start gap-4">
+                          {/* Event Icon with Colored Background */}
                           <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                              event.severity === "high"
-                                ? "bg-[var(--danger-bg)] text-[var(--danger)]"
-                                : "bg-[var(--warning-bg)] text-[var(--warning)]"
-                            }`}
+                            className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
+                            style={{
+                              backgroundColor: event.severity === "high" ? '#ef4444' : '#f97316'
+                            }}
                           >
                             {event.severity === "high" ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                              </svg>
+                              <AlertTriangle className="w-6 h-6 text-white" />
                             ) : (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                              </svg>
+                              <Info className="w-6 h-6 text-white" />
                             )}
                           </div>
-                          <div>
-                            <h4 className={`font-medium ${event.severity === "high" ? "text-[var(--danger-dark)]" : "text-[var(--warning-dark)]"}`}>{event.type}</h4>
-                            <p className={`text-sm ${event.severity === "high" ? "text-[var(--danger)]" : "text-[var(--warning)]"}`}>{event.time} - {event.details}</p>
-                            {event.location && (
-                              <p className={`text-sm ${event.severity === "high" ? "text-[var(--danger)]" : "text-[var(--warning)]"}`}>Location: {event.location}</p>
-                            )}
+
+                          {/* Event Details */}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>
+                                  {event.type}
+                                </h4>
+                                <span 
+                                  className="px-3 py-1 text-xs font-medium rounded-full border"
+                                  style={{
+                                    backgroundColor: event.severity === "high" ? '#fee2e2' : '#fed7aa',
+                                    color: event.severity === "high" ? '#b91c1c' : '#c2410c',
+                                    borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
+                                  }}
+                                >
+                                  {event.severity === "high" ? "High Priority" : "Medium Priority"}
+                                </span>
+                              </div>
+                              <div className="text-right">
+                                <span 
+                                  className="text-sm font-medium px-3 py-1 rounded-full"
+                                  style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
+                                >
+                                  {event.time}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <p className="text-base font-medium" style={{ color: '#374151' }}>
+                                {event.details}
+                              </p>
+                              {event.location && (
+                                <div 
+                                  className="flex items-center gap-2 p-2 rounded-lg"
+                                  style={{ backgroundColor: '#f9fafb' }}
+                                >
+                                  <MapPin className="w-4 h-4" style={{ color: '#dc2626' }} />
+                                  <span className="text-sm font-medium" style={{ color: '#6b7280' }}>
+                                    {event.location}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -619,96 +663,253 @@ export default function RideDetailModal({
             )}
 
             {activeTab === 2 && (
-              <div className={"space-y-6 "+tabPanelClass}>
-                {rideData.stops.map((stop, index) => (
-                  <div
-                    key={index}
-                    className={`p-6 rounded-lg ${
-                      stop.status === "Completed"
-                        ? "bg-[var(--success-bg)] border border-[var(--success-bg)]"
-                        : stop.status === "In Progress"
-                        ? "bg-[var(--primary-bg)] border border-[var(--primary-bg)]"
-                        : "bg-[var(--surface-bg)] border border-[var(--surface-muted)]"
-                    }`}
-                  >
-                    <div className="flex items-start">
-                      <div className="mr-4">
-                        <Clock size={24} className="text-[var(--muted-text)]" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-medium text-lg">{stop.type} {stop.status === "Completed" && "(Completed)"}</h3>
-                            <p className="text-[var(--muted-text)]">{stop.address}</p>
+              <div className="space-y-6">
+                {/* Stops with vertical line */}
+                <div className="relative">
+                  {/* Vertical line */}
+                  <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
+
+                  <div className="space-y-8">
+                    {/* Stop 1 - Pickup */}
+                    <div className="relative">
+                      <div className="flex items-start gap-4">
+                        {/* Stop number circle */}
+                        <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--green-600)' }}>
+                          <span className="text-white font-bold text-lg">1</span>
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>1425 Oak Street Apt 204, Springfield, MA 01103</h4>
+                            <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                              <Eye className="w-4 h-4" />
+                              View Details
+                            </button>
                           </div>
-                          <div className="text-right">
-                            {stop.time ? (
-                              <p className="text-[var(--success)] font-medium">{stop.time}</p>
-                            ) : (
-                              <p className="text-[var(--muted-text)]">ETA: {stop.eta}</p>
-                            )}
+
+                          <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <div className="flex items-center gap-2">
+                              <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                <span className="text-white text-xs">🏠</span>
+                              </div>
+                              <span>Residential • Door-to-door pickup</span>
+                            </div>
+                            <div className="ml-6">
+                              <span>Scheduled 7:15 AM EST Pick up 1 student</span>
+                            </div>
+                          </div>
+
+                          {/* Student info */}
+                          <div className="mt-4 flex items-center gap-3">
+                            <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                              <User className="w-3 h-3 text-white" />
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <button
+                                className="font-semibold hover:underline cursor-pointer"
+                                style={{ color: 'var(--blue-600)' }}
+                              >
+                                Marcus Johnson
+                              </button>
+                              <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
+                              <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                            </div>
                           </div>
                         </div>
-                        {stop.students.length > 0 && (
-                          <div className="mt-4">
-                            {stop.students.map((student, idx) => (
-                              <div key={idx} className="flex justify-between items-center mb-2">
-                                <p>{student}</p>
-                                {stop.status === "Completed" ? (
-                                  <StatusBadge status="Picked up" type="active" />
-                                ) : (
-                                  <StatusBadge status="Waiting" type="default" />
-                                )}
-                              </div>
-                            ))}
+                      </div>
+                    </div>
+
+                    {/* Stop 2 - Drop off */}
+                    <div className="relative">
+                      <div className="flex items-start gap-4">
+                        {/* Stop number circle */}
+                        <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--orange)' }}>
+                          <span className="text-white font-bold text-lg">2</span>
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>48:50 Riverside Drive, Boston, MA</h4>
+                            <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                              <Eye className="w-4 h-4" />
+                              View Details
+                            </button>
                           </div>
-                        )}
+
+                          <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                            <div className="flex items-center gap-2">
+                              <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                <span className="text-white text-xs">🏫</span>
+                              </div>
+                              <span>School Campus • Main entrance</span>
+                            </div>
+                            <div className="ml-6">
+                              <span>Scheduled 7:45 AM EST Drop off 1 student</span>
+                            </div>
+                          </div>
+
+                          {/* School info */}
+                          <div className="mt-4 flex items-center gap-3">
+                            <div className="w-6 h-6 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                              <span className="text-white text-xs">🏫</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="font-semibold" style={{ color: 'var(--heading)' }}>Lincoln Academy High School</span>
+                              <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             )}
 
             {activeTab === 3 && (
-              <div className={"space-y-6 "+tabPanelClass}>
-                {rideData.students.map((student, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border-b border-[var(--surface-muted)]">
-                    <div className="flex items-center">
-                      {/* Map Pin Style Student Container */}
-                      <div className="relative mr-4">
-                        {/* Main Pin Container */}
-                        <div className="bg-white rounded-lg p-2 shadow-lg border border-[var(--gray-200)] relative">
-                          {/* Student Profile Picture */}
-                          <div className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                            <img src={student.avatar || "/picture.jpg"} alt={student.name} className="w-full h-full object-cover" onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }} />
-                            <div data-fallback className="hidden w-full h-full flex items-center justify-center text-sm font-semibold text-[var(--heading)]">
-                              {student.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
-                            </div>
+              <div className="space-y-6">
+                {/* Student Detail Card */}
+                <div className="bg-white rounded-lg shadow-sm border overflow-hidden" style={{ borderColor: 'var(--gray-200)' }}>
+                  {/* Student Header */}
+                  <div className="p-6 border-b" style={{ borderColor: 'var(--gray-200)' }}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        {/* Simple Profile Picture */}
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                          <img
+                            src={rideData.students[0]?.avatar || "/picture.jpg"}
+                            alt={rideData.students[0]?.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                          />
+                          <div data-fallback className="hidden w-full h-full flex items-center justify-center text-sm font-semibold text-[var(--heading)]">
+                            {rideData.students[0]?.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                           </div>
                         </div>
-                        {/* Pin Pointer */}
-                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-white"></div>
-                        {/* Shadow */}
-                        <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
+                        <div>
+                          <button
+                            className="text-xl font-bold hover:underline cursor-pointer"
+                            style={{ color: 'var(--blue-600)' }}
+                          >
+                            {rideData.students[0]?.name}
+                          </button>
+                          <p className="text-sm mt-1" style={{ color: 'var(--muted-text)' }}>Grade {rideData.students[0]?.grade}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-medium">{student.name}</h4>
-                        <p className="text-sm text-[var(--muted-text)]">Grade {student.grade} • ID: {student.id}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <StatusBadge status={student.status} type={student.status === "Picked up" ? "active" : "default"} />
+                      <span
+                        className="px-3 py-1 text-xs rounded-full"
+                        style={{
+                          backgroundColor: 'var(--gray-100)',
+                          color: 'var(--muted-text)'
+                        }}
+                      >
+                        {rideData.students[0]?.status}
+                      </span>
                     </div>
                   </div>
-                ))}
+
+                  {/* Pickup Section */}
+                  <div className="relative">
+                    <div
+                      className="p-6 rounded-t-lg"
+                      style={{ backgroundColor: 'var(--green-100)' }}
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Pickup Circle */}
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                          style={{ backgroundColor: 'var(--green-600)' }}
+                        >
+                          1
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Pickup</h4>
+                            <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                            <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:15 AM EST</span>
+                          </div>
+                          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            {selectedDriver.address}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vertical Line */}
+                    <div
+                      className="absolute left-6 top-16 w-0.5 h-16"
+                      style={{ backgroundColor: 'var(--green-600)' }}
+                    ></div>
+                  </div>
+
+                  {/* Dropoff Section */}
+                  <div className="relative">
+                    <div
+                      className="p-6"
+                      style={{ backgroundColor: 'var(--amber-100)' }}
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Dropoff Circle */}
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                          style={{ backgroundColor: 'var(--orange)' }}
+                        >
+                          2
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Dropoff</h4>
+                            <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
+                            <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:45 AM EST</span>
+                          </div>
+                          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                            Lincoln Academy High School
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vertical Line */}
+                    <div
+                      className="absolute left-6 top-16 w-0.5 h-16"
+                      style={{ backgroundColor: 'var(--orange)' }}
+                    ></div>
+                  </div>
+
+                  {/* Notes Section */}
+                  <div className="relative">
+                    <div
+                      className="p-6 rounded-b-lg"
+                      style={{ backgroundColor: 'var(--blue-100)' }}
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Notes Icon */}
+                        <div
+                          className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: 'var(--blue-600)' }}
+                        >
+                          <FileText className="w-4 h-4 text-white" />
+                        </div>
+
+                        <div className="flex-1">
+                          <h4 className="font-semibold mb-2" style={{ color: 'var(--heading)' }}>Notes</h4>
+                          <p className="text-sm" style={{ color: 'var(--blue-600)' }}>
+                            Guardian requested pickup at main building entrance. Student requires wheelchair accessibility.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
             {activeTab === 4 && (
               <div className="space-y-6">
                 {/* Timeline Header */}
-               
+
 
                 {/* Timeline Events */}
                 <div className="relative">
@@ -729,7 +930,7 @@ export default function RideDetailModal({
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Created by System</h4>
                           <div className="flex items-center gap-2">
-                            <div 
+                            <div
                               className="w-3 h-3 rounded-full border border-white shadow-sm"
                               style={{ backgroundColor: '#10b981' }}
                             ></div>
@@ -745,7 +946,7 @@ export default function RideDetailModal({
                           </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 8:00 AM</p>
+                          <p>April 16, 2025, 7:00 AM</p>
                           <p className="mt-1">System</p>
                         </div>
                       </div>
@@ -764,7 +965,7 @@ export default function RideDetailModal({
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Driver Assigned by Mark</h4>
                           <div className="flex items-center gap-2">
-                            <div 
+                            <div
                               className="w-3 h-3 rounded-full border border-white shadow-sm"
                               style={{ backgroundColor: '#10b981' }}
                             ></div>
@@ -780,7 +981,7 @@ export default function RideDetailModal({
                           </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 8:15 AM</p>
+                          <p>April 16, 2025, 7:05 AM</p>
                           <p className="mt-1">Mark – admin</p>
                         </div>
                       </div>
@@ -797,9 +998,9 @@ export default function RideDetailModal({
 
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
-                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Started by Michael</h4>
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Started by {selectedDriver.name}</h4>
                           <div className="flex items-center gap-2">
-                            <div 
+                            <div
                               className="w-3 h-3 rounded-full border border-white shadow-sm"
                               style={{ backgroundColor: '#10b981' }}
                             ></div>
@@ -815,8 +1016,8 @@ export default function RideDetailModal({
                           </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 12:00 PM</p>
-                          <p className="mt-1">Michael – driver</p>
+                          <p>April 16, 2025, 7:15 AM</p>
+                          <p className="mt-1">{selectedDriver.name} – driver</p>
                         </div>
                       </div>
                     </div>
@@ -832,9 +1033,9 @@ export default function RideDetailModal({
 
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
-                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>First Stop Completed by Michael</h4>
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Pickup Completed by {selectedDriver.name}</h4>
                           <div className="flex items-center gap-2">
-                            <div 
+                            <div
                               className="w-3 h-3 rounded-full border border-white shadow-sm"
                               style={{ backgroundColor: '#10b981' }}
                             ></div>
@@ -850,9 +1051,9 @@ export default function RideDetailModal({
                           </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 12:15 PM</p>
-                          <p className="mt-1">Michael – driver</p>
-                          <p className="mt-1">2 students picked up</p>
+                          <p>April 16, 2025, 7:15 AM</p>
+                          <p className="mt-1">{selectedDriver.name} – driver</p>
+                          <p className="mt-1">1 student picked up</p>
                         </div>
                       </div>
                     </div>
@@ -868,7 +1069,7 @@ export default function RideDetailModal({
 
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
-                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Second Stop Completed by Michael</h4>
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Dropoff Completed by {selectedDriver.name}</h4>
                           <span
                             className="px-3 py-1 text-sm rounded-full font-medium"
                             style={{
@@ -880,9 +1081,9 @@ export default function RideDetailModal({
                           </span>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 12:30 PM</p>
-                          <p className="mt-1">Michael – driver</p>
-                          <p className="mt-1">1 student picked up</p>
+                          <p>April 16, 2025, 7:45 AM</p>
+                          <p className="mt-1">{selectedDriver.name} – driver</p>
+                          <p className="mt-1">1 student dropped off at school</p>
                         </div>
                       </div>
                     </div>
@@ -898,9 +1099,9 @@ export default function RideDetailModal({
 
                       <div className="flex-1 pt-2">
                         <div className="flex items-center gap-3 mb-2">
-                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Completed by Michael</h4>
+                          <h4 className="text-lg font-bold underline" style={{ color: 'var(--heading)' }}>Ride Completed by {selectedDriver.name}</h4>
                           <div className="flex items-center gap-2">
-                            <div 
+                            <div
                               className="w-3 h-3 rounded-full border border-white shadow-sm"
                               style={{ backgroundColor: '#10b981' }}
                             ></div>
@@ -916,32 +1117,32 @@ export default function RideDetailModal({
                           </div>
                         </div>
                         <div className="text-sm" style={{ color: 'var(--muted-text)' }}>
-                          <p>April 16, 2025, 1:15 PM</p>
-                          <p className="mt-1">Michael – driver</p>
+                          <p>April 16, 2025, 7:45 AM</p>
+                          <p className="mt-1">{selectedDriver.name} – driver</p>
                           <p className="mt-1">All students dropped off at school</p>
                         </div>
                       </div>
                     </div>
-                    </div>
                   </div>
+                </div>
               </div>
             )}
           </div>
-          </div>
+        </div>
 
         <div className="p-4 border-t border-[var(--border)] flex justify-center space-x-4">
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Map size={18} />
-              <span>Route Map</span>
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Camera size={18} />
-              <span>Stop Photos</span>
-            </Button>
-            <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
-              <Eye size={18} />
-              <span>Street View</span>
-            </Button>
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Map size={18} />
+            <span>Route Map</span>
+          </Button>
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Camera size={18} />
+            <span>Stop Photos</span>
+          </Button>
+          <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)]">
+            <Eye size={18} />
+            <span>Street View</span>
+          </Button>
         </div>
       </div>
     </div>
