@@ -27,25 +27,104 @@ const getDriverData = (driverId) => {
   const drivers = {
     "D-001": {
       id: "D-001",
-      name: "Sam Kebede",
-      phone: "(404) 555-1234",
-      email: "sam.k@example.com",
-      address: "789 Peachtree St, Atlanta, GA",
-      licenseNumber: "GA-DL-123456789",
-      licenseExpires: "2026-05-15",
+      name: "Sarah Williams",
+      phone: "(404) 555-1001",
+      email: "sarah.w@example.com",
+      address: "999 Peachtree St NE, Atlanta, GA 30309",
+      licenseNumber: "GA-DL-1001001",
+      licenseExpires: "2026-08-15",
+      vehicle: {
+        make: "Honda Odyssey",
+        year: 2022,
+        licensePlate: "ABC-1234",
+        type: "Minivan",
+        color: "Silver"
+      },
+      totalRides: 142,
+      upcomingRides: 2,
+      assignedRoutes: 1,
+      status: "Active"
+    },
+    "D-002": {
+      id: "D-002",
+      name: "Michael Johnson",
+      phone: "(404) 555-1002",
+      email: "michael.j@example.com",
+      address: "1234 West Peachtree St NW, Atlanta, GA 30309",
+      licenseNumber: "GA-DL-1001002",
+      licenseExpires: "2025-12-20",
+      vehicle: {
+        make: "Toyota Sienna",
+        year: 2023,
+        licensePlate: "XYZ-5678",
+        type: "Minivan",
+        color: "Black"
+      },
+      totalRides: 128,
+      upcomingRides: 1,
+      assignedRoutes: 3,
+      status: "Active"
+    },
+    "D-003": {
+      id: "D-003",
+      name: "David Thompson",
+      phone: "(404) 555-1003",
+      email: "david.t@example.com",
+      address: "456 Marietta St NW, Atlanta, GA 30313",
+      licenseNumber: "GA-DL-1001003",
+      licenseExpires: "2026-03-10",
       vehicle: {
         make: "Ford Transit",
-        year: 2023,
-        licensePlate: "GEO-1234",
+        year: 2021,
+        licensePlate: "DEF-9012",
         type: "Van",
+        color: "White"
+      },
+      totalRides: 98,
+      upcomingRides: 0,
+      assignedRoutes: 2,
+      status: "Active"
+    },
+    "D-004": {
+      id: "D-004",
+      name: "Jessica Martinez",
+      phone: "(404) 555-1004",
+      email: "jessica.m@example.com",
+      address: "3456 Peachtree Rd NE, Atlanta, GA 30326",
+      licenseNumber: "GA-DL-1001004",
+      licenseExpires: "2027-01-15",
+      vehicle: {
+        make: "Chevrolet Suburban",
+        year: 2023,
+        licensePlate: "GHI-3456",
+        type: "SUV",
         color: "White"
       },
       totalRides: 156,
       upcomingRides: 1,
       assignedRoutes: 2,
       status: "Active"
+    },
+    "D-005": {
+      id: "D-005",
+      name: "Robert Chen",
+      phone: "(404) 555-1005",
+      email: "robert.c@example.com",
+      address: "1234 N Highland Ave NE, Atlanta, GA 30306",
+      licenseNumber: "GA-DL-1001005",
+      licenseExpires: "2026-07-22",
+      vehicle: {
+        make: "Honda Pilot",
+        year: 2022,
+        licensePlate: "JKL-7890",
+        type: "SUV",
+        color: "Blue"
+      },
+      totalRides: 134,
+      upcomingRides: 3,
+      assignedRoutes: 1,
+      status: "Active"
     }
-    // Add more drivers as needed
   };
   
   return drivers[driverId] || null;

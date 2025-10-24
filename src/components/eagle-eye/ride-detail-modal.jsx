@@ -9,6 +9,7 @@ import ForceNoShowModal from '@/components/common/modals/ForceNoShowModal'
 import DuplicateModal from '@/components/common/modals/DuplicateModal'
 import ManageTripModal from '@/components/common/modals/ManageTripModal'
 import EditTripModal from '@/components/common/modals/EditTripModal'
+import DriverDetailModal from '@/components/drivers/DriverDetailModal'
 import {
   X,
   MapPin,
@@ -34,7 +35,7 @@ import { FaRoute } from "react-icons/fa";
 // Mock drivers data (same as MapView)
 const mockDrivers = [
   {
-    id: "D1",
+    id: "D-001",
     name: "Sarah Williams",
     avatar: "/driver1.jpg",
     vehicle: "Honda Odyssey",
@@ -45,10 +46,25 @@ const mockDrivers = [
     statusColor: "#10b981",
     position: { top: "32%", left: "52%" },
     rideId: "R123",
-    eta: "15 min"
+    eta: "15 min",
+    phone: "(404) 555-1001",
+    email: "sarah.w@example.com",
+    licenseNumber: "GA-DL-1001001",
+    licenseExpires: "2026-08-15",
+    vehicleDetails: {
+      make: "Honda Odyssey",
+      year: 2022,
+      licensePlate: "ABC-1234",
+      type: "Minivan",
+      color: "Silver"
+    },
+    totalRides: 142,
+    upcomingRides: 2,
+    assignedRoutes: 1,
+    status: "Active"
   },
   {
-    id: "D2",
+    id: "D-002",
     name: "Michael Johnson",
     avatar: "/driver2.jpg",
     vehicle: "Toyota Sienna",
@@ -59,10 +75,25 @@ const mockDrivers = [
     statusColor: "#10b981",
     position: { top: "28%", left: "48%" },
     rideId: "R222",
-    eta: "10 min"
+    eta: "10 min",
+    phone: "(404) 555-1002",
+    email: "michael.j@example.com",
+    licenseNumber: "GA-DL-1001002",
+    licenseExpires: "2025-12-20",
+    vehicleDetails: {
+      make: "Toyota Sienna",
+      year: 2023,
+      licensePlate: "XYZ-5678",
+      type: "Minivan",
+      color: "Black"
+    },
+    totalRides: 128,
+    upcomingRides: 1,
+    assignedRoutes: 3,
+    status: "Active"
   },
   {
-    id: "D3",
+    id: "D-003",
     name: "David Thompson",
     avatar: "/driver3.jpg",
     vehicle: "Ford Transit",
@@ -73,10 +104,25 @@ const mockDrivers = [
     statusColor: "#ef4444",
     position: { top: "45%", left: "54%" },
     rideId: "R456",
-    eta: "8 min"
+    eta: "8 min",
+    phone: "(404) 555-1003",
+    email: "david.t@example.com",
+    licenseNumber: "GA-DL-1001003",
+    licenseExpires: "2026-03-10",
+    vehicleDetails: {
+      make: "Ford Transit",
+      year: 2021,
+      licensePlate: "DEF-9012",
+      type: "Van",
+      color: "White"
+    },
+    totalRides: 98,
+    upcomingRides: 0,
+    assignedRoutes: 2,
+    status: "Active"
   },
   {
-    id: "D4",
+    id: "D-004",
     name: "Jessica Martinez",
     avatar: "/driver4.jpg",
     vehicle: "Chevrolet Suburban",
@@ -87,10 +133,25 @@ const mockDrivers = [
     statusColor: "#10b981",
     position: { top: "22%", left: "56%" },
     rideId: "R444",
-    eta: "14 min"
+    eta: "14 min",
+    phone: "(404) 555-1004",
+    email: "jessica.m@example.com",
+    licenseNumber: "GA-DL-1001004",
+    licenseExpires: "2027-01-15",
+    vehicleDetails: {
+      make: "Chevrolet Suburban",
+      year: 2023,
+      licensePlate: "GHI-3456",
+      type: "SUV",
+      color: "White"
+    },
+    totalRides: 156,
+    upcomingRides: 1,
+    assignedRoutes: 2,
+    status: "Active"
   },
   {
-    id: "D5",
+    id: "D-005",
     name: "Robert Chen",
     avatar: "/driver5.webp",
     vehicle: "Honda Pilot",
@@ -101,7 +162,22 @@ const mockDrivers = [
     statusColor: "#10b981",
     position: { top: "35%", left: "60%" },
     rideId: "R789",
-    eta: "12 min"
+    eta: "12 min",
+    phone: "(404) 555-1005",
+    email: "robert.c@example.com",
+    licenseNumber: "GA-DL-1001005",
+    licenseExpires: "2026-07-22",
+    vehicleDetails: {
+      make: "Honda Pilot",
+      year: 2022,
+      licensePlate: "JKL-7890",
+      type: "SUV",
+      color: "Blue"
+    },
+    totalRides: 134,
+    upcomingRides: 3,
+    assignedRoutes: 1,
+    status: "Active"
   }
 ];
 
@@ -120,6 +196,7 @@ export default function RideDetailModal({
   const [showDuplicateModal, setShowDuplicateModal] = useState(false)
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showEditTripModal, setShowEditTripModal] = useState(false)
+  const [showDriverDetailModal, setShowDriverDetailModal] = useState(false)
 
   // Find the driver data based on rideId
   const selectedDriver = mockDrivers.find(driver => driver.rideId === rideId) || mockDrivers[0];
@@ -451,7 +528,12 @@ export default function RideDetailModal({
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-lg text-[var(--primary-black)]">{rideData.driver.name}</div>
+                      <button 
+                        onClick={() => setShowDriverDetailModal(true)}
+                        className="font-semibold text-lg text-[var(--primary-black)] hover:text-[var(--blue-600)] hover:underline cursor-pointer transition-colors duration-200"
+                      >
+                        {rideData.driver.name}
+                      </button>
                       <div className="text-sm text-[var(--muted-text)]">{rideData.driver.phone}</div>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-yellow-500 text-base">★</span>
@@ -1313,6 +1395,13 @@ export default function RideDetailModal({
           setShowEditTripModal(false);
           // Handle edit trip logic here
         }}
+      />
+      
+      <DriverDetailModal
+        isOpen={showDriverDetailModal}
+        onClose={() => setShowDriverDetailModal(false)}
+        driverId={rideData.driver.id}
+        onBack={() => setShowDriverDetailModal(false)}
       />
     </div>
   );
