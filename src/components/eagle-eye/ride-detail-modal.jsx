@@ -3,6 +3,12 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import Tabs from "@/components/ui/Tabs";
+import ForceStartModal from '@/components/common/modals/ForceStartModal'
+import ForceCompleteModal from '@/components/common/modals/ForceCompleteModal'
+import ForceNoShowModal from '@/components/common/modals/ForceNoShowModal'
+import DuplicateModal from '@/components/common/modals/DuplicateModal'
+import ManageTripModal from '@/components/common/modals/ManageTripModal'
+import EditTripModal from '@/components/common/modals/EditTripModal'
 import {
   X,
   MapPin,
@@ -106,6 +112,14 @@ export default function RideDetailModal({
   rideStatus = "In Progress",
 }) {
   const [activeTab, setActiveTab] = useState(0);
+  
+  // Modal states
+  const [showForceStartModal, setShowForceStartModal] = useState(false)
+  const [showForceCompleteModal, setShowForceCompleteModal] = useState(false)
+  const [showForceNoShowModal, setShowForceNoShowModal] = useState(false)
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [showManageTripModal, setShowManageTripModal] = useState(false)
+  const [showEditTripModal, setShowEditTripModal] = useState(false)
 
   // Find the driver data based on rideId
   const selectedDriver = mockDrivers.find(driver => driver.rideId === rideId) || mockDrivers[0];
@@ -296,12 +310,12 @@ export default function RideDetailModal({
           </div>
 
           {/* Custom Tabs matching RideDetailContent design */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 overflow-x-auto custom-scrollbar">
             {tabList.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                className="px-6 py-3 text-sm font-medium !w-max cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
                 style={{
                   backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
                   color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
@@ -319,7 +333,95 @@ export default function RideDetailModal({
                 {tab.label}
               </button>
             ))}
+            <div className="flex gap-3  pb-2">
+        <Button
+          variant="primary"
+          onClick={() => setShowForceStartModal(true)}
+          className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+          style={{ backgroundColor: 'var(--green-600)' }}
+        >
+          <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+            <div className="w-0 h-0 border-l-[4px] border-l-white border-y-[3px] border-y-transparent ml-0.5"></div>
           </div>
+          <span>Force Start</span>
+        </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowForceCompleteModal(true)}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+                style={{ backgroundColor: '#06b6d4' }}
+              >
+                <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <span>Mark Complete</span>
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowForceNoShowModal(true)}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+                style={{ backgroundColor: '#ef4444' }}
+              >
+                <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <span>Force No-Show</span>
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowDuplicateModal(true)}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
+                style={{
+                  backgroundColor: 'var(--gray-100)',
+                  color: 'var(--heading)',
+                  border: '1px solid var(--gray-200)'
+                }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                  <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                </svg>
+                <span>Duplicate</span>
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowManageTripModal(true)}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
+                style={{
+                  backgroundColor: 'var(--gray-100)',
+                  color: 'var(--heading)',
+                  border: '1px solid var(--gray-200)'
+                }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                </svg>
+                <span>Manage Trip</span>
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowEditTripModal(true)}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
+                style={{
+                  backgroundColor: 'var(--gray-100)',
+                  color: 'var(--heading)',
+                  border: '1px solid var(--gray-200)'
+                }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+                <span>Edit Trip</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Action Buttons - Single row with custom scrollbar */}
+
         </div>
 
         <div className="px-6 pb-6 flex-1 overflow-y-auto">
@@ -584,7 +686,7 @@ export default function RideDetailModal({
                       </span>
                     </div>
                   </h3>
-                  
+
                   <div className="space-y-4">
                     {rideData.events.map((event, index) => (
                       <div
@@ -616,7 +718,7 @@ export default function RideDetailModal({
                                 <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>
                                   {event.type}
                                 </h4>
-                                <span 
+                                <span
                                   className="px-3 py-1 text-xs font-medium rounded-full border"
                                   style={{
                                     backgroundColor: event.severity === "high" ? '#fee2e2' : '#fed7aa',
@@ -628,7 +730,7 @@ export default function RideDetailModal({
                                 </span>
                               </div>
                               <div className="text-right">
-                                <span 
+                                <span
                                   className="text-sm font-medium px-3 py-1 rounded-full"
                                   style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
                                 >
@@ -636,13 +738,13 @@ export default function RideDetailModal({
                                 </span>
                               </div>
                             </div>
-                            
+
                             <div className="space-y-2">
                               <p className="text-base font-medium" style={{ color: '#374151' }}>
                                 {event.details}
                               </p>
                               {event.location && (
-                                <div 
+                                <div
                                   className="flex items-center gap-2 p-2 rounded-lg"
                                   style={{ backgroundColor: '#f9fafb' }}
                                 >
@@ -1145,6 +1247,73 @@ export default function RideDetailModal({
           </Button>
         </div>
       </div>
+      
+      {/* Modal Components */}
+      <ForceStartModal
+        isOpen={showForceStartModal}
+        onClose={() => setShowForceStartModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force Start confirmed:', data);
+          setShowForceStartModal(false);
+          // Handle force start logic here
+        }}
+      />
+      
+      <ForceCompleteModal
+        isOpen={showForceCompleteModal}
+        onClose={() => setShowForceCompleteModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force Complete confirmed:', data);
+          setShowForceCompleteModal(false);
+          // Handle force complete logic here
+        }}
+      />
+      
+      <ForceNoShowModal
+        isOpen={showForceNoShowModal}
+        onClose={() => setShowForceNoShowModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force No-Show confirmed:', data);
+          setShowForceNoShowModal(false);
+          // Handle force no-show logic here
+        }}
+      />
+      
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => setShowDuplicateModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Duplicate confirmed:', data);
+          setShowDuplicateModal(false);
+          // Handle duplicate logic here
+        }}
+      />
+      
+      <ManageTripModal
+        isOpen={showManageTripModal}
+        onClose={() => setShowManageTripModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Manage Trip confirmed:', data);
+          setShowManageTripModal(false);
+          // Handle manage trip logic here
+        }}
+      />
+      
+      <EditTripModal
+        isOpen={showEditTripModal}
+        onClose={() => setShowEditTripModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Edit Trip confirmed:', data);
+          setShowEditTripModal(false);
+          // Handle edit trip logic here
+        }}
+      />
     </div>
   );
 }

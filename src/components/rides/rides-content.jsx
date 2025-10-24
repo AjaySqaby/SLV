@@ -12,6 +12,12 @@ import AddRideModal from "./AddRideModal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Pagination from "@/components/ui/Pagination";
+import ForceStartModal from '@/components/common/modals/ForceStartModal'
+import ForceCompleteModal from '@/components/common/modals/ForceCompleteModal'
+import ForceNoShowModal from '@/components/common/modals/ForceNoShowModal'
+import DuplicateModal from '@/components/common/modals/DuplicateModal'
+import ManageTripModal from '@/components/common/modals/ManageTripModal'
+import EditTripModal from '@/components/common/modals/EditTripModal'
 
 export default function RidesContent() {
   const router = useRouter();
@@ -46,6 +52,14 @@ export default function RidesContent() {
 
   // Header search disabled on Rides page; only in-page search is used
   const [showAddRide, setShowAddRide] = useState(false);
+  
+  // Modal states
+  const [showForceStartModal, setShowForceStartModal] = useState(false)
+  const [showForceCompleteModal, setShowForceCompleteModal] = useState(false)
+  const [showForceNoShowModal, setShowForceNoShowModal] = useState(false)
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [showManageTripModal, setShowManageTripModal] = useState(false)
+  const [showEditTripModal, setShowEditTripModal] = useState(false)
 
   // Dynamic State and City options (USA) using country-state-city
   const rides = [
@@ -1135,6 +1149,67 @@ export default function RidesContent() {
         />
       </div>
       <AddRideModal open={showAddRide} onClose={() => setShowAddRide(false)} />
+      
+      {/* Modal Components */}
+      <ForceStartModal
+        isOpen={showForceStartModal}
+        onClose={() => setShowForceStartModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Force Start confirmed:', data);
+          // Handle force start logic here
+        }}
+      />
+      
+      <ForceCompleteModal
+        isOpen={showForceCompleteModal}
+        onClose={() => setShowForceCompleteModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Force Complete confirmed:', data);
+          // Handle force complete logic here
+        }}
+      />
+      
+      <ForceNoShowModal
+        isOpen={showForceNoShowModal}
+        onClose={() => setShowForceNoShowModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Force No-Show confirmed:', data);
+          // Handle force no-show logic here
+        }}
+      />
+      
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => setShowDuplicateModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Duplicate confirmed:', data);
+          // Handle duplicate logic here
+        }}
+      />
+      
+      <ManageTripModal
+        isOpen={showManageTripModal}
+        onClose={() => setShowManageTripModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Manage Trip confirmed:', data);
+          // Handle manage trip logic here
+        }}
+      />
+      
+      <EditTripModal
+        isOpen={showEditTripModal}
+        onClose={() => setShowEditTripModal(false)}
+        rideId="SLV1001-75185"
+        onConfirm={(data) => {
+          console.log('Edit Trip confirmed:', data);
+          // Handle edit trip logic here
+        }}
+      />
     </div>
   );
 }
