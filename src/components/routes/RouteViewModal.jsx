@@ -144,172 +144,178 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   ];
 
   const renderOverview = () => (
-    <div className="grid grid-cols-2 gap-6">
-      {/* Driver Card */}
-      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
-            <User className="w-5 h-5 text-white" />
+    <div className="space-y-6">
+      {/* Main Route Details Card - Single Card Design */}
+      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+        {/* Header Section */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+            <Route className="w-5 h-5 text-white" />
           </div>
-          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Driver</h3>
+          <h3 className="text-lg font-semibold">Route Details</h3>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-            <img
-              src="/driver1.jpg"
-              alt={routeData.driver}
-              className="w-full h-full object-cover"
-              onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-            />
-            <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-              {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
+
+        {/* Route Profile Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+              <Route className="w-8 h-8 text-[var(--blue-600)]" />
+            </div>
+            <div className="flex-1">
+              <div className="font-semibold text-2xl text-[var(--primary-black)]">{routeData.name}</div>
+              <div className="text-sm text-[var(--muted-text)]">Route ID: {routeData.id}</div>
+              <div className="text-sm text-[var(--muted-text)]">District: {routeData.district}</div>
             </div>
           </div>
-          <div className="flex-1">
-            <button
-              className="font-semibold text-lg hover:underline text-left"
-              style={{ color: '#111827' }}
-              onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
-            >
-              {routeData.driver}
+          <div className="flex flex-col gap-2">
+            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+              {routeData.status}
+            </div>
+            <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
+              <Eye className="w-4 h-4" />
+              <span>View Route</span>
             </button>
-            <div className="flex items-center gap-1 text-sm" style={{ color: '#6b7280' }}>
-              <Star className="w-4 h-4" style={{ color: '#f59e0b' }} fill="currentColor" />
-              <span>4.9 rating</span>
-            </div>
-          </div>
-          <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>
-            Completed
           </div>
         </div>
-      </div>
 
-      {/* Vehicle Card */}
-      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
-            <Car className="w-5 h-5 text-white" />
-          </div>
-          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Vehicle</h3>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f3f4f6' }}>
-            <Car className="w-6 h-6" style={{ color: '#6b7280' }} />
-          </div>
-          <div className="flex-1">
-            <p className="font-semibold text-lg" style={{ color: '#111827' }}>Chrysler Pacifica</p>
-            <p className="text-sm" style={{ color: '#6b7280' }}>ID: RT-30842</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Trip Details Card */}
-      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
-        <div className="flex items-center justify-between mb-4">
+        {/* Route Information Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
-              <Route className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+              <Hash className="w-4 h-4 text-[var(--blue-600)]" />
             </div>
-            <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Trip Details</h3>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">ROUTE ID</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.id}</div>
+            </div>
           </div>
-          <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors" style={{ backgroundColor: '#dbeafe', color: '#1d4ed8' }}>
-            <Eye className="w-4 h-4" />
-            <span>View Route</span>
-          </button>
-        </div>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
-                <Hash className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Route:</span>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+              <Timer className="w-4 h-4 text-[var(--green-600)]" />
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.id}</span>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">DURATION</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.duration}</div>
+            </div>
           </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
-                <Timer className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Duration:</span>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+              <MapPinIcon className="w-4 h-4 text-[var(--orange-600)]" />
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.duration}</span>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">DISTANCE</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.distance}</div>
+            </div>
           </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
-                <MapPinIcon className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Distance:</span>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.distance}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
-                <MapPin className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Stops:</span>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">STOPS</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.stops.length}</div>
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.stops.length}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
-                <UsersIcon className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Students:</span>
-            </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.students.length}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#06b6d4' }}>
-                <UserCheck className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Available Seats:</span>
-            </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>3</span>
           </div>
         </div>
-      </div>
 
-      {/* Schedule Card */}
-      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#3b82f6' }}>
-            <Clock className="w-5 h-5 text-white" />
+        {/* Students and Seats Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
+                <UsersIcon className="w-4 h-4 text-[var(--red-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.students.length}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
+                <UserCheck className="w-4 h-4 text-[var(--cyan-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">AVAILABLE SEATS</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">3</div>
+              </div>
+            </div>
           </div>
-          <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Schedule</h3>
         </div>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
-                <Clock className="w-3 h-3 text-white" />
+
+        {/* Driver Information Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Driver Information</h4>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+              <img
+                src="/driver1.jpg"
+                alt={routeData.driver}
+                className="w-full h-full object-cover"
+                onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+              />
+              <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+                {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
               </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Start Time:</span>
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.startTime}</span>
+            <div className="flex-1">
+              <button
+                className="font-semibold text-lg hover:underline text-left text-[var(--primary-black)]"
+                onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
+              >
+                {routeData.driver}
+              </button>
+              <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
+                <Star className="w-4 h-4 text-[var(--yellow-500)]" fill="currentColor" />
+                <span>4.9 rating</span>
+              </div>
+            </div>
+            <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
+              Completed
+            </div>
           </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
-                <Clock className="w-3 h-3 text-white" />
-              </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>End Time:</span>
+        </div>
+
+        {/* Vehicle Information Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Vehicle Information</h4>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--gray-100)]">
+              <Car className="w-6 h-6 text-[var(--gray-600)]" />
             </div>
-            <span className="font-semibold" style={{ color: '#111827' }}>{routeData.endTime}</span>
+            <div className="flex-1">
+              <div className="font-semibold text-lg text-[var(--primary-black)]">Chrysler Pacifica</div>
+              <div className="text-sm text-[var(--muted-text)]">ID: RT-30842</div>
+            </div>
           </div>
-          <div className="flex justify-between items-center">
+        </div>
+
+        {/* Schedule Information Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Schedule Information</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
-                <CheckCircle className="w-3 h-3 text-white" />
+              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                <Clock className="w-4 h-4 text-[var(--green-600)]" />
               </div>
-              <span className="text-sm" style={{ color: '#6b7280' }}>Status:</span>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">START TIME</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.startTime}</div>
+              </div>
             </div>
-            <StatusBadge status={routeData.status} type="active" />
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
+                <Clock className="w-4 h-4 text-[var(--red-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">END TIME</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.endTime}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

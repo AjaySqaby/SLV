@@ -340,214 +340,199 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
           </div>
         </div>
 
-        {/* Information Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Campus Information Card */}
-          <Card className="p-6 bg-white shadow-sm border border-[var(--gray-100)] hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-[var(--orange-600)] rounded-lg flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--gray-900)]">Campus Information</h3>
+        {/* Single Campus Details Card - Matching District Modal Design */}
+        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
+              <Building2 className="w-5 h-5 text-white" />
             </div>
-
-            <div className="flex flex-col items-center mb-6">
-              <div className="w-20 h-20 bg-[var(--gray-200)] rounded-full flex items-center justify-center mb-4 shadow-inner">
-                <span className="text-2xl font-bold text-[var(--gray-700)]">
-                  {safeCurrentData.name.split(' ').map(n => n[0]).join('')}
-                </span>
+            <h3 className="text-lg font-semibold">Campus Details</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <Hash className="w-4 h-4 text-[var(--blue-600)]" />
               </div>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={safeCurrentData.name}
-                  onChange={(e) => handleFieldChange('name', e.target.value)}
-                  className="text-xl font-semibold text-[var(--gray-900)] mb-1 border border-[var(--gray-300)] rounded px-2 py-1 text-center"
-                />
-              ) : (
-                <h4 className="text-xl font-semibold text-[var(--gray-900)] mb-1">{safeCurrentData.name}</h4>
-              )}
-              <p className="text-[var(--gray-600)] flex items-center gap-1">
-                <Building className="w-4 h-4" />
+              <div>
+                <div className="text-sm text-[var(--muted-text)]">ID</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">#{safeCurrentData.id}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                <Building className="w-4 h-4 text-[var(--green-600)]" />
+              </div>
+              <div>
+                <div className="text-sm text-[var(--muted-text)]">TYPE</div>
                 {isEditing ? (
                   <select
                     value={safeCurrentData.type}
                     onChange={(e) => handleFieldChange('type', e.target.value)}
-                    className="border border-[var(--gray-300)] rounded px-2 py-1 text-sm"
+                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                   >
                     <option value="Elementary School">Elementary School</option>
                     <option value="Middle School">Middle School</option>
                     <option value="High School">High School</option>
                   </select>
                 ) : (
-                  safeCurrentData.type
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.type}</div>
                 )}
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Hash className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Campus ID</span>
-                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.id}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Building className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">District</span>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={safeCurrentData.district}
-                      onChange={(e) => handleFieldChange('district', e.target.value)}
-                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <p className="text-sm text-[var(--blue-600)] hover:underline cursor-pointer font-medium transition-colors hover:text-[var(--blue-700)]">
-                      {safeCurrentData.district}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <MapPin className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Address</span>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={safeCurrentData.address}
-                      onChange={(e) => handleFieldChange('address', e.target.value)}
-                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.address}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Users className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Total Students</span>
-                  {isEditing ? (
-                    <input
-                      type="number"
-                      value={safeCurrentData.students}
-                      onChange={(e) => handleFieldChange('students', parseInt(e.target.value))}
-                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.students}</p>
-                  )}
-                </div>
               </div>
             </div>
-          </Card>
-
-          {/* Principal Information Card */}
-          <Card className="p-6 bg-white shadow-sm border border-[var(--gray-100)] hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-[var(--orange-600)] rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-white" />
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
               </div>
-              <h3 className="text-lg font-semibold text-[var(--gray-900)]">Principal Information</h3>
+              <div>
+                <div className="text-sm text-[var(--muted-text)]">CITY</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">Atlanta</div>
+              </div>
             </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                <Users className="w-4 h-4 text-[var(--orange-600)]" />
+              </div>
+              <div>
+                <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={safeCurrentData.students}
+                    onChange={(e) => handleFieldChange('students', parseInt(e.target.value))}
+                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                  />
+                ) : (
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.students}</div>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={safeCurrentData.address}
+                    onChange={(e) => handleFieldChange('address', e.target.value)}
+                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                  />
+                ) : (
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.address}</div>
+                )}
+              </div>
+            </div>
+          </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <GraduationCap className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Name</span>
+          {/* Principal Information Section */}
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
+                </div>
+                <div>
+                  <div className="text-sm text-[var(--muted-text)]">PRINCIPAL</div>
                   {isEditing ? (
                     <input
                       type="text"
                       value={safeCurrentData.principal.name}
                       onChange={(e) => handlePrincipalFieldChange('name', e.target.value)}
-                      className="text-sm font-medium text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm font-medium text-[var(--gray-900)]">{safeCurrentData.principal.name}</p>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.name}</div>
                   )}
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Phone className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Phone</span>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-[var(--blue-600)]" />
+                </div>
+                <div>
+                  <div className="text-sm text-[var(--muted-text)]">PHONE</div>
                   {isEditing ? (
                     <input
                       type="tel"
                       value={safeCurrentData.principal.phone}
                       onChange={(e) => handlePrincipalFieldChange('phone', e.target.value)}
-                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.principal.phone}</p>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.phone}</div>
                   )}
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Mail className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex-1">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Email</span>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-[var(--purple-600)]" />
+                </div>
+                <div>
+                  <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
                   {isEditing ? (
                     <input
                       type="email"
                       value={safeCurrentData.principal.email}
                       onChange={(e) => handlePrincipalFieldChange('email', e.target.value)}
-                      className="text-sm text-[var(--gray-900)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
+                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
                     />
                   ) : (
-                    <p className="text-sm text-[var(--gray-900)]">{safeCurrentData.principal.email}</p>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.email}</div>
                   )}
                 </div>
               </div>
             </div>
-          </Card>
+          </div>
 
-          {/* Transportation Details Card */}
-          <Card className="p-6 bg-white shadow-sm border border-[var(--gray-100)] hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-[var(--orange-600)] rounded-lg flex items-center justify-center">
-                <Car className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--gray-900)]">Transportation Details</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Route className="w-4 h-4 text-[var(--gray-500)]" />
+          {/* Transportation Information Section */}
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                  <Route className="w-4 h-4 text-[var(--orange-600)]" />
+                </div>
                 <div>
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Assigned Routes</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{campusData.transportation.assignedRoutes}</p>
+                  <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.assignedRoutes}</div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <Car className="w-4 h-4 text-[var(--gray-500)]" />
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                  <Car className="w-4 h-4 text-[var(--blue-600)]" />
+                </div>
                 <div>
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Scheduled Rides</span>
-                  <p className="text-sm font-medium text-[var(--gray-900)]">{campusData.transportation.scheduledRides}</p>
+                  <div className="text-sm text-[var(--muted-text)]">RIDES</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.scheduledRides}</div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 p-3 bg-[var(--gray-50)] rounded-lg">
-                <CheckCircle className="w-4 h-4 text-[var(--gray-500)]" />
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                  <StatusBadge status={safeCurrentData.transportation.status} />
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-[var(--green-600)]" />
+                </div>
+                <div>
+                  <div className="text-sm text-[var(--muted-text)]">STATUS</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <StatusBadge status={safeCurrentData.transportation.status} />
+                  </div>
                 </div>
               </div>
             </div>
-          </Card>
+          </div>
         </div>
+
 
         {/* Tabs */}
       

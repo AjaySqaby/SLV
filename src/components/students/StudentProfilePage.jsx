@@ -261,156 +261,126 @@ export default function StudentProfilePage({ studentId }) {
 
       {/* Main Content */}
       <div className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Student Information Card */}
-          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
-                <User className="w-8 h-8 text-white" />
+        {/* Single Student Details Card - Matching Campus Design */}
+        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
+              <User className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-lg font-semibold">Student Details</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <Hash className="w-4 h-4 text-[var(--blue-600)]" />
               </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Student Information</h3>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">ID</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">#{studentData.studentId}</div>
               </div>
             </div>
             
-            {/* <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="text-lg font-semibold text-gray-600">EJ</span>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
               </div>
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900">{studentData.name}</h4>
-                <p className="text-sm text-gray-600">{studentData.grade}</p>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">CAMPUS</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.campus}</div>
               </div>
-            </div> */}
+            </div>
             
-            <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-[var(--purple-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">DISTRICT</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.district}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.address}</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Guardian Information Section */}
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
-                  <User className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <User className="w-4 h-4 text-[var(--green-600)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">ID</p>
-                  <p className="text-sm font-medium text-gray-900">{studentData.studentId}</p>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">GUARDIAN</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.guardian.name}</div>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
-                  <GraduationCap className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-[var(--blue-600)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Campus</p>
-                  <p className="text-sm font-medium text-blue-600 cursor-pointer hover:underline">{studentData.campus}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
-                  <CheckCircle className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">District</p>
-                  <p className="text-sm font-medium text-blue-600 cursor-pointer hover:underline">{studentData.district}</p>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.guardian.phone}</div>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f59e0b' }}>
-                  <MapPin className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-[var(--purple-600)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Address</p>
-                  <p className="text-sm font-medium text-gray-900">{studentData.address}</p>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.guardian.email}</div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Guardian Information Card */}
-          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
-                <User className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Guardian Information</h3>
-              </div>
-            </div>
-            
-            <div className="space-y-3">
+          {/* Transportation Information Section */}
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#8b5cf6' }}>
-                  <User className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                  <Route className="w-4 h-4 text-[var(--orange-600)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Name</p>
-                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.name}</p>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.transportation.assignedRoutes}</div>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
-                  <Phone className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-[var(--blue-600)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Phone</p>
-                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.phone}</p>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">RIDES</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.transportation.scheduledRides}</div>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#06b6d4' }}>
-                  <Mail className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Email</p>
-                  <p className="text-sm font-medium text-gray-900">{studentData.guardian.email}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Transportation Details Card */}
-          <div className="bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#10b981' }}>
-                <Car className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Transportation Details</h3>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3b82f6' }}>
-                  <Route className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-[var(--green-600)]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-gray-600">Assigned Routes</p>
-                  <p className="text-sm font-medium text-gray-900 mt-1">{studentData.transportation.assignedRoutes}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
-                  <Clock className="w-4 h-4 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600">Scheduled Rides</p>
-                  <p className="text-sm font-medium text-gray-900 mt-1">{studentData.transportation.scheduledRides}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
-                  <CheckCircle className="w-4 h-4 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600">Status</p>
-                  <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700 mt-1">
-                    {studentData.transportation.status}
-                  </span>
+                  <div className="text-sm text-[var(--muted-text)]">STATUS</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                      {studentData.transportation.status}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

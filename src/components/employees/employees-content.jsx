@@ -261,205 +261,179 @@ export default function EmployeesContent() {
               </button>
             </div>
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
-              {/* Upper Section - Personal & Contact Info */}
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                      <User className="w-6 h-6 text-[var(--blue-600)]" />
-                    </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Personal Information</div>
+              {/* Main Employee Details Card - Single Card Design */}
+              <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+                {/* Header Section */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                    <Users className="w-5 h-5 text-white" />
                   </div>
-                  <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Employee Details</h3>
+                </div>
+
+                {/* Employee Profile Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                      <User className="w-8 h-8 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-2xl text-[var(--primary-black)]">{selectedEmployee.name}</div>
+                      <div className="text-sm text-[var(--muted-text)]">Employee ID: {selectedEmployee.id}</div>
+                      <div className="text-sm text-[var(--muted-text)]">Title: {selectedEmployee.title}</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                      {selectedEmployee.status}
+                    </div>
+                    <div className="text-sm text-[var(--muted-text)]">
+                      Performance: 4.8/5
+                    </div>
+                  </div>
+                </div>
+
+                {/* Employee Information Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <User className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">NAME</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.name}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">TITLE</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.title}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.email}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                      <Phone className="w-4 h-4 text-[var(--orange-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.phone}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Work Information Section */}
+                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Work Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--gray-100)] rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-[var(--gray-600)]" />
+                      <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                        <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
                       </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Name</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.name}</p>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">DISTRICT</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.district}</div>
                       </div>
                     </div>
+                    
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                        <GraduationCap className="w-5 h-5 text-[var(--green-600)]" />
+                      <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                        <Building2 className="w-4 h-4 text-[var(--green-600)]" />
                       </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Title</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.title}</p>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">CAMPUS</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.campus}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-[var(--purple-600)]" />
+
+                {/* Employment Details Section */}
+                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Employment Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--green-600)] font-bold text-xs">📅</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">HIRE DATE</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">Jan 15, 2020</div>
+                      </div>
                     </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Contact Information</div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🏢</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">DEPARTMENT</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">Administration</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">⏰</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">WORK HOURS</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">Full-time (40 hrs/week)</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-4">
+                </div>
+
+                {/* Performance & Skills Section */}
+                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Performance & Skills</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                        <Mail className="w-5 h-5 text-[var(--blue-600)]" />
+                      <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--blue-600)] font-bold text-xs">⭐</div>
                       </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Email</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.email}</p>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">PERFORMANCE RATING</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">Excellent (4.8/5)</div>
                       </div>
                     </div>
+                    
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                        <Phone className="w-5 h-5 text-[var(--green-600)]" />
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🎓</div>
                       </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Phone</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.phone}</p>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">EDUCATION</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">Master's in Education</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                        <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">🏆</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm text-[var(--muted-text)]">CERTIFICATIONS</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">3 Active Certifications</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Lower Section - Work Details */}
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-[var(--green-600)]" />
-                    </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Work Details</div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-[var(--blue-600)]" />
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">District</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.district}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-[var(--purple-600)]" />
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Campus</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.campus}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
-                      <User className="w-6 h-6 text-[var(--amber-600)]" />
-                    </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Status & ID</div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                        <div className="w-3 h-3 bg-[var(--green-600)] rounded-full"></div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.status}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--gray-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--gray-600)] font-bold text-xs">#</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Employee ID</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">{selectedEmployee.id}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Additional Information Section */}
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                      <User className="w-6 h-6 text-[var(--blue-600)]" />
-                    </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Employment Details</div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--green-600)] font-bold text-xs">📅</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Hire Date</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">Jan 15, 2020</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--purple-600)] font-bold text-xs">🏢</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Department</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">Administration</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--amber-600)] font-bold text-xs">⏰</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Work Hours</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">Full-time (40 hrs/week)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                      <GraduationCap className="w-6 h-6 text-[var(--green-600)]" />
-                    </div>
-                    <div className="font-semibold text-[var(--primary-black)]">Performance & Skills</div>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--blue-600)] font-bold text-xs">⭐</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Performance Rating</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">Excellent (4.8/5)</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--purple-600)] font-bold text-xs">🎓</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Education</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">Master's in Education</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
-                        <div className="w-5 h-5 text-[var(--amber-600)] font-bold text-xs">🏆</div>
-                      </div>
-                      <div>
-                        <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Certifications</span>
-                        <p className="text-sm font-medium text-[var(--heading)]">3 Active Certifications</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-          
             </div>
             
             {/* Fixed Footer Buttons */}

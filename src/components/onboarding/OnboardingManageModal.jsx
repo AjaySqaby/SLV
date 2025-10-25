@@ -118,47 +118,117 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
 
         {/* Modal Content */}
         <div className="p-6 space-y-6">
-          {/* Driver Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="text-sm font-medium text-[var(--gray-500)] mb-1">Driver Name</h3>
-              <p className="text-lg font-semibold text-[var(--heading)]">{driverData.name}</p>
+          {/* Main Onboarding Details Card - Single Card Design */}
+          <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+            {/* Header Section */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+                <CheckCircle className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold">Onboarding Details</h3>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-[var(--gray-500)] mb-1">Start Date</h3>
-              <p className="text-lg font-semibold text-[var(--heading)]">{driverData.startDate}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-[var(--gray-500)] mb-1">Status</h3>
-              <div className="mt-1">{getStatusBadge(driverData.status)}</div>
-            </div>
-          </div>
 
-          {/* Progress Overview */}
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--heading)] mb-4">Onboarding Progress</h3>
-            <div className="flex items-center gap-4 mb-4">
-              <span className="text-lg font-bold text-[var(--heading)]">
-                {driverData.progress}% Complete
-              </span>
-              <div className="flex-1">
+            {/* Driver Profile Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-[var(--blue-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-2xl text-[var(--primary-black)]">{driverData.name}</div>
+                  <div className="text-sm text-[var(--muted-text)]">Driver ID: {driverData.id}</div>
+                  <div className="text-sm text-[var(--muted-text)]">Started: {driverData.startDate}</div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {driverData.status}
+                </div>
+                <div className="text-sm text-[var(--muted-text)]">
+                  Progress: {driverData.progress}%
+                </div>
+              </div>
+            </div>
+
+            {/* Driver Information Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-[var(--blue-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">DRIVER NAME</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.name}</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-[var(--green-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">START DATE</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.startDate}</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-[var(--purple-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">COMPLETED STEPS</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.completedSteps}</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-[var(--orange-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">TOTAL STEPS</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.totalSteps}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Information Section */}
+            <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+              <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Progress Overview</h4>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-[var(--muted-text)]">
+                    {driverData.completedSteps} of {driverData.totalSteps} steps completed
+                  </div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">
+                    {driverData.progress}%
+                  </div>
+                </div>
                 <ProgressBar
                   progress={driverData.progress}
                   className="h-3"
                   color={getProgressColor(driverData.progress)}
                 />
+                <div className="flex justify-between text-sm">
+                  <span className="text-[var(--muted-text)]">Progress: {driverData.progress}%</span>
+                  <span className="text-[var(--muted-text)]">Estimated completion: {driverData.estimatedCompletion}</span>
+                </div>
               </div>
             </div>
-            
-            {/* Due Date */}
-            <div className="flex items-center justify-between p-4 bg-[var(--gray-50)] rounded-lg">
-              <div>
-                <h4 className="font-medium text-[var(--heading)]">Due Date</h4>
-                <p className="text-sm text-[var(--muted-text)]">Set a deadline for completing onboarding</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[var(--heading)]">{driverData.dueDate}</span>
-                <Clock className="h-4 w-4 text-[var(--gray-400)]" />
+
+            {/* Due Date Section */}
+            <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+              <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Due Date Information</h4>
+              <div className="flex items-center justify-between p-4 bg-[var(--gray-50)] rounded-lg">
+                <div>
+                  <div className="font-medium text-[var(--primary-black)]">Due Date</div>
+                  <div className="text-sm text-[var(--muted-text)]">Set a deadline for completing onboarding</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[var(--primary-black)]">{driverData.dueDate}</span>
+                  <Clock className="h-4 w-4 text-[var(--gray-400)]" />
+                </div>
               </div>
             </div>
           </div>

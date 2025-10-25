@@ -483,9 +483,20 @@ export default function DriverDetailContent({ driverId }) {
 
   return (
     <div className="space-y-6">
-      {/* Driver Profile Header - Redesigned */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6">
-        <div className="flex items-center justify-between mb-4">
+      {/* Main Driver Details Card - Single Card Design */}
+      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
+        {/* Header Section */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-white">
+              <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold">Driver Details</h3>
+        </div>
+
+        {/* Driver Profile Header */}
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
               <img
@@ -533,171 +544,178 @@ export default function DriverDetailContent({ driverId }) {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content - Professional grid layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Driver Information */}
-        <div className="bg-[var(--surface-bg)] p-6 rounded-lg border border-[var(--gray-200)]">
-          <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Driver Information</h3>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--blue-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue)]">
-                  <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.phone}</div>
-                <div className="text-sm text-[var(--muted-text)]">Phone Number</div>
-              </div>
+        {/* Driver Information Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue-600)]">
+                <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" />
+              </svg>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--green-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green)]">
-                  <path d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.email}</div>
-                <div className="text-sm text-[var(--muted-text)]">Email Address</div>
-              </div>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.phone}</div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--purple-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple)]">
-                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.address}</div>
-                <div className="text-sm text-[var(--muted-text)]">Home Address</div>
-              </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green-600)]">
+                <path d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--orange-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--orange)]">
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.licenseNumber}</div>
-                <div className="text-sm text-[var(--muted-text)]">License • Expires: {driverData.licenseExpires}</div>
-              </div>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.email}</div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple-600)]">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.address}</div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--orange-600)]">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">LICENSE</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.licenseNumber}</div>
             </div>
           </div>
         </div>
 
-        {/* Vehicle Information */}
-        <div className="bg-[var(--surface-bg)] p-6 rounded-lg border border-[var(--gray-200)]">
+        {/* License Expiration */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--orange-600)]">
+                <path d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-4 4m4-4l4 4m-4 0v8a2 2 0 01-2 2H8a2 2 0 01-2-2v-8" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <div className="text-sm text-[var(--muted-text)]">LICENSE EXPIRES</div>
+              <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.licenseExpires}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Vehicle Information Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-[var(--primary-black)]">Vehicle Information</h3>
-            <div className="bg-[var(--green-bg)] text-[var(--green)] px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+            <h4 className="text-md font-semibold text-[var(--primary-black)]">Vehicle Information</h4>
+            <div className="bg-[var(--green-100)] text-[var(--green-600)] px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path d="M5 13l4 4L19 7" />
               </svg>
               Default Vehicle
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--blue-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue-600)]">
                   <path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                 </svg>
               </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.vehicle.make}</div>
-                <div className="text-sm text-[var(--muted-text)]">({driverData.vehicle.year})</div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">MAKE/MODEL</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.vehicle.make} ({driverData.vehicle.year})</div>
               </div>
             </div>
+            
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--green-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green-600)]">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.vehicle.licensePlate}</div>
-                <div className="text-sm text-[var(--muted-text)]">License Plate</div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">LICENSE PLATE</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.vehicle.licensePlate}</div>
               </div>
             </div>
+            
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--purple-bg)] flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple-600)]">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.vehicle.type}</div>
-                <div className="text-sm text-[var(--muted-text)]">Vehicle Type</div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">VEHICLE TYPE</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.vehicle.type}</div>
               </div>
             </div>
+            
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--orange-bg)] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
                 <div className="w-4 h-4 rounded" style={{ backgroundColor: driverData.vehicle.color.toLowerCase() }}></div>
               </div>
-              <div>
-                <div className="font-medium text-[var(--primary-black)]">{driverData.vehicle.color}</div>
-                <div className="text-sm text-[var(--muted-text)]">Color</div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">COLOR</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.vehicle.color}</div>
               </div>
             </div>
           </div>
-          <div className="mt-4 pt-4 border-t border-[var(--gray-200)]">
-            <Button 
-              variant="secondary" 
-              className="w-full flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
-              onClick={() => setShowVehicleModal(true)}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Add Another Vehicle
-            </Button>
-          </div>
         </div>
-      </div>
 
-      {/* Transportation Summary */}
-      <div className="bg-[var(--surface-bg)] p-6 rounded-lg border border-[var(--gray-200)]">
-        <h3 className="text-lg font-semibold mb-4 text-[var(--primary-black)]">Transportation Summary</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[var(--blue-bg)] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue)]">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+        {/* Transportation Summary Section */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Transportation Summary</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--blue-600)]">
+                  <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">TOTAL RIDES</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.totalRides}</div>
+              </div>
             </div>
-            <div>
-              <div className="text-2xl font-bold text-[var(--primary-black)]">156</div>
-              <div className="text-sm text-[var(--muted-text)]">Total Rides</div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green-600)]">
+                  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">UPCOMING RIDES</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.upcomingRides}</div>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[var(--green-bg)] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--green)]">
-                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-[var(--primary-black)]">1</div>
-              <div className="text-sm text-[var(--muted-text)]">Upcoming Rides</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[var(--purple-bg)] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple)]">
-                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-[var(--primary-black)]">2</div>
-              <div className="text-sm text-[var(--muted-text)]">Assigned Routes</div>
+            
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--purple-600)]">
+                  <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">ASSIGNED ROUTES</div>
+                <div className="text-sm font-medium text-[var(--primary-black)]">{driverData.assignedRoutes}</div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mt-4 pt-4 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
+
+        {/* Action Buttons */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
           <Button 
             variant="secondary" 
             className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
