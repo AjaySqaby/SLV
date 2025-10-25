@@ -9,6 +9,7 @@ import Card from '@/components/ui/Card';
 import StatusBadge from '@/components/ui/StatusBadge';
 import DriverDetailModal from '@/components/drivers/DriverDetailModal';
 import StudentProfilePage from '@/components/students/StudentProfilePage';
+import Collapse from '@/components/ui/Collapse';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -16,6 +17,9 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  
+  // Accordion state - only one collapse can be open at a time
+  const [openCollapse, setOpenCollapse] = useState(null);
 
   if (!isOpen) return null;
 
@@ -143,42 +147,44 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     { id: 4, label: "Rides" }
   ];
 
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
+
   const renderOverview = () => (
-    <div className="space-y-6">
-      {/* Main Route Details Card - Single Card Design */}
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
-        {/* Header Section */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-            <Route className="w-5 h-5 text-white" />
+    <div className="space-y-4">
+      {/* Single Collapse with All Information */}
+      <Collapse 
+        title="Route Information" 
+        icon={<Route className="w-4 h-4 text-purple-600" />}
+        isOpen={openCollapse === 'route-info'}
+        onToggle={() => handleCollapseToggle('route-info')}
+      >
+        <div className="space-y-4">
+          {/* Route Profile Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                <Route className="w-8 h-8 text-[var(--blue-600)]" />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold text-2xl text-[var(--primary-black)]">{routeData.name}</div>
+                <div className="text-sm text-[var(--muted-text)]">Route ID: {routeData.id}</div>
+                <div className="text-sm text-[var(--muted-text)]">District: {routeData.district}</div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                {routeData.status}
+              </div>
+              <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
+                <Eye className="w-4 h-4" />
+                <span>View Route</span>
+              </button>
+            </div>
           </div>
-          <h3 className="text-lg font-semibold">Route Details</h3>
-        </div>
 
-        {/* Route Profile Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-              <Route className="w-8 h-8 text-[var(--blue-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="font-semibold text-2xl text-[var(--primary-black)]">{routeData.name}</div>
-              <div className="text-sm text-[var(--muted-text)]">Route ID: {routeData.id}</div>
-              <div className="text-sm text-[var(--muted-text)]">District: {routeData.district}</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
-              {routeData.status}
-            </div>
-            <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
-              <Eye className="w-4 h-4" />
-              <span>View Route</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Route Information Section */}
+          {/* Route Information Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
@@ -245,80 +251,80 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             </div>
           </div>
         </div>
-
-        {/* Driver Information Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Driver Information</h4>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-              <img
-                src="/driver1.jpg"
-                alt={routeData.driver}
-                className="w-full h-full object-cover"
-                onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-              />
-              <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-                {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
-              </div>
-            </div>
-            <div className="flex-1">
-              <button
-                className="font-semibold text-lg hover:underline text-left text-[var(--primary-black)]"
-                onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
-              >
-                {routeData.driver}
-              </button>
-              <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
-                <Star className="w-4 h-4 text-[var(--yellow-500)]" fill="currentColor" />
-                <span>4.9 rating</span>
-              </div>
-            </div>
-            <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
-              Completed
-            </div>
-          </div>
-        </div>
-
-        {/* Vehicle Information Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Vehicle Information</h4>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--gray-100)]">
-              <Car className="w-6 h-6 text-[var(--gray-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="font-semibold text-lg text-[var(--primary-black)]">Chrysler Pacifica</div>
-              <div className="text-sm text-[var(--muted-text)]">ID: RT-30842</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Schedule Information Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-          <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Schedule Information</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                <Clock className="w-4 h-4 text-[var(--green-600)]" />
+          {/* Driver Information */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Driver Information</h4>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                <img
+                  src="/driver1.jpg"
+                  alt={routeData.driver}
+                  className="w-full h-full object-cover"
+                  onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                />
+                <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+                  {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                </div>
               </div>
               <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">START TIME</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.startTime}</div>
+                <button
+                  className="font-semibold text-lg hover:underline text-left text-[var(--primary-black)]"
+                  onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
+                >
+                  {routeData.driver}
+                </button>
+                <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
+                  <Star className="w-4 h-4 text-[var(--yellow-500)]" fill="currentColor" />
+                  <span>4.9 rating</span>
+                </div>
+              </div>
+              <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
+                Completed
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
-                <Clock className="w-4 h-4 text-[var(--red-600)]" />
+          </div>
+
+          {/* Vehicle Information */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Vehicle Information</h4>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--gray-100)]">
+                <Car className="w-6 h-6 text-[var(--gray-600)]" />
               </div>
               <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">END TIME</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.endTime}</div>
+                <div className="font-semibold text-lg text-[var(--primary-black)]">Chrysler Pacifica</div>
+                <div className="text-sm text-[var(--muted-text)]">ID: RT-30842</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Schedule Information */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Schedule Information</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-[var(--green-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">START TIME</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.startTime}</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-[var(--red-600)]" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">END TIME</div>
+                  <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.endTime}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Collapse>
     </div>
   );
 

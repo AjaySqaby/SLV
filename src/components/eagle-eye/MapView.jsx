@@ -14,7 +14,9 @@ const mockDrivers = [
     statusColor: "#10b981", // Green for On Ride
     position: { top: "32%", left: "52%" },
     rideId: "R123",
-    eta: "15 min"
+    eta: "15 min",
+    scheduledTime: "08:30 AM",
+    driverETA: "08:45 AM"
   },
   {
     id: "D2", 
@@ -28,7 +30,9 @@ const mockDrivers = [
     statusColor: "#10b981", // Green for Ready Now
     position: { top: "28%", left: "48%" },
     rideId: "R222",
-    eta: "10 min"
+    eta: "10 min",
+    scheduledTime: "09:00 AM",
+    driverETA: "09:05 AM"
   },
   {
     id: "D3",
@@ -42,7 +46,9 @@ const mockDrivers = [
     statusColor: "#ef4444", // Red for Delayed
     position: { top: "45%", left: "54%" },
     rideId: "R456",
-    eta: "8 min"
+    eta: "8 min",
+    scheduledTime: "08:30 AM",
+    driverETA: "08:52 AM"
   },
   {
     id: "D4",
@@ -56,7 +62,9 @@ const mockDrivers = [
     statusColor: "#10b981", // Green for Ready Now
     position: { top: "22%", left: "56%" },
     rideId: "R444",
-    eta: "14 min"
+    eta: "14 min",
+    scheduledTime: "09:15 AM",
+    driverETA: "09:12 AM"
   },
   {
     id: "D5",
@@ -70,7 +78,9 @@ const mockDrivers = [
     statusColor: "#10b981", // Green for On Ride
     position: { top: "35%", left: "60%" },
     rideId: "R789",
-    eta: "12 min"
+    eta: "12 min",
+    scheduledTime: "08:30 AM",
+    driverETA: "08:52 AM"
   }
 ];
 
@@ -229,6 +239,20 @@ export default function MapView({ onViewRide }) {
                         <div className="flex items-center">
                           <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
                           <span className="truncate">Next Stop: West Campus</span>
+                        </div>
+                      </div>
+
+                      {/* Time Information */}
+                      <div className="mt-3 pt-2 border-t border-gray-100">
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-gray-600">Scheduled:</span>
+                            <span className="font-medium">{driver.scheduledTime || "08:30 AM"}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-gray-600">Driver ETA:</span>
+                            <span className="font-medium text-green-600">{driver.driverETA || driver.eta}</span>
+                          </div>
                         </div>
                       </div>
 

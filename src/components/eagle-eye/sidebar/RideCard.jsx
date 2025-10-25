@@ -82,27 +82,30 @@ export default function RideCard({ ride, onViewRide, onSmartSuggest }) {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
-            <Clock size={12} className="text-[var(--muted-text)]" />
-            <span>ETA: </span>
-            <DualTimeDisplay 
-              rideTime={ride.eta}
-              rideTimezone="America/Los_Angeles"
-              showLabels={false}
-              className="text-xs font-medium text-[var(--heading)]"
-            />
+        <div className="space-y-2">
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
+              <Clock size={12} className="text-[var(--muted-text)]" />
+              <span>ETA: </span>
+              <DualTimeDisplay 
+                rideTime={ride.eta}
+                rideTimezone="America/Los_Angeles"
+                showLabels={false}
+                className="text-xs font-medium text-[var(--heading)]"
+              />
+            </div>
+            <Button
+              variant="secondary"
+              className="px-3 py-1 text-xs text-[var(--purple-700)] border border-[var(--purple)]/30 bg-[var(--surface-bg)] rounded hover:bg-[var(--primary-bg)] font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                onViewRide(ride.id);
+              }}
+            >
+              Details
+            </Button>
           </div>
-          <Button
-            variant="secondary"
-            className="px-3 py-1 text-xs text-[var(--purple-700)] border border-[var(--purple)]/30 bg-[var(--surface-bg)] rounded hover:bg-[var(--primary-bg)] font-semibold"
-            onClick={(e) => {
-              e.stopPropagation();
-              onViewRide(ride.id);
-            }}
-          >
-            Details
-          </Button>
         </div>
       )}
     </div>

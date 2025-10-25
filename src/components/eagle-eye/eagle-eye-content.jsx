@@ -29,9 +29,11 @@ export default function EagleEyeContent() {
         location: "1221 Broadway",
         phone: "(510) 555-1234",
       },
-      eta: "08:30 AM",
-      status: "On Time",
-      statusColor: "green", // Green for on time
+      eta: "08:34 AM",
+      scheduled: "08:30 AM",
+      driverETA: "08:52 AM", // Driver's actual ETA
+      status: "Late",
+      statusColor: "red", // Red for late
     },
     {
       id: "RT1002",
@@ -42,8 +44,10 @@ export default function EagleEyeContent() {
         phone: "(510) 555-5678",
       },
       eta: "09:15 AM",
-      status: "Delayed",
-      statusColor: "red", // Red for delayed
+      scheduled: "09:00 AM",
+      driverETA: "09:20 AM", // Driver's actual ETA
+      status: "Late",
+      statusColor: "red", // Red for late
     },
     {
       id: "RT1003",

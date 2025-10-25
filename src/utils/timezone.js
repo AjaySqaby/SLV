@@ -29,7 +29,21 @@ export const getUserTimezone = () => {
     if (typeof window === 'undefined') {
       return 'UTC'; // Default to UTC on server side
     }
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    // Get timezone from browser
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('🌍 Detected timezone:', timezone);
+    
+    // Log additional timezone info
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const offsetHours = Math.abs(offset) / 60;
+    const offsetSign = offset <= 0 ? '+' : '-';
+    
+    console.log(`🕐 Timezone offset: UTC${offsetSign}${offsetHours}`);
+    console.log(`📍 Current time: ${now.toLocaleString()}`);
+    
+    return timezone;
   } catch (error) {
     console.warn('Could not detect user timezone:', error);
     return 'UTC';
