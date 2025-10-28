@@ -31,14 +31,26 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
     { address: 'School Drop-off', type: 'dropoff', time: '08:25', students: 7 }
   ]);
 
+  // Students management state
+  const [students, setStudents] = useState([
+    { id: 1, name: 'John Doe', grade: '5th', address: '123 Main St', pickupTime: '08:00', stopId: 0 },
+    { id: 2, name: 'Jane Smith', grade: '4th', address: '456 Oak Ave', pickupTime: '08:00', stopId: 0 },
+    { id: 3, name: 'Mike Johnson', grade: '6th', address: '789 Pine Rd', pickupTime: '08:05', stopId: 1 },
+    { id: 4, name: 'Sarah Wilson', grade: '5th', address: '321 Elm St', pickupTime: '08:10', stopId: 2 },
+    { id: 5, name: 'Tom Brown', grade: '4th', address: '654 Maple Dr', pickupTime: '08:15', stopId: 3 },
+    { id: 6, name: 'Lisa Davis', grade: '6th', address: '987 Cedar Ln', pickupTime: '08:15', stopId: 3 },
+    { id: 7, name: 'Alex Miller', grade: '5th', address: '147 Birch Way', pickupTime: '08:15', stopId: 3 }
+  ]);
+
   if (!isOpen) return null;
 
   const tabs = [
     { id: 0, label: "Basic Info" },
     { id: 1, label: "Route Stops" },
-    { id: 2, label: "Schedule" },
-    { id: 3, label: "Assignment" },
-    { id: 4, label: "Exceptions" }
+    { id: 2, label: "Students" },
+    { id: 3, label: "Schedule" },
+    { id: 4, label: "Assignment" },
+    { id: 5, label: "Exceptions" }
   ];
 
   const handleInputChange = (field, value) => {
@@ -52,6 +64,29 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
     // Save logic here
     console.log('Saving route:', formData);
     onClose();
+  };
+
+  // Student management functions
+  const addStudent = () => {
+    const newStudent = {
+      id: Math.max(...students.map(s => s.id)) + 1,
+      name: '',
+      grade: '',
+      address: '',
+      pickupTime: '08:00',
+      stopId: 0
+    };
+    setStudents(prev => [newStudent, ...prev]); // Add at the beginning instead of end
+  };
+
+  const updateStudent = (id, field, value) => {
+    setStudents(prev => prev.map(student => 
+      student.id === id ? { ...student, [field]: value } : student
+    ));
+  };
+
+  const removeStudent = (id) => {
+    setStudents(prev => prev.filter(student => student.id !== id));
   };
 
   const renderBasicInfo = () => (
@@ -132,16 +167,74 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
   const renderRouteStops = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Route Stops</h3>
-        <Button
-          variant="secondary"
-          className="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all duration-200"
-          onClick={() => setStops(prev => [...prev, { address: '', type: 'pickup', time: '08:30', students: 1 }])}
-        >
-          <Plus className="w-4 h-4" />
-          Add Stop
-        </Button>
+        <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Route Stops & Map</h3>
+        <div className="flex gap-2">
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all duration-200"
+            onClick={() => setStops(prev => [...prev, { address: '', type: 'pickup', time: '08:30', students: 1 }])}
+          >
+            <Plus className="w-4 h-4" />
+            Add Stop
+          </Button>
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all duration-200"
+          >
+            <Map className="w-4 h-4" />
+            View Map
+          </Button>
+        </div>
       </div>
+
+      {/* Map Preview */}
+      <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <h4 className="text-md font-semibold mb-4" style={{ color: '#111827' }}>Route Map Preview</h4>
+        <div className="h-64 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg border border-gray-200 relative overflow-hidden">
+          {/* Map Background Pattern */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZGRkIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')]"></div>
+          </div>
+
+          {/* Route Line */}
+          <div className="absolute inset-0">
+            <svg className="w-full h-full">
+              <path
+                d="M 50 50 Q 150 100 250 80 Q 350 60 450 120"
+                stroke="#3b82f6"
+                strokeWidth="3"
+                fill="none"
+                strokeDasharray="5,5"
+              />
+            </svg>
+          </div>
+
+          {/* Stop Markers */}
+          {stops.map((stop, index) => (
+            <div
+              key={index}
+              className="absolute w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg"
+              style={{
+                backgroundColor: stop.type === 'dropoff' ? '#f97316' : '#10b981',
+                top: `${20 + (index * 15)}%`,
+                left: `${10 + (index * 20)}%`
+              }}
+            >
+              {index + 1}
+            </div>
+          ))}
+
+          {/* Map Controls */}
+          <div className="absolute top-4 right-4 flex flex-col gap-2">
+            <button className="bg-white px-3 py-2 rounded-lg shadow-md text-xs font-medium text-gray-700 border border-gray-200 hover:bg-gray-50">
+              Edit Route
+            </button>
+            <button className="bg-white px-3 py-2 rounded-lg shadow-md text-xs font-medium text-gray-700 border border-gray-200 hover:bg-gray-50">
+              Optimize
+            </button>
+          </div>
+        </div>
+      </Card>
 
       {stops.map((stop, index) => (
         <Card key={index} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
@@ -155,10 +248,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             <div className="flex-1 grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
-                  Address
+                  Address/Location
                 </label>
                 <Input
-                  placeholder="Enter stop address"
+                  placeholder="Enter stop address or location"
                   value={stop.address}
                   onChange={(e)=> setStops(prev => prev.map((s,i)=> i===index ? { ...s, address: e.target.value } : s))}
                 />
@@ -205,6 +298,106 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             >
               <Trash2 className="w-4 h-4" />
             </Button>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+
+  const renderStudents = () => (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-semibold" style={{ color: '#111827' }}>Students Management</h3>
+        <Button
+          variant="secondary"
+          className="flex items-center gap-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all duration-200"
+          onClick={addStudent}
+        >
+          <Plus className="w-4 h-4" />
+          Add Student
+        </Button>
+      </div>
+
+      {students.map((student) => (
+        <Card key={student.id} className="p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-start gap-4">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold bg-blue-500">
+              {student.id}
+            </div>
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
+                  Student Name
+                </label>
+                <Input
+                  placeholder="Enter student name"
+                  value={student.name}
+                  onChange={(e) => updateStudent(student.id, 'name', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
+                  Grade
+                </label>
+                <Select
+                  value={student.grade}
+                  onChange={(value) => updateStudent(student.id, 'grade', value)}
+                  options={[
+                    { value: "1st", label: "1st Grade" },
+                    { value: "2nd", label: "2nd Grade" },
+                    { value: "3rd", label: "3rd Grade" },
+                    { value: "4th", label: "4th Grade" },
+                    { value: "5th", label: "5th Grade" },
+                    { value: "6th", label: "6th Grade" },
+                    { value: "7th", label: "7th Grade" },
+                    { value: "8th", label: "8th Grade" }
+                  ]}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
+                  Address
+                </label>
+                <Input
+                  placeholder="Enter student address"
+                  value={student.address}
+                  onChange={(e) => updateStudent(student.id, 'address', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
+                  Pickup Time
+                </label>
+                <Input
+                  type="time"
+                  value={student.pickupTime}
+                  onChange={(e) => updateStudent(student.id, 'pickupTime', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111827' }}>
+                  Assigned Stop
+                </label>
+                <Select
+                  value={student.stopId}
+                  onChange={(value) => updateStudent(student.id, 'stopId', Number(value))}
+                  options={stops.map((stop, index) => ({
+                    value: index,
+                    label: `Stop ${index + 1}: ${stop.address}`
+                  }))}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-red-600 hover:text-red-800 hover:bg-red-100 transition-all duration-200"
+                onClick={() => removeStudent(student.id)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </Card>
       ))}
@@ -446,9 +639,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
             >
               {tab.id === 0 && <Route className="w-4 h-4" />}
               {tab.id === 1 && <MapPin className="w-4 h-4" />}
-              {tab.id === 2 && <Clock className="w-4 h-4" />}
-              {tab.id === 3 && <User className="w-4 h-4" />}
-              {tab.id === 4 && <Calendar className="w-4 h-4" />}
+              {tab.id === 2 && <Users className="w-4 h-4" />}
+              {tab.id === 3 && <Clock className="w-4 h-4" />}
+              {tab.id === 4 && <User className="w-4 h-4" />}
+              {tab.id === 5 && <Calendar className="w-4 h-4" />}
               {tab.label}
             </button>
           ))}
@@ -458,9 +652,10 @@ export default function RouteEditModal({ isOpen, onClose, routeId }) {
         <div className="p-6 overflow-y-auto flex-1">
           {activeTab === 0 && renderBasicInfo()}
           {activeTab === 1 && renderRouteStops()}
-          {activeTab === 2 && renderSchedule()}
-          {activeTab === 3 && renderAssignment()}
-          {activeTab === 4 && renderExceptions()}
+          {activeTab === 2 && renderStudents()}
+          {activeTab === 3 && renderSchedule()}
+          {activeTab === 4 && renderAssignment()}
+          {activeTab === 5 && renderExceptions()}
         </div>
 
         {/* Footer */}

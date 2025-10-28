@@ -10,6 +10,7 @@ import StatusBadge from '@/components/ui/StatusBadge';
 import DriverDetailModal from '@/components/drivers/DriverDetailModal';
 import StudentProfilePage from '@/components/students/StudentProfilePage';
 import Collapse from '@/components/ui/Collapse';
+import RouteEditModal from './RouteEditModal';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -17,6 +18,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   
   // Accordion state - only one collapse can be open at a time
   const [openCollapse, setOpenCollapse] = useState(null);
@@ -177,10 +179,19 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
                 {routeData.status}
               </div>
-              <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
-                <Eye className="w-4 h-4" />
-                <span>View Route</span>
-              </button>
+              <div className="flex gap-2">
+                <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
+                  <Eye className="w-4 h-4" />
+                  <span>View Route</span>
+                </button>
+                <button 
+                  onClick={() => setShowEditModal(true)}
+                  className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--purple-100)] text-[var(--purple-600)] hover:bg-[var(--purple-200)]"
+                >
+                  <Edit className="w-4 h-4" />
+                  <span>Edit Route</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -792,6 +803,15 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Route Edit Modal */}
+      {showEditModal && (
+        <RouteEditModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          routeId={routeId}
+        />
       )}
     </div>
   );
