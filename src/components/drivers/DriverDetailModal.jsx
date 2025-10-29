@@ -15,9 +15,9 @@ export default function DriverDetailModal({ isOpen, onClose, driverId, onBack })
       onBack={onBack}
       title="Driver Details" 
       size="xl" 
-      widthClass="w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden"
+      widthClass="w-[95vw] h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] max-w-7xl mx-4 overflow-hidden"
     >
-      <div className="max-h-[calc(90vh-200px)] overflow-y-auto">
+      <div className="max-h-[calc(100vh-3rem-200px)] overflow-y-auto">
         <DriverDetailContent driverId={driverId} />
       </div>
     </BaseModal>

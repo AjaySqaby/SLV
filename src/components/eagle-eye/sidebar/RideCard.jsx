@@ -85,14 +85,15 @@ export default function RideCard({ ride, onViewRide, onSmartSuggest }) {
         <div className="space-y-2">
           
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 text-xs font-medium text-[var(--heading)]">
+            <div className="flex items-center gap-1 text-xs">
               <Clock size={12} className="text-[var(--muted-text)]" />
-              <span>ETA: </span>
+              <span className="text-[var(--blue-600)]">ETA: </span>
               <DualTimeDisplay 
                 rideTime={ride.eta}
                 rideTimezone="America/Los_Angeles"
                 showLabels={false}
-                className="text-xs font-medium text-[var(--heading)]"
+                className="text-xs text-[var(--blue-600)]"
+                compact={true}
               />
             </div>
             <Button

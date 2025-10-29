@@ -455,8 +455,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
           )}
         </div>
 
-        {/* Bottom Row - Tabs and Action Buttons - Centered */}
-        <div className="flex items-center justify-center">
+        {/* Bottom Row - Tabs and Action Buttons */}
+        <div className="flex items-center justify-start">
           <div className="flex items-center space-x-2">
             {/* Tabs */}
             <button
@@ -500,47 +500,6 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </button>
 
             {/* Action Buttons */}
-            <Button
-              variant="primary"
-              onClick={handleForceStart}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
-              style={{ backgroundColor: 'var(--green-600)' }}
-            >
-              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
-                <Play className="w-2.5 h-2.5" />
-              </div>
-              <span>Force Start</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleForceComplete}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
-              style={{ backgroundColor: 'var(--secondary)' }}
-            >
-              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
-                <Check className="w-2.5 h-2.5" />
-              </div>
-              <span>Mark Complete</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleForceNoShow}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent"
-              style={{ backgroundColor: 'var(--red-600)' }}
-            >
-              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
-                <UserX className="w-2.5 h-2.5" />
-              </div>
-              <span>Force No Show</span>
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleDuplicateRide}
-              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
-            >
-              <Copy className="w-4 h-4" />
-              <span>Duplicate</span>
-            </Button>
             <Button
               variant="secondary"
               onClick={handleManageTrip}

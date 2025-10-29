@@ -3,10 +3,18 @@
 import { useState } from "react";
 import { X, Settings, Eye, User, Car, Star } from "lucide-react";
 import Button from "@/components/ui/Button";
+import ForceStartModal from './ForceStartModal';
+import ForceCompleteModal from './ForceCompleteModal';
+import ForceNoShowModal from './ForceNoShowModal';
+import DuplicateModal from './DuplicateModal';
 
 export default function ManageTripModal({ isOpen, onClose, rideId, onConfirm }) {
   const [driverAssignment, setDriverAssignment] = useState('keep-current');
   const [vehicleAssignment, setVehicleAssignment] = useState('keep-current');
+  const [showForceStartModal, setShowForceStartModal] = useState(false);
+  const [showForceCompleteModal, setShowForceCompleteModal] = useState(false);
+  const [showForceNoShowModal, setShowForceNoShowModal] = useState(false);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
 
   const handleSubmit = () => {
     onConfirm({
@@ -48,6 +56,65 @@ export default function ManageTripModal({ isOpen, onClose, rideId, onConfirm }) 
             <button onClick={onClose} className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
               <X className="w-6 h-6 text-gray-500" />
             </button>
+          </div>
+        </div>
+
+        {/* Action Buttons Section */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant="primary"
+              onClick={() => setShowForceStartModal(true)}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+              style={{ backgroundColor: 'var(--green-600)' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <div className="w-0 h-0 border-l-[4px] border-l-white border-y-[3px] border-y-transparent ml-0.5"></div>
+              </div>
+              <span>Force Start</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowForceCompleteModal(true)}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+              style={{ backgroundColor: '#06b6d4' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span>Mark Complete</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowForceNoShowModal(true)}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 text-white border-transparent flex-shrink-0 whitespace-nowrap"
+              style={{ backgroundColor: '#ef4444' }}
+            >
+              <div className="w-4 h-4 border-2 border-white rounded-full flex items-center justify-center">
+                <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span>Force No-Show</span>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDuplicateModal(true)}
+              className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
+              style={{
+                backgroundColor: 'var(--gray-100)',
+                color: 'var(--heading)',
+                border: '1px solid var(--gray-200)'
+              }}
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+              </svg>
+              <span>Duplicate</span>
+            </Button>
           </div>
         </div>
 
@@ -222,6 +289,47 @@ export default function ManageTripModal({ isOpen, onClose, rideId, onConfirm }) 
           </Button>
         </div>
       </div>
+
+      {/* Action Modals */}
+      <ForceStartModal
+        isOpen={showForceStartModal}
+        onClose={() => setShowForceStartModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force Start confirmed:', data);
+          setShowForceStartModal(false);
+        }}
+      />
+      
+      <ForceCompleteModal
+        isOpen={showForceCompleteModal}
+        onClose={() => setShowForceCompleteModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force Complete confirmed:', data);
+          setShowForceCompleteModal(false);
+        }}
+      />
+      
+      <ForceNoShowModal
+        isOpen={showForceNoShowModal}
+        onClose={() => setShowForceNoShowModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Force No-Show confirmed:', data);
+          setShowForceNoShowModal(false);
+        }}
+      />
+      
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => setShowDuplicateModal(false)}
+        rideId={rideId}
+        onConfirm={(data) => {
+          console.log('Duplicate confirmed:', data);
+          setShowDuplicateModal(false);
+        }}
+      />
     </div>
   );
 }

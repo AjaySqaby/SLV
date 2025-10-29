@@ -30,11 +30,11 @@ export default function EditTripModal({ isOpen, onClose, rideId, onConfirm, init
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl p-6 w-[82rem] mx-4"
+        className="bg-white rounded-2xl p-8 w-full max-w-6xl max-h-[90vh] overflow-y-auto mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
               <Edit className="w-5 h-5 text-white" />
@@ -47,7 +47,7 @@ export default function EditTripModal({ isOpen, onClose, rideId, onConfirm, init
         </div>
 
         {/* Edit Form */}
-        <div className="space-y-6">
+        <div className="space-y-6 mb-8">
           {/* Pickup Address */}
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: 'var(--heading)' }}>
@@ -108,7 +108,7 @@ export default function EditTripModal({ isOpen, onClose, rideId, onConfirm, init
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-3 mt-8">
+        <div className="flex items-center justify-end gap-4 pt-6 border-t sticky bottom-0 bg-white z-10" style={{ borderColor: 'var(--gray-200)' }}>
           <Button variant="secondary" onClick={onClose} className="px-6 py-2">
             Cancel
           </Button>

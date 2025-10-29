@@ -247,10 +247,10 @@ export default function EmployeesContent() {
           onClick={handleViewModalClose}
         >
           <div 
-            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
+            className="bg-white rounded-2xl w-[95vw] h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] max-w-7xl mx-4 overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)] flex-shrink-0">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
                   <Users className="w-6 h-6 text-[var(--primary)]" />
@@ -267,7 +267,7 @@ export default function EmployeesContent() {
                 <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
+            <div className="p-6 overflow-y-auto flex-1">
               {/* Single Collapse with All Employee Information */}
               <Collapse 
                 title="Employee Information" 
@@ -278,8 +278,9 @@ export default function EmployeesContent() {
                 }
                 isOpen={openCollapse === 'employee-info'}
                 onToggle={() => handleCollapseToggle('employee-info')}
+                contentClassName="[&>*]:!mt-0"
               >
-                <div className="space-y-6">
+                <div className="[&>*]:!mt-0 [&>*]:!mb-0 [&>*>*]:!mt-0 [&>*>*]:!mb-0">
                   {/* Employee Profile Header */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
@@ -446,8 +447,8 @@ export default function EmployeesContent() {
               </Collapse>
             </div>
             
-            {/* Fixed Footer Buttons */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+            {/* Footer Buttons */}
+            <div className="border-t border-[var(--gray-200)] p-6 flex-shrink-0">
               <div className="flex justify-end gap-3">
                 <Button 
                   variant="secondary" 
@@ -480,10 +481,10 @@ export default function EmployeesContent() {
           onClick={handleEditModalClose}
         >
           <div 
-            className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
+            className="bg-white rounded-2xl w-[95vw] h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] max-w-7xl mx-4 overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)] flex-shrink-0">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
                   <Edit className="w-6 h-6 text-[var(--primary)]" />
@@ -500,7 +501,7 @@ export default function EmployeesContent() {
                 <X className="w-6 h-6 text-[var(--gray-500)]" />
               </button>
             </div>
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
+            <div className="p-6 overflow-y-auto flex-1">
               <form className="space-y-6">
                 {/* Personal Information Section */}
                 <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
@@ -597,7 +598,7 @@ export default function EmployeesContent() {
                 </div>
               </form>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-[var(--gray-200)] p-6">
+            <div className="border-t border-[var(--gray-200)] p-6 flex-shrink-0">
               <div className="flex justify-end gap-3">
                 <Button 
                   variant="secondary" 

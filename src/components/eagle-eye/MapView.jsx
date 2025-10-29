@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MapPin, Phone, Car, Clock, User, Eye, Hash } from 'lucide-react';
+import DualTimeDisplay from "@/components/ui/DualTimeDisplay";
 
 const mockDrivers = [
   {
@@ -191,7 +192,7 @@ export default function MapView({ onViewRide }) {
               {/* Hover Tooltip */}
               {hoveredDriver?.id === driver.id && (
                 <div 
-                  className="absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl border border-gray-200 p-4 min-w-[280px] animate-in fade-in zoom-in duration-200"
+                  className="absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-2xl border border-gray-200 p-4 min-w-[420px] max-w-[420px] animate-in fade-in zoom-in duration-200"
                   style={{ zIndex: 1001 }}
                   onMouseEnter={() => setHoveredDriver(driver)}
                   onMouseLeave={() => setHoveredDriver(null)}
@@ -220,39 +221,51 @@ export default function MapView({ onViewRide }) {
                       <div className="space-y-1 text-xs text-gray-600">
                         <div className="flex items-center">
                           <Car className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.vehicle}</span>
+                          <span className="whitespace-nowrap">{driver.vehicle}</span>
                         </div>
                         <div className="flex items-center">
                           <Hash className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.plateNumber}</span>
+                          <span className="whitespace-nowrap">{driver.plateNumber}</span>
                         </div>
                         <div className="flex items-center">
                           <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">{driver.address}</span>
+                          <span className="whitespace-nowrap">{driver.address}</span>
                         </div>
                         {driver.rideId && (
                           <div className="flex items-center">
                             <Clock className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                            <span className="truncate">Route {driver.rideId} • ETA {driver.eta}</span>
+                            <span className="whitespace-nowrap">Route {driver.rideId} • ETA {driver.eta}</span>
                           </div>
                         )}
                         <div className="flex items-center">
                           <MapPin className="w-3 h-3 mr-1.5 text-gray-400 flex-shrink-0" />
-                          <span className="truncate">Next Stop: West Campus</span>
+                          <span className="whitespace-nowrap">Next Stop: West Campus</span>
                         </div>
                       </div>
 
                       {/* Time Information */}
                       <div className="mt-3 pt-2 border-t border-gray-100">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="text-gray-600">Scheduled:</span>
-                            <span className="font-medium">{driver.scheduledTime || "08:30 AM"}</span>
+                        <div className="space-y-1.5">
+                          <div className="text-xs text-[var(--blue-600)] whitespace-nowrap">
+                            Scheduled: <DualTimeDisplay
+                              rideTime={driver.scheduledTime || "08:30 AM"}
+                              rideTimezone="America/Los_Angeles"
+                              showLabels={false}
+                              className="text-[var(--blue-600)]"
+                              compact={true}
+                            />
                           </div>
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="text-gray-600">Driver ETA:</span>
-                            <span className="font-medium text-green-600">{driver.driverETA || driver.eta}</span>
-                          </div>
+                          {driver.driverETA && (
+                            <div className="text-xs text-[var(--success-dark)] whitespace-nowrap">
+                              Driver ETA: <DualTimeDisplay
+                                rideTime={driver.driverETA || driver.eta}
+                                rideTimezone="America/Los_Angeles"
+                                showLabels={false}
+                                className="text-[var(--success-dark)]"
+                                compact={true}
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
 
