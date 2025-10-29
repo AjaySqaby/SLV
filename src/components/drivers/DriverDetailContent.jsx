@@ -21,6 +21,7 @@ const BlockedStudentsTab = dynamic(() => import("./BlockedStudentsTab"), { ssr: 
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import Collapse from "@/components/ui/Collapse";
 
 // Mock data - in real app, this would come from API
 const getDriverData = (driverId) => {
@@ -443,6 +444,13 @@ export default function DriverDetailContent({ driverId }) {
   const [showVehicleModal, setShowVehicleModal] = useState(false);
   const [showEditVehicleModal, setShowEditVehicleModal] = useState(false);
   const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
+  const [openCollapse, setOpenCollapse] = useState(null);
+
+  // Accordion state - only one collapse can be open at a time
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
+
   const driverData = getDriverData(driverId);
   
   if (!driverData) {
@@ -482,20 +490,20 @@ export default function DriverDetailContent({ driverId }) {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Main Driver Details Card - Single Card Design */}
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
-        {/* Header Section */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-white">
-              <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold">Driver Details</h3>
-        </div>
-
-        {/* Driver Profile Header */}
+    <div className="space-y-4">
+      {/* Single Collapse with All Information */}
+      <Collapse 
+        title="Driver Information" 
+        icon={
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        }
+        isOpen={openCollapse === 'driver-info'}
+        onToggle={() => handleCollapseToggle('driver-info')}
+      >
+        <div className="space-y-6">
+          {/* Driver Profile Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
@@ -714,43 +722,44 @@ export default function DriverDetailContent({ driverId }) {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Button 
-            variant="secondary" 
-            className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
-            onClick={() => setShowDocumentsModal(true)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Manage Documents
-          </Button>
-          <Button 
-            variant="secondary" 
-            className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
-            onClick={() => setShowVehicleModal(true)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            Manage Vehicle Information
-          </Button>
-        </div>
-      </div>
+         {/* Action Buttons */}
+         <div className="mt-6 pt-6 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
+           <Button 
+             variant="secondary" 
+             className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
+             onClick={() => setShowDocumentsModal(true)}
+           >
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+               <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+             </svg>
+             Manage Documents
+           </Button>
+           <Button 
+             variant="secondary" 
+             className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
+             onClick={() => setShowVehicleModal(true)}
+           >
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+               <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+               <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+             </svg>
+             Manage Vehicle Information
+           </Button>
+         </div>
 
-      {/* Driver Tabs */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)]">
-          <DriverTabs 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab} 
-          tabs={tabs}
-          />
-        <div className="p-6">
-          {renderTabContent()}
-        </div>
-      </div>
+         {/* Driver Tabs Section */}
+         <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+           <DriverTabs 
+             activeTab={activeTab} 
+             onTabChange={setActiveTab} 
+             tabs={tabs}
+           />
+           <div className="mt-4">
+             {renderTabContent()}
+           </div>
+         </div>
+         </div>
+       </Collapse>
 
       {/* Documents Modal */}
       {showDocumentsModal && (

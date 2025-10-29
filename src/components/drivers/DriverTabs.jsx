@@ -22,7 +22,7 @@ export default function DriverTabs({ tabs, activeTab, onTabChange }) {
   };
 
   return (
-    <div className="flex mt-2 ml-8">
+    <div className="flex mt-2">
       {tabs.map((tab) => (
         <button
           key={tab.id}

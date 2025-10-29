@@ -57,6 +57,7 @@ import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import Select from '@/components/ui/Select'
 import Input from '@/components/ui/Input'
+import Collapse from '@/components/ui/Collapse'
 
 export default function StudentProfilePage({ studentId }) {
   const router = useRouter()
@@ -64,6 +65,12 @@ export default function StudentProfilePage({ studentId }) {
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showAddGuardianModal, setShowAddGuardianModal] = useState(false)
   const [showBlockDriverModal, setShowBlockDriverModal] = useState(false)
+  const [openCollapse, setOpenCollapse] = useState(null)
+
+  // Accordion state - only one collapse can be open at a time
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
   const [newGuardian, setNewGuardian] = useState({
     name: '',
     phone: '',
@@ -261,16 +268,19 @@ export default function StudentProfilePage({ studentId }) {
 
       {/* Main Content */}
       <div className="p-6">
-        {/* Single Student Details Card - Matching Campus Design */}
-        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <h3 className="text-lg font-semibold">Student Details</h3>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Single Collapse with All Information */}
+        <Collapse 
+          title="Student Information" 
+          icon={
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-green-600">
+              <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          }
+          isOpen={openCollapse === 'student-info'}
+          onToggle={() => handleCollapseToggle('student-info')}
+        >
+          <div className="space-y-6">
+            {/* Student Details Section */}
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
                 <Hash className="w-4 h-4 text-[var(--blue-600)]" />
@@ -385,10 +395,9 @@ export default function StudentProfilePage({ studentId }) {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Tabs Section */}
-        <div className="mt-6 bg-white rounded-lg border border-gray-100 p-6 shadow-lg">
+          {/* Tabs Section */}
+          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
           <div className="flex items-center space-x-2 mb-6">
             <button 
               onClick={() => setActiveTab('routes')}
@@ -665,7 +674,8 @@ export default function StudentProfilePage({ studentId }) {
               </>
             )}
           </div>
-        </div>
+          </div>
+        </Collapse>
       </div>
 
       {/* Block Driver Modal */}

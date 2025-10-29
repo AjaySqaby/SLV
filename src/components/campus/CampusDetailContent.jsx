@@ -25,6 +25,7 @@ import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import Tabs from '@/components/ui/Tabs'
 import Table from '@/components/ui/Table'
+import Collapse from '@/components/ui/Collapse'
 import StudentsTab from '@/components/campus/details/StudentsTab'
 import RoutesTab from '@/components/campus/details/RoutesTab'
 import RidesTab from '@/components/campus/details/RidesTab'
@@ -35,6 +36,12 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
   const [isEditing, setIsEditing] = useState(isEditMode)
   const [editedCampusData, setEditedCampusData] = useState(null)
   const [holidays, setHolidays] = useState([])
+  const [openCollapse, setOpenCollapse] = useState(null)
+
+  // Accordion state - only one collapse can be open at a time
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -340,15 +347,17 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
           </div>
         </div>
 
-        {/* Single Campus Details Card - Matching District Modal Design */}
-        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
-              <Building2 className="w-5 h-5 text-white" />
-            </div>
-            <h3 className="text-lg font-semibold">Campus Details</h3>
-          </div>
-          
+        {/* Single Collapse with All Information */}
+        <Collapse 
+          title="Campus Information" 
+          icon={
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-green-600">
+              <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          }
+          isOpen={openCollapse === 'campus-info'}
+          onToggle={() => handleCollapseToggle('campus-info')}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
@@ -530,67 +539,63 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
                 </div>
               </div>
             </div>
+
+            {/* Campus Tabs Section */}
+            <div className="pt-6 border-t border-[var(--gray-200)]">
+              <div className="flex items-center space-x-2 mb-6">
+                <button 
+                  onClick={() => setActiveTab(0)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 0 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Users className="w-4 h-4" />
+                  Students
+                </button>
+                <button 
+                  onClick={() => setActiveTab(1)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 1 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Route className="w-4 h-4" />
+                  Routes
+                </button>
+                <button 
+                  onClick={() => setActiveTab(2)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 2 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Car className="w-4 h-4" />
+                  Rides
+                </button>
+                <button 
+                  onClick={() => setActiveTab(3)}
+                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                    activeTab === 3 
+                      ? 'text-white' 
+                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                  }`}
+                  style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Holidays & Exceptions
+                </button>
+              </div>
+              {renderTabContent()}
+            </div>
           </div>
-        </div>
-
-
-        {/* Tabs */}
-      
-
-        {/* Tab Content */}
-        <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] p-6">
-        <div className="flex items-center space-x-2 mb-6">
-            <button 
-              onClick={() => setActiveTab(0)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 0 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
-            >
-              <Users className="w-4 h-4" />
-              Students
-            </button>
-            <button 
-              onClick={() => setActiveTab(1)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 1 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
-            >
-              <Route className="w-4 h-4" />
-              Routes
-            </button>
-            <button 
-              onClick={() => setActiveTab(2)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 2 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
-            >
-              <Car className="w-4 h-4" />
-              Rides
-            </button>
-            <button 
-              onClick={() => setActiveTab(3)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 3 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
-            >
-              <Calendar className="w-4 h-4" />
-              Holidays & Exceptions
-            </button>
-          </div>
-          {renderTabContent()}
-        </div>
+        </Collapse>
       </div>
     </div>
   )

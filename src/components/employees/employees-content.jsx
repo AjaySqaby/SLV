@@ -19,6 +19,7 @@ import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
+import Collapse from "../ui/Collapse";
 import AddEmployeeModal from "./AddEmployeeModal";
 import EmployeeActionsDropdown from "./EmployeeActionsDropdown";
 
@@ -29,6 +30,12 @@ export default function EmployeesContent() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [openCollapse, setOpenCollapse] = useState(null);
+
+  // Accordion state - only one collapse can be open at a time
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
 
   const handleViewEmployee = (employee) => {
     setSelectedEmployee(employee);
@@ -261,40 +268,42 @@ export default function EmployeesContent() {
               </button>
             </div>
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
-              {/* Main Employee Details Card - Single Card Design */}
-              <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-200)] p-6 mb-8">
-                {/* Header Section */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
-                    <Users className="w-5 h-5 text-white" />
+              {/* Single Collapse with All Employee Information */}
+              <Collapse 
+                title="Employee Information" 
+                icon={
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                }
+                isOpen={openCollapse === 'employee-info'}
+                onToggle={() => handleCollapseToggle('employee-info')}
+              >
+                <div className="space-y-6">
+                  {/* Employee Profile Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                        <User className="w-8 h-8 text-[var(--purple-600)]" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-2xl text-[var(--primary-black)]">{selectedEmployee.name}</div>
+                        <div className="text-sm text-[var(--muted-text)]">Employee ID: {selectedEmployee.id}</div>
+                        <div className="text-sm text-[var(--muted-text)]">Title: {selectedEmployee.title}</div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {selectedEmployee.status}
+                      </div>
+                      <div className="text-sm text-[var(--muted-text)]">
+                        Performance: 4.8/5
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold">Employee Details</h3>
-                </div>
 
-                {/* Employee Profile Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                      <User className="w-8 h-8 text-[var(--purple-600)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-semibold text-2xl text-[var(--primary-black)]">{selectedEmployee.name}</div>
-                      <div className="text-sm text-[var(--muted-text)]">Employee ID: {selectedEmployee.id}</div>
-                      <div className="text-sm text-[var(--muted-text)]">Title: {selectedEmployee.title}</div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {selectedEmployee.status}
-                    </div>
-                    <div className="text-sm text-[var(--muted-text)]">
-                      Performance: 4.8/5
-                    </div>
-                  </div>
-                </div>
-
-                {/* Employee Information Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Employee Information Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
                       <User className="w-4 h-4 text-[var(--blue-600)]" />
@@ -434,6 +443,7 @@ export default function EmployeesContent() {
                   </div>
                 </div>
               </div>
+              </Collapse>
             </div>
             
             {/* Fixed Footer Buttons */}
