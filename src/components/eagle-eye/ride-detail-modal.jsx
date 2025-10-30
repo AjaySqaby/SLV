@@ -26,6 +26,9 @@ import {
   FileText,
   AlertTriangle,
   Info,
+  Star,
+  Settings,
+  Edit,
 } from "lucide-react";
 import { FaPlay, FaUsers, FaHistory } from "react-icons/fa";
 import Button from "@/components/ui/Button";
@@ -197,6 +200,7 @@ export default function RideDetailModal({
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showEditTripModal, setShowEditTripModal] = useState(false)
   const [showDriverDetailModal, setShowDriverDetailModal] = useState(false)
+  
 
   // Find the driver data based on rideId
   const selectedDriver = mockDrivers.find(driver => driver.rideId === rideId) || mockDrivers[0];
@@ -359,24 +363,10 @@ export default function RideDetailModal({
               <Route className="w-5 h-5 text-[var(--blue-600)]" />
               <Clock className="w-5 h-5 text-[var(--blue-600)]" />
               <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-              <div className="flex items-center gap-3">
-                <StatusBadge status={rideStatus} fontSize="text-lg" />
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-4 h-4 rounded-full border border-white shadow-sm"
-                    style={{
-                      backgroundColor: getStatusCircleColor(rideStatus) === 'bg-green-500' ? '#10b981' :
-                        getStatusCircleColor(rideStatus) === 'bg-red-500' ? '#ef4444' :
-                          getStatusCircleColor(rideStatus) === 'bg-orange-500' ? '#f97316' :
-                            getStatusCircleColor(rideStatus) === 'bg-black' ? '#000000' :
-                              '#6b7280'
-                    }}
-                  ></div>
-                  <span className="text-sm font-medium text-gray-700">
-                    ETA: {rideData.ride.estimatedArrival}
-                  </span>
-                </div>
-              </div>
+              <StatusBadge status={rideStatus} fontSize="text-lg" />
+              <span className="text-sm font-medium text-gray-700">
+                ETA: {rideData.ride.estimatedArrival}
+              </span>
             </div>
             <button
               onClick={onClose}
@@ -386,59 +376,89 @@ export default function RideDetailModal({
             </button>
           </div>
 
-          {/* Custom Tabs matching RideDetailContent design */}
-          <div className="flex items-center space-x-2 overflow-x-auto custom-scrollbar">
-            {tabList.map((tab) => (
+          {/* Bottom Row - Tabs and Action Buttons */}
+          <div className="flex items-center justify-start">
+            <div className="flex items-center space-x-2">
+              {/* Tabs */}
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className="px-6 py-3 text-sm font-medium !w-max cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
+                onClick={() => setActiveTab(0)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
                 style={{
-                  backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
-                  color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
-                  border: activeTab === tab.id ? 'none' : '1px solid var(--gray-200)',
+                  backgroundColor: activeTab === 0 ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 0 ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === 0 ? 'none' : '1px solid var(--gray-200)',
                   borderRadius: '12px'
                 }}
               >
-                {tab.id === 0 ? (
-                  <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
-                    <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
-                  </div>
-                ) : (
-                  tab.icon && <tab.icon className="w-4 h-4" />
-                )}
-                {tab.label}
+                <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                  <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                </div>
+                TRIP STOPS
               </button>
-            ))}
-            <div className="flex gap-3  pb-2">
+              <button
+                onClick={() => setActiveTab(1)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                style={{
+                  backgroundColor: activeTab === 1 ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 1 ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === 1 ? 'none' : '1px solid var(--gray-200)',
+                  borderRadius: '12px'
+                }}
+              >
+                LIVE TRACKING
+              </button>
+              <button
+                onClick={() => setActiveTab(2)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                style={{
+                  backgroundColor: activeTab === 2 ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 2 ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === 2 ? 'none' : '1px solid var(--gray-200)',
+                  borderRadius: '12px'
+                }}
+              >
+                STOPS
+              </button>
+              <button
+                onClick={() => setActiveTab(3)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                style={{
+                  backgroundColor: activeTab === 3 ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 3 ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === 3 ? 'none' : '1px solid var(--gray-200)',
+                  borderRadius: '12px'
+                }}
+              >
+                STUDENTS
+              </button>
+              <button
+                onClick={() => setActiveTab(4)}
+                className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
+                style={{
+                  backgroundColor: activeTab === 4 ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 4 ? 'var(--on-primary)' : 'var(--muted-text)',
+                  border: activeTab === 4 ? 'none' : '1px solid var(--gray-200)',
+                  borderRadius: '12px'
+                }}
+              >
+                TIMELINE
+              </button>
+
+              {/* Action Buttons */}
               <Button
                 variant="secondary"
                 onClick={() => setShowManageTripModal(true)}
-                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
-                style={{
-                  backgroundColor: 'var(--gray-100)',
-                  color: 'var(--heading)',
-                  border: '1px solid var(--gray-200)'
-                }}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                </svg>
+                <Settings className="w-4 h-4" />
                 <span>Manage Trip</span>
               </Button>
               <Button
                 variant="secondary"
                 onClick={() => setShowEditTripModal(true)}
-                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 flex-shrink-0 whitespace-nowrap"
-                style={{
-                  backgroundColor: 'var(--gray-100)',
-                  color: 'var(--heading)',
-                  border: '1px solid var(--gray-200)'
-                }}
+                className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                </svg>
+                <Edit className="w-4 h-4" />
                 <span>Edit Trip</span>
               </Button>
             </div>
@@ -448,352 +468,317 @@ export default function RideDetailModal({
 
         </div>
 
-        <div className="px-6 pb-6 flex-1 overflow-y-auto">
-          <div className={tabPanelClass}>
-            {activeTab === 0 && (
-              <div className="grid grid-cols-2 gap-8">
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Driver Information</h3>
-                  </div>
-                  <div className="flex items-center mb-4">
-                    {/* Simple Profile Picture */}
-                    <div className="mr-4">
-                      <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                        <img
-                          src={rideData.driver.avatar || "/picture.jpg"}
-                          alt={rideData.driver.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-                        />
-                        <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-                          {rideData.driver.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <button 
-                        onClick={() => setShowDriverDetailModal(true)}
-                        className="font-semibold text-lg text-[var(--primary-black)] hover:text-[var(--blue-600)] hover:underline cursor-pointer transition-colors duration-200"
-                      >
-                        {rideData.driver.name}
-                      </button>
-                      <div className="text-sm text-[var(--muted-text)]">{rideData.driver.phone}</div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-yellow-500 text-base">★</span>
-                        <span className="text-sm font-medium text-[var(--primary-black)]">4.9</span>
-                        <span className="text-xs text-[var(--muted-text)]">/ 5</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2 ml-4">
-                      <Button className="flex items-center gap-1 bg-[var(--gray-100)] text-[var(--primary-black)] px-3 py-1 rounded font-medium text-sm border border-[var(--gray-200)]" variant="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="mr-1">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="17 8 12 3 7 8" />
-                          <line x1="12" y1="3" x2="12" y2="15" />
-                        </svg>
-                        Text
-                      </Button>
-                      <Button className="flex items-center gap-1 bg-[var(--blue)] text-white px-3 py-1 rounded font-medium text-sm" variant="primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="mr-1">
-                          <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        Call
-                      </Button>
+               {/* Main Content - Three-column grid */}
+               <div className="grid grid-cols-12 gap-6 items-start flex-1 px-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {/* Left Sidebar - Clean Detail Stack */}
+          <div className="col-span-3 min-w-0 space-y-4">
+            {/* Driver */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-shadow duration-200"
+              onClick={() => setShowDriverDetailModal(true)}
+            >
+              <div className="flex items-center mb-3">
+                <Users className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Driver</h2>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <img src={rideData.driver.avatar || "/picture.jpg"} alt="Driver" className="w-10 h-10 rounded-full object-cover" />
+                  <div>
+                    <p className="font-medium text-gray-900">{rideData.driver.name}</p>
+                    <div className="flex items-center text-xs text-gray-600">
+                      <Star className="w-3.5 h-3.5 text-yellow-500 mr-1" />
+                      <span>4.9 rating</span>
                     </div>
                   </div>
                 </div>
+                <StatusBadge status={rideStatus} fontSize="text-sm" />
+              </div>
+            </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--green-600)' }}>
-                      <Car className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Vehicle Information</h3>
+            {/* Vehicle */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-shadow duration-200"
+              onClick={() => setShowDriverDetailModal(true)}
+            >
+              <div className="flex items-center mb-3">
+                <Car className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Vehicle</h2>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded bg-blue-50 flex items-center justify-center">
+                    <Car className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center mr-3">
-                          <Car className="w-5 h-5 text-[var(--blue-600)]" />
-                        </div>
-                        <div className="flex-1 flex justify-between">
-                          <span className="text-sm text-[var(--muted-text)]">Vehicle:</span>
-                          <span className="text-sm font-medium">{rideData.vehicle.name}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center mr-3">
-                          <MapPin className="w-5 h-5 text-[var(--green-600)]" />
-                        </div>
-                        <div className="flex-1 flex justify-between">
-                          <span className="text-sm text-[var(--muted-text)]">License Plate:</span>
-                          <span className="text-sm font-medium">{rideData.vehicle.licensePlate}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center mr-3">
-                          <User className="w-5 h-5 text-[var(--purple-600)]" />
-                        </div>
-                        <div className="flex-1 flex justify-between">
-                          <span className="text-sm text-[var(--muted-text)]">Capacity:</span>
-                          <span className="text-sm font-medium">{rideData.vehicle.capacity}</span>
-                        </div>
-                      </div>
-                    </div>
+                    <p className="font-medium text-gray-900">{rideData.vehicle.name}</p>
+                    <p className="text-xs text-gray-600">ID: {rideData.route.id}</p>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
-                      <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Ride Information</h3>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center mr-3">
-                        <Clock className="w-5 h-5 text-[var(--green-600)]" />
-                      </div>
-                      <div className="flex-1 flex justify-between">
-                        <span className="text-sm text-[var(--muted-text)]">Status:</span>
-                        <span className="text-sm font-medium text-[var(--success)]">{rideData.ride.status}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center mr-3">
-                        <Clock className="w-5 h-5 text-[var(--blue-600)]" />
-                      </div>
-                      <div className="flex-1 flex justify-between">
-                        <span className="text-sm text-[var(--muted-text)]">Pickup Time:</span>
-                        <div className="text-sm font-medium">
-                          <DualTimeDisplay rideTime={rideData.ride.pickupTime} rideTimezone="America/Los_Angeles" showLabels={false} />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center mr-3">
-                        <Clock className="w-5 h-5 text-[var(--purple-600)]" />
-                      </div>
-                      <div className="flex-1 flex justify-between">
-                        <span className="text-sm text-[var(--muted-text)]">Estimated Arrival:</span>
-                        <div className="text-sm font-medium">
-                          <DualTimeDisplay rideTime={rideData.ride.estimatedArrival} rideTimezone="America/Los_Angeles" showLabels={false} />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center mr-3">
-                        <MapPin className="w-5 h-5 text-[var(--orange-600)]" />
-                      </div>
-                      <div className="flex-1 flex justify-between">
-                        <span className="text-sm text-[var(--muted-text)]">Distance:</span>
-                        <span className="text-sm font-medium">{rideData.ride.distance}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[var(--pink-100)] flex items-center justify-center mr-3">
-                        <Clock className="w-5 h-5 text-[var(--pink-600)]" />
-                      </div>
-                      <div className="flex-1 flex justify-between">
-                        <span className="text-sm text-[var(--muted-text)]">Duration:</span>
-                        <span className="text-sm font-medium">{rideData.ride.duration}</span>
-                      </div>
-                    </div>
+            {/* Trip Details */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Route className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                  <h2 className="text-lg font-semibold text-gray-900">Trip Details</h2>
+                </div>
+                <Button
+                  variant="secondary"
+                  onClick={() => console.log('View Route')}
+                  className="text-xs px-3 py-1"
+                  style={{
+                    backgroundColor: 'var(--blue-100)',
+                    color: 'var(--blue-600)',
+                    border: '1px solid var(--blue-200)'
+                  }}
+                >
+                  View Route
+                </Button>
+              </div>
+              <div className="grid grid-cols-2 gap-y-3">
+                <div className="text-sm text-gray-500">Route</div>
+                <div className="text-sm font-medium text-gray-900">{rideData.route.id}</div>
+                <div className="text-sm text-gray-500">Duration</div>
+                <div className="text-sm font-medium text-gray-900">{rideData.ride.duration}</div>
+                <div className="text-sm text-gray-500">Distance</div>
+                <div className="text-sm font-medium text-gray-900">{rideData.ride.distance}</div>
+                <div className="text-sm text-gray-500">Stops</div>
+                <div className="text-sm font-medium text-gray-900">{rideData.stops.length}</div>
+                <div className="text-sm text-gray-500">Students</div>
+                <div className="text-sm font-medium text-gray-900">{rideData.students.length}</div>
+                <div className="text-sm text-gray-500">Available Seats</div>
+                <div className="text-sm font-medium text-gray-900">{Math.max(0, 6 - (rideData.students?.length || 0))}</div>
+              </div>
+            </div>
+
+            {/* Schedule */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center mb-3">
+                <Clock className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Schedule</h2>
+              </div>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-green-600"><span className="w-2 h-2 rounded-full bg-green-600 mr-2"></span>Start</div>
+                  <div className="font-medium text-gray-900">{rideData.ride.pickupTime}</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-red-600"><span className="w-2 h-2 rounded-full bg-red-600 mr-2"></span>End</div>
+                  <div className="font-medium text-gray-900">{rideData.ride.estimatedArrival}</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-gray-600"><span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>Completed</div>
+                  <div className="font-medium text-gray-900">
+                    {rideStatus === 'Completed' ? rideData.ride.estimatedArrival : '--'}
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-                      <FaRoute className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Route Information</h3>
-                  </div>
-                  <div>
-                    <div className="mb-4">
-                      <div className="flex items-start">
-                        <div className="w-8 h-8 rounded-full bg-[var(--success)] flex items-center justify-center text-[var(--on-success)] mr-3 mt-1">
-                          <MapPin size={16} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Pickup</p>
-                          <p className="text-sm text-[var(--muted-text)]">{rideData.route.pickup.address}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-start">
-                        <div className="w-8 h-8 rounded-full bg-[var(--danger)] flex items-center justify-center text-[var(--on-danger)] mr-3 mt-1">
-                          <MapPin size={16} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Dropoff</p>
-                          <p className="text-sm text-[var(--muted-text)]">{rideData.route.dropoff.address}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Additional */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="flex items-center mb-3">
+                <FileText className="w-5 h-5 text-[var(--blue-600)] mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Additional</h2>
+              </div>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500">Equipment</span>
+                  <span className="font-medium text-gray-900">Yes</span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500">Billed By</span>
+                  <span className="font-medium text-gray-900 truncate">Seattle Public Schools District</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="bg-[var(--surface-bg)] p-6 rounded-lg col-span-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-[var(--gray-200)] mt-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-600)' }}>
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Students</h3>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    {rideData.students.map((student, index) => {
-                      const iconBackgroundColors = [
-                        'bg-[var(--blue-100)]',
-                        'bg-[var(--green-100)]',
-                        'bg-[var(--purple-100)]'
-                      ];
-                      const iconColors = [
-                        'text-[var(--blue-600)]',
-                        'text-[var(--green-600)]',
-                        'text-[var(--purple-600)]'
-                      ];
-                      return (
-                        <div key={index} className="flex items-center">
-                          {/* Map Pin Style Student Container */}
-                          <div className="relative mr-3">
-                            {/* Main Pin Container */}
-                            <div className="bg-white rounded-lg p-2 shadow-lg border border-[var(--gray-200)] relative">
-                              {/* Student Icon */}
-                              <div className={`w-8 h-8 rounded-full ${iconBackgroundColors[index]} flex items-center justify-center`}>
-                                <GraduationCap size={16} className={iconColors[index]} />
-                              </div>
-                            </div>
-                            {/* Pin Pointer */}
-                            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-white"></div>
-                            {/* Shadow */}
-                            <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-3 border-r-3 border-t-3 border-transparent border-t-gray-300 opacity-50"></div>
+                 {/* Middle Column - Content */}
+                 <div className="col-span-4 min-w-0">
+                   <div className="space-y-4">
+              {/* Content Cards */}
+              <div>
+                {activeTab === 0 && (
+                  <div className="space-y-6">
+                    {/* Trip Route Summary Card */}
+                    <div className="rounded-xl p-6" style={{ backgroundColor: 'var(--light-blue-bg)', border: '1px solid var(--blue-100)' }}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--blue-500)' }}>
+                            <span className="text-white font-bold text-lg">TR</span>
                           </div>
                           <div>
-                            <p className="text-sm font-medium">{student.name}</p>
-                            <p className="text-xs text-[var(--muted-text)]">(Grade {student.grade}) • {student.id}</p>
+                            <h3 className="text-lg font-bold" style={{ color: 'var(--heading)' }}>Trip Route</h3>
+                            <p className="text-sm" style={{ color: 'var(--muted-text)' }}>{rideData.stops.length} stops • {rideData.students.length} student • {rideData.ride.distance} total</p>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 1 && (
-              <div className={tabPanelClass}>
-                {/* Map Section */}
-                <div className="bg-white rounded-lg border overflow-hidden mb-6" style={{ borderColor: 'var(--gray-200)' }}>
-                  <div className="h-96 relative">
-                    <RideMap
-                      embed
-                      className="h-96"
-                      pickup={{ coords: { lat: 33.7489, lng: -84.3880 } }}
-                      dropoff={{ coords: { lat: 33.7740, lng: -84.3510 } }}
-                      status="In-progress"
-                    />
-                  </div>
-                </div>
-
-                {/* Route Events Section */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold mb-6 flex items-center" style={{ color: 'var(--heading)' }}>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: 'var(--blue-600)' }}>
-                      <MapPin className="w-4 h-4 text-white" />
-                    </div>
-                    Route Events
-                    <div className="ml-auto">
-                      <span className="px-3 py-1 text-sm rounded-full" style={{ backgroundColor: 'var(--blue-100)', color: 'var(--blue-700)' }}>
-                        {rideData.events.length} Events
-                      </span>
-                    </div>
-                  </h3>
-
-                  <div className="space-y-4">
-                    {rideData.events.map((event, index) => (
-                      <div
-                        key={index}
-                        className="p-4 rounded-lg shadow-sm"
-                        style={{
-                          backgroundColor: event.severity === "high" ? '#fef2f2' : '#fff7ed'
-                        }}
-                      >
-                        <div className="flex items-start gap-4">
-                          {/* Event Icon with Colored Background */}
-                          <div
-                            className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
-                            style={{
-                              backgroundColor: event.severity === "high" ? '#ef4444' : '#f97316'
-                            }}
-                          >
-                            {event.severity === "high" ? (
-                              <AlertTriangle className="w-6 h-6 text-white" />
-                            ) : (
-                              <Info className="w-6 h-6 text-white" />
-                            )}
-                          </div>
-
-                          {/* Event Details */}
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-3">
-                                <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>
-                                  {event.type}
-                                </h4>
-                                <span
-                                  className="px-3 py-1 text-xs font-medium rounded-full border"
-                                  style={{
-                                    backgroundColor: event.severity === "high" ? '#fee2e2' : '#fed7aa',
-                                    color: event.severity === "high" ? '#b91c1c' : '#c2410c',
-                                    borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
-                                  }}
-                                >
-                                  {event.severity === "high" ? "High Priority" : "Medium Priority"}
-                                </span>
-                              </div>
-                              <div className="text-right">
-                                <span
-                                  className="text-sm font-medium px-3 py-1 rounded-full"
-                                  style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
-                                >
-                                  {event.time}
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="space-y-2">
-                              <p className="text-base font-medium" style={{ color: '#374151' }}>
-                                {event.details}
-                              </p>
-                              {event.location && (
-                                <div
-                                  className="flex items-center gap-2 p-2 rounded-lg"
-                                  style={{ backgroundColor: '#f9fafb' }}
-                                >
-                                  <MapPin className="w-4 h-4" style={{ color: '#dc2626' }} />
-                                  <span className="text-sm font-medium" style={{ color: '#6b7280' }}>
-                                    {event.location}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                        <div className="text-right">
+                          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>Est. Duration</p>
+                          <p className="text-xl font-bold" style={{ color: 'var(--heading)' }}>{rideData.ride.duration}</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+                    </div>
 
-            {activeTab === 2 && (
+                    {/* Stops with vertical line */}
+                    <div className="relative">
+                      {/* Vertical line */}
+                      <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
+
+                      <div className="space-y-8">
+                        {rideData.stops.map((stop, index) => (
+                          <div key={index} className="relative">
+                            <div className="flex items-start gap-4">
+                              {/* Stop number circle */}
+                              <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" 
+                                style={{ backgroundColor: index === 0 ? 'var(--green-600)' : 'var(--orange)' }}>
+                                <span className="text-white font-bold text-lg">{index + 1}</span>
+                              </div>
+
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-2">
+                                  <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>{stop.address}</h4>
+                                  <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                                    <Eye className="w-4 h-4" />
+                                    View Details
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                      <span className="text-white text-xs">{index === 0 ? '🏠' : '🏫'}</span>
+                                    </div>
+                                    <span>{index === 0 ? 'Residential • Door-to-door pickup' : 'School Campus • Main entrance'}</span>
+                                  </div>
+                                  <div className="ml-6">
+                                    <span>Scheduled {stop.time} {index === 0 ? 'Pick up' : 'Drop off'} {stop.students.length} student</span>
+                                  </div>
+                                </div>
+
+                                {/* Student info */}
+                                {stop.students.length > 0 && (
+                                  <div className="mt-4 flex items-center gap-3">
+                                    <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                                      <User className="w-3 h-3 text-white" />
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <button
+                                        className="font-semibold hover:underline cursor-pointer"
+                                        style={{ color: 'var(--blue-600)' }}
+                                      >
+                                        {stop.students[0]}
+                                      </button>
+                                      <span style={{ color: 'var(--muted-text)' }}>Grade 10</span>
+                                      <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>Scheduled</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 1 && (
+                  <div className="space-y-6">
+                    {/* Route Events Section */}
+                    <div className="bg-white rounded-lg p-6 shadow-sm">
+                      <h3 className="text-lg font-semibold mb-6 flex items-center" style={{ color: 'var(--heading)' }}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: 'var(--blue-600)' }}>
+                          <MapPin className="w-4 h-4 text-white" />
+                        </div>
+                        Route Events
+                        <div className="ml-auto">
+                          <span className="px-3 py-1 text-sm rounded-full" style={{ backgroundColor: 'var(--blue-100)', color: 'var(--blue-700)' }}>
+                            {rideData.events.length} Events
+                          </span>
+                        </div>
+                      </h3>
+
+                      <div className="space-y-4">
+                        {rideData.events.map((event, index) => (
+                          <div
+                            key={index}
+                            className="p-4 rounded-lg shadow-sm border"
+                            style={{
+                              backgroundColor: event.severity === "high" ? '#fef2f2' : '#fff7ed',
+                              borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
+                            }}
+                          >
+                            <div className="flex items-start gap-4">
+                              {/* Event Icon with Colored Background */}
+                              <div
+                                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
+                                style={{
+                                  backgroundColor: event.severity === "high" ? '#ef4444' : '#f97316'
+                                }}
+                              >
+                                {event.severity === "high" ? (
+                                  <AlertTriangle className="w-5 h-5 text-white" />
+                                ) : (
+                                  <Info className="w-5 h-5 text-white" />
+                                )}
+                              </div>
+
+                              {/* Event Details */}
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-3">
+                                  <div className="flex items-center gap-3">
+                                    <h4 className="text-base font-semibold" style={{ color: 'var(--heading)' }}>
+                                      {event.type}
+                                    </h4>
+                                    <span
+                                      className="px-2 py-1 text-xs font-medium rounded-full border"
+                                      style={{
+                                        backgroundColor: event.severity === "high" ? '#fee2e2' : '#fed7aa',
+                                        color: event.severity === "high" ? '#b91c1c' : '#c2410c',
+                                        borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
+                                      }}
+                                    >
+                                      {event.severity === "high" ? "High Priority" : "Medium Priority"}
+                                    </span>
+                                  </div>
+                                  <div className="text-right">
+                                    <span
+                                      className="text-xs font-medium px-2 py-1 rounded-full"
+                                      style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
+                                    >
+                                      {event.time}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <p className="text-sm font-medium" style={{ color: '#374151' }}>
+                                    {event.details}
+                                  </p>
+                                  {event.location && (
+                                    <div
+                                      className="flex items-center gap-2 p-2 rounded-lg border"
+                                      style={{ backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }}
+                                    >
+                                      <MapPin className="w-4 h-4" style={{ color: '#dc2626' }} />
+                                      <span className="text-xs font-medium" style={{ color: '#6b7280' }}>
+                                        {event.location}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 2 && (
               <div className="space-y-6">
                 {/* Stops with vertical line */}
                 <div className="relative">
@@ -1258,6 +1243,23 @@ export default function RideDetailModal({
                 </div>
               </div>
             )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Map and Controls */}
+          <div className="col-span-5 min-w-0 h-full">
+            <div className="h-full">
+              {/* Map Container */}
+              <div className="h-full bg-gray-200 overflow-hidden">
+                <RideMap
+                  pickup={rideData.route.pickup}
+                  dropoff={rideData.route.dropoff}
+                  status={rideStatus}
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
           </div>
         </div>
 

@@ -103,7 +103,7 @@ export default function MapView({ onViewRide }) {
   };
 
   return (
-    <div className="flex-1 relative">
+    <div className="flex-1 relative" style={{ zIndex: 1 }}>
       {/* Google Maps Background */}
       <div className="absolute inset-0 bg-[var(--surface-muted)]">
         <iframe
