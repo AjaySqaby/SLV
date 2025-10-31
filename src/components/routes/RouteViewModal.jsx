@@ -11,6 +11,7 @@ import DriverDetailModal from '@/components/drivers/DriverDetailModal';
 import StudentProfilePage from '@/components/students/StudentProfilePage';
 import Collapse from '@/components/ui/Collapse';
 import RouteEditModal from './RouteEditModal';
+import { countEquipmentFromStudents, formatEquipmentCounts } from '@/utils/equipment';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -88,7 +89,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 10",
         address: "1425 Oak Street Apt 204",
         stopId: 1,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: ["Booster Seat"]
       },
       {
         id: "S-002",
@@ -96,7 +98,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 9",
         address: "1425 Oak Street Apt 204",
         stopId: 1,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: ["Wheelchair"]
       },
       {
         id: "S-003",
@@ -104,7 +107,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 11",
         address: "789 Pine Avenue",
         stopId: 2,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: ["Booster Seat"]
       },
       {
         id: "S-004",
@@ -112,7 +116,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 10",
         address: "456 Elm Street",
         stopId: 3,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: []
       },
       {
         id: "S-005",
@@ -120,7 +125,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 12",
         address: "456 Elm Street",
         stopId: 3,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: ["Harness"]
       },
       {
         id: "S-006",
@@ -128,7 +134,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 9",
         address: "321 Maple Drive",
         stopId: 4,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: []
       },
       {
         id: "S-007",
@@ -136,7 +143,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         grade: "Grade 11",
         address: "321 Maple Drive",
         stopId: 4,
-        status: "Scheduled"
+        status: "Scheduled",
+        equipment: ["Car Seat"]
       }
     ]
   };
@@ -238,9 +246,9 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
           </div>
         </div>
 
-        {/* Students and Seats Section */}
+        {/* Students, Seats and Equipment Section */}
         <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
                 <UsersIcon className="w-4 h-4 text-[var(--red-600)]" />
@@ -258,6 +266,28 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               <div className="flex-1">
                 <div className="text-sm text-[var(--muted-text)]">AVAILABLE SEATS</div>
                 <div className="text-sm font-medium text-[var(--primary-black)]">3</div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                <span className="text-sm">🧰</span>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">EQUIPMENT NEEDED</div>
+                {(() => {
+                  const eqCounts = countEquipmentFromStudents(routeData.students);
+                  const summary = formatEquipmentCounts(eqCounts);
+                  return (
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {summary
+                        ? summary.split(', ').map((part) => (
+                            <span key={part} className="px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{part}</span>
+                          ))
+                        : <span className="text-sm text-[var(--gray-500)]">None</span>}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -642,6 +672,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   });
 
   const renderRides = () => {
+    const equipmentSummary = formatEquipmentCounts(countEquipmentFromStudents(routeData.students));
     const ridesForTable = filteredRouteRides.map((r) => ({
       id: r.id,
       district: r.route,
@@ -655,6 +686,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
       status: r.status,
       nextStop: { address: 'Central High School' },
       stops: [],
+      equipmentSummary,
     }));
     return (
       <div className="space-y-4">

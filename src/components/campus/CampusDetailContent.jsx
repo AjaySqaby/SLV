@@ -347,7 +347,7 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
           </div>
         </div>
 
-        {/* Single Collapse with All Information */}
+        {/* Single Collapse with general information only */}
         <Collapse 
           title="Campus Information" 
           icon={
@@ -540,62 +540,63 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
               </div>
             </div>
 
-            {/* Campus Tabs Section */}
-            <div className="pt-6 border-t border-[var(--gray-200)]">
-              <div className="flex items-center space-x-2 mb-6">
-                <button 
-                  onClick={() => setActiveTab(0)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 0 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Users className="w-4 h-4" />
-                  Students
-                </button>
-                <button 
-                  onClick={() => setActiveTab(1)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 1 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Route className="w-4 h-4" />
-                  Routes
-                </button>
-                <button 
-                  onClick={() => setActiveTab(2)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 2 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Car className="w-4 h-4" />
-                  Rides
-                </button>
-                <button 
-                  onClick={() => setActiveTab(3)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 3 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Calendar className="w-4 h-4" />
-                  Holidays & Exceptions
-                </button>
-              </div>
-              {renderTabContent()}
-            </div>
           </div>
         </Collapse>
+
+        {/* Tabs always visible below general info */}
+        <div className="w-full px-0 mt-8">
+          <div className="flex items-center space-x-2 mb-6">
+            <button 
+              onClick={() => setActiveTab(0)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 0 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Users className="w-4 h-4" />
+              Students
+            </button>
+            <button 
+              onClick={() => setActiveTab(1)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 1 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Route className="w-4 h-4" />
+              Routes
+            </button>
+            <button 
+              onClick={() => setActiveTab(2)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 2 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Car className="w-4 h-4" />
+              Rides
+            </button>
+            <button 
+              onClick={() => setActiveTab(3)}
+              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
+                activeTab === 3 
+                  ? 'text-white' 
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'
+              }`}
+              style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
+            >
+              <Calendar className="w-4 h-4" />
+              Holidays & Exceptions
+            </button>
+          </div>
+          {renderTabContent()}
+        </div>
       </div>
     </div>
   )

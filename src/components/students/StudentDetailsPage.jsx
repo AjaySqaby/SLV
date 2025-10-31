@@ -96,6 +96,14 @@ export default function StudentDetailsPage({ params, forceViewModal, isModal = f
     secondaryEmail: "",
     secondaryPhone: "",
     notes: "",
+    // Special equipment flags
+    carSeat: false,
+    boosterSeat: false,
+    monitor: false,
+    wheelchair: false,
+    walker: false,
+    harness: false,
+    buckleGuard: false,
   });
   const handleChange = (e) => {
     const { name, value } = e.target;

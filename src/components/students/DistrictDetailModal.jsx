@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Collapse from "@/components/ui/Collapse";
 // Remove Modal import - we'll create custom modal
 import Tabs from "@/components/ui/Tabs";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -25,6 +26,7 @@ import {
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   const [activeTab, setActiveTab] = useState(0);
+  const [openInfo, setOpenInfo] = useState(false);
 
   if (!districtData) return null;
 
@@ -397,7 +399,12 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
           <div className="space-y-6">
 
-            {/* District Details Card */}
+            {/* District Details - collapsible (hidden by default) */}
+            <Collapse
+              title="District Information"
+              isOpen={openInfo}
+              onToggle={() => setOpenInfo(!openInfo)}
+            >
             <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
@@ -454,6 +461,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
             </div>
           </div>
         </div>
+        </Collapse>
 
             {/* Tabs */}
             <div className="bg-white rounded-lg border border-[var(--gray-200)] shadow-sm">

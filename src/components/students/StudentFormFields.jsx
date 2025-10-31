@@ -1,6 +1,7 @@
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
 import { User, Home, GraduationCap, Phone, Mail, UserPlus } from 'lucide-react'
+import { EQUIPMENT_TYPES, labelToKey } from '@/utils/equipment'
 
 export default function StudentFormFields({ form, onChange, className = "" }) {
   const gradeOptions = Array.from({length: 12}, (_, i) => ({
@@ -176,6 +177,31 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
             value={form.secondaryPhone} 
             onChange={onChange} 
           />
+        </div>
+      </div>
+
+      {/* Special Equipment */}
+      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-[var(--cyan-100)] rounded-full flex items-center justify-center">
+            <span className="text-lg">🧰</span>
+          </div>
+          <div className="font-semibold text-[var(--primary-black)]">Special Equipment</div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {EQUIPMENT_TYPES.map((label) => {
+            const key = labelToKey(label)
+            return (
+              <label key={key} className="flex items-center justify-between p-3 rounded-lg border border-[var(--gray-200)] cursor-pointer">
+                <span className="text-sm text-[var(--gray-700)]">{label}</span>
+                <input
+                  type="checkbox"
+                  checked={!!form[key]}
+                  onChange={(e) => onChange({ target: { name: key, value: e.target.checked } })}
+                />
+              </label>
+            )
+          })}
         </div>
       </div>
 

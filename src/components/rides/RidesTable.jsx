@@ -146,6 +146,11 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                             compact={true}
                           />
                         </div>
+                        {ride.equipmentSummary && (
+                          <div className="text-xs text-[var(--gray-700)] mt-1">
+                            Equipment: {ride.equipmentSummary}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>

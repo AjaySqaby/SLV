@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, User, GraduationCap, Home, Phone, Mail, FileText, Plus } from 'lucide-react';
+import { EQUIPMENT_TYPES, labelToKey } from '@/utils/equipment';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
@@ -27,6 +28,14 @@ export default function AddStudentModal({ isOpen, onClose }) {
     secondaryGuardianEmail: '',
     secondaryGuardianRelationship: '',
     hasSecondaryGuardian: false,
+    // Special equipment flags
+    carSeat: false,
+    boosterSeat: false,
+    monitor: false,
+    wheelchair: false,
+    walker: false,
+    harness: false,
+    buckleGuard: false,
   });
 
   const handleChange = (e) => {
@@ -316,6 +325,31 @@ export default function AddStudentModal({ isOpen, onClose }) {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Special Equipment */}
+        <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-[var(--cyan-100)] rounded-full flex items-center justify-center">
+              <span className="text-xl">🧰</span>
+            </div>
+            <h3 className="text-lg font-semibold text-[var(--primary-black)]">Special Equipment</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {EQUIPMENT_TYPES.map((label) => {
+              const key = labelToKey(label);
+              return (
+                <div key={key} className="flex items-center justify-between p-3 rounded-lg border border-[var(--gray-200)]">
+                  <label className="text-sm font-medium text-[var(--gray-700)]">{label}</label>
+                  <Toggle
+                    checked={!!studentForm[key]}
+                    onChange={(value) => handleToggleChange(key, value)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-sm text-[var(--muted-text)] mt-2">Enable the equipment needed for this student’s ride.</p>
         </div>
 
             {/* Additional Notes */}

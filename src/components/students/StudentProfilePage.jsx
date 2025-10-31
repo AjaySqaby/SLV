@@ -97,6 +97,7 @@ export default function StudentProfilePage({ studentId }) {
       phone: "(404) 555-1234",
       email: "rjohnson@example.com"
     },
+    equipment: ["Booster Seat", "Wheelchair"],
     transportation: {
       assignedRoutes: 1,
       scheduledRides: 2,
@@ -279,7 +280,7 @@ export default function StudentProfilePage({ studentId }) {
           isOpen={openCollapse === 'student-info'}
           onToggle={() => handleCollapseToggle('student-info')}
         >
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Student Details Section */}
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
@@ -318,6 +319,25 @@ export default function StudentProfilePage({ studentId }) {
               <div className="flex-1">
                 <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
                 <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.address}</div>
+              </div>
+            </div>
+
+            {/* Equipment */}
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
+                <span className="text-sm">🧰</span>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-[var(--muted-text)]">SPECIAL EQUIPMENT</div>
+                <div className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap">
+                  {(studentData.equipment || []).length === 0 ? (
+                    <span className="text-sm text-[var(--gray-500)]">None</span>
+                  ) : (
+                    studentData.equipment.map((eq) => (
+                      <span key={eq} className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{eq}</span>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>
