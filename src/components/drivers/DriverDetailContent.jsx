@@ -747,19 +747,20 @@ export default function DriverDetailContent({ driverId }) {
            </Button>
          </div>
 
-         {/* Driver Tabs Section */}
-         <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-           <DriverTabs 
-             activeTab={activeTab} 
-             onTabChange={setActiveTab} 
-             tabs={tabs}
-           />
-           <div className="mt-4">
-             {renderTabContent()}
-           </div>
-         </div>
          </div>
        </Collapse>
+
+      {/* Driver Tabs Section - always visible outside general info */}
+      <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        <DriverTabs 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+          tabs={tabs}
+        />
+        <div className="mt-4">
+          {renderTabContent()}
+        </div>
+      </div>
 
       {/* Documents Modal */}
       {showDocumentsModal && (

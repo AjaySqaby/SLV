@@ -416,8 +416,10 @@ export default function StudentProfilePage({ studentId }) {
             </div>
           </div>
 
-          {/* Tabs Section */}
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        </Collapse>
+
+        {/* Tabs Section - always visible outside general info */}
+        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
           <div className="flex items-center space-x-2 mb-6">
             <button 
               onClick={() => setActiveTab('routes')}
@@ -694,8 +696,7 @@ export default function StudentProfilePage({ studentId }) {
               </>
             )}
           </div>
-          </div>
-        </Collapse>
+        </div>
       </div>
 
       {/* Block Driver Modal */}
