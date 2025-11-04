@@ -1,5 +1,6 @@
 import { FaCar, FaMapMarkerAlt, FaPhone, FaBell, FaInfoCircle, FaUserPlus } from "react-icons/fa";
 import Button from "@/components/ui/Button";
+import StatusBadge from "@/components/ui/StatusBadge";
 
 export default function DriverCard({ driver }) {
   const getStatusStyle = () => {
@@ -15,30 +16,7 @@ export default function DriverCard({ driver }) {
     }
   };
 
-  const getStatusBadge = () => {
-    switch (driver.status) {
-      case "Ready Now":
-        return (
-          <span className="bg-[var(--green-100)] text-[var(--green-600)] px-2 py-0.5 rounded text-xs font-medium">
-            Ready
-          </span>
-        );
-      case "On Active Ride":
-        return (
-          <span className="bg-[var(--blue-100)] text-[var(--blue-600)] px-2 py-0.5 rounded text-xs font-medium">
-            Active
-          </span>
-        );
-      case "Offline":
-        return (
-          <span className="bg-[var(--gray-100)] text-[var(--gray-500)] px-2 py-0.5 rounded text-xs font-medium">
-            Offline
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
+  // Use shared StatusBadge for uniform styling across the app
 
   return (
     <div className={`p-3 mb-2 rounded-lg shadow-sm border hover:shadow-md transition-all ${getStatusStyle()}`}>
@@ -63,7 +41,7 @@ export default function DriverCard({ driver }) {
             <div className="font-semibold text-sm text-[var(--heading)] truncate">
               {driver.name}
             </div>
-            {getStatusBadge()}
+            <StatusBadge status={driver.status} showIcon={false} />
           </div>
           <div className="grid grid-cols-1 gap-0.5 text-xs text-[var(--muted-text)]">
             <div className="flex items-center gap-1">

@@ -46,6 +46,15 @@ export default function StatusBadge({ status, fontSize = "text-xs", lateMinutes,
         return { backgroundColor: 'var(--gray-100)', color: 'var(--gray-700)', border: '1px solid var(--gray-300)' };
       case 'unaccepted':
         return { backgroundColor: 'var(--amber-100)', color: 'var(--warning-dark)', border: '1px solid var(--warning)' };
+      
+      // Driver presence states
+      case 'ready now':
+      case 'ready':
+        return { backgroundColor: 'var(--green-100)', color: 'var(--success-dark)', border: '1px solid var(--green-600)' };
+      case 'on active ride':
+        return { backgroundColor: 'var(--blue-100)', color: 'var(--blue-800)', border: '1px solid var(--blue-600)' };
+      case 'offline':
+        return { backgroundColor: 'var(--gray-100)', color: 'var(--gray-700)', border: '1px solid var(--gray-300)' };
         
       // Problem states
       case 'delayed':
@@ -100,6 +109,13 @@ export default function StatusBadge({ status, fontSize = "text-xs", lateMinutes,
         return XCircle;
       case 'not started':
         return PauseCircle;
+      case 'ready now':
+      case 'ready':
+        return UserCheck;
+      case 'on active ride':
+        return Loader2;
+      case 'offline':
+        return PauseCircle;
       default:
         return null;
     }
@@ -111,7 +127,8 @@ export default function StatusBadge({ status, fontSize = "text-xs", lateMinutes,
     const activeBarStatuses = new Set([
       'assigned', 'non assigned', 'non-assigned', 'unassigned',
       'accepted', 'unaccepted', 'not started', 'substitute needed',
-      'in progress', 'in-progress', 'active', 'scheduled', 'upcoming'
+      'in progress', 'in-progress', 'active', 'scheduled', 'upcoming',
+      'on active ride', 'ready now'
     ]);
     if (s === 'rejected' || s === 'canceled' || s === 'cancelled' || s === 'completed' || s === 'complete') return false;
     return activeBarStatuses.has(s);
