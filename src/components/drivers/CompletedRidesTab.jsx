@@ -1,11 +1,13 @@
 "use client";
+import { useState } from "react";
 import { RiEyeLine, RiRouteLine, RiCalendarLine, RiGroupLine, RiCheckLine } from "react-icons/ri";
-import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
+import RideDetailContent from "@/components/rides/RideDetailContent";
 
 export default function CompletedRidesTab({ driverId }) {
-  const router = useRouter();
+  const [showRideDetailModal, setShowRideDetailModal] = useState(false);
+  const [selectedRideId, setSelectedRideId] = useState(null);
   // Real data from user
   const completedRides = [
     {
@@ -60,7 +62,10 @@ export default function CompletedRidesTab({ driverId }) {
                       variant="outline" 
                       size="sm"
                       className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                      onClick={() => router.push(`/rides/${ride.rideId}`)}
+                      onClick={() => {
+                        setSelectedRideId(ride.rideId);
+                        setShowRideDetailModal(true);
+                      }}
                     >
                       View
                     </Button>
@@ -69,6 +74,22 @@ export default function CompletedRidesTab({ driverId }) {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+      {showRideDetailModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-center z-[9000] pt-6"
+          onClick={() => setShowRideDetailModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <RideDetailContent 
+              rideId={selectedRideId} 
+              onClose={() => setShowRideDetailModal(false)}
+            />
+          </div>
         </div>
       )}
     </div>

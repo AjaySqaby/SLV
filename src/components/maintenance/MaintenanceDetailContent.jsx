@@ -21,7 +21,7 @@ import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import AddMaintenanceModal from './AddMaintenanceModal'
 
-export default function MaintenanceDetailContent({ maintenanceId }) {
+export default function MaintenanceDetailContent({ maintenanceId, onBack }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   
   // Mock data - replace with actual API call
@@ -48,7 +48,13 @@ export default function MaintenanceDetailContent({ maintenanceId }) {
             variant="ghost"
             size="sm"
             className="flex items-center gap-2 text-[var(--blue-600)] hover:text-[var(--blue-700)] hover:bg-[var(--blue-50)] px-3 py-2 rounded-lg transition-all duration-200"
-            onClick={() => window.history.back()}
+            onClick={() => {
+              if (typeof onBack === 'function') {
+                onBack();
+              } else {
+                window.history.back();
+              }
+            }}
           >
             <ArrowLeft className="w-4 h-4 text-[var(--blue-600)]" />
             <span className="font-medium">Back to Maintenance</span>

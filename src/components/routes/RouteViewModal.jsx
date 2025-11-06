@@ -710,7 +710,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[10000] backdrop-blur-sm"
       onClick={onClose}
     >
       <div

@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import AddMaintenanceModal from "@/components/maintenance/AddMaintenanceModal";
+import MaintenanceDetailModal from "@/components/maintenance/MaintenanceDetailModal";
 
 export default function MaintenanceTab({ driverId }) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedMaintenanceId, setSelectedMaintenanceId] = useState(null);
   // Real data from user
   const upcomingMaintenance = [
     {
@@ -82,14 +85,14 @@ export default function MaintenanceTab({ driverId }) {
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.type}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.dueDate}</td>
                     <td className="py-3 px-4">
-                      <StatusBadge status={item.status} type="warning" />
+                     <StatusBadge status={item.status} />
                     </td>
                     <td className="py-3 px-4">
                       <Button 
                         variant="outline" 
                         size="sm"
                         className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        onClick={() => router.push(`/maintenance/M-${index + 1}`)}
+                        onClick={() => { setSelectedMaintenanceId(`M-${index + 1}`); setShowDetailModal(true); }}
                       >
                         View
                       </Button>
@@ -130,13 +133,13 @@ export default function MaintenanceTab({ driverId }) {
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.date}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.mileage}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.serviceProvider}</td>
-                     <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.cost}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.cost}</td>
+                   <td className="py-3 px-4">
                       <Button 
                         variant="outline" 
                         size="sm"
                         className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        onClick={() => router.push(`/maintenance/M-${index + 1}`)}
+                        onClick={() => { setSelectedMaintenanceId(`M-${index + 1}`); setShowDetailModal(true); }}
                       >
                         View Details
                       </Button>
@@ -154,6 +157,13 @@ export default function MaintenanceTab({ driverId }) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         maintenanceData={null}
+      />
+
+      {/* Maintenance Detail Modal - uniform full layout */}
+      <MaintenanceDetailModal
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        maintenanceId={selectedMaintenanceId}
       />
     </div>
   );

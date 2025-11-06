@@ -9,6 +9,8 @@ import Card from "@/components/ui/Card";
 export default function UpcomingRidesTab({ driverId }) {
   const [selectedRide, setSelectedRide] = useState(null);
   const [showRideModal, setShowRideModal] = useState(false);
+  const [showRideDetailModal, setShowRideDetailModal] = useState(false);
+  const [selectedRideId, setSelectedRideId] = useState(null);
   
   // Real data from user
   const upcomingRides = [
@@ -64,7 +66,9 @@ export default function UpcomingRidesTab({ driverId }) {
                       className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                       onClick={() => {
                         setSelectedRide(ride);
-                        setShowRideModal(true);
+                        setSelectedRideId(ride.rideId);
+                        // Open full Ride Detail modal for uniform UX
+                        setShowRideDetailModal(true);
                       }}
                     >
                       View
@@ -77,79 +81,21 @@ export default function UpcomingRidesTab({ driverId }) {
         </div>
       )}
 
-      {/* Ride Detail Modal - Uniform design without map */}
-      {showRideModal && selectedRide && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9000] p-6">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-2xl font-bold text-gray-900">Ride Details #{selectedRide.rideId}</h2>
-                  <StatusBadge status={selectedRide.status} />
-                </div>
-                <button
-                  onClick={() => setShowRideModal(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-                  aria-label="Close"
-                >
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <Card className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">Route Information</h3>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p><span className="text-gray-500">Route:</span> {selectedRide.route}</p>
-                      <p><span className="text-gray-500">Scheduled:</span> {selectedRide.scheduledDate}</p>
-                    </div>
-                  </Card>
-                  <Card className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">Passenger Information</h3>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p><span className="text-gray-500">Students:</span> {selectedRide.students}</p>
-                      <p className="flex items-center gap-2"><span className="text-gray-500">Status:</span> <StatusBadge status={selectedRide.status} /></p>
-                    </div>
-                  </Card>
-                </div>
-                <div className="space-y-4">
-                  <Card className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">Driver Information</h3>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p><span className="text-gray-500">Driver ID:</span> D-001</p>
-                      <p><span className="text-gray-500">Vehicle:</span> Honda Odyssey</p>
-                    </div>
-                  </Card>
-                  <Card className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">Schedule</h3>
-                    <div className="text-sm text-gray-700 space-y-1">
-                      <p><span className="text-gray-500">Pickup:</span> 7:00 AM</p>
-                      <p><span className="text-gray-500">Dropoff:</span> 7:40 AM</p>
-                    </div>
-                  </Card>
-                </div>
-              </div>
-              
-              <div className="mt-6 flex justify-end space-x-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowRideModal(false)}
-                >
-                  Close
-                </Button>
-                <Button
-                  onClick={() => {
-                    // Navigate to full ride details if needed
-                    setShowRideModal(false);
-                  }}
-                >
-                  View Full Details
-                </Button>
-              </div>
-            </div>
+      {/* Full Ride Detail Modal (same pattern as Rides list) */}
+      {showRideDetailModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-center z-[9000] pt-6"
+          onClick={() => setShowRideDetailModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full max-h-[calc(100vh-3rem)] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <RideDetailContent 
+              rideId={selectedRideId} 
+              onClose={() => setShowRideDetailModal(false)}
+              onViewDriver={() => {}}
+            />
           </div>
         </div>
       )}
