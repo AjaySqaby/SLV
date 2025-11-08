@@ -4,12 +4,14 @@ import { Search, Bell, User, LogOut } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import TimezoneIndicator from "@/components/ui/TimezoneIndicator";
+import { useAuth } from "@/components/auth/AuthContext";
 
 export default function Header({ activePage, onSearch, searchPlaceholder, hideSearch }) {
   const [search, setSearch] = useState("");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const { logout } = useAuth();
   
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -21,7 +23,7 @@ export default function Header({ activePage, onSearch, searchPlaceholder, hideSe
   };
 
   const handleLogout = () => {
-    // Clear any auth tokens/session here if needed
+    logout();
     router.push("/auth");
     setShowUserDropdown(false);
   };
