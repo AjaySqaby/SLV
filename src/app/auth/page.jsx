@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -10,7 +10,7 @@ import SetNewPasswordModal from "@/components/auth/SetNewPasswordModal";
 import { useAuth } from "@/components/auth/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-const Login = () => {
+const LoginContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, isAuthenticated, isLoading } = useAuth();
@@ -170,6 +170,18 @@ const Login = () => {
         onComplete={handlePasswordSet}
       />
     </>
+  );
+};
+
+const Login = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-secondary to-primary text-white text-lg">
+        Loading...
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 };
 
