@@ -150,7 +150,6 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   };
 
   const tabs = [
-    { id: 0, label: "Route Overview" },
     { id: 1, label: "Route Stops" },
     { id: 2, label: "Students" },
     { id: 3, label: "Map View" },
@@ -163,209 +162,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
 
   const renderOverview = () => (
     <div className="space-y-4">
-      {/* Single Collapse with All Information */}
-      <Collapse 
-        title="Route Information" 
-        icon={<Route className="w-4 h-4 text-purple-600" />}
-        isOpen={openCollapse === 'route-info'}
-        onToggle={() => handleCollapseToggle('route-info')}
-      >
-        <div className="space-y-4">
-          {/* Route Profile Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                <Route className="w-8 h-8 text-[var(--blue-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold text-2xl text-[var(--primary-black)]">{routeData.name}</div>
-                <div className="text-sm text-[var(--muted-text)]">Route ID: {routeData.id}</div>
-                <div className="text-sm text-[var(--muted-text)]">District: {routeData.district}</div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
-                {routeData.status}
-              </div>
-              <div className="flex gap-2">
-                <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
-                  <Eye className="w-4 h-4" />
-                  <span>View Route</span>
-                </button>
-                <button 
-                  onClick={() => setShowEditModal(true)}
-                  className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--purple-100)] text-[var(--purple-600)] hover:bg-[var(--purple-200)]"
-                >
-                  <Edit className="w-4 h-4" />
-                  <span>Edit Route</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Route Information Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-              <Hash className="w-4 h-4 text-[var(--blue-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="text-sm text-[var(--muted-text)]">ROUTE ID</div>
-              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.id}</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-              <Timer className="w-4 h-4 text-[var(--green-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="text-sm text-[var(--muted-text)]">DURATION</div>
-              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.duration}</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-              <MapPinIcon className="w-4 h-4 text-[var(--orange-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="text-sm text-[var(--muted-text)]">DISTANCE</div>
-              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.distance}</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
-            </div>
-            <div className="flex-1">
-              <div className="text-sm text-[var(--muted-text)]">STOPS</div>
-              <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.stops.length}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Students, Seats and Equipment Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
-                <UsersIcon className="w-4 h-4 text-[var(--red-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.students.length}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
-                <UserCheck className="w-4 h-4 text-[var(--cyan-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">AVAILABLE SEATS</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">3</div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                <span className="text-sm">🧰</span>
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">EQUIPMENT NEEDED</div>
-                {(() => {
-                  const eqCounts = countEquipmentFromStudents(routeData.students);
-                  const summary = formatEquipmentCounts(eqCounts);
-                  return (
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {summary
-                        ? summary.split(', ').map((part) => (
-                            <span key={part} className="px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{part}</span>
-                          ))
-                        : <span className="text-sm text-[var(--gray-500)]">None</span>}
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-          {/* Driver Information */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Driver Information</h4>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                <img
-                  src="/driver1.jpg"
-                  alt={routeData.driver}
-                  className="w-full h-full object-cover"
-                  onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
-                />
-                <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
-                  {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
-                </div>
-              </div>
-              <div className="flex-1">
-                <button
-                  className="font-semibold text-lg hover:underline text-left text-[var(--primary-black)]"
-                  onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
-                >
-                  {routeData.driver}
-                </button>
-                <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
-                  <Star className="w-4 h-4 text-[var(--yellow-500)]" fill="currentColor" />
-                  <span>4.9 rating</span>
-                </div>
-              </div>
-              <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
-                Completed
-              </div>
-            </div>
-          </div>
-
-          {/* Vehicle Information */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Vehicle Information</h4>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--gray-100)]">
-                <Car className="w-6 h-6 text-[var(--gray-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold text-lg text-[var(--primary-black)]">Chrysler Pacifica</div>
-                <div className="text-sm text-[var(--muted-text)]">ID: RT-30842</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Schedule Information */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Schedule Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">START TIME</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.startTime}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-[var(--red-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">END TIME</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.endTime}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Collapse>
+      {/* Overview content can be added here if needed */}
     </div>
   );
 
@@ -736,8 +533,215 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
           </button>
         </div>
 
+        {/* Collapse - Route Information */}
+        <div className="px-6 pt-4">
+          <Collapse 
+            title="Route Information" 
+            icon={<Route className="w-4 h-4 text-purple-600" />}
+            isOpen={openCollapse === 'route-info'}
+            onToggle={() => handleCollapseToggle('route-info')}
+          >
+            <div className="space-y-4">
+              {/* Route Profile Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                    <Route className="w-8 h-8 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-2xl text-[var(--primary-black)]">{routeData.name}</div>
+                    <div className="text-sm text-[var(--muted-text)]">Route ID: {routeData.id}</div>
+                    <div className="text-sm text-[var(--muted-text)]">District: {routeData.district}</div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {routeData.status}
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--blue-100)] text-[var(--blue-600)]">
+                      <Eye className="w-4 h-4" />
+                      <span>View Route</span>
+                    </button>
+                    <button 
+                      onClick={() => setShowEditModal(true)}
+                      className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2 transition-colors bg-[var(--purple-100)] text-[var(--purple-600)] hover:bg-[var(--purple-200)]"
+                    >
+                      <Edit className="w-4 h-4" />
+                      <span>Edit Route</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Route Information Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Hash className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">ROUTE ID</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.id}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                    <Timer className="w-4 h-4 text-[var(--green-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">DURATION</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.duration}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                    <MapPinIcon className="w-4 h-4 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">DISTANCE</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.distance}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">STOPS</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.stops.length}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Students, Seats and Equipment Section */}
+              <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
+                      <UsersIcon className="w-4 h-4 text-[var(--red-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.students.length}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
+                      <UserCheck className="w-4 h-4 text-[var(--cyan-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">AVAILABLE SEATS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">3</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <span className="text-sm">🧰</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">EQUIPMENT NEEDED</div>
+                      {(() => {
+                        const eqCounts = countEquipmentFromStudents(routeData.students);
+                        const summary = formatEquipmentCounts(eqCounts);
+                        return (
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {summary
+                              ? summary.split(', ').map((part) => (
+                                  <span key={part} className="px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{part}</span>
+                                ))
+                              : <span className="text-sm text-[var(--gray-500)]">None</span>}
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Driver Information */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Driver Information</h4>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                    <img
+                      src="/driver1.jpg"
+                      alt={routeData.driver}
+                      className="w-full h-full object-cover"
+                      onError={(e)=>{ e.currentTarget.style.display='none'; e.currentTarget.parentElement.querySelector('[data-fallback]')?.classList.remove('hidden'); }}
+                    />
+                    <div data-fallback className="hidden w-full h-full flex items-center justify-center text-lg font-bold text-[var(--primary)]">
+                      {routeData.driver.split(' ').map(n=>n[0]).join('').slice(0,2)}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <button
+                      className="font-semibold text-lg hover:underline text-left text-[var(--primary-black)]"
+                      onClick={() => { setSelectedDriverId(routeData.driverId); setShowDriverModal(true); }}
+                    >
+                      {routeData.driver}
+                    </button>
+                    <div className="flex items-center gap-1 text-sm text-[var(--muted-text)]">
+                      <Star className="w-4 h-4 text-[var(--yellow-500)]" fill="currentColor" />
+                      <span>4.9 rating</span>
+                    </div>
+                  </div>
+                  <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
+                    Completed
+                  </div>
+                </div>
+              </div>
+
+              {/* Vehicle Information */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Vehicle Information</h4>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[var(--gray-100)]">
+                    <Car className="w-6 h-6 text-[var(--gray-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-lg text-[var(--primary-black)]">Chrysler Pacifica</div>
+                    <div className="text-sm text-[var(--muted-text)]">ID: RT-30842</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Schedule Information */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Schedule Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">START TIME</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.startTime}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-[var(--red-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">END TIME</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{routeData.endTime}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Collapse>
+        </div>
+
         {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-4 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
