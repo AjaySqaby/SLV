@@ -55,7 +55,6 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview' },
     { id: 'drivers', label: 'Drivers' },
     { id: 'routes', label: 'Routes' },
     { id: 'rides', label: 'Rides' },
@@ -87,215 +86,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
 
   const renderOverview = () => (
     <div className="space-y-4">
-      {/* Single Collapse with All Information */}
-      <Collapse 
-        title="Partner Information" 
-        icon={<Building2 className="w-4 h-4 text-purple-600" />}
-        isOpen={openCollapse === 'partner-info'}
-        onToggle={() => handleCollapseToggle('partner-info')}
-      >
-        <div className="space-y-6">
-          {/* Partner Profile Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold text-2xl text-[var(--primary-black)]">{partner.name}</div>
-                <div className="text-sm text-[var(--muted-text)]">Partner ID: {partner.id}</div>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-yellow-500 text-base">★</span>
-                  <span className="text-sm font-medium text-[var(--primary-black)]">{partner.rating}</span>
-                  <span className="text-xs text-[var(--muted-text)]">/ 5</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
-                {partner.status}
-              </div>
-              <div className="text-sm text-[var(--muted-text)]">
-                Joined: {partner.joinDate}
-              </div>
-            </div>
-          </div>
-
-          {/* Company Information Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-[var(--blue-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">COMPANY</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{partner.name}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                <User className="w-4 h-4 text-[var(--purple-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">CONTACT</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.name}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                <Mail className="w-4 h-4 text-[var(--green-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.email}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                <Phone className="w-4 h-4 text-[var(--orange-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">PHONE</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.phone}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Address Section */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">{partner.address}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Performance Statistics */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Performance Statistics</h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                  <Users className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">DRIVERS</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.drivers}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <Route className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.routes}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--purple-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">TOTAL RIDES</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.rides}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                  <Star className="w-4 h-4 text-[var(--orange-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">RATING</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.rating}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Fleet Information */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Fleet Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">SEDANS</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.sedans}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">SUVS</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.suvs}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--purple-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">BUSES</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.buses}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--orange-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">VANS</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.vans}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Service Information */}
-          <div className="pt-4 border-t border-[var(--gray-200)]">
-            <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Service Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                  <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">SERVICE AREA</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.serviceArea}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm text-[var(--muted-text)]">OPERATING HOURS</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{partner.operatingHours}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Collapse>
+      {/* Overview content can be added here if needed */}
     </div>
   );
 
@@ -552,8 +343,220 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
           </div>
         </div>
 
+        {/* Collapse - Partner Information */}
+        <div className="px-6 pt-4">
+          <Collapse 
+            title="Partner Information" 
+            icon={<Building2 className="w-4 h-4 text-purple-600" />}
+            isOpen={openCollapse === 'partner-info'}
+            onToggle={() => handleCollapseToggle('partner-info')}
+          >
+            <div className="space-y-6">
+              {/* Partner Profile Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                    <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-2xl text-[var(--primary-black)]">{partner.name}</div>
+                    <div className="text-sm text-[var(--muted-text)]">Partner ID: {partner.id}</div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-yellow-500 text-base">★</span>
+                      <span className="text-sm font-medium text-[var(--primary-black)]">{partner.rating}</span>
+                      <span className="text-xs text-[var(--muted-text)]">/ 5</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {partner.status}
+                  </div>
+                  <div className="text-sm text-[var(--muted-text)]">
+                    Joined: {partner.joinDate}
+                  </div>
+                </div>
+              </div>
+
+              {/* Company Information Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Building2 className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">COMPANY</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{partner.name}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                    <User className="w-4 h-4 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">CONTACT</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.name}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-[var(--green-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.email}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                    <Phone className="w-4 h-4 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{partner.contact.phone}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Address Section */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{partner.address}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Performance Statistics */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Performance Statistics</h4>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Users className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">DRIVERS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.drivers}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <Route className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.routes}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">TOTAL RIDES</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.rides}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                      <Star className="w-4 h-4 text-[var(--orange-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">RATING</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.rating}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Fleet Information */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Fleet Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">SEDANS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.sedans}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">SUVS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.suvs}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">BUSES</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.buses}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--orange-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">VANS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.fleet.vans}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Information */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Service Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">SERVICE AREA</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.serviceArea}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">OPERATING HOURS</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{partner.operatingHours}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Collapse>
+        </div>
+
         {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-2 ml-8">
+        <div className="flex items-center space-x-2 mt-4 ml-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
