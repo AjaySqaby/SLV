@@ -1,19 +1,22 @@
 "use client";
 import { useState } from "react";
-import { X, Users, User, Mail, Phone, Building2, MapPin, GraduationCap, Settings } from "lucide-react";
+import { X, Users, User, Mail, Phone, Building2, MapPin, GraduationCap, Settings, Shield } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import PermissionsSelector from "./PermissionsSelector";
 
 export default function AddEmployeeModal({ open, onClose }) {
   const [formData, setFormData] = useState({
+    employeeType: "district", // "slv" or "district"
     firstName: "",
     lastName: "",
     district: "",
     campus: "",
     title: "",
     email: "",
-    phone: ""
+    phone: "",
+    permissions: []
   });
 
   // Mock data for districts and campuses
@@ -36,6 +39,13 @@ export default function AddEmployeeModal({ open, onClose }) {
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handlePermissionsChange = (permissions) => {
+    setFormData(prev => ({
+      ...prev,
+      permissions
     }));
   };
 
@@ -80,6 +90,50 @@ export default function AddEmployeeModal({ open, onClose }) {
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)] pb-24">
           {/* Form Content */}
           <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Employee Type Selection */}
+              <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-[var(--orange-100)] rounded-full flex items-center justify-center">
+                    <Users className="w-5 h-5 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="font-semibold text-[var(--primary-black)]">Employee Type</div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, employeeType: "slv" }))}
+                    className={`
+                      p-4 rounded-lg border-2 transition-all duration-200 text-left
+                      ${formData.employeeType === "slv"
+                        ? "border-[var(--purple-600)] bg-[var(--purple-50)]"
+                        : "border-[var(--gray-200)] bg-white hover:border-[var(--purple-300)]"
+                      }
+                    `}
+                  >
+                    <div className="font-medium text-[var(--primary-black)]">SLV Employee</div>
+                    <div className="text-sm text-[var(--muted-text)] mt-1">
+                      Internal SLV staff with full dashboard access
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, employeeType: "district" }))}
+                    className={`
+                      p-4 rounded-lg border-2 transition-all duration-200 text-left
+                      ${formData.employeeType === "district"
+                        ? "border-[var(--purple-600)] bg-[var(--purple-50)]"
+                        : "border-[var(--gray-200)] bg-white hover:border-[var(--purple-300)]"
+                      }
+                    `}
+                  >
+                    <div className="font-medium text-[var(--primary-black)]">District Employee</div>
+                    <div className="text-sm text-[var(--muted-text)] mt-1">
+                      School district staff with limited access
+                    </div>
+                  </button>
+                </div>
+              </div>
+
               {/* Personal Information Section */}
               <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
                 <div className="flex items-center gap-3 mb-4">
@@ -120,25 +174,29 @@ export default function AddEmployeeModal({ open, onClose }) {
                   <div className="font-semibold text-[var(--primary-black)]">Work Information</div>
                 </div>
                 <div className="space-y-6">
-                  <Select
-                    label="District"
-                    name="district"
-                    value={formData.district}
-                    onChange={handleInputChange}
-                    options={districts}
-                    placeholder="Select a district"
-                    required
-                  />
+                  {formData.employeeType === "district" && (
+                    <>
+                      <Select
+                        label="District"
+                        name="district"
+                        value={formData.district}
+                        onChange={handleInputChange}
+                        options={districts}
+                        placeholder="Select a district"
+                        required
+                      />
 
-                  <Select
-                    label="Campus (Optional for district-level employees)"
-                    name="campus"
-                    value={formData.campus}
-                    onChange={handleInputChange}
-                    options={campuses}
-                    placeholder="Select a campus"
-                    helperText="Leave empty for district-level employees"
-                  />
+                      <Select
+                        label="Campus (Optional for district-level employees)"
+                        name="campus"
+                        value={formData.campus}
+                        onChange={handleInputChange}
+                        options={campuses}
+                        placeholder="Select a campus"
+                        helperText="Leave empty for district-level employees"
+                      />
+                    </>
+                  )}
 
                   <Input
                     label="Job Title"
@@ -182,6 +240,30 @@ export default function AddEmployeeModal({ open, onClose }) {
                     icon={<Phone className="h-4 w-4 text-[var(--muted-text)]" />}
                   />
                 </div>
+              </div>
+
+              {/* Permissions Section */}
+              <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="font-semibold text-[var(--primary-black)]">Dashboard Permissions</div>
+                </div>
+                <PermissionsSelector
+                  selectedPermissions={formData.permissions}
+                  onChange={handlePermissionsChange}
+                />
+                {formData.employeeType === "district" && formData.permissions.length === 0 && (
+                  <p className="text-sm text-[var(--muted-text)] mt-4">
+                    Select permissions to grant this district employee access to specific dashboard sections.
+                  </p>
+                )}
+                {formData.employeeType === "slv" && (
+                  <p className="text-sm text-[var(--blue-600)] mt-4 font-medium">
+                    SLV employees typically have full access. You can customize permissions if needed.
+                  </p>
+                )}
               </div>
 
             </form>
