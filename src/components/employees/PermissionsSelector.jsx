@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Shield, CheckSquare, Square } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Shield, Eye, Settings } from "lucide-react";
+import Toggle from "../ui/Toggle";
 
 const DASHBOARD_PERMISSIONS = [
   { id: "dashboard", label: "Dashboard", description: "View dashboard overview" },
@@ -19,42 +20,111 @@ const DASHBOARD_PERMISSIONS = [
   { id: "marketplace", label: "Marketplace", description: "Access marketplace" },
 ];
 
-export default function PermissionsSelector({ selectedPermissions = [], onChange }) {
-  const [permissions, setPermissions] = useState(selectedPermissions);
+// Convert flat array format to permissions object
+const parsePermissions = (permissionsArray) => {
+  const permissionsObj = {};
+  DASHBOARD_PERMISSIONS.forEach((perm) => {
+    permissionsObj[perm.id] = {
+      view: permissionsArray.includes(`${perm.id}:view`) || permissionsArray.includes(perm.id),
+      manage: permissionsArray.includes(`${perm.id}:manage`)
+    };
+  });
+  return permissionsObj;
+};
 
-  const handleTogglePermission = (permissionId) => {
-    const newPermissions = permissions.includes(permissionId)
-      ? permissions.filter((id) => id !== permissionId)
-      : [...permissions, permissionId];
+// Convert permissions object to flat array format
+const serializePermissions = (permissionsObj) => {
+  const permissionsArray = [];
+  Object.keys(permissionsObj).forEach((permId) => {
+    if (permissionsObj[permId].view) {
+      permissionsArray.push(`${permId}:view`);
+    }
+    if (permissionsObj[permId].manage) {
+      permissionsArray.push(`${permId}:manage`);
+    }
+  });
+  return permissionsArray;
+};
+
+export default function PermissionsSelector({ selectedPermissions = [], onChange }) {
+  // Parse selectedPermissions (flat array) into object structure
+  const [permissions, setPermissions] = useState(() => parsePermissions(selectedPermissions));
+
+  // Update internal state when selectedPermissions prop changes
+  useEffect(() => {
+    setPermissions(parsePermissions(selectedPermissions));
+  }, [selectedPermissions]);
+
+  const handleToggleView = (permissionId, newValue) => {
+    const newPermissions = {
+      ...permissions,
+      [permissionId]: {
+        ...permissions[permissionId],
+        view: newValue
+      }
+    };
+    
+    // If disabling view, also disable manage
+    if (!newValue) {
+      newPermissions[permissionId].manage = false;
+    }
     
     setPermissions(newPermissions);
     if (onChange) {
-      onChange(newPermissions);
+      onChange(serializePermissions(newPermissions));
+    }
+  };
+
+  const handleToggleManage = (permissionId, newValue) => {
+    const newPermissions = {
+      ...permissions,
+      [permissionId]: {
+        ...permissions[permissionId],
+        manage: newValue
+      }
+    };
+    
+    // If enabling manage, also enable view
+    if (newValue) {
+      newPermissions[permissionId].view = true;
+    }
+    
+    setPermissions(newPermissions);
+    if (onChange) {
+      onChange(serializePermissions(newPermissions));
     }
   };
 
   const handleSelectAll = () => {
-    const allPermissions = DASHBOARD_PERMISSIONS.map((p) => p.id);
+    const allPermissions = {};
+    DASHBOARD_PERMISSIONS.forEach((perm) => {
+      allPermissions[perm.id] = { view: true, manage: true };
+    });
     setPermissions(allPermissions);
     if (onChange) {
-      onChange(allPermissions);
+      onChange(serializePermissions(allPermissions));
     }
   };
 
   const handleDeselectAll = () => {
-    setPermissions([]);
+    const emptyPermissions = {};
+    DASHBOARD_PERMISSIONS.forEach((perm) => {
+      emptyPermissions[perm.id] = { view: false, manage: false };
+    });
+    setPermissions(emptyPermissions);
     if (onChange) {
       onChange([]);
     }
   };
 
+  const totalSelected = Object.values(permissions).reduce((sum, perm) => {
+    return sum + (perm.view ? 1 : 0) + (perm.manage ? 1 : 0);
+  }, 0);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[var(--purple-600)]" />
-          <h3 className="font-semibold text-[var(--primary-black)]">Dashboard Permissions</h3>
-        </div>
+       
         <div className="flex gap-2">
           <button
             type="button"
@@ -74,29 +144,15 @@ export default function PermissionsSelector({ selectedPermissions = [], onChange
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {DASHBOARD_PERMISSIONS.map((permission) => {
-          const isSelected = permissions.includes(permission.id);
+          const perm = permissions[permission.id] || { view: false, manage: false };
           return (
             <div
               key={permission.id}
-              onClick={() => handleTogglePermission(permission.id)}
-              className={`
-                p-4 rounded-lg border-2 cursor-pointer transition-all duration-200
-                ${isSelected
-                  ? "border-[var(--purple-600)] bg-[var(--purple-50)]"
-                  : "border-[var(--gray-200)] bg-white hover:border-[var(--purple-300)] hover:bg-[var(--purple-50)]"
-                }
-              `}
+              className="p-4 rounded-lg border-2 border-[var(--gray-200)] bg-white hover:border-[var(--purple-300)] transition-all duration-200"
             >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">
-                  {isSelected ? (
-                    <CheckSquare className="w-5 h-5 text-[var(--purple-600)]" />
-                  ) : (
-                    <Square className="w-5 h-5 text-[var(--gray-400)]" />
-                  )}
-                </div>
+              <div className="flex items-start gap-3 mb-3">
                 <div className="flex-1">
                   <div className="font-medium text-sm text-[var(--primary-black)]">
                     {permission.label}
@@ -106,15 +162,42 @@ export default function PermissionsSelector({ selectedPermissions = [], onChange
                   </div>
                 </div>
               </div>
+              
+              <div className="space-y-3 pt-3 border-t border-[var(--gray-100)]">
+                {/* View Toggle */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-[var(--gray-500)]" />
+                    <span className="text-sm font-medium text-[var(--gray-700)]">View</span>
+                  </div>
+                  <Toggle
+                    checked={perm.view}
+                    onChange={(value) => handleToggleView(permission.id, value)}
+                  />
+                </div>
+                
+                {/* Manage Toggle */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Settings className="w-4 h-4 text-[var(--gray-500)]" />
+                    <span className="text-sm font-medium text-[var(--gray-700)]">Manage</span>
+                  </div>
+                  <Toggle
+                    checked={perm.manage}
+                    onChange={(value) => handleToggleManage(permission.id, value)}
+                    disabled={!perm.view}
+                  />
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
 
-      {permissions.length > 0 && (
+      {totalSelected > 0 && (
         <div className="mt-4 p-3 bg-[var(--blue-50)] rounded-lg border border-[var(--blue-200)]">
           <p className="text-sm text-[var(--blue-700)]">
-            <strong>{permissions.length}</strong> permission{permissions.length !== 1 ? "s" : ""} selected
+            <strong>{totalSelected}</strong> permission{totalSelected !== 1 ? "s" : ""} selected
           </p>
         </div>
       )}
