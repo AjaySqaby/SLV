@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(null);
   const [openInfo, setOpenInfo] = useState(false);
 
   if (!districtData) return null;
@@ -357,6 +357,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   );
 
   const renderTabContent = () => {
+    if (activeTab === null) return null;
     switch (activeTab) {
       case 0:
         return renderCampusesTab();
@@ -367,7 +368,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
       case 3:
         return renderRidesTab();
       default:
-        return renderCampusesTab();
+        return null;
     }
   };
 
@@ -470,7 +471,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         </Collapse>
 
             {/* Tabs */}
-            <div className="bg-white rounded-lg border border-[var(--gray-200)] shadow-sm">
+            <div className={`bg-white rounded-lg ${activeTab !== null ? 'border border-[var(--gray-200)] shadow-sm' : ''}`}>
               <div className="flex mt-2 ml-8">
                 {tabs.map((tab) => (
                   <button
@@ -493,10 +494,12 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                 ))}
               </div>
 
-              {/* Tab Content */}
-              <div className="p-6">
-                {renderTabContent()}
-              </div>
+              {/* Tab Content - Only show when a tab is active */}
+              {activeTab !== null && (
+                <div className="p-6">
+                  {renderTabContent()}
+                </div>
+              )}
             </div>
           </div>
         </div>

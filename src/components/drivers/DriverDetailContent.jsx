@@ -439,7 +439,7 @@ const DriverDocumentsForm = ({ driverData }) => {
 };
 
 export default function DriverDetailContent({ driverId }) {
-  const [activeTab, setActiveTab] = useState("upcoming-rides");
+  const [activeTab, setActiveTab] = useState(null);
   const [showDocumentsModal, setShowDocumentsModal] = useState(false);
   const [showVehicleModal, setShowVehicleModal] = useState(false);
   const [showEditVehicleModal, setShowEditVehicleModal] = useState(false);
@@ -471,6 +471,7 @@ export default function DriverDetailContent({ driverId }) {
   ];
 
   const renderTabContent = () => {
+    if (activeTab === null) return null;
     switch (activeTab) {
       case "upcoming-rides":
         return <UpcomingRidesTab driverId={driverId} />;
@@ -485,7 +486,7 @@ export default function DriverDetailContent({ driverId }) {
       case "blocked-students":
         return <BlockedStudentsTab driverId={driverId} />;
       default:
-        return <UpcomingRidesTab driverId={driverId} />;
+        return null;
     }
   };
 

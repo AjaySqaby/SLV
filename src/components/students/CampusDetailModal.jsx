@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 export default function CampusDetailModal({ open, onClose, campusData }) {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(null);
 
   if (!campusData) return null;
 
@@ -271,6 +271,7 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
   );
 
   const renderTabContent = () => {
+    if (activeTab === null) return null;
     switch (activeTab) {
       case 0:
         return renderStudentsTab();
@@ -279,7 +280,7 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
       case 2:
         return renderRidesTab();
       default:
-        return renderStudentsTab();
+        return null;
     }
   };
 
@@ -388,7 +389,7 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
         </div>
 
             {/* Tabs */}
-            <div className="bg-white rounded-lg border border-[var(--gray-200)] shadow-sm">
+            <div className={`bg-white rounded-lg ${activeTab !== null ? 'border border-[var(--gray-200)] shadow-sm' : ''}`}>
               <div className="flex mt-2 ml-8">
                 {tabs.map((tab) => (
                   <button
@@ -411,10 +412,12 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
                 ))}
               </div>
 
-              {/* Tab Content */}
-              <div className="p-6">
-                {renderTabContent()}
-              </div>
+              {/* Tab Content - Only show when a tab is active */}
+              {activeTab !== null && (
+                <div className="p-6">
+                  {renderTabContent()}
+                </div>
+              )}
             </div>
           </div>
         </div>

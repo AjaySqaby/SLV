@@ -32,7 +32,7 @@ import RidesTab from '@/components/campus/details/RidesTab'
 import HolidayExceptionsTab from '@/components/campus/details/HolidayExceptionsTab'
 
 export default function CampusDetailContent({ campusId, isModal = false, isEditMode = false }) {
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(null)
   const [isEditing, setIsEditing] = useState(isEditMode)
   const [editedCampusData, setEditedCampusData] = useState(null)
   const [holidays, setHolidays] = useState([])
@@ -255,6 +255,7 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
   }, [searchParams, campusData, isEditing])
 
   const renderTabContent = () => {
+    if (activeTab === null) return null;
     switch (activeTab) {
       case 0:
         return <StudentsTab students={students} />
