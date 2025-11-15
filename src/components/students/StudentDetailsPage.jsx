@@ -7,7 +7,7 @@ import StudentEditForm from "./StudentEditForm"
 
 export default function StudentDetailsPage({ params, forceViewModal, isModal = false }) {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeTab, setActiveTab] = useState(null)
 
   // Mock data for the student
   const student = {

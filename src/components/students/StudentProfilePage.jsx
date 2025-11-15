@@ -61,7 +61,7 @@ import Collapse from '@/components/ui/Collapse'
 
 export default function StudentProfilePage({ studentId }) {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState('routes')
+  const [activeTab, setActiveTab] = useState(null)
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showAddGuardianModal, setShowAddGuardianModal] = useState(false)
   const [showBlockDriverModal, setShowBlockDriverModal] = useState(false)
