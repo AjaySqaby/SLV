@@ -546,57 +546,61 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
 
         {/* Tabs always visible below general info */}
         <div className="w-full px-0 mt-8">
-          <div className="flex items-center space-x-2 mb-6">
+          <div className="flex items-center space-x-2 mb-6 ml-8">
             <button 
               onClick={() => setActiveTab(0)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 0 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === 0 ? 'var(--primary)' : '#f3f4f6',
+                color: activeTab === 0 ? '#ffffff' : '#6b7280',
+                border: activeTab === 0 ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
             >
               <Users className="w-4 h-4" />
               Students
             </button>
             <button 
               onClick={() => setActiveTab(1)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 1 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === 1 ? 'var(--primary)' : '#f3f4f6',
+                color: activeTab === 1 ? '#ffffff' : '#6b7280',
+                border: activeTab === 1 ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
             >
               <Route className="w-4 h-4" />
               Routes
             </button>
             <button 
               onClick={() => setActiveTab(2)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 2 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === 2 ? 'var(--primary)' : '#f3f4f6',
+                color: activeTab === 2 ? '#ffffff' : '#6b7280',
+                border: activeTab === 2 ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
             >
               <Car className="w-4 h-4" />
               Rides
             </button>
             <button 
               onClick={() => setActiveTab(3)}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 3 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === 3 ? 'var(--primary)' : '#f3f4f6',
+                color: activeTab === 3 ? '#ffffff' : '#6b7280',
+                border: activeTab === 3 ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
             >
               <Calendar className="w-4 h-4" />
               Holidays & Exceptions
             </button>
           </div>
-          {renderTabContent()}
+          {activeTab !== null && renderTabContent()}
         </div>
       </div>
     </div>

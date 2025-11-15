@@ -471,36 +471,31 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         </Collapse>
 
             {/* Tabs */}
-            <div className={`bg-white rounded-lg ${activeTab !== null ? 'border border-[var(--gray-200)] shadow-sm' : ''}`}>
-              <div className="flex mt-2 ml-8">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
-                    style={{
-                      backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
-                      color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
-                      borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
-                      marginRight: '4px',
-                      fontSize: '14px'
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <tab.icon className="w-6 h-6" />
-                      <span>{tab.label}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Tab Content - Only show when a tab is active */}
-              {activeTab !== null && (
-                <div className="p-6">
-                  {renderTabContent()}
-                </div>
-              )}
+            <div className="flex items-center space-x-2 mt-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                  style={{
+                    backgroundColor: activeTab === tab.id ? 'var(--primary)' : '#f3f4f6',
+                    color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                    border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              ))}
             </div>
+
+            {/* Tab Content - Only show when a tab is active */}
+            {activeTab !== null && (
+              <div className="p-6">
+                {renderTabContent()}
+              </div>
+            )}
           </div>
         </div>
       </div>
