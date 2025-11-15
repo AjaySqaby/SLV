@@ -110,7 +110,7 @@ export default function EmployeesContent() {
   });
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Header Section */}
       <div className="flex items-center">
        
@@ -280,7 +280,7 @@ export default function EmployeesContent() {
                 onToggle={() => handleCollapseToggle('employee-info')}
                 contentClassName="[&>*]:!mt-0"
               >
-                <div className="[&>*]:!mt-0 [&>*]:!mb-0 [&>*>*]:!mt-0 [&>*>*]:!mb-0">
+                <div className="[&>*]:!mt-0 [&>*]:!mb-[12px] [&>*>*]:!mt-0 [&>*>*]:!mb-[12px]">
                   {/* Employee Profile Header */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">

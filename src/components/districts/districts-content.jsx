@@ -121,7 +121,7 @@ export default function DistrictsContent() {
   });
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Header Section */}
       <div className="flex items-center">
        

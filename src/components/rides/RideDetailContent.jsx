@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react'
-import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield, Search, Calendar, Edit } from 'lucide-react'
+import { ArrowLeft, Car, X, Copy, Check, UserX, Settings, Route, Clock, Users, FileText, Star, Eye, Play, MapPin, ChevronDown, User, Shield, Search, Calendar, Edit, Map, Camera, AlertTriangle, Info } from 'lucide-react'
+import { FaUsers, FaHistory } from 'react-icons/fa'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
@@ -19,7 +20,7 @@ import DuplicateModal from '@/components/common/modals/DuplicateModal'
 import ManageTripModal from '@/components/common/modals/ManageTripModal'
 import EditTripModal from '@/components/common/modals/EditTripModal'
 
-export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
+export default function RideDetailContent({ rideId, onClose, onViewDriver, rideStatus: propRideStatus, showMapViewButtons = false, onManageTrip, onEditTrip, customTabs = null }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,7 +58,10 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
       </span>
     )
   }
-  const [activeTab, setActiveTab] = useState('stops')
+  // Use custom tabs if provided, otherwise use default tabs
+  const defaultTabs = customTabs ? null : ['stops', 'students', 'ridelog']
+  const initialTab = customTabs && customTabs.length > 0 ? (customTabs[0].value || customTabs[0].id || customTabs[0].key) : 'stops'
+  const [activeTab, setActiveTab] = useState(initialTab)
   const [selectedDriver, setSelectedDriver] = useState(null)
   const [mapView, setMapView] = useState('route') // route, photos, streetview
   const [showAllDrivers, setShowAllDrivers] = useState(false)
@@ -134,6 +138,22 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
           { id: 2, address: "Northside Charter High School", time: "7:15 AM", status: "completed", students: 1 },
           { id: 3, address: "Westminster Schools", time: "7:30 AM", status: "completed", students: 1 },
           { id: 4, address: "Cross Keys High School", time: "7:35 AM", status: "completed", students: 0 }
+        ],
+        events: [
+          {
+            type: "Speeding Event",
+            time: "7:32 AM",
+            details: "Speed: 45mph in 35mph zone",
+            location: "5325 Buford Hwy NE, Doraville, GA",
+            severity: "high",
+          },
+          {
+            type: "Hard Braking",
+            time: "7:41 AM",
+            details: "Sudden deceleration detected",
+            location: "Cross Keys High School",
+            severity: "medium",
+          },
         ],
         nearbyDrivers: [
           { id: 1, name: "John Smith", distance: "0.5 mi", eta: "5 min", rating: 4.8, vehicle: "Honda Pilot" },
@@ -250,7 +270,20 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         payment: {
           driverPayment: "$65.00",
           districtCharge: "$110.00"
-        }
+        },
+        events: [
+          {
+            type: "Speeding Event",
+            time: "9:15 AM",
+            details: "Speed: 50mph in 35mph zone",
+            location: "Buckhead Elementary",
+            severity: "high",
+          },
+        ],
+        stops: [
+          { id: 1, address: "Buckhead Elementary", time: "9:05 AM", status: "completed", students: 1 },
+          { id: 2, address: "145 Ralph McGill Blvd NE, Atlanta, GA 30308", time: "9:35 AM", status: "pending", students: 0 }
+        ]
       }
     } else {
       // Default ride data - make it dynamic based on common statuses
@@ -290,17 +323,32 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         payment: {
           driverPayment: "$75.00",
           districtCharge: "$120.00"
-        }
+        },
+        events: [
+          {
+            type: "Normal Driving",
+            time: "7:20 AM",
+            details: "Driver maintaining safe speed",
+            location: "5325 Buford Hwy NE, Doraville, GA",
+            severity: "low",
+          },
+        ],
+        stops: [
+          { id: 1, address: "5325 Buford Hwy NE, Doraville, GA", time: "7:00 AM", status: "completed", students: 1 },
+          { id: 2, address: "Cross Keys High School", time: "7:40 AM", status: "pending", students: 0 }
+        ]
       }
     }
   }
 
   const rideData = rideDataState || getRideData(rideId)
-
+  
+  // Use prop status if provided, otherwise fallback to rideData.status
+  const displayStatus = propRideStatus || rideData?.status || 'Unknown'
 
   // Calculate how many minutes late based on dropoff actual vs scheduled where applicable
   const computeLateMinutes = () => {
-    const status = String(rideData?.status || '').toLowerCase()
+    const status = String(displayStatus || '').toLowerCase()
     if (!(status === 'late' || status === 'delayed')) return undefined
     const scheduled = rideData?.dropoff?.scheduledTime
     const actual = rideData?.dropoff?.actualTime
@@ -430,9 +478,9 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
   }
 
   return (
-    <div className="bg-white h-screen flex flex-col">
-      {/* Header Section */}
-      <div className="mb-6 px-6 pt-6">
+    <div className="bg-white flex flex-col h-full">
+      {/* Header Section - Fixed */}
+      <div className="flex-shrink-0 mb-6 px-6 pt-6">
         {/* Top Row - Title and Status */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
@@ -440,7 +488,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             <Route className="w-5 h-5 text-[var(--blue-600)]" />
             <Clock className="w-5 h-5 text-[var(--blue-600)]" />
             <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
-            <StatusBadge status={rideData.status} fontSize="text-lg" lateMinutes={lateMinutes} />
+            <StatusBadge status={displayStatus} fontSize="text-lg" lateMinutes={lateMinutes} />
             <span className="text-sm font-medium text-gray-700">
               ETA: {formatTimeWithHighlight(rideData.eta, 'EST')}
             </span>
@@ -458,51 +506,83 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         {/* Bottom Row - Tabs and Action Buttons */}
         <div className="flex items-center justify-start">
           <div className="flex items-center space-x-2">
-            {/* Tabs */}
-            <button
-              onClick={() => setActiveTab('stops')}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
-                border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
-                borderRadius: '12px'
-              }}
-            >
-              <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
-                <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
-              </div>
-              TRIP STOPS
-            </button>
-            <button
-              onClick={() => setActiveTab('students')}
-              className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
-                border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
-                borderRadius: '12px'
-              }}
-            >
-              STUDENTS
-            </button>
-            <button
-              onClick={() => setActiveTab('ridelog')}
-              className="px-6 py-3 text-sm font-medium cursor-pointer transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)',
-                color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
-                border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
-                borderRadius: '12px'
-              }}
-            >
-              TIMELINE
-            </button>
+            {/* Tabs - Render custom tabs if provided, otherwise default tabs */}
+            {customTabs ? (
+              customTabs.map((tab, index) => {
+                const tabValue = tab.value || tab.id || tab.key
+                const isActive = activeTab === tabValue
+                return (
+                  <button
+                    key={tabValue || index}
+                    onClick={() => setActiveTab(tabValue)}
+                    className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 ${tab.icon ? '' : ''}`}
+                    style={{
+                      backgroundColor: isActive ? 'var(--primary)' : 'var(--gray-100)',
+                      color: isActive ? 'var(--on-primary)' : 'var(--muted-text)',
+                      border: isActive ? 'none' : '1px solid var(--gray-200)',
+                      borderRadius: '12px'
+                    }}
+                  >
+                    {index === 0 && isActive && (
+                      <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                        <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                      </div>
+                    )}
+                    {tab.icon && !(index === 0 && isActive) && <tab.icon className="w-4 h-4" />}
+                    {tab.label}
+                  </button>
+                )
+              })
+            ) : (
+              <>
+                <button
+                  onClick={() => setActiveTab('stops')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                  style={{
+                    backgroundColor: activeTab === 'stops' ? 'var(--primary)' : 'var(--gray-100)',
+                    color: activeTab === 'stops' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'stops' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                    <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                  </div>
+                  TRIP STOPS
+                </button>
+                <button
+                  onClick={() => setActiveTab('students')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                  style={{
+                    backgroundColor: activeTab === 'students' ? 'var(--primary)' : 'var(--gray-100)',
+                    color: activeTab === 'students' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'students' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <FaUsers className="w-4 h-4" />
+                  STUDENTS
+                </button>
+                <button
+                  onClick={() => setActiveTab('ridelog')}
+                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                  style={{
+                    backgroundColor: activeTab === 'ridelog' ? 'var(--primary)' : 'var(--gray-100)',
+                    color: activeTab === 'ridelog' ? 'var(--on-primary)' : 'var(--muted-text)',
+                    border: activeTab === 'ridelog' ? 'none' : '1px solid var(--gray-200)',
+                    borderRadius: '12px'
+                  }}
+                >
+                  <FaHistory className="w-4 h-4" />
+                  TIMELINE
+                </button>
+              </>
+            )}
 
             {/* Action Buttons */}
             <Button
               variant="secondary"
-              onClick={handleManageTrip}
+              onClick={onManageTrip || handleManageTrip}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
             >
               <Settings className="w-4 h-4" />
@@ -510,13 +590,13 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
             </Button>
             <Button
               variant="secondary"
-              onClick={() => {
+              onClick={onEditTrip || (() => {
                 setEditPickupAddress(rideData.pickup?.address || '')
                 setEditDropoffAddress(rideData.dropoff?.address || '')
                 setEditPickupTime(rideData.pickup?.scheduledTime || '')
                 setEditDropoffTime(rideData.dropoff?.scheduledTime || '')
                 setShowEditTripModal(true)
-              }}
+              })}
               className="flex items-center justify-center px-4 py-2 !rounded-full text-sm font-semibold cursor-pointer border transition-all duration-150 gap-2 bg-white text-black border-card-border"
             >
               <Edit className="w-4 h-4" />
@@ -526,8 +606,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         </div>
       </div>
 
-      {/* Main Content - Three-column grid */}
-      <div className="grid grid-cols-12 gap-6 items-start flex-1 px-6">
+      {/* Main Content - Three-column grid - Scrollable */}
+      <div className={`grid grid-cols-12 gap-6 items-start flex-1 px-6 ${onClose ? 'overflow-y-auto min-h-0' : ''}`}>
         {/* Left Sidebar - Clean Detail Stack */}
         <div className="col-span-3 min-w-0 space-y-4">
           {/* Driver */}
@@ -553,7 +633,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                   </div>
                 </div>
               </div>
-              <StatusBadge status={rideData.status} lateMinutes={lateMinutes} />
+              <StatusBadge status={displayStatus} lateMinutes={lateMinutes} />
             </div>
           </Card>
 
@@ -640,7 +720,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-gray-600"><span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>Completed</div>
                 <div className="font-medium text-gray-900">
-                  {rideData.status === 'Completed' ? formatTimeWithHighlight(rideData.dropoff?.actualTime, 'EST') : '--'}
+                  {displayStatus === 'Completed' ? formatTimeWithHighlight(rideData.dropoff?.actualTime, 'EST') : '--'}
                 </div>
               </div>
             </div>
@@ -1108,6 +1188,171 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 </div>
               )}
 
+              {/* LIVE TRACKING Tab - for Eagle Eye */}
+              {activeTab === 'livetracking' && (
+                <div className="space-y-6">
+                  {/* Route Events Section */}
+                  <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                    <h3 className="text-lg font-semibold mb-6 flex items-center" style={{ color: 'var(--heading)' }}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: 'var(--blue-600)' }}>
+                        <MapPin className="w-4 h-4 text-white" />
+                      </div>
+                      Route Events
+                      <div className="ml-auto">
+                        <span className="px-3 py-1 text-sm rounded-full" style={{ backgroundColor: 'var(--blue-100)', color: 'var(--blue-700)' }}>
+                          {(rideData.events || []).length} Events
+                        </span>
+                      </div>
+                    </h3>
+
+                    <div className="space-y-4">
+                      {(rideData.events || []).map((event, index) => (
+                        <div
+                          key={index}
+                          className="p-4 rounded-lg shadow-sm border border-gray-200"
+                          style={{
+                            backgroundColor: event.severity === "high" ? '#fef2f2' : '#fff7ed',
+                            borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
+                          }}
+                        >
+                          <div className="flex items-start gap-4">
+                            {/* Event Icon with Colored Background */}
+                            <div
+                              className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
+                              style={{
+                                backgroundColor: event.severity === "high" ? '#ef4444' : '#f97316'
+                              }}
+                            >
+                              {event.severity === "high" ? (
+                                <AlertTriangle className="w-5 h-5 text-white" />
+                              ) : (
+                                <Info className="w-5 h-5 text-white" />
+                              )}
+                            </div>
+
+                            {/* Event Details */}
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <h4 className="text-base font-semibold" style={{ color: 'var(--heading)' }}>
+                                    {event.type}
+                                  </h4>
+                                  <span
+                                    className="px-2 py-1 text-xs font-medium rounded-full border"
+                                    style={{
+                                      backgroundColor: event.severity === "high" ? '#fee2e2' : '#fed7aa',
+                                      color: event.severity === "high" ? '#b91c1c' : '#c2410c',
+                                      borderColor: event.severity === "high" ? '#fecaca' : '#fed7aa'
+                                    }}
+                                  >
+                                    {event.severity === "high" ? "High Priority" : "Medium Priority"}
+                                  </span>
+                                </div>
+                                <div className="text-right">
+                                  <span
+                                    className="text-xs font-medium px-2 py-1 rounded-full"
+                                    style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
+                                  >
+                                    {event.time}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <p className="text-sm font-medium" style={{ color: '#374151' }}>
+                                  {event.details}
+                                </p>
+                                {event.location && (
+                                  <div
+                                    className="flex items-center gap-2 p-2 rounded-lg border border-gray-200"
+                                    style={{ backgroundColor: '#f9fafb' }}
+                                  >
+                                    <MapPin className="w-4 h-4" style={{ color: '#dc2626' }} />
+                                    <span className="text-xs font-medium" style={{ color: '#6b7280' }}>
+                                      {event.location}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {(!rideData.events || rideData.events.length === 0) && (
+                        <div className="text-center py-8 text-gray-500">
+                          No events recorded for this ride
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STOPS Tab - for Eagle Eye (separate from TRIP STOPS) */}
+              {activeTab === 'stops-list' && (
+                <div className="space-y-6">
+                  {/* Stops with vertical line */}
+                  <div className="relative">
+                    {/* Vertical line */}
+                    <div className="absolute left-6 top-0 bottom-0 w-0.5" style={{ backgroundColor: 'var(--blue-100)' }}></div>
+
+                    <div className="space-y-8">
+                      {(rideData.stops || []).map((stop, index) => (
+                        <div key={stop.id || index} className="relative">
+                          <div className="flex items-start gap-4">
+                            {/* Stop number circle */}
+                            <div className="relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-sm" 
+                              style={{ backgroundColor: index === 0 ? 'var(--green-600)' : 'var(--orange)' }}>
+                              <span className="text-white font-bold text-lg">{stop.id || (index + 1)}</span>
+                            </div>
+
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-lg font-semibold" style={{ color: 'var(--heading)' }}>{stop.address}</h4>
+                                <button className="flex items-center gap-1 text-sm font-medium hover:opacity-80 transition-opacity" style={{ color: 'var(--blue-600)' }}>
+                                  <Eye className="w-4 h-4" />
+                                  View Details
+                                </button>
+                              </div>
+
+                              <div className="space-y-2 text-sm" style={{ color: 'var(--muted-text)' }}>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-4 h-4 rounded-sm flex items-center justify-center" style={{ backgroundColor: 'var(--amber-500)' }}>
+                                    <span className="text-white text-xs">{index === 0 ? '🏠' : '🏫'}</span>
+                                  </div>
+                                  <span>{index === 0 ? 'Residential • Door-to-door pickup' : 'School Campus • Main entrance'}</span>
+                                </div>
+                                <div className="ml-6">
+                                  <span>Scheduled {stop.time} {stop.status === 'completed' ? 'Completed' : 'Pending'} {stop.students || 0} student{(stop.students || 0) !== 1 ? 's' : ''}</span>
+                                </div>
+                              </div>
+
+                              {/* Student info */}
+                              {stop.students > 0 && (
+                                <div className="mt-4 flex items-center gap-3">
+                                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--purple-600)' }}>
+                                    <User className="w-3 h-3 text-white" />
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                    <span style={{ color: 'var(--muted-text)' }}>{stop.students} student{(stop.students || 0) !== 1 ? 's' : ''}</span>
+                                    <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'var(--gray-100)', color: 'var(--muted-text)' }}>{stop.status || 'Scheduled'}</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {(!rideData.stops || rideData.stops.length === 0) && (
+                        <div className="text-center py-8 text-gray-500">
+                          No stops recorded for this ride
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeTab === 'documents' && (
                 <Card className="p-6 shadow-sm border border-gray-100">
                   <div className="mb-4">
@@ -1170,7 +1415,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
                 <RideMap
                   pickup={rideData.pickup}
                   dropoff={rideData.dropoff}
-                  status={rideData.status}
+                  status={displayStatus}
                   className="w-full h-full"
                   mapView={mapView}
                 />
@@ -1247,8 +1492,35 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver }) {
         </div>
       </div>
 
-
-
+      {/* Map View Buttons - shown when showMapViewButtons is true */}
+      {showMapViewButtons && (
+        <div className="flex-shrink-0 p-4 border-t border-[var(--border)] flex justify-center space-x-4">
+          <Button 
+            variant="secondary" 
+            onClick={() => setMapView('route')}
+            className={`flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)] ${mapView === 'route' ? 'bg-[var(--surface-muted)]' : ''}`}
+          >
+            <Map size={18} />
+            <span>Route Map</span>
+          </Button>
+          <Button 
+            variant="secondary" 
+            onClick={() => setMapView('photos')}
+            className={`flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)] ${mapView === 'photos' ? 'bg-[var(--surface-muted)]' : ''}`}
+          >
+            <Camera size={18} />
+            <span>Stop Photos</span>
+          </Button>
+          <Button 
+            variant="secondary" 
+            onClick={() => setMapView('streetview')}
+            className={`flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-md hover:bg-[var(--surface-muted)] ${mapView === 'streetview' ? 'bg-[var(--surface-muted)]' : ''}`}
+          >
+            <Eye size={18} />
+            <span>Street View</span>
+          </Button>
+        </div>
+      )}
 
       {/* View All Drivers Modal */}
       {showAllDrivers && (
