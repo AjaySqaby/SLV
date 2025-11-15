@@ -546,7 +546,7 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
 
         {/* Tabs always visible below general info */}
         <div className="w-full px-0 mt-8">
-          <div className="flex items-center space-x-2 mb-6 ml-8">
+          <div className="flex items-center space-x-2 mb-6">
             <button 
               onClick={() => setActiveTab(0)}
               className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
