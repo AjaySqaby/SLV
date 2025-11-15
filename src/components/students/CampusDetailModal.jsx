@@ -389,7 +389,7 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
         </div>
 
             {/* Tabs */}
-            <div className="flex items-center space-x-2 mt-4 ml-8">
+            <div className="flex items-center space-x-2 mt-4">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
