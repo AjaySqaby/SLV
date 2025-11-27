@@ -23,6 +23,7 @@ import Button from "../ui/Button";
 import Collapse from "../ui/Collapse";
 import AddEmployeeModal from "./AddEmployeeModal";
 import EmployeeActionsDropdown from "./EmployeeActionsDropdown";
+import StatusBadge from "../ui/StatusBadge";
 
 export default function EmployeesContent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,90 +150,93 @@ export default function EmployeesContent() {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">ID</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Title</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Campus</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Email</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Phone</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
-              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredEmployees.length > 0 ? (
-              filteredEmployees.map((employee) => (
-                <tr
-                  key={employee.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
-                  onClick={() => handleViewEmployee(employee)}
-                >
-                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
-                        {filteredEmployees.indexOf(employee) + 1}
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">ID</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Title</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Campus</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Phone</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+                <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredEmployees.length > 0 ? (
+                filteredEmployees.map((employee) => (
+                  <tr
+                    key={employee.id}
+                    className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                    onClick={() => handleViewEmployee(employee)}
+                  >
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                          {filteredEmployees.indexOf(employee) + 1}
+                        </div>
+                        <span className="font-medium">{employee.id}</span>
                       </div>
-                      <span className="font-medium">{employee.id}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{employee.name}</td>
-                  <td className="px-6 py-4 text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">{employee.title}</td>
-                  <td className="px-6 py-4 text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">{employee.district}</td>
-                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Building2 className="h-4 w-4" />
-                      {employee.campus}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Mail className="h-4 w-4" />
-                      {employee.email}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Phone className="h-4 w-4" />
-                      {employee.phone}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
-                      {employee.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center">
-                      <EmployeeActionsDropdown
-                        employee={employee}
-                        onView={handleViewEmployee}
-                        onEdit={handleEditEmployee}
+                    </td>
+                    <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{employee.name}</td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{employee.title}</td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{employee.district}</td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-[var(--muted-text)]" />
+                        {employee.campus}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-[var(--muted-text)]" />
+                        {employee.email}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-[var(--muted-text)]" />
+                        {employee.phone}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <StatusBadge
+                        status={employee.status}
+                        type={employee.status === "Active" ? "active" : "inactive"}
                       />
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex justify-center">
+                        <EmployeeActionsDropdown
+                          employee={employee}
+                          onView={handleViewEmployee}
+                          onEdit={handleEditEmployee}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mb-4">
+                        <Users className="h-8 w-8 text-[var(--muted-text)]" />
+                      </div>
+                      <p className="text-[var(--muted-text)] text-center">
+                        No employees found. Add your first employee!
+                      </p>
                     </div>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mb-4">
-                      <Users className="h-8 w-8 text-[var(--muted-text)]" />
-                    </div>
-                    <p className="text-[var(--muted-text)] text-center">
-                      No employees found. Add your first employee!
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Add Employee Modal */}

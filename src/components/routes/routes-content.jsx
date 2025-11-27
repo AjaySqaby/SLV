@@ -293,9 +293,9 @@ export default function RoutesContent() {
                        <span className="font-medium">{route.id}</span>
                      </div>
                    </td>
-                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">{route.name}</td>
+                   <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">{route.name}</td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                     <span className="text-blue-600 cursor-pointer hover:underline">
+                     <span className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]">
                        {route.district}
                      </span>
                    </td>
@@ -310,19 +310,19 @@ export default function RoutesContent() {
                    </td>
                   <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
                     {route.driver ? (
-                      <button
-                        className="text-blue-600 hover:underline"
+                      <span
+                        className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
                         onClick={(e) => { e.stopPropagation(); openAssignDriver(route); }}
                       >
                         {route.driver} (change)
-                      </button>
+                      </span>
                     ) : (
-                      <button
-                        className="text-blue-600 hover:underline"
+                      <span
+                        className="text-[var(--blue-600)] hover:underline cursor-pointer transition-colors hover:text-[var(--blue-700)]"
                         onClick={(e) => { e.stopPropagation(); openAssignDriver(route); }}
                       >
                         Assign Driver
-                      </button>
+                      </span>
                     )}
                   </td>
                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">

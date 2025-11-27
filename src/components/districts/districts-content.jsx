@@ -160,88 +160,90 @@ export default function DistrictsContent() {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Location</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Schools</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Students</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Routes</th>
-              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredDistricts.length > 0 ? (
-              filteredDistricts.map((district) => (
-                <tr
-                  key={district.id}
-                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
-                  onClick={() => handleViewDistrict(district)}
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
-                        {filteredDistricts.indexOf(district) + 1}
-                      </div>
-                      <span className="font-medium">{district.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <MapPin className="h-4 w-4" />
-                      {district.location}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Building2 className="h-4 w-4" />
-                      {district.schools}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Users className="h-4 w-4" />
-                      {district.students}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-[var(--muted-text)]">
-                      <Route className="h-4 w-4" />
-                      {district.routes}
-                    </div>
-                  </td>
-                  <td 
-                    className="px-6 py-4"
-                    onClick={(e) => e.stopPropagation()}
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">District Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Location</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Schools</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Students</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Routes</th>
+                <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredDistricts.length > 0 ? (
+                filteredDistricts.map((district) => (
+                  <tr
+                    key={district.id}
+                    className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                    onClick={() => handleViewDistrict(district)}
                   >
-                    <div className="flex justify-center">
-                      <DistrictActionsDropdown
-                        district={district}
-                        onView={handleViewDistrict}
-                        onEdit={handleEditDistrict}
-                      />
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                          {filteredDistricts.indexOf(district) + 1}
+                        </div>
+                        <span className="font-medium">{district.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2 text-[var(--muted-text)]">
+                        <MapPin className="h-4 w-4" />
+                        {district.location}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-[var(--muted-text)]" />
+                        {district.schools}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-[var(--muted-text)]" />
+                        {district.students}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                      <div className="flex items-center gap-2">
+                        <Route className="h-4 w-4 text-[var(--muted-text)]" />
+                        {district.routes}
+                      </div>
+                    </td>
+                    <td 
+                      className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex justify-center">
+                        <DistrictActionsDropdown
+                          district={district}
+                          onView={handleViewDistrict}
+                          onEdit={handleEditDistrict}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mb-4">
+                        <Building2 className="h-8 w-8 text-[var(--muted-text)]" />
+                      </div>
+                      <p className="text-[var(--muted-text)] text-center">
+                        No districts found. Add your first district!
+                      </p>
                     </div>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-[var(--gray-100)] rounded-full flex items-center justify-center mb-4">
-                      <Building2 className="h-8 w-8 text-[var(--muted-text)]" />
-                    </div>
-                    <p className="text-[var(--muted-text)] text-center">
-                      No districts found. Add your first district!
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Add District Modal */}

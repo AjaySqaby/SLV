@@ -169,68 +169,70 @@ export default function OnboardingContent() {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver ID</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Start Date</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Onboarding Progress</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
-              <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((driver) => (
-              <tr 
-                key={driver.id} 
-                className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
-                onClick={() => handleManageDriver(driver)}
-              >
-                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
-                      {filteredData.indexOf(driver) + 1}
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Driver ID</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Start Date</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Onboarding Progress</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+                <th className="px-6 py-3 text-center text-sm font-semibold text-[var(--gray-700)]">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((driver) => (
+                <tr 
+                  key={driver.id} 
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200 cursor-pointer"
+                  onClick={() => handleManageDriver(driver)}
+                >
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[var(--purple)] text-white flex items-center justify-center text-sm font-bold">
+                        {filteredData.indexOf(driver) + 1}
+                      </div>
+                      <span className="font-medium">{driver.id}</span>
                     </div>
-                    <span className="font-medium">{driver.id}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-[var(--heading)] hover:bg-[var(--gray-100)] transition-all duration-200">
-                  {driver.name}
-                </td>
-                <td className="px-6 py-4 text-sm text-[var(--muted-text)] hover:bg-[var(--gray-100)] transition-all duration-200">
-                  {driver.startDate}
-                </td>
-                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <ProgressBar
-                        progress={driver.progress}
-                        className="h-2"
-                        color={getProgressColor(driver.progress)}
+                  </td>
+                  <td className="px-6 py-4 font-medium hover:bg-[var(--gray-100)] transition-all duration-200">
+                    {driver.name}
+                  </td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    {driver.startDate}
+                  </td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1">
+                        <ProgressBar
+                          progress={driver.progress}
+                          className="h-2"
+                          color={getProgressColor(driver.progress)}
+                        />
+                      </div>
+                      <span className="font-medium min-w-[40px]">
+                        {driver.progress}%
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    {getStatusBadge(driver.status)}
+                  </td>
+                  <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
+                    <div className="flex justify-center">
+                      <OnboardingActionsDropdown
+                        driver={driver}
+                        onManage={handleManageDriver}
                       />
                     </div>
-                    <span className="text-sm font-medium text-[var(--heading)] min-w-[40px]">
-                      {driver.progress}%
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 hover:bg-[var(--gray-100)] transition-all duration-200">
-                  {getStatusBadge(driver.status)}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex justify-center">
-                    <OnboardingActionsDropdown
-                      driver={driver}
-                      onManage={handleManageDriver}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Empty State */}
