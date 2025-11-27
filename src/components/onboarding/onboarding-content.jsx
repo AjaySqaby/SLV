@@ -124,7 +124,7 @@ export default function OnboardingContent() {
   });
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
@@ -150,7 +150,7 @@ export default function OnboardingContent() {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-6">
         <div className="flex-1">
           <SearchInput
             value={searchQuery}

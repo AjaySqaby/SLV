@@ -13,7 +13,8 @@ import {
   Eye,
   User,
   X,
-  GraduationCap
+  GraduationCap,
+  Pencil
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
@@ -247,42 +248,54 @@ export default function EmployeesContent() {
           onClick={handleViewModalClose}
         >
           <div 
-            className="bg-white rounded-2xl w-[95vw] h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] max-w-7xl mx-4 overflow-hidden flex flex-col"
+            className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)] flex-shrink-0">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-[var(--primary)]" />
+                <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+                  <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Employee Details</h2>
-                  <p className="text-[var(--muted-text)]">{selectedEmployee.name} - {selectedEmployee.id}</p>
+                  <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Employee Details</h2>
+                  <p style={{ color: '#6b7280' }}>{selectedEmployee.name} - {selectedEmployee.id}</p>
                 </div>
               </div>
-              <button
-                onClick={handleViewModalClose}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
-              >
-                <X className="w-6 h-6 text-[var(--gray-500)]" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    handleViewModalClose();
+                    handleEditEmployee(selectedEmployee);
+                  }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                  aria-label="Edit employee"
+                  title="Edit"
+                >
+                  <Pencil className="w-5 h-5" style={{ color: '#6b7280' }} />
+                </button>
+                <button
+                  onClick={handleViewModalClose}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                  aria-label="Close"
+                  title="Close"
+                >
+                  <X className="w-6 h-6" style={{ color: '#6b7280' }} />
+                </button>
+              </div>
             </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              {/* Single Collapse with All Employee Information */}
+
+            {/* Collapse - Employee Information */}
+            <div className="px-6 pt-4">
               <Collapse 
                 title="Employee Information" 
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
-                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                }
+                icon={<User className="w-4 h-4 text-purple-600" />}
                 isOpen={openCollapse === 'employee-info'}
                 onToggle={() => handleCollapseToggle('employee-info')}
-                contentClassName="[&>*]:!mt-0"
               >
-                <div className="[&>*]:!mt-0 [&>*]:!mb-[12px] [&>*>*]:!mt-0 [&>*>*]:!mb-[12px]">
+                <div className="space-y-6">
                   {/* Employee Profile Header */}
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
                         <User className="w-8 h-8 text-[var(--purple-600)]" />
@@ -294,7 +307,7 @@ export default function EmployeesContent() {
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                      <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                         {selectedEmployee.status}
                       </div>
                       <div className="text-sm text-[var(--muted-text)]">
@@ -305,170 +318,143 @@ export default function EmployeesContent() {
 
                   {/* Employee Information Section */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                      <User className="w-4 h-4 text-[var(--blue-600)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-[var(--muted-text)]">NAME</div>
-                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.name}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                      <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-[var(--muted-text)]">TITLE</div>
-                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.title}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                      <Mail className="w-4 h-4 text-[var(--purple-600)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
-                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.email}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                      <Phone className="w-4 h-4 text-[var(--orange-600)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-[var(--muted-text)]">PHONE</div>
-                      <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.phone}</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Work Information Section */}
-                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Work Information</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                        <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
+                        <User className="w-4 h-4 text-[var(--blue-600)]" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">DISTRICT</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.district}</div>
+                        <div className="text-sm text-[var(--muted-text)]">NAME</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.name}</div>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                        <Building2 className="w-4 h-4 text-[var(--green-600)]" />
+                        <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">CAMPUS</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.campus}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Employment Details Section */}
-                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Employment Details</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--green-600)] font-bold text-xs">📅</div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">HIRE DATE</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">Jan 15, 2020</div>
+                        <div className="text-sm text-[var(--muted-text)]">TITLE</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.title}</div>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🏢</div>
+                        <Mail className="w-4 h-4 text-[var(--purple-600)]" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">DEPARTMENT</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">Administration</div>
+                        <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.email}</div>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">⏰</div>
+                        <Phone className="w-4 h-4 text-[var(--orange-600)]" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">WORK HOURS</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">Full-time (40 hrs/week)</div>
+                        <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+                        <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.phone}</div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Performance & Skills Section */}
-                <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-                  <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Performance & Skills</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--blue-600)] font-bold text-xs">⭐</div>
+                  {/* Work Information Section */}
+                  <div className="pt-4 border-t border-[var(--gray-200)]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                          <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">DISTRICT</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.district}</div>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">PERFORMANCE RATING</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">Excellent (4.8/5)</div>
+                      
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                          <Building2 className="w-4 h-4 text-[var(--green-600)]" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">CAMPUS</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">{selectedEmployee.campus}</div>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🎓</div>
+                  </div>
+
+                  {/* Employment Details Section */}
+                  <div className="pt-4 border-t border-[var(--gray-200)]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--green-600)] font-bold text-xs">📅</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">HIRE DATE</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">Jan 15, 2020</div>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">EDUCATION</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">Master's in Education</div>
+                      
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🏢</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">DEPARTMENT</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">Administration</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">⏰</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">WORK HOURS</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">Full-time (40 hrs/week)</div>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                        <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">🏆</div>
+                  </div>
+
+                  {/* Performance & Skills Section */}
+                  <div className="pt-4 border-t border-[var(--gray-200)]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--blue-600)] font-bold text-xs">⭐</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">PERFORMANCE RATING</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">Excellent (4.8/5)</div>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-[var(--muted-text)]">CERTIFICATIONS</div>
-                        <div className="text-sm font-medium text-[var(--primary-black)]">3 Active Certifications</div>
+                      
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--purple-600)] font-bold text-xs">🎓</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">EDUCATION</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">Master's in Education</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                          <div className="w-4 h-4 text-[var(--orange-600)] font-bold text-xs">🏆</div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm text-[var(--muted-text)]">CERTIFICATIONS</div>
+                          <div className="text-sm font-medium text-[var(--primary-black)]">3 Active Certifications</div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </Collapse>
-            </div>
-            
-            {/* Footer Buttons */}
-            <div className="border-t border-[var(--gray-200)] p-6 flex-shrink-0">
-              <div className="flex justify-end gap-3">
-                <Button 
-                  variant="secondary" 
-                  onClick={handleViewModalClose}
-                  className="flex items-center gap-2"
-                >
-                  <X className="w-4 h-4" />
-                  Close
-                </Button>
-                <Button 
-                  className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white flex items-center gap-2"
-                  onClick={() => {
-                    handleViewModalClose();
-                    handleEditEmployee(selectedEmployee);
-                  }}
-                >
-                  <Edit className="w-4 h-4" />
-                  Edit Employee
-                </Button>
-              </div>
             </div>
           </div>
         </div>

@@ -491,7 +491,7 @@ export default function DriverDetailContent({ driverId }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="px-6 pt-4">
       {/* Single Collapse with All Information */}
       <Collapse 
         title="Driver Information" 
@@ -505,7 +505,7 @@ export default function DriverDetailContent({ driverId }) {
       >
         <div className="space-y-6">
           {/* Driver Profile Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
               <img
@@ -532,7 +532,7 @@ export default function DriverDetailContent({ driverId }) {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               Active
             </div>
             <div className="flex gap-2">
@@ -607,7 +607,7 @@ export default function DriverDetailContent({ driverId }) {
         </div>
 
         {/* License Expiration */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        <div className="pt-4 border-t border-[var(--gray-200)]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-[var(--orange-600)]">
@@ -622,10 +622,10 @@ export default function DriverDetailContent({ driverId }) {
         </div>
 
         {/* Vehicle Information Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        <div className="pt-4 border-t border-[var(--gray-200)]">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-md font-semibold text-[var(--primary-black)]">Vehicle Information</h4>
-            <div className="bg-[var(--green-100)] text-[var(--green-600)] px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path d="M5 13l4 4L19 7" />
               </svg>
@@ -682,7 +682,7 @@ export default function DriverDetailContent({ driverId }) {
         </div>
 
         {/* Transportation Summary Section */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        <div className="pt-4 border-t border-[var(--gray-200)]">
           <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Transportation Summary</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-3">
@@ -724,7 +724,7 @@ export default function DriverDetailContent({ driverId }) {
         </div>
 
          {/* Action Buttons */}
-         <div className="mt-6 pt-6 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
+         <div className="pt-4 border-t border-[var(--gray-200)] grid grid-cols-1 md:grid-cols-2 gap-3">
            <Button 
              variant="secondary" 
              className="flex items-center justify-center gap-2 text-[var(--muted-text)] border border-[var(--gray-200)]"
@@ -752,7 +752,7 @@ export default function DriverDetailContent({ driverId }) {
        </Collapse>
 
       {/* Driver Tabs Section - always visible outside general info */}
-      <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+      <div className="pt-4 border-t border-[var(--gray-200)]">
         <DriverTabs 
           activeTab={activeTab} 
           onTabChange={setActiveTab} 

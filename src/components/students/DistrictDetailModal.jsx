@@ -26,7 +26,11 @@ import {
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   const [activeTab, setActiveTab] = useState(null);
-  const [openInfo, setOpenInfo] = useState(false);
+  const [openCollapse, setOpenCollapse] = useState('district-info');
+  
+  const handleCollapseToggle = (collapseId) => {
+    setOpenCollapse(openCollapse === collapseId ? null : collapseId);
+  };
 
   if (!districtData) return null;
 
@@ -372,6 +376,10 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
     }
   };
 
+  const renderContent = () => {
+    return renderTabContent();
+  };
+
   if (!open) return null;
 
   return (
@@ -380,123 +388,116 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl w-[95vw] h-[90vh] max-w-7xl mx-4 overflow-hidden relative"
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-[var(--primary)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+              <Building2 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[var(--primary-black)]">{mockDistrictData.name}</h2>
-              <p className="text-[var(--muted-text)]">District Details</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>{mockDistrictData.name}</h2>
+              <p style={{ color: '#6b7280' }}>District Details</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            aria-label="Close"
+            title="Close"
           >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
+            <X className="w-6 h-6" style={{ color: '#6b7280' }} />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
-          <div className="space-y-6">
+        {/* Collapse - District Information */}
+        <div className="px-6 pt-4">
+          <Collapse 
+            title="District Information" 
+            icon={<Building2 className="w-4 h-4 text-purple-600" />}
+            isOpen={openCollapse === 'district-info'}
+            onToggle={() => handleCollapseToggle('district-info')}
+          >
+            <div className="space-y-6">
+              {/* District Profile Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                    <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-2xl text-[var(--primary-black)]">{mockDistrictData.name}</div>
+                    <div className="text-sm text-[var(--muted-text)]">District ID: {mockDistrictData.id}</div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {mockDistrictData.status}
+                  </div>
+                </div>
+              </div>
 
-            {/* District Details - collapsible (hidden by default) */}
-            <Collapse
-              title="District Information"
-              isOpen={openInfo}
-              onToggle={() => setOpenInfo(!openInfo)}
-            >
-            <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                  <Building2 className="w-8 h-8 text-[var(--green-600)]" />
+              {/* District Information Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Hash className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">ID</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.id}</div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--primary-black)]">
-                  District Details
-                </h3>
-              </div>
-          <div className="grid grid-cols-3 gap-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--gray-100)] rounded-full flex items-center justify-center">
-                  <Hash className="w-4 h-4 text-[var(--gray-600)]" />
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Globe className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">REGION</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.region}</div>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">ID</span>
-                  <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.id}</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                  <Globe className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div>
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Region</span>
-                  <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.region}</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
-                  <MapPin className="w-4 h-4 text-[var(--amber-600)]" />
-                </div>
-                <div>
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">City</span>
-                  <p className="text-sm font-medium text-[var(--heading)]">{mockDistrictData.city}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--green-100)] rounded-full flex items-center justify-center">
-                  <div className="w-3 h-3 bg-[var(--green-600)] rounded-full"></div>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <span className="text-xs text-[var(--gray-500)] uppercase tracking-wide">Status</span>
-                  <div>
-                    <StatusBadge status={mockDistrictData.status} type="active" />
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">CITY</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.city}</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Collapse>
         </div>
-        </Collapse>
 
-            {/* Tabs */}
-            <div className="flex items-center space-x-2 mt-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-                  style={{
-                    backgroundColor: activeTab === tab.id ? 'var(--primary)' : '#f3f4f6',
-                    color: activeTab === tab.id ? '#ffffff' : '#6b7280',
-                    border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
-                    borderRadius: '12px'
-                  }}
-                >
-                  <tab.icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              ))}
-            </div>
+        {/* Tabs */}
+        <div className="flex items-center space-x-2 mt-4 ml-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
 
-            {/* Tab Content - Only show when a tab is active */}
-            {activeTab !== null && (
-              <div className="p-6">
-                {renderTabContent()}
-              </div>
-            )}
-          </div>
+        {/* Content */}
+        <div className="p-6 overflow-y-auto flex-1">
+          {renderTabContent()}
         </div>
       </div>
     </div>

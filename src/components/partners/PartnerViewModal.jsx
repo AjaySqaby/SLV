@@ -369,7 +369,7 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     {partner.status}
                   </div>
                   <div className="text-sm text-[var(--muted-text)]">

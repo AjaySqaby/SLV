@@ -227,37 +227,37 @@ export default function StudentProfilePage({ studentId }) {
   }
 
   return (
-    <div className="bg-transparent min-h-screen">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-6">
-        <div className="flex items-center justify-between">
+    <div className="bg-transparent">
+      {/* Header Section with Profile Info and Actions */}
+      <div className="px-6 pt-6">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-           
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b82f6' }}>
-                <Users className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                <Users className="w-8 h-8" style={{ color: '#6b7280' }} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{studentData.name}</h1>
-                {/* <p className="text-sm text-gray-600">Student Profile</p> */}
+                <h1 className="text-2xl font-bold" style={{ color: '#111827' }}>{studentData.name}</h1>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <StatusBadge status={studentData.status} />
+            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              {studentData.status}
+            </div>
             <div className="flex gap-2">
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-[var(--gray-100)] text-[var(--primary-black)] px-3 py-1 rounded font-medium text-sm border border-[var(--gray-200)]"
               >
                 <FileText className="w-4 h-4" />
                 Text
               </Button>
               <Button
-                variant="outline"
+                variant="primary"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-[var(--blue)] text-white px-3 py-1 rounded font-medium text-sm"
               >
                 <RiPhoneLine className="w-4 h-4" />
                 Call
@@ -268,20 +268,21 @@ export default function StudentProfilePage({ studentId }) {
       </div>
 
       {/* Main Content */}
-      <div className="p-6">
+      <div className="px-6 pt-4">
         {/* Single Collapse with All Information */}
         <Collapse 
           title="Student Information" 
           icon={
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
               <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           }
           isOpen={openCollapse === 'student-info'}
           onToggle={() => handleCollapseToggle('student-info')}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-6">
             {/* Student Details Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
                 <Hash className="w-4 h-4 text-[var(--blue-600)]" />
@@ -321,30 +322,32 @@ export default function StudentProfilePage({ studentId }) {
                 <div className="text-sm font-medium text-[var(--primary-black)]">{studentData.address}</div>
               </div>
             </div>
+            </div>
 
-            {/* Equipment */}
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
-                <span className="text-sm">🧰</span>
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">SPECIAL EQUIPMENT</div>
-                <div className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap">
-                  {(studentData.equipment || []).length === 0 ? (
-                    <span className="text-sm text-[var(--gray-500)]">None</span>
-                  ) : (
-                    studentData.equipment.map((eq) => (
-                      <span key={eq} className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{eq}</span>
-                    ))
-                  )}
+            {/* Special Equipment Section */}
+            <div className="pt-4 border-t border-[var(--gray-200)]">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--cyan-100)] flex items-center justify-center">
+                  <span className="text-sm">🧰</span>
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-[var(--muted-text)]">SPECIAL EQUIPMENT</div>
+                  <div className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap">
+                    {(studentData.equipment || []).length === 0 ? (
+                      <span className="text-sm text-[var(--muted-text)]">None</span>
+                    ) : (
+                      studentData.equipment.map((eq) => (
+                        <span key={eq} className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[var(--gray-100)] text-[var(--gray-700)]">{eq}</span>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           
           {/* Guardian Information Section */}
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
                   <User className="w-4 h-4 text-[var(--green-600)]" />
@@ -378,7 +381,7 @@ export default function StudentProfilePage({ studentId }) {
           </div>
 
           {/* Transportation Information Section */}
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+          <div className="pt-4 border-t border-[var(--gray-200)]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
@@ -407,7 +410,7 @@ export default function StudentProfilePage({ studentId }) {
                 <div className="flex-1">
                   <div className="text-sm text-[var(--muted-text)]">STATUS</div>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                    <span className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                       {studentData.transportation.status}
                     </span>
                   </div>
@@ -415,11 +418,12 @@ export default function StudentProfilePage({ studentId }) {
               </div>
             </div>
           </div>
+          </div>
 
         </Collapse>
 
         {/* Tabs Section - always visible outside general info */}
-        <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+        <div className="pt-4 border-t border-[var(--gray-200)]">
           <div className="flex items-center space-x-2 mb-6">
             <button 
               onClick={() => setActiveTab('routes')}

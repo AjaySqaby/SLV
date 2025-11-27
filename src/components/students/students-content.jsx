@@ -288,14 +288,14 @@ export default function StudentsContent() {
             className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-                  <GraduationCap className="w-6 h-6 text-[var(--primary)]" />
+                <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+                  <GraduationCap className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[var(--primary-black)]">Student Details</h2>
-                  <p className="text-[var(--muted-text)]">{selectedStudent.name} - {selectedStudent.id}</p>
+                  <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Student Details</h2>
+                  <p style={{ color: '#6b7280' }}>{selectedStudent.name} - {selectedStudent.id}</p>
                 </div>
               </div>
               <button
@@ -303,9 +303,11 @@ export default function StudentsContent() {
                   setIsViewModalOpen(false);
                   setSelectedStudent(null);
                 }}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                aria-label="Close"
+                title="Close"
               >
-                <X className="w-6 h-6 text-[var(--gray-500)]" />
+                <X className="w-6 h-6" style={{ color: '#6b7280' }} />
               </button>
             </div>
             <div className="overflow-y-auto flex-1">

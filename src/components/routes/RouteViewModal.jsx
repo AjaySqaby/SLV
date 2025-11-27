@@ -515,21 +515,23 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)]">
+        <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: '#e5e7eb' }}>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
-              <Route className="w-6 h-6 text-[var(--primary)]" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: '#8b5cf6' }}>
+              <Route className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Route Details #{routeData.id}</h2>
-              <p className="text-[var(--muted-text)]">{routeData.name}</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Route Details #{routeData.id}</h2>
+              <p style={{ color: '#6b7280' }}>{routeData.name}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            aria-label="Close"
+            title="Close"
           >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
+            <X className="w-6 h-6" style={{ color: '#6b7280' }} />
           </button>
         </div>
 
@@ -541,7 +543,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
             isOpen={openCollapse === 'route-info'}
             onToggle={() => handleCollapseToggle('route-info')}
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Route Profile Header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -555,7 +557,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     {routeData.status}
                   </div>
                   <div className="flex gap-2">
@@ -618,7 +620,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               </div>
 
               {/* Students, Seats and Equipment Section */}
-              <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
+              <div className="pt-4 border-t border-[var(--gray-200)]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--red-100)] flex items-center justify-center">
@@ -691,7 +693,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
                       <span>4.9 rating</span>
                     </div>
                   </div>
-                  <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]">
+                  <div className="px-3 py-1 rounded-full text-sm font-medium bg-[var(--green-100)] text-[var(--green-600)]" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     Completed
                   </div>
                 </div>
@@ -748,7 +750,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               onClick={() => setActiveTab(tab.id)}
               className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: activeTab === tab.id ? '#3b82f6' : '#f3f4f6',
+                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
                 color: activeTab === tab.id ? '#ffffff' : '#6b7280',
                 border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
                 borderRadius: '12px'

@@ -36,7 +36,7 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
   const [isEditing, setIsEditing] = useState(isEditMode)
   const [editedCampusData, setEditedCampusData] = useState(null)
   const [holidays, setHolidays] = useState([])
-  const [openCollapse, setOpenCollapse] = useState(null)
+  const [openCollapse, setOpenCollapse] = useState('campus-info')
 
   // Accordion state - only one collapse can be open at a time
   const handleCollapseToggle = (collapseId) => {
@@ -281,9 +281,13 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
     }
   };
 
+  const renderContent = () => {
+    return renderTabContent();
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--gray-50)]">
-      <div className="w-full px-6 pb-6">
+    <div className={isModal ? '' : 'min-h-screen bg-[var(--gray-50)]'}>
+      <div className={isModal ? '' : 'w-full px-6 pb-6'}>
         {/* Back Navigation - Only show if not in modal */}
         {!isModal && (
           <div className="mb-6">
@@ -299,308 +303,192 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
           </div>
         )}
 
-        {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center shadow-lg">
-                <Building2 className="w-6 h-6 text-white" />
+        {/* Collapse - Campus Information */}
+        <div className={isModal ? "px-6 pt-4" : "mb-8"}>
+          <Collapse 
+            title="Campus Information" 
+            icon={<Building2 className="w-4 h-4 text-purple-600" />}
+            isOpen={openCollapse === 'campus-info'}
+            onToggle={() => handleCollapseToggle('campus-info')}
+          >
+            <div className="space-y-6">
+              {/* Campus Profile Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                    <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-2xl text-[var(--primary-black)]">{safeCurrentData.name}</div>
+                    <div className="text-sm text-[var(--muted-text)]">Campus ID: {safeCurrentData.id}</div>
+                    <div className="text-sm text-[var(--muted-text)]">District: {safeCurrentData.district}</div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {safeCurrentData.status}
+                  </div>
+                </div>
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-[var(--gray-900)]">{safeCurrentData.name}</h1>
-                <p className="text-[var(--gray-600)] flex items-center gap-2 mt-1">
-                  <Building className="w-4 h-4" />
-                  {safeCurrentData.type} • {safeCurrentData.district}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              {isEditing ? (
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={<X className="w-4 h-4" />}
-                    onClick={handleCancelEdit}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    icon={<Save className="w-4 h-4" />}
-                    onClick={handleEditToggle}
-                  >
-                    Save Changes
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  icon={<Edit3 className="w-4 h-4" />}
-                  onClick={handleEditToggle}
-                >
-                  Edit Campus
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
 
-        {/* Single Collapse with general information only */}
-        <Collapse 
-          title="Campus Information" 
-          icon={
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-green-600">
-              <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          }
-          isOpen={openCollapse === 'campus-info'}
-          onToggle={() => handleCollapseToggle('campus-info')}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                <Hash className="w-4 h-4 text-[var(--blue-600)]" />
+              {/* Campus Information Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Hash className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">ID</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.id}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                    <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">TYPE</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.type}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                    <Users className="w-4 h-4 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.students}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                    <Building className="w-4 h-4 text-[var(--blue-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">DISTRICT</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.district}</div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="text-sm text-[var(--muted-text)]">ID</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">#{safeCurrentData.id}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                <Building className="w-4 h-4 text-[var(--green-600)]" />
-              </div>
-              <div>
-                <div className="text-sm text-[var(--muted-text)]">TYPE</div>
-                {isEditing ? (
-                  <select
-                    value={safeCurrentData.type}
-                    onChange={(e) => handleFieldChange('type', e.target.value)}
-                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                  >
-                    <option value="Elementary School">Elementary School</option>
-                    <option value="Middle School">Middle School</option>
-                    <option value="High School">High School</option>
-                  </select>
-                ) : (
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.type}</div>
-                )}
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[var(--purple-600)]" />
-              </div>
-              <div>
-                <div className="text-sm text-[var(--muted-text)]">CITY</div>
-                <div className="text-sm font-medium text-[var(--primary-black)]">Atlanta</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                <Users className="w-4 h-4 text-[var(--orange-600)]" />
-              </div>
-              <div>
-                <div className="text-sm text-[var(--muted-text)]">STUDENTS</div>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    value={safeCurrentData.students}
-                    onChange={(e) => handleFieldChange('students', parseInt(e.target.value))}
-                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                  />
-                ) : (
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.students}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[var(--blue-600)]" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={safeCurrentData.address}
-                    onChange={(e) => handleFieldChange('address', e.target.value)}
-                    className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                  />
-                ) : (
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.address}</div>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Principal Information Section */}
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">PRINCIPAL</div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={safeCurrentData.principal.name}
-                      onChange={(e) => handlePrincipalFieldChange('name', e.target.value)}
-                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.name}</div>
-                  )}
+              {/* Address Section */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-[var(--muted-text)]">ADDRESS</div>
+                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.address}</div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">PHONE</div>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      value={safeCurrentData.principal.phone}
-                      onChange={(e) => handlePrincipalFieldChange('phone', e.target.value)}
-                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.phone}</div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
-                  <Mail className="w-4 h-4 text-[var(--purple-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
-                  {isEditing ? (
-                    <input
-                      type="email"
-                      value={safeCurrentData.principal.email}
-                      onChange={(e) => handlePrincipalFieldChange('email', e.target.value)}
-                      className="text-sm font-medium text-[var(--primary-black)] border border-[var(--gray-300)] rounded px-2 py-1 w-full mt-1"
-                    />
-                  ) : (
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.email}</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Transportation Information Section */}
-          <div className="mt-6 pt-6 border-t border-[var(--gray-200)]">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                  <Route className="w-4 h-4 text-[var(--orange-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.assignedRoutes}</div>
+              {/* Principal Information Section */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Principal Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <GraduationCap className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">PRINCIPAL</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.name}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Phone className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">PHONE</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.phone}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--purple-100)] flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">EMAIL</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{safeCurrentData.principal.email}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                  <Car className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">RIDES</div>
-                  <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.scheduledRides}</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-[var(--green-600)]" />
-                </div>
-                <div>
-                  <div className="text-sm text-[var(--muted-text)]">STATUS</div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <StatusBadge status={safeCurrentData.transportation.status} />
+
+              {/* Transportation Information Section */}
+              <div className="pt-4 border-t border-[var(--gray-200)]">
+                <h4 className="text-md font-semibold text-[var(--primary-black)] mb-4">Transportation Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                      <Route className="w-4 h-4 text-[var(--orange-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">ROUTES</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.assignedRoutes}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Car className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">RIDES</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{campusData.transportation.scheduledRides}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--green-100)] flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-[var(--green-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">STATUS</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {safeCurrentData.transportation.status}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </Collapse>
+        </div>
 
-          </div>
-        </Collapse>
+        {/* Tabs */}
+        <div className="flex items-center space-x-2 mt-4 ml-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
+                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
+                borderRadius: '12px'
+              }}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
 
-        {/* Tabs always visible below general info */}
-        <div className="w-full px-0 mt-8">
-          <div className="flex items-center space-x-2 mb-6">
-            <button 
-              onClick={() => setActiveTab(0)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 0 ? 'var(--primary)' : '#f3f4f6',
-                color: activeTab === 0 ? '#ffffff' : '#6b7280',
-                border: activeTab === 0 ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <Users className="w-4 h-4" />
-              Students
-            </button>
-            <button 
-              onClick={() => setActiveTab(1)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 1 ? 'var(--primary)' : '#f3f4f6',
-                color: activeTab === 1 ? '#ffffff' : '#6b7280',
-                border: activeTab === 1 ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <Route className="w-4 h-4" />
-              Routes
-            </button>
-            <button 
-              onClick={() => setActiveTab(2)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 2 ? 'var(--primary)' : '#f3f4f6',
-                color: activeTab === 2 ? '#ffffff' : '#6b7280',
-                border: activeTab === 2 ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <Car className="w-4 h-4" />
-              Rides
-            </button>
-            <button 
-              onClick={() => setActiveTab(3)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === 3 ? 'var(--primary)' : '#f3f4f6',
-                color: activeTab === 3 ? '#ffffff' : '#6b7280',
-                border: activeTab === 3 ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <Calendar className="w-4 h-4" />
-              Holidays & Exceptions
-            </button>
-          </div>
-          {activeTab !== null && renderTabContent()}
+        {/* Content */}
+        <div className="p-6 overflow-y-auto flex-1">
+          {renderContent()}
         </div>
       </div>
     </div>

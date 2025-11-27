@@ -19,10 +19,22 @@ const customStyles = `
   }
 `;
 
-export default function DateRangePicker({ startDate, endDate, onDateRangeChange }) {
+export default function DateRangePicker({ startDate, endDate, onDateRangeChange, selected, onSelect, label, ...props }) {
+  // Support both APIs: selected/onSelect (simple) and startDate/endDate/onDateRangeChange (range)
+  const isSimpleMode = selected !== undefined || onSelect !== undefined;
+  const actualStartDate = isSimpleMode ? selected : startDate;
+  const actualEndDate = isSimpleMode ? null : endDate;
+  
+  const handleDateRangeChange = (start, end) => {
+    if (isSimpleMode && onSelect) {
+      onSelect(start);
+    } else if (onDateRangeChange) {
+      onDateRangeChange(start, end);
+    }
+  };
   const [show, setShow] = useState(false);
-  const [tempStartDate, setTempStartDate] = useState(startDate);
-  const [tempEndDate, setTempEndDate] = useState(endDate);
+  const [tempStartDate, setTempStartDate] = useState(actualStartDate);
+  const [tempEndDate, setTempEndDate] = useState(actualEndDate);
   const ref = useRef();
 
   // Close calendar if clicked outside
@@ -46,9 +58,9 @@ export default function DateRangePicker({ startDate, endDate, onDateRangeChange 
 
   // Update temp values when props change
   useEffect(() => {
-    setTempStartDate(startDate);
-    setTempEndDate(endDate);
-  }, [startDate, endDate]);
+    setTempStartDate(actualStartDate);
+    setTempEndDate(actualEndDate);
+  }, [actualStartDate, actualEndDate]);
 
   const handleStartDateChange = (date) => {
     setTempStartDate(date);
@@ -65,47 +77,44 @@ export default function DateRangePicker({ startDate, endDate, onDateRangeChange 
   const handleClear = () => {
     setTempStartDate(null);
     setTempEndDate(null);
-    onDateRangeChange(null, null);
+    handleDateRangeChange(null, null);
     setShow(false);
   };
 
   const handleCancel = () => {
-    setTempStartDate(startDate);
-    setTempEndDate(endDate);
+    setTempStartDate(actualStartDate);
+    setTempEndDate(actualEndDate);
     setShow(false);
   };
 
   const handleApply = () => {
-    onDateRangeChange(tempStartDate, tempEndDate);
+    handleDateRangeChange(tempStartDate, tempEndDate);
     setShow(false);
   };
 
   const formatDateRange = () => {
-    if (startDate && endDate) {
-      return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-    } else if (startDate) {
-      return `${startDate.toLocaleDateString()} - Select end date`;
-    } else if (endDate) {
-      return `Select start date - ${endDate.toLocaleDateString()}`;
+    if (actualStartDate && actualEndDate) {
+      return `${actualStartDate.toLocaleDateString()} - ${actualEndDate.toLocaleDateString()}`;
+    } else if (actualStartDate) {
+      return `${actualStartDate.toLocaleDateString()} - Select end date`;
+    } else if (actualEndDate) {
+      return `Select start date - ${actualEndDate.toLocaleDateString()}`;
     }
     return "Select date range";
   };
 
-  return (
+  const buttonElement = (
     <div className="w-full relative" ref={ref}>
       <style>{customStyles}</style>
-      {/* <label className="block text-sm font-medium text-[var(--gray-700)] mb-1">
-        Date Range
-      </label> */}
       <Button
         type="button"
-        className={`w-full bg-background border-2 border-[var(--gray-300)] font-semibold rounded-lg py-2 px-4 flex items-center gap-2 focus:outline-none ${
-          startDate || endDate ? "!text-gray-900" : "!text-[var(--gray-400)]"
+        className={`w-full bg-white border border-gray-300 font-normal rounded-lg py-2 px-4 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+          actualStartDate || actualEndDate ? "text-gray-900" : "text-gray-500"
         }`}
         onClick={() => setShow((v) => !v)}
       >
-        <Calendar className="h-5 w-5" />
-        {formatDateRange()}
+        <Calendar className="h-5 w-5 text-gray-400" />
+        <span className="flex-1 text-left">{formatDateRange()}</span>
       </Button>
       {show && (
         <div className="absolute z-50 mt-2 bg-background rounded-lg shadow-lg p-4 min-w-[650px] right-0">
@@ -172,4 +181,17 @@ export default function DateRangePicker({ startDate, endDate, onDateRangeChange 
       )}
     </div>
   );
+
+  if (label) {
+    return (
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+        {buttonElement}
+      </div>
+    );
+  }
+
+  return buttonElement;
 }
