@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMap, ZoomControl, useMapEvents, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -205,8 +205,20 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
   const [followCar, setFollowCar] = useState(false);
   const [progressRatio, setProgressRatio] = useState(0); // 0..1
   const [distanceLeft, setDistanceLeft] = useState(0); // meters
-  const [carSpeedMps, setCarSpeedMps] = useState(0); // instantaneous speed
+  const carSpeedMpsRef = useRef(0); // instantaneous speed (using ref to avoid infinite loops)
+  const lastSpeedUpdateRef = useRef(0); // timestamp of last speed state update
+  const [carSpeedMps, setCarSpeedMps] = useState(0); // for display only
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  
+  // Memoize callbacks to prevent infinite loops
+  const handleInteractionStart = useCallback(() => {
+    setIsUserInteracting(true);
+    setFollowCar(false);
+  }, []);
+  
+  const handleInteractionEnd = useCallback(() => {
+    setIsUserInteracting(false);
+  }, []);
 
   const MapInteractionWatcher = ({ onStart, onEnd }) => {
     const map = useMap();
@@ -223,8 +235,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       overlayadd: onStart,
       overlayremove: onStart,
     });
-    // Safety: cancel follow right away on mount in case parent toggles
-    useEffect(() => { onStart?.() }, []);
+    // Removed useEffect that was causing infinite loop - onStart will be called by events naturally
     return null;
   };
 
@@ -298,7 +309,12 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
       const lng = a[1] + (b[1] - a[1]) * t;
       if (Array.isArray(lastPos) && dt > 0) {
         const instSpeed = distanceMeters(lastPos, [lat, lng]) / dt; // m/s
-        setCarSpeedMps(instSpeed);
+        carSpeedMpsRef.current = instSpeed;
+        // Throttle state updates to avoid infinite loops - update only every 100ms
+        if (!lastSpeedUpdateRef.current || ts - lastSpeedUpdateRef.current > 100) {
+          setCarSpeedMps(instSpeed);
+          lastSpeedUpdateRef.current = ts;
+        }
       }
       lastPos = [lat, lng];
       setCarPosition([lat, lng]);
@@ -429,7 +445,7 @@ export default function RideMap({ pickup, dropoff, status = "In-progress", class
 
         <BoundsOnce points={routePath} />
         <InvalidateSize />
-        <MapInteractionWatcher onStart={() => { setIsUserInteracting(true); setFollowCar(false); }} onEnd={() => setIsUserInteracting(false)} />
+        <MapInteractionWatcher onStart={handleInteractionStart} onEnd={handleInteractionEnd} />
         <FollowCar position={carPosition} enabled={followCar} interacting={isUserInteracting} />
       </MapContainer>
       {/* Top progress/ETA overlay (non-interactive so wheel passes through) */}

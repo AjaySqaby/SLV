@@ -304,13 +304,20 @@ export const convertRideTimeToUserTimezone = (rideTime, rideTimezone, userTimezo
     const now = DateTime.now();
     const today = now.startOf('day');
     
+    // Validate date values to prevent NaN errors
+    const year = today.year || now.year;
+    const month = today.month || now.month;
+    const day = today.day || now.day;
+    const validHour = isNaN(hour) ? 0 : hour;
+    const validMinute = isNaN(parseInt(minutes)) ? 0 : parseInt(minutes);
+    
     // Create a DateTime object in the ride's timezone
     const rideDateTime = DateTime.fromObject({
-      year: today.year,
-      month: today.month,
-      day: today.day,
-      hour: hour,
-      minute: parseInt(minutes)
+      year: year,
+      month: month,
+      day: day,
+      hour: validHour,
+      minute: validMinute
     }, { zone: rideTimezone });
     
     console.log(`Ride DateTime in ${rideTimezone}: ${rideDateTime.toFormat('h:mm a')}`);

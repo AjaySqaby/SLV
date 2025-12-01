@@ -24,6 +24,10 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   // Accordion state - only one collapse can be open at a time
   const [openCollapse, setOpenCollapse] = useState(null);
 
+  // Rides tab state - must be declared before any conditional returns
+  const [rideStart, setRideStart] = useState(null);
+  const [rideEnd, setRideEnd] = useState(null);
+
   if (!isOpen) return null;
 
   // Mock route data - replace with actual API call
@@ -446,8 +450,6 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     </div>
   );
 
-  const [rideStart, setRideStart] = useState(null);
-  const [rideEnd, setRideEnd] = useState(null);
   const routeRides = [
     { id: 'R-2001', route: routeData.id, date: '04/01/2025', driver: 'Sam Kebede', status: 'Completed' },
     { id: 'R-2002', route: routeData.id, date: '04/02/2025', driver: 'John Doe', status: 'In progress' },

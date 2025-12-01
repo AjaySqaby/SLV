@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, User } from "lucide-react";
+import { X, User, ArrowLeft } from "lucide-react";
 import DriverDetailContent from "./DriverDetailContent";
 
 export default function DriverDetailModal({ isOpen, onClose, driverId, onBack }) {
@@ -27,16 +27,7 @@ export default function DriverDetailModal({ isOpen, onClose, driverId, onBack })
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-                aria-label="Back"
-                title="Back"
-              >
-                <X className="w-5 h-5" style={{ color: '#6b7280' }} />
-              </button>
-            )}
+           
             <button
               onClick={onClose}
               className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"

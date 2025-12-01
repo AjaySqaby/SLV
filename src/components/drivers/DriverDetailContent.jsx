@@ -28,16 +28,16 @@ const getDriverData = (driverId) => {
   const drivers = {
     "D-001": {
       id: "D-001",
-      name: "Sarah Williams",
+      name: "Yonathan Mekonnen",
       phone: "(404) 555-1001",
-      email: "sarah.w@example.com",
+      email: "yonathan.m@example.com",
       address: "999 Peachtree St NE, Atlanta, GA 30309",
       licenseNumber: "GA-DL-1001001",
       licenseExpires: "2026-08-15",
       vehicle: {
-        make: "Honda Odyssey",
+        make: "Chrysler Pacifica",
         year: 2022,
-        licensePlate: "ABC-1234",
+        licensePlate: "RT-30842",
         type: "Minivan",
         color: "Silver"
       },
@@ -48,16 +48,16 @@ const getDriverData = (driverId) => {
     },
     "D-002": {
       id: "D-002",
-      name: "Michael Johnson",
+      name: "William Rodriguez",
       phone: "(404) 555-1002",
-      email: "michael.j@example.com",
+      email: "william.r@example.com",
       address: "1234 West Peachtree St NW, Atlanta, GA 30309",
       licenseNumber: "GA-DL-1001002",
       licenseExpires: "2025-12-20",
       vehicle: {
         make: "Toyota Sienna",
         year: 2023,
-        licensePlate: "XYZ-5678",
+        licensePlate: "RT-30845",
         type: "Minivan",
         color: "Black"
       },
@@ -68,17 +68,17 @@ const getDriverData = (driverId) => {
     },
     "D-003": {
       id: "D-003",
-      name: "David Thompson",
+      name: "Maria Sanchez",
       phone: "(404) 555-1003",
-      email: "david.t@example.com",
+      email: "maria.s@example.com",
       address: "456 Marietta St NW, Atlanta, GA 30313",
       licenseNumber: "GA-DL-1001003",
       licenseExpires: "2026-03-10",
       vehicle: {
-        make: "Ford Transit",
+        make: "Honda Odyssey",
         year: 2021,
-        licensePlate: "DEF-9012",
-        type: "Van",
+        licensePlate: "RT-30846",
+        type: "Minivan",
         color: "White"
       },
       totalRides: 98,

@@ -20,7 +20,7 @@ import DuplicateModal from '@/components/common/modals/DuplicateModal'
 import ManageTripModal from '@/components/common/modals/ManageTripModal'
 import EditTripModal from '@/components/common/modals/EditTripModal'
 
-export default function RideDetailContent({ rideId, onClose, onViewDriver, rideStatus: propRideStatus, showMapViewButtons = false, onManageTrip, onEditTrip, customTabs = null }) {
+export default function RideDetailContent({ rideId, onClose, onViewDriver, onViewVehicle, rideStatus: propRideStatus, showMapViewButtons = false, onManageTrip, onEditTrip, customTabs = null }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -104,6 +104,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
         status: "Completed",
         eta: "7:35 AM",
         driver: {
+          id: "D-001",
           name: "Yonathan Mekonnen",
           vehicle: "Chrysler Pacifica"
         },
@@ -168,6 +169,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
         status: "In Progress",
         eta: "8:15 AM",
         driver: {
+          id: "D-001",
           name: "Yonathan Mekonnen",
           vehicle: "Chrysler Pacifica"
         },
@@ -205,6 +207,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
         status: "Upcoming",
         eta: "8:30 AM",
         driver: {
+          id: "D-002",
           name: "William Rodriguez",
           vehicle: "Toyota Sienna"
         },
@@ -242,6 +245,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
         status: "Delayed",
         eta: "9:35 AM",
         driver: {
+          id: "D-003",
           name: "Maria Sanchez",
           vehicle: "Honda Odyssey"
         },
@@ -295,6 +299,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
         status: randomStatus,
         eta: "7:35 AM",
         driver: {
+          id: "D-001",
           name: "Yonathan Mekonnen",
           vehicle: "Chrysler Pacifica"
         },
@@ -613,8 +618,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
           {/* Driver */}
           <Card className="p-4 cursor-pointer"
             onClick={() => {
-              if (onViewDriver) {
-                onViewDriver('D-001')
+              if (onViewDriver && rideData.driver?.id) {
+                onViewDriver(rideData.driver.id)
               }
             }}
           >
@@ -640,8 +645,8 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, rideS
           {/* Vehicle */}
           <Card className="p-4 cursor-pointer"
             onClick={() => {
-              if (onViewDriver) {
-                onViewDriver('D-001')
+              if (onViewVehicle && rideData.driver?.id) {
+                onViewVehicle(rideData.driver.id)
               }
             }}
           >
