@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import SearchInput from "../ui/SearchInput";
 import Select from "../ui/Select";
+import Button from "../ui/Button";
 import AddPartnerModal from "./AddPartnerModal";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
 import PartnerViewModal from "./PartnerViewModal";
@@ -177,29 +178,8 @@ export default function PartnersContent() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-8">
-            Partners
-          </h1>
-
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={() => setIsAddPartnerModalOpen(true)}
-            className="text-base flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
-          >
-            <Plus size={18} />
-            Add Partner
-          </button>
-          <button
-            onClick={() => setIsAddDriverModalOpen(true)}
-            className="text-base flex items-center justify-center font-medium gap-2 bg-[var(--blue-600)] hover:bg-[var(--blue)] whitespace-nowrap transition-all duration-200 hover:shadow-md px-4 py-2 rounded-md text-white"
-          >
-            <Plus size={18} />
-            Add Driver
-          </button>
-        </div>
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-3xl font-bold mb-8">Partners</h1>
       </div>
 
       <div className="grid grid-cols-4 gap-6 mb-8">
@@ -229,33 +209,47 @@ export default function PartnersContent() {
         ))}
       </div>
 
-      <div className="bg-[var(--background)] rounded-lg shadow-sm border border-[var(--gray-100)]">
-        <div className="p-4 border-b border-[var(--gray-100)]">
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+       
 
-
-          {/* Search and Filter Section - Full Width */}
-          <div className="flex justify-between items-center gap-2">
-            <div className="relative w-full">
-              <SearchInput
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search partners..."
-                width="w-full"
-              />
-            </div>
-            <div className="w-48">
-              <Select
-                placeholder="Status"
-                options={[{ value: "", label: "All" }, { value: "Active", label: "Active" }, { value: "Not Active", label: "Not Active" }]}
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              />
-            </div>
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search partners..."
+              width="w-full"
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[{ value: "", label: "All" }, { value: "Active", label: "Active" }, { value: "Not Active", label: "Not Active" }]}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              variant="secondary"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
+              onClick={() => setIsAddDriverModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add Driver
+            </Button>
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setIsAddPartnerModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add Partner
+            </Button>
           </div>
         </div>
-        {/* <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} /> */}
 
-        <div className="overflow-x-auto mt-5">
+        <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
               <tr>

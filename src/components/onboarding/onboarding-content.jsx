@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SearchInput from "@/components/ui/SearchInput";
+import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import ProgressBar from "@/components/ui/ProgressBar";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
@@ -125,51 +126,51 @@ export default function OnboardingContent() {
 
   return (
     <div>
-      {/* Header Section */}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center mb-2">
         <div>
-          <h1 className="text-3xl font-bold text-[var(--primary-black)]">Driver Onboarding</h1>
-          <p className="text-[var(--muted-text)] mt-1">Manage driver onboarding process and track progress</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <Button
-            variant="secondary"
-            className="flex items-center gap-2"
-            icon={<TrendingUp className="h-4 w-4" />}
-          >
-            View Reports
-          </Button>
-          <Button
-            className="text-base bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
-            icon={<Plus className="h-4 w-4" />}
-            onClick={() => setShowAddDriverModal(true)}
-          >
-            Add New Driver
-          </Button>
+          <h1 className="text-3xl font-bold mb-8">Driver Onboarding</h1>
         </div>
       </div>
 
-      {/* Search and Filter Section */}
-      <div className="flex items-center gap-4 mt-6">
-        <div className="flex-1">
-          <SearchInput
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by driver name or ID"
-            width="w-full"
-          />
-        </div>
-        <Button 
-          variant="secondary" 
-          icon={<Filter className="h-4 w-4" />} 
-          className="whitespace-nowrap"
-        >
-          Filter
-        </Button>
-      </div>
-
-      {/* Main Content Card */}
       <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+       
+
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search drivers..."
+              width="w-full"
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Pending",label:"Pending"},{value:"In Progress",label:"In Progress"},{value:"Completed",label:"Completed"}]}
+              value={statusFilter}
+              onChange={(e)=>setStatusFilter(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              variant="secondary"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
+            >
+              <TrendingUp size={18} />
+              View Reports
+            </Button>
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setShowAddDriverModal(true)}
+            >
+              <Plus size={18} />
+              Add New Driver
+            </Button>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">

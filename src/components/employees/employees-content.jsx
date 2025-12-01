@@ -113,44 +113,42 @@ export default function EmployeesContent() {
 
   return (
     <div>
-      {/* Header Section */}
-      <div className="flex items-center">
-       
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Employee Management</h1>
-        
-        </div>
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-3xl font-bold mb-8">Employee Management</h1>
       </div>
 
-      {/* Search Section - Full Width */}
-      <div className="flex justify-between items-center mb-6 gap-2">
-        <div className="relative w-full">
-          <SearchInput
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search employees by name, title or campus"
-            width="w-full"
-          />
-        </div>
-        <div className="w-48">
-          <Select
-            placeholder="Status"
-            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
-            value={statusFilter}
-            onChange={(e)=>setStatusFilter(e.target.value)}
-          />
-        </div>
-        <Button
-          className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
-          icon={<Plus className="h-4 w-4" />}
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          Add New Employee
-        </Button>
-      </div>
-
-      {/* Main Content Card */}
       <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
+       
+
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search employees..."
+              width="w-full"
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+              value={statusFilter}
+              onChange={(e)=>setStatusFilter(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setIsAddModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add New Employee
+            </Button>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">

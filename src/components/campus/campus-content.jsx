@@ -117,43 +117,44 @@ export default function CampusContent() {
 
   return (
     <div>
-      <div className="flex items-center ">
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-3xl font-bold mb-8">Campus Management</h1>
+      </div>
+
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">
        
-        <div>
-          <h1 className="text-3xl font-bold mb-6">Campus Management</h1>
-         
-        </div>
-      </div>
 
-      {/* Search Section - Full Width */}
-      <div className="flex justify-between items-center mb-6 gap-2">
-        <div className="relative w-full">
-          <SearchInput
-            placeholder="Search campus by name, ID or type"
-            width="w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        {/* Search and Filter Section */}
+        <div className="flex justify-between items-center mb-6 gap-3">
+          <div className="relative flex-1 max-none">
+            <SearchInput
+              placeholder="Search campus..."
+              width="w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <div className="w-48">
+            <Select
+              placeholder="Status"
+              options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
+              value={statusFilter}
+              onChange={(e)=>setStatusFilter(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Button
+              className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              onClick={() => setIsAddModalOpen(true)}
+            >
+              <Plus size={18} />
+              Add New Campus
+            </Button>
+          </div>
         </div>
-        <div className="w-48">
-          <Select
-            placeholder="Status"
-            options={[{value:"",label:"All"},{value:"Active",label:"Active"},{value:"Not Active",label:"Not Active"}]}
-            value={statusFilter}
-            onChange={(e)=>setStatusFilter(e.target.value)}
-          />
-        </div>
-        <Button
-          className="bg-gradient-to-r from-[var(--primary)] to-[var(--purple)] hover:from-[var(--primary-dark)] hover:to-[var(--purple-dark)] text-white shadow-lg hover:shadow-xl transition-all duration-300 w-max whitespace-nowrap"
-          icon={<Plus size={18} />}
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          Add New Campus
-        </Button>
-      </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-[var(--gray-100)] overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+          <table className="w-full">
           <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Campus ID</th>
@@ -221,6 +222,7 @@ export default function CampusContent() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Campus View Modal */}
