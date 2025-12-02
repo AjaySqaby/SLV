@@ -26,7 +26,7 @@ import {
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   const [activeTab, setActiveTab] = useState(null);
-  const [openCollapse, setOpenCollapse] = useState('district-info');
+  const [openCollapse, setOpenCollapse] = useState(null);
   
   const handleCollapseToggle = (collapseId) => {
     setOpenCollapse(openCollapse === collapseId ? null : collapseId);

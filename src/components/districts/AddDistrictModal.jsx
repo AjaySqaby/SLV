@@ -646,130 +646,108 @@ export default function AddDistrictModal({ open, onClose }) {
   if (!open) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    <div
+      className="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-center z-[9000] pt-6"
       onClick={onClose}
     >
-      <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto"
+      <div
+        className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+        {/* Modal Header - Matching Ride Details Modal */}
+        <div className="flex items-center justify-between p-6 border-b border-[var(--gray-200)] flex-shrink-0">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <Building2 className="h-5 w-5 text-blue-600" />
+            <div className="w-12 h-12 bg-[var(--primary-bg)] rounded-full flex items-center justify-center">
+              <Building2 className="w-6 h-6 text-[var(--primary)]" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">Add New School District</h2>
-              <p className="text-[var(--gray-600)] text-sm">
+              <h2 className="text-2xl font-bold text-[var(--primary-black)]">Add New School District</h2>
+              <p className="text-[var(--muted-text)] text-sm mt-1">
                 Create a new school district with all required information
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-[var(--hover-bg)] transition-colors"
+            aria-label="Close"
           >
-            <X size={24} />
+            <X className="w-6 h-6" style={{ color: '#6b7280' }} />
           </button>
         </div>
 
-        {/* Modal Content */}
-        <div className="p-6">
-          <div className="bg-white rounded-lg shadow-sm border border-[var(--border)]">
-            {/* Card Header */}
-            <div className="p-6 border-b border-[var(--border)]">
-              <h3 className="text-lg font-semibold text-[var(--heading)]">District Information</h3>
-            </div>
-
-            {/* Tabs */}
-            <div className="px-6 pt-6">
+        {/* Modal Content - Matching Ride Details Modal */}
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {/* District Information Section */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-[var(--heading)] mb-4">District Information</h3>
+              
+              {/* Tabs - Matching Ride Details Modal Style */}
               <div className="flex items-center space-x-2 mb-6">
-                <button 
-                  onClick={() => setActiveTab(0)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 0 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 0 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Building2 className="w-4 h-4" />
-                  Basic Info
-                </button>
-                <button 
-                  onClick={() => setActiveTab(1)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 1 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 1 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Calendar className="w-4 h-4" />
-                  Holidays
-                </button>
-                <button 
-                  onClick={() => setActiveTab(2)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 2 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 2 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <Sun className="w-4 h-4" />
-                  Summer School
-                </button>
-                <button 
-                  onClick={() => setActiveTab(3)}
-                  className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                    activeTab === 3 
-                      ? 'text-white' 
-                      : 'bg-gray-100 text-gray-600 border border-gray-200'
-                  }`}
-                  style={activeTab === 3 ? { backgroundColor: 'var(--primary)' } : {}}
-                >
-                  <DollarSign className="w-4 h-4" />
-                  Rate Settings
-                </button>
+                {tabs.map((tab, index) => {
+                  const isActive = activeTab === tab.id;
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 ${
+                        isActive ? '' : ''
+                      }`}
+                      style={{
+                        backgroundColor: isActive ? 'var(--primary)' : 'var(--gray-100)',
+                        color: isActive ? 'var(--on-primary)' : 'var(--muted-text)',
+                        border: isActive ? 'none' : '1px solid var(--gray-200)',
+                        borderRadius: '12px'
+                      }}
+                    >
+                      {index === 0 && isActive && (
+                        <div className="w-4 h-4 border-2 border-white rounded-sm flex items-center justify-center">
+                          <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-0.5"></div>
+                        </div>
+                      )}
+                      {Icon && !(index === 0 && isActive) && <Icon className="w-4 h-4" />}
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Tab Content */}
+              <div className="mt-6">
+                {activeTab === 0 && renderBasicInfoTab()}
+                {activeTab === 1 && renderHolidaysTab()}
+                {activeTab === 2 && renderSummerSchoolTab()}
+                {activeTab === 3 && renderRateSettingsTab()}
               </div>
             </div>
+          </div>
 
-            {/* Tab Content */}
-            <div className="px-6 pb-6">
-              {activeTab === 0 && renderBasicInfoTab()}
-              {activeTab === 1 && renderHolidaysTab()}
-              {activeTab === 2 && renderSummerSchoolTab()}
-              {activeTab === 3 && renderRateSettingsTab()}
-            </div>
-
-            {/* Footer Buttons */}
-            <div className="flex items-center justify-between p-6 border-t border-[var(--border)] bg-[var(--gray-50)]">
-              <div className="flex gap-3">
+          {/* Footer Buttons - Matching Ride Details Modal */}
+          <div className="flex items-center justify-between p-6 border-t border-[var(--gray-200)] bg-[var(--gray-50)] flex-shrink-0">
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+              {activeTab > 0 && (
                 <Button
                   variant="secondary"
-                  onClick={onClose}
+                  onClick={() => setActiveTab(activeTab - 1)}
                 >
-                  Cancel
+                  Back to {tabs[activeTab - 1].label}
                 </Button>
-                {activeTab > 0 && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => setActiveTab(activeTab - 1)}
-                  >
-                    Back to {tabs[activeTab - 1].label}
-                  </Button>
-                )}
-              </div>
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-              >
-                Create District
-              </Button>
+              )}
             </div>
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+            >
+              Create District
+            </Button>
           </div>
         </div>
       </div>
