@@ -154,22 +154,22 @@ export default function OnboardingContent() {
             />
           </div>
           <div className="flex gap-3 flex-shrink-0">
-            <Button
-              variant="secondary"
+          <Button
+            variant="secondary"
               className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
-            >
+          >
               <TrendingUp size={18} />
-              View Reports
-            </Button>
-            <Button
+            View Reports
+          </Button>
+          <Button
               className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
-              onClick={() => setShowAddDriverModal(true)}
-            >
+            onClick={() => setShowAddDriverModal(true)}
+          >
               <Plus size={18} />
-              Add New Driver
-            </Button>
-          </div>
+            Add New Driver
+          </Button>
         </div>
+      </div>
 
         <div className="overflow-x-auto">
           <table className="w-full">

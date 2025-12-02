@@ -29,24 +29,13 @@ export default function EagleEyeHeader() {
   };
 
   return (
-    <div className=" py-3  flex items-center justify-between">
-      <div className="flex items-center">
-        {/* <Button 
-          variant="primary" 
-          className="flex items-center bg-[var(--secondary)] text-white mr-4 px-3 py-1 rounded-md text-sm font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
-          onClick={handleBack}
-        >
-          <ArrowLeft size={18} className="mr-1" />
-          <span>Back</span>
-        </Button> */}
-        <h1 className="text-3xl font-bold mb-8">Eagle Eye Live View</h1>
-      </div>
+    <div className="flex justify-between items-center mb-2">
+      <h1 className="text-3xl font-bold mb-8">Eagle Eye Live View</h1>
       <Button
-        variant="primary"
-        className="flex items-center bg-[var(--blue)] text-white px-3 py-1 rounded-md text-base font-semibold transition-all duration-150 border-2 border-transparent hover:opacity-90"
+        className="text-sm flex items-center justify-center font-medium gap-2 bg-gradient-to-r from-[var(--purple-600)] to-[var(--blue)] hover:from-[var(--purple-700)] hover:to-[var(--blue-600)] whitespace-nowrap transition-all duration-200 hover:shadow-md"
         onClick={handleRefresh}
       >
-        <RefreshCw size={18} className="mr-1" />
+        <RefreshCw size={18} />
         <span>Refresh</span>
       </Button>
     </div>
