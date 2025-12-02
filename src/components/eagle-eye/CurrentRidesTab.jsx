@@ -103,36 +103,38 @@ export default function CurrentRidesTab({
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto  py-2 min-h-0 bg-gray-50/30">
+      <div className="flex-1 overflow-auto min-h-0 bg-[var(--background)]">
         {filteredRides.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
+          <div className="flex flex-col items-center justify-center py-16">
+            <svg
+              width="48"
+              height="48"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="mb-4 text-muted"
+            >
+              <path
+                d="M7 17V17.01M17 17V17.01M7 17C5.34315 17 4 15.6569 4 14V10C4 8.34315 5.34315 7 7 7H17C18.6569 7 20 8.34315 20 10V14C20 15.6569 18.6569 17 17 17H7ZM7 17V17.01M17 17V17.01"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="text-gray-400"
-              >
-                <path d="M16 6l3 4-3 4"></path>
-                <path d="M8 18l-3-4 3-4"></path>
-                <path d="M19 10h-6"></path>
-                <path d="M5 14h6"></path>
-              </svg>
+              />
+            </svg>
+            <div className="text-lg font-semibold text-[var(--gray-500)] mb-2">
+              No rides found
             </div>
-            <p className="text-gray-500 font-medium text-sm mb-1">No rides found</p>
-            <p className="text-gray-400 text-xs">Try adjusting your filters or search terms</p>
+            <div className="text-[var(--gray-400)]">
+              No rides matching your current filters.
+            </div>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filteredRides.map((ride) => (
-              <RideCard key={ride.id} ride={ride} onViewRide={onViewRide} onSmartSuggest={onSmartSuggest} />
-            ))}
+          <div className="overflow-x-auto">
+            <div className="space-y-0">
+              {filteredRides.map((ride, index) => (
+                <RideCard key={ride.id} ride={ride} onViewRide={onViewRide} onSmartSuggest={onSmartSuggest} index={index} />
+              ))}
+            </div>
           </div>
         )}
       </div>

@@ -31,9 +31,10 @@ export default function EagleEyeContent() {
       },
       eta: "08:34 AM",
       scheduled: "08:30 AM",
-      driverETA: "08:52 AM", // Driver's actual ETA
+      driverETA: "08:52 AM",
       status: "Late",
-      statusColor: "red", // Red for late
+      statusColor: "red",
+      timezone: "America/Los_Angeles",
     },
     {
       id: "RT1002",
@@ -45,9 +46,10 @@ export default function EagleEyeContent() {
       },
       eta: "09:15 AM",
       scheduled: "09:00 AM",
-      driverETA: "09:20 AM", // Driver's actual ETA
+      driverETA: "09:20 AM",
       status: "Late",
-      statusColor: "red", // Red for late
+      statusColor: "red",
+      timezone: "America/Los_Angeles",
     },
     {
       id: "RT1003",
@@ -58,8 +60,41 @@ export default function EagleEyeContent() {
         phone: "",
       },
       eta: "--",
+      scheduled: "",
+      driverETA: "",
       status: "Unknown",
-      statusColor: "black", // Black for unknown
+      statusColor: "black",
+      timezone: "America/Los_Angeles",
+    },
+    {
+      id: "RT1004",
+      driver: {
+        name: "David Thompson",
+        avatar: "/driver3.jpg",
+        location: "500 12th St",
+        phone: "(510) 555-9012",
+      },
+      eta: "09:45 AM",
+      scheduled: "09:30 AM",
+      driverETA: "09:50 AM",
+      status: "On Time",
+      statusColor: "green",
+      timezone: "America/Los_Angeles",
+    },
+    {
+      id: "RT1005",
+      driver: {
+        name: "Sarah Williams",
+        avatar: "/driver4.jpg",
+        location: "789 Market St",
+        phone: "(510) 555-3456",
+      },
+      eta: "10:00 AM",
+      scheduled: "10:00 AM",
+      driverETA: "10:05 AM",
+      status: "On Time",
+      statusColor: "green",
+      timezone: "America/Los_Angeles",
     },
   ];
 
@@ -80,7 +115,7 @@ export default function EagleEyeContent() {
     <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden">
       <EagleEyeHeader />
       <div className="flex-1 flex min-h-0">
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 max-w-[calc(100%-450px)]">
           <SearchFilters />
           <MapView onViewRide={openRideModal} />
         </div>

@@ -69,7 +69,7 @@ export default function Sidebar({
   const [driverFilter, setDriverFilter] = useState("All");
 
   return (
-    <div className="w-96 bg-[var(--sidebar-bg)] border-l border-[var(--border)] flex flex-col h-full">
+    <div className="w-[450px] bg-[var(--sidebar-bg)] border-l border-[var(--border)] flex flex-col h-full flex-shrink-0">
       <div className="p-3 flex whitespace-nowrap space-x-2 flex-shrink-0">
         <Button
           variant={sidebarTab === "rides" ? "primary" : "secondary"}
