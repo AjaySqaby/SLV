@@ -228,18 +228,6 @@ export default function StudentProfilePage({ studentId }) {
 
   return (
     <div className="bg-transparent">
-      {/* Header Section with Profile Info */}
-      <div className="pt-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-            <Users className="w-8 h-8" style={{ color: '#6b7280' }} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold" style={{ color: '#111827' }}>{studentData.name}</h1>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div className="pt-4">
         {/* Single Collapse with All Information */}
