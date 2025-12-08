@@ -127,7 +127,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   const renderCampusesTab = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[var(--heading)]">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Campuses ({mockCampuses.length})
         </h3>
         <Button
@@ -138,40 +138,41 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           Add New Campus
         </Button>
       </div>
-      <div className="bg-[var(--surface-bg)] rounded-lg border border-[var(--border)] overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--border)]">
-              <th className="px-6 py-3 font-medium">Campus ID</th>
-              <th className="px-6 py-3 font-medium">Name</th>
-              <th className="px-6 py-3 font-medium">Type</th>
-              <th className="px-6 py-3 font-medium">Address</th>
-              <th className="px-6 py-3 font-medium">Students</th>
-              <th className="px-6 py-3 font-medium">Status</th>
-              <th className="px-6 py-3 font-medium">Actions</th>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Campus ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody>
             {mockCampuses.map((campus) => (
               <tr
                 key={campus.id}
-                className="border-b border-[var(--border)] hover:bg-[var(--gray-50)]"
+                className="border-b border-gray-100 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 font-medium">{campus.id}</td>
-                <td className="px-6 py-4 font-medium">{campus.name}</td>
-                <td className="px-6 py-4">{campus.type}</td>
-                <td className="px-6 py-4">{campus.address}</td>
-                <td className="px-6 py-4">{campus.students}</td>
-                <td className="px-6 py-4">
-                  <StatusBadge
-                    status={campus.status}
-                    type={campus.status === "Active" ? "active" : "inactive"}
-                  />
+                <td className="py-4 px-4 text-sm text-gray-900">{campus.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{campus.name}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{campus.type}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{campus.address}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{campus.students}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={campus.status} />
                 </td>
-                <td className="px-6 py-4">
-                  <button className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors">
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                  >
                     View
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -184,7 +185,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   const renderStudentsTab = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[var(--heading)]">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Students ({mockStudents.length})
         </h3>
         <Button
@@ -195,44 +196,45 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           Add New Student
         </Button>
       </div>
-      <div className="bg-[var(--surface-bg)] rounded-lg border border-[var(--border)] overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--border)]">
-              <th className="px-6 py-3 font-medium">Student ID</th>
-              <th className="px-6 py-3 font-medium">Name</th>
-              <th className="px-6 py-3 font-medium">Grade</th>
-              <th className="px-6 py-3 font-medium">Campus</th>
-              <th className="px-6 py-3 font-medium">Address</th>
-              <th className="px-6 py-3 font-medium">Status</th>
-              <th className="px-6 py-3 font-medium">Actions</th>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Student ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Grade</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Campus</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody>
             {mockStudents.map((student) => (
               <tr
                 key={student.id}
-                className="border-b border-[var(--border)] hover:bg-[var(--gray-50)]"
+                className="border-b border-gray-100 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 font-medium">{student.id}</td>
-                <td className="px-6 py-4 font-medium">{student.name}</td>
-                <td className="px-6 py-4">{student.grade}</td>
-                <td className="px-6 py-4">
+                <td className="py-4 px-4 text-sm text-gray-900">{student.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{student.name}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{student.grade}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">
                   <span className="text-[var(--blue-600)] hover:underline cursor-pointer">
                     {student.campus}
                   </span>
                 </td>
-                <td className="px-6 py-4">{student.address}</td>
-                <td className="px-6 py-4">
-                  <StatusBadge
-                    status={student.status}
-                    type={student.status === "Active" ? "active" : "inactive"}
-                  />
+                <td className="py-4 px-4 text-sm text-gray-900">{student.address}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={student.status} />
                 </td>
-                <td className="px-6 py-4">
-                  <button className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors">
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                  >
                     View
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -245,7 +247,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   const renderRoutesTab = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[var(--heading)]">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Routes ({mockRoutes.length})
         </h3>
         <Button
@@ -256,40 +258,41 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           Add New Route
         </Button>
       </div>
-      <div className="bg-[var(--surface-bg)] rounded-lg border border-[var(--border)] overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--border)]">
-              <th className="px-6 py-3 font-medium">Route ID</th>
-              <th className="px-6 py-3 font-medium">Name</th>
-              <th className="px-6 py-3 font-medium">Stops</th>
-              <th className="px-6 py-3 font-medium">Distance</th>
-              <th className="px-6 py-3 font-medium">Students</th>
-              <th className="px-6 py-3 font-medium">Status</th>
-              <th className="px-6 py-3 font-medium">Actions</th>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody>
             {mockRoutes.map((route) => (
               <tr
                 key={route.id}
-                className="border-b border-[var(--border)] hover:bg-[var(--gray-50)]"
+                className="border-b border-gray-100 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 font-medium">{route.id}</td>
-                <td className="px-6 py-4 font-medium">{route.name}</td>
-                <td className="px-6 py-4">{route.stops}</td>
-                <td className="px-6 py-4">{route.distance}</td>
-                <td className="px-6 py-4">{route.students}</td>
-                <td className="px-6 py-4">
-                  <StatusBadge
-                    status={route.status}
-                    type={route.status === "Active" ? "active" : "inactive"}
-                  />
+                <td className="py-4 px-4 text-sm text-gray-900">{route.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={route.status} />
                 </td>
-                <td className="px-6 py-4">
-                  <button className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors">
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                  >
                     View
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -302,7 +305,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   const renderRidesTab = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[var(--heading)]">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Rides ({mockRides.length})
         </h3>
         <Button
@@ -313,44 +316,39 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           Add New Ride
         </Button>
       </div>
-      <div className="bg-[var(--surface-bg)] rounded-lg border border-[var(--border)] overflow-hidden">
+      <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-left text-sm text-[var(--gray-500)] border-b border-[var(--border)]">
-              <th className="px-6 py-3 font-medium">Ride ID</th>
-              <th className="px-6 py-3 font-medium">Route</th>
-              <th className="px-6 py-3 font-medium">Scheduled Date</th>
-              <th className="px-6 py-3 font-medium">Driver</th>
-              <th className="px-6 py-3 font-medium">Status</th>
-              <th className="px-6 py-3 font-medium">Actions</th>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Scheduled Date</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Driver</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody>
             {mockRides.map((ride) => (
               <tr
                 key={ride.id}
-                className="border-b border-[var(--border)] hover:bg-[var(--gray-50)]"
+                className="border-b border-gray-100 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 font-medium">{ride.id}</td>
-                <td className="px-6 py-4 font-medium">{ride.route}</td>
-                <td className="px-6 py-4">{ride.scheduledDate}</td>
-                <td className="px-6 py-4">{ride.driver}</td>
-                <td className="px-6 py-4">
-                  <StatusBadge
-                    status={ride.status}
-                    type={
-                      ride.status === "In progress"
-                        ? "active"
-                        : ride.status === "Assigned"
-                        ? "warning"
-                        : "inactive"
-                    }
-                  />
+                <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{ride.route}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{ride.scheduledDate}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{ride.driver}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={ride.status} />
                 </td>
-                <td className="px-6 py-4">
-                  <button className="px-3 py-1 text-sm border rounded-lg text-[var(--gray-600)] hover:text-[var(--gray-800)] hover:bg-[var(--gray-50)] transition-colors">
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                  >
                     View
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -398,8 +396,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
               <Building2 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>{mockDistrictData.name}</h2>
-              <p style={{ color: '#6b7280' }}>District Details</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>District Details</h2>
             </div>
           </div>
           <button
@@ -412,92 +409,102 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           </button>
         </div>
 
-        {/* Collapse - District Information */}
-        <div className="px-6 pt-4">
-          <Collapse 
-            title="District Information" 
-            icon={<Building2 className="w-4 h-4 text-purple-600" />}
-            isOpen={openCollapse === 'district-info'}
-            onToggle={() => handleCollapseToggle('district-info')}
-          >
-            <div className="space-y-6">
-              {/* District Profile Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                    <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 pt-4">
+            {/* Collapse - District Information */}
+            <Collapse 
+              title="District Information" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+                  <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              }
+              isOpen={openCollapse === 'district-info'}
+              onToggle={() => handleCollapseToggle('district-info')}
+            >
+              <div className="space-y-6">
+                {/* District Profile Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                      <Building2 className="w-8 h-8 text-[var(--purple-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-2xl text-[var(--primary-black)]">{mockDistrictData.name}</div>
+                      <div className="text-sm text-[var(--muted-text)]">District ID: {mockDistrictData.id}</div>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-2xl text-[var(--primary-black)]">{mockDistrictData.name}</div>
-                    <div className="text-sm text-[var(--muted-text)]">District ID: {mockDistrictData.id}</div>
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {mockDistrictData.status}
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {mockDistrictData.status}
+
+                {/* District Information Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Hash className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">ID</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.id}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
+                      <Globe className="w-4 h-4 text-[var(--blue-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">REGION</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.region}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-[var(--muted-text)]">CITY</div>
+                      <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.city}</div>
+                    </div>
                   </div>
                 </div>
               </div>
+            </Collapse>
 
-              {/* District Information Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                    <Hash className="w-4 h-4 text-[var(--blue-600)]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-[var(--muted-text)]">ID</div>
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.id}</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
-                    <Globe className="w-4 h-4 text-[var(--blue-600)]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-[var(--muted-text)]">REGION</div>
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.region}</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-[var(--muted-text)]">CITY</div>
-                    <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.city}</div>
-                  </div>
-                </div>
+            {/* Tabs Section - always visible outside general info */}
+            <div className="pt-4 border-t border-[var(--gray-200)]">
+              <div className="flex mt-2">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+                    style={{
+                      backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                      color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                      borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                      marginRight: '4px',
+                      fontSize: '14px'
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <tab.icon className="w-4 h-4" />
+                      <span>{tab.label}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className="mt-4">
+                {renderTabContent()}
               </div>
             </div>
-          </Collapse>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-4 ml-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
-                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
-                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <tab.icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1">
-          {renderTabContent()}
+          </div>
         </div>
       </div>
     </div>
