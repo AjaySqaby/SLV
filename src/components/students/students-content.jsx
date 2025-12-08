@@ -295,7 +295,6 @@ export default function StudentsContent() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Student Details</h2>
-                  <p style={{ color: '#6b7280' }}>{selectedStudent.name} - {selectedStudent.id}</p>
                 </div>
               </div>
               <button
@@ -310,8 +309,10 @@ export default function StudentsContent() {
                 <X className="w-6 h-6" style={{ color: '#6b7280' }} />
               </button>
             </div>
-            <div className="overflow-y-auto flex-1">
-              <StudentProfilePage studentId={selectedStudent.id} />
+            <div className="flex-1 overflow-y-auto">
+              <div className="px-6 pt-4">
+                <StudentProfilePage studentId={selectedStudent.id} />
+              </div>
             </div>
           </div>
         </div>

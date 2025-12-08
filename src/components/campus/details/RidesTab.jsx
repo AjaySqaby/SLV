@@ -55,7 +55,7 @@ export default function RidesTab({ rides }) {
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-        <div className="font-semibold text-base">Rides</div>
+        <h3 className="text-lg font-semibold text-gray-900">Rides</h3>
         <div className="w-full md:w-80">
           <DateRangePicker
             startDate={startDate}

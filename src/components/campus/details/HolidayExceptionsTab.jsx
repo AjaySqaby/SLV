@@ -79,14 +79,14 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-[var(--gray-900)]">Holidays & Exceptions</h3>
-          <p className="text-sm text-[var(--gray-600)]">Manage school holidays and schedule changes</p>
+          <h3 className="text-lg font-semibold text-gray-900">Holidays & Exceptions</h3>
+          {/* <p className="text-sm text-gray-600">Manage school holidays and schedule changes</p> */}
         </div>
         <Button
-          variant="primary"
           size="sm"
+          variant="primary"
           icon={<Plus className="w-4 h-4" />}
           onClick={() => setShowAddModal(true)}
         >
@@ -101,6 +101,7 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
           <h4 className="text-lg font-medium text-gray-900 mb-2">No Holidays/Exceptions</h4>
           <p className="text-gray-600 mb-4">Add holidays and schedule changes to manage transportation</p>
           <Button
+            size="sm"
             variant="outline"
             icon={<Plus className="w-4 h-4" />}
             onClick={() => setShowAddModal(true)}
@@ -109,89 +110,88 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
           </Button>
         </div>
       ) : (
-        <table className="w-full text-sm border border-gray-200 rounded-lg">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="p-3 text-left font-semibold text-gray-700">Title</th>
-              <th className="p-3 text-left font-semibold text-gray-700">Type</th>
-              <th className="p-3 text-left font-semibold text-gray-700">Date Range</th>
-              <th className="p-3 text-left font-semibold text-gray-700">Transportation</th>
-              <th className="p-3 text-left font-semibold text-gray-700">Description</th>
-              <th className="p-3 text-center font-semibold text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {holidays.map((holiday) => (
-              <tr 
-                key={holiday.id} 
-                className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer"
-                onClick={() => router.push('/campus')}
-              >
-                <td className="p-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(holiday.type)}`}>
-                      {getTypeIcon(holiday.type)}
-                    </div>
-                    <span className="font-semibold text-gray-900">{holiday.title}</span>
-                  </div>
-                </td>
-                <td className="p-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(holiday.type)}`}>
-                    {getTypeLabel(holiday.type)}
-                  </span>
-                </td>
-                <td className="p-3">
-                  <div className="flex items-center gap-1 text-gray-600">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                      {holiday.startDate} 
-                      {holiday.endDate && holiday.endDate !== holiday.startDate && ` - ${holiday.endDate}`}
-                    </span>
-                  </div>
-                </td>
-                <td className="p-3">
-                  {holiday.affectsTransportation ? (
-                    <span className="flex items-center gap-1 text-blue-600">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">Affects</span>
-                    </span>
-                  ) : (
-                    <span className="text-gray-400 text-sm">No Impact</span>
-                  )}
-                </td>
-                <td className="p-3">
-                  <span className="text-gray-600 text-sm">
-                    {holiday.description || '-'}
-                  </span>
-                </td>
-                <td className="p-3">
-                  <div className="flex items-center justify-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<Edit3 className="w-4 h-4" />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditHoliday(holiday);
-                      }}
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<Trash2 className="w-4 h-4" />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteHoliday(holiday.id);
-                      }}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    />
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Title</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Date Range</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Transportation</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Description</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {holidays.map((holiday) => (
+                <tr 
+                  key={holiday.id} 
+                  className="border-b border-gray-100 hover:bg-gray-50"
+                >
+                  <td className="py-4 px-4 text-sm text-gray-900">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(holiday.type)}`}>
+                        {getTypeIcon(holiday.type)}
+                      </div>
+                      <span>{holiday.title}</span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(holiday.type)}`}>
+                      {getTypeLabel(holiday.type)}
+                    </span>
+                  </td>
+                  <td className="py-4 px-4 text-sm text-gray-900">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        {holiday.startDate} 
+                        {holiday.endDate && holiday.endDate !== holiday.startDate && ` - ${holiday.endDate}`}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4 text-sm text-gray-900">
+                    {holiday.affectsTransportation ? (
+                      <span className="flex items-center gap-1 text-blue-600">
+                        <Clock className="w-4 h-4" />
+                        <span>Affects</span>
+                      </span>
+                    ) : (
+                      <span className="text-gray-400">No Impact</span>
+                    )}
+                  </td>
+                  <td className="py-4 px-4 text-sm text-gray-900">
+                    {holiday.description || '-'}
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<Edit3 className="w-4 h-4" />}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditHoliday(holiday);
+                        }}
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<Trash2 className="w-4 h-4" />}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteHoliday(holiday.id);
+                        }}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Add/Edit Modal */}

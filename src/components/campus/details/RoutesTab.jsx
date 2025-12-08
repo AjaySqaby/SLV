@@ -2,6 +2,7 @@ import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge"
 import { FaBus } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
 
 export default function RoutesTab({ routes }) {
   const router = useRouter();
@@ -9,60 +10,62 @@ export default function RoutesTab({ routes }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <div className="font-semibold text-base">Bus Routes</div>
-        <Button variant="primary">Add Route</Button>
+        <h3 className="text-lg font-semibold text-gray-900">Bus Routes</h3>
+        <Button size="sm" variant="primary" icon={<Plus className="w-4 h-4" />}>Add Route</Button>
       </div>
-      <table className="w-full text-sm border">
-        <thead>
-          <tr className="bg-gray-50">
-            <th className="p-2 text-left">Route ID</th>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Stops</th>
-            <th className="p-2 text-left">Distance</th>
-            <th className="p-2 text-left">Students</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {routes.map((r) => (
-            <tr 
-              key={r.id} 
-              className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
-              onClick={() => router.push('/routes')}
-            >
-              <td className="p-2 font-medium">{r.id}</td>
-              <td className="p-2">
-                <span className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
-                    <FaBus className="text-blue-500 w-4 h-4" />
-                  </span>
-                  <span className="font-semibold">{r.name}</span>
-                </span>
-              </td>
-              <td className="p-2">{r.stops}</td>
-              <td className="p-2">{r.distance}</td>
-              <td className="p-2">{r.students}</td>
-              <td className="p-2">
-                <StatusBadge status={r.status} type={r.status === "Active" ? "active" : "inactive"} />
-              </td>
-              <td className="p-2">
-                <Button 
-                  size="sm" 
-                  variant="secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push('/routes');
-                  }}
-                  className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                >
-                  View
-                </Button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {routes.map((r) => (
+              <tr 
+                key={r.id} 
+                className="border-b border-gray-100 hover:bg-gray-50"
+                onClick={() => router.push('/routes')}
+              >
+                <td className="py-4 px-4 text-sm text-gray-900">{r.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
+                      <FaBus className="text-blue-500 w-4 h-4" />
+                    </span>
+                    <span>{r.name}</span>
+                  </span>
+                </td>
+                <td className="py-4 px-4 text-sm text-gray-900">{r.stops}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{r.distance}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{r.students}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={r.status} />
+                </td>
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push('/routes');
+                    }}
+                  >
+                    View
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 } 

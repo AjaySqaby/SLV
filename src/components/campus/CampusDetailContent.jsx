@@ -307,7 +307,11 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
         <div className={isModal ? "px-6 pt-4" : "mb-8"}>
           <Collapse 
             title="Campus Information" 
-            icon={<Building2 className="w-4 h-4 text-purple-600" />}
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            }
             isOpen={openCollapse === 'campus-info'}
             onToggle={() => handleCollapseToggle('campus-info')}
           >
@@ -464,31 +468,34 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
               </div>
             </div>
           </Collapse>
-        </div>
 
-        {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-4 ml-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
-                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
-                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              <tab.icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1">
-          {renderContent()}
+          {/* Tabs Section - always visible outside general info */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <div className="flex mt-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+                  style={{
+                    backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                    color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                    borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                    marginRight: '4px',
+                    fontSize: '14px'
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <tab.icon className="w-4 h-4" />
+                    <span>{tab.label}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="mt-4">
+              {renderContent()}
+            </div>
+          </div>
         </div>
       </div>
     </div>

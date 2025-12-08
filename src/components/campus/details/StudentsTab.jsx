@@ -4,6 +4,7 @@ import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge"
 import { AiOutlineUser } from "react-icons/ai";
+import { Plus } from "lucide-react";
 
 export default function StudentsTab({ students }) {
   const [search, setSearch] = useState("");
@@ -21,61 +22,63 @@ export default function StudentsTab({ students }) {
           placeholder="Search students..."
           width="w-[300px]"
         />
-        <Button variant="primary">Add Student</Button>
+        <Button size="sm" variant="primary" icon={<Plus className="w-4 h-4" />}>Add Student</Button>
       </div>
-      <table className="w-full text-sm border">
-        <thead>
-          <tr className="bg-gray-50">
-            <th className="p-2 text-left">Student ID</th>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Grade</th>
-            <th className="p-2 text-left">Homeroom</th>
-            <th className="p-2 text-left">Address</th>
-            <th className="p-2 text-left">Transportation</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredStudents.map((s) => (
-            <tr 
-              key={s.id} 
-              className="border-b hover:bg-gray-50 transition-colors cursor-pointer"
-              onClick={() => router.push('/students')}
-            >
-              <td className="p-2 font-medium">{s.id}</td>
-              <td className="p-2">
-                <span className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
-                    <AiOutlineUser className="text-blue-500 w-4 h-4" />
-                  </span>
-                  <span className="font-semibold">{s.name}</span>
-                </span>
-              </td>
-              <td className="p-2">{s.grade}</td>
-              <td className="p-2">{s.homeroom}</td>
-              <td className="p-2">{s.address}</td>
-              <td className="p-2">{s.transportation}</td>
-              <td className="p-2">
-                <StatusBadge status={s.status} type={s.status === "Active" ? "active" : "inactive"} />
-              </td>
-              <td className="p-2">
-                <Button 
-                  size="sm" 
-                  variant="secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push('/students');
-                  }}
-                  className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                >
-                  View
-                </Button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Student ID</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Grade</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Homeroom</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Transportation</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredStudents.map((s) => (
+              <tr 
+                key={s.id} 
+                className="border-b border-gray-100 hover:bg-gray-50"
+                onClick={() => router.push('/students')}
+              >
+                <td className="py-4 px-4 text-sm text-gray-900">{s.id}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
+                      <AiOutlineUser className="text-blue-500 w-4 h-4" />
+                    </span>
+                    <span>{s.name}</span>
+                  </span>
+                </td>
+                <td className="py-4 px-4 text-sm text-gray-900">{s.grade}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{s.homeroom}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{s.address}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{s.transportation}</td>
+                <td className="py-4 px-4">
+                  <StatusBadge status={s.status} />
+                </td>
+                <td className="py-4 px-4">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push('/students');
+                    }}
+                  >
+                    View
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 } 

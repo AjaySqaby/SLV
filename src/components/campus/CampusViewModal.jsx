@@ -23,9 +23,7 @@ export default function CampusViewModal({ open, onClose, campusId, isEditModal =
               <Building2 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>
-                {isEditModal ? 'Edit Campus' : 'Campus Details'}
-              </h2>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Campus Details</h2>
             </div>
           </div>
           <button
@@ -39,7 +37,7 @@ export default function CampusViewModal({ open, onClose, campusId, isEditModal =
         </div>
 
         {/* Modal Content - Use existing CampusDetailContent */}
-        <div className="p-0 overflow-y-auto flex-1">
+        <div className="flex-1 overflow-y-auto">
           <CampusDetailContent 
             campusId={campusId} 
             isModal={true}

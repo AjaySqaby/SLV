@@ -523,8 +523,7 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               <Route className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Route Details #{routeData.id}</h2>
-              <p style={{ color: '#6b7280' }}>{routeData.name}</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Route Details</h2>
             </div>
           </div>
           <button
@@ -537,14 +536,20 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
           </button>
         </div>
 
-        {/* Collapse - Route Information */}
-        <div className="px-6 pt-4">
-          <Collapse 
-            title="Route Information" 
-            icon={<Route className="w-4 h-4 text-purple-600" />}
-            isOpen={openCollapse === 'route-info'}
-            onToggle={() => handleCollapseToggle('route-info')}
-          >
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 pt-4">
+            {/* Collapse - Route Information */}
+            <Collapse 
+              title="Route Information" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+                  <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+              }
+              isOpen={openCollapse === 'route-info'}
+              onToggle={() => handleCollapseToggle('route-info')}
+            >
             <div className="space-y-6">
               {/* Route Profile Header */}
               <div className="flex items-center justify-between">
@@ -742,62 +747,65 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
               </div>
             </div>
           </Collapse>
-        </div>
 
-        {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-4 ml-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-              style={{
-                backgroundColor: activeTab === tab.id ? '#8b5cf6' : '#f3f4f6',
-                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
-                border: activeTab === tab.id ? 'none' : '1px solid #e5e7eb',
-                borderRadius: '12px'
-              }}
-            >
-              {tab.id === 0 && <Route className="w-4 h-4" />}
-              {tab.id === 1 && <MapPin className="w-4 h-4" />}
-              {tab.id === 2 && <Users className="w-4 h-4" />}
-              {tab.id === 3 && <Map className="w-4 h-4" />}
-              {tab.id === 4 && <Car className="w-4 h-4" />}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1">
-          {activeTab === 0 && renderOverview()}
-          {activeTab === 1 && renderStops()}
-          {activeTab === 2 && renderStudents()}
-          {activeTab === 3 && renderMap()}
-          {activeTab === 4 && renderRides()}
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-          >
-            <div className="flex items-center gap-2">
-              <X className="w-4 h-4" />
-              <span>Close</span>
+          {/* Tabs Section - always visible outside general info */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <div className="flex mt-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+                  style={{
+                    backgroundColor: activeTab === tab.id ? 'var(--primary)' : 'var(--gray-100)',
+                    color: activeTab === tab.id ? 'var(--on-primary)' : 'var(--muted-text)',
+                    borderBottom: activeTab === tab.id ? '2px solid var(--primary)' : 'none',
+                    marginRight: '4px',
+                    fontSize: '14px'
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    {tab.id === 1 && <MapPin className="w-4 h-4" />}
+                    {tab.id === 2 && <Users className="w-4 h-4" />}
+                    {tab.id === 3 && <Map className="w-4 h-4" />}
+                    {tab.id === 4 && <Car className="w-4 h-4" />}
+                    <span>{tab.label}</span>
+                  </div>
+                </button>
+              ))}
             </div>
-          </Button>
-          <Button
-            className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" />
-              <span>Save Route</span>
+            <div className="mt-4">
+              {activeTab === 0 && renderOverview()}
+              {activeTab === 1 && renderStops()}
+              {activeTab === 2 && renderStudents()}
+              {activeTab === 3 && renderMap()}
+              {activeTab === 4 && renderRides()}
             </div>
-          </Button>
+          </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <div className="flex justify-end gap-3 p-6 border-t border-[var(--gray-200)]">
+        <Button
+          variant="secondary"
+          onClick={onClose}
+        >
+          <div className="flex items-center gap-2">
+            <X className="w-4 h-4" />
+            <span>Close</span>
+          </div>
+        </Button>
+        <Button
+          className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white"
+        >
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4" />
+            <span>Save Route</span>
+          </div>
+        </Button>
+      </div>
+    </div>
 
       {/* Driver Detail Modal */}
       <DriverDetailModal

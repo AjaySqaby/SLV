@@ -228,47 +228,20 @@ export default function StudentProfilePage({ studentId }) {
 
   return (
     <div className="bg-transparent">
-      {/* Header Section with Profile Info and Actions */}
-      <div className="px-6 pt-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
-                <Users className="w-8 h-8" style={{ color: '#6b7280' }} />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold" style={{ color: '#111827' }}>{studentData.name}</h1>
-              </div>
-            </div>
+      {/* Header Section with Profile Info */}
+      <div className="pt-6">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+            <Users className="w-8 h-8" style={{ color: '#6b7280' }} />
           </div>
-          <div className="flex items-center gap-3">
-            <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-              {studentData.status}
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="flex items-center gap-2 bg-[var(--gray-100)] text-[var(--primary-black)] px-3 py-1 rounded font-medium text-sm border border-[var(--gray-200)]"
-              >
-                <FileText className="w-4 h-4" />
-                Text
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                className="flex items-center gap-2 bg-[var(--blue)] text-white px-3 py-1 rounded font-medium text-sm"
-              >
-                <RiPhoneLine className="w-4 h-4" />
-                Call
-              </Button>
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold" style={{ color: '#111827' }}>{studentData.name}</h1>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="px-6 pt-4">
+      <div className="pt-4">
         {/* Single Collapse with All Information */}
         <Collapse 
           title="Student Information" 
@@ -281,6 +254,42 @@ export default function StudentProfilePage({ studentId }) {
           onToggle={() => handleCollapseToggle('student-info')}
         >
           <div className="space-y-6">
+            {/* Student Profile Header with Actions */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full border border-[var(--gray-200)] overflow-hidden bg-[var(--gray-100)] flex items-center justify-center">
+                  <Users className="w-8 h-8" style={{ color: '#6b7280' }} />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-2xl text-[var(--primary-black)]">{studentData.name}</div>
+                  <div className="text-sm text-[var(--muted-text)]">Student ID: {studentData.studentId}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="bg-[var(--green)] text-white px-3 py-1 rounded-full text-sm font-medium" style={{ minWidth: '87px', minHeight: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {studentData.status}
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="flex items-center gap-2 bg-[var(--gray-100)] text-[var(--primary-black)] px-3 py-1 rounded font-medium text-sm border border-[var(--gray-200)]"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Text
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="flex items-center gap-2 bg-[var(--blue)] text-white px-3 py-1 rounded font-medium text-sm"
+                  >
+                    <RiPhoneLine className="w-4 h-4" />
+                    Call
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             {/* Student Details Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
@@ -424,55 +433,71 @@ export default function StudentProfilePage({ studentId }) {
 
         {/* Tabs Section - always visible outside general info */}
         <div className="pt-4 border-t border-[var(--gray-200)]">
-          <div className="flex items-center space-x-2 mb-6">
+          <div className="flex mt-2">
             <button 
               onClick={() => setActiveTab('routes')}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 'routes' 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 'routes' ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === 'routes' ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === 'routes' ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === 'routes' ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
             >
-              <Route className="w-4 h-4" />
-              Routes
+              <div className="flex items-center gap-2">
+                <Route className="w-4 h-4" />
+                <span>Routes</span>
+              </div>
             </button>
             <button 
               onClick={() => setActiveTab('rides')}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 'rides' 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 'rides' ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === 'rides' ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === 'rides' ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === 'rides' ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
             >
-              <Clock className="w-4 h-4" />
-              Rides
-              <span className="ml-1 px-2 py-1 text-xs font-medium rounded-full bg-white text-purple-600">2</span>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>Rides</span>
+                <span className="ml-1 px-2 py-1 text-xs font-medium rounded-full bg-white text-purple-600">2</span>
+              </div>
             </button>
             <button 
               onClick={() => setActiveTab('drivers')}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 'drivers' 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 'drivers' ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === 'drivers' ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === 'drivers' ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === 'drivers' ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
             >
-              <Users className="w-4 h-4" />
-              Drivers
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                <span>Drivers</span>
+              </div>
             </button>
             <button 
               onClick={() => setActiveTab('blocked')}
-              className={`px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 rounded-lg ${
-                activeTab === 'blocked' 
-                  ? 'text-white' 
-                  : 'bg-gray-100 text-gray-600 border border-gray-200'
-              }`}
-              style={activeTab === 'blocked' ? { backgroundColor: 'var(--primary)' } : {}}
+              className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg"
+              style={{
+                backgroundColor: activeTab === 'blocked' ? 'var(--primary)' : 'var(--gray-100)',
+                color: activeTab === 'blocked' ? 'var(--on-primary)' : 'var(--muted-text)',
+                borderBottom: activeTab === 'blocked' ? '2px solid var(--primary)' : 'none',
+                marginRight: '4px',
+                fontSize: '14px'
+              }}
             >
-              <Shield className="w-4 h-4" />
-              Blocked Drivers
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>Blocked Drivers</span>
+              </div>
             </button>
           </div>
 
@@ -480,222 +505,197 @@ export default function StudentProfilePage({ studentId }) {
           <div>
             {activeTab === 'routes' && (
               <>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <Route className="w-5 h-5 text-purple-600" />
-                    Assigned Routes ({studentData.assignedRoutes.length})
-                  </h2>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Stops</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Distance</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {studentData.assignedRoutes.map((route, index) => (
-                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewRoute(route.id)}>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{route.id}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{route.name}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{route.stops}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{route.distance}</td>
-                          <td className="py-4 px-6">
-                            <div className="flex flex-col items-start">
-                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
-                                {route.status}
-                              </span>
-                              <div className="w-full h-px bg-gray-200 mt-1"></div>
-                            </div>
-                          </td>
-                          <td className="py-4 px-6 text-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleViewRoute(route.id)
-                              }}
-                            >
-                              View
-                            </Button>
-                          </td>
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Assigned Routes ({studentData.assignedRoutes.length})</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {studentData.assignedRoutes.map((route, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                            <td className="py-4 px-4 text-sm text-gray-900">{route.id}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
+                            <td className="py-4 px-4">
+                              <StatusBadge status={route.status} />
+                            </td>
+                            <td className="py-4 px-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleViewRoute(route.id)
+                                }}
+                              >
+                                View
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </>
             )}
 
             {activeTab === 'rides' && (
               <>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-purple-600" />
-                    Upcoming Rides ({studentData.upcomingRides.length})
-                  </h2>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Ride ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Route</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {studentData.upcomingRides.map((ride, index) => (
-                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewRide(ride.id)}>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{ride.id}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{ride.date}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{ride.driver}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{ride.route}</td>
-                          <td className="py-4 px-6">
-                            <div className="flex flex-col items-start">
-                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
-                                {ride.status}
-                              </span>
-                              <div className="w-full h-px bg-gray-200 mt-1"></div>
-                            </div>
-                          </td>
-                          <td className="py-4 px-6 text-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleViewRide(ride.id)
-                              }}
-                            >
-                              View
-                            </Button>
-                          </td>
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Rides ({studentData.upcomingRides.length})</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Date</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {studentData.upcomingRides.map((ride, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                            <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.date}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.driver}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.route}</td>
+                            <td className="py-4 px-4">
+                              <StatusBadge status={ride.status} />
+                            </td>
+                            <td className="py-4 px-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleViewRide(ride.id)
+                                }}
+                              >
+                                View
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </>
             )}
 
             {activeTab === 'drivers' && (
               <>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-purple-600" />
-                    Approved Drivers ({studentData.approvedDrivers.length})
-                  </h2>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Rating</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Rides Completed</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {studentData.approvedDrivers.map((driver, index) => (
-                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => handleViewDriver(driver.id)}>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{driver.id}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{driver.name}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900 flex items-center gap-1">
-                            {driver.rating} <Star className="w-4 h-4 text-yellow-500" />
-                          </td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{driver.ridesCompleted}</td>
-                          <td className="py-4 px-6">
-                            <div className="flex flex-col items-start">
-                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
-                                {driver.status}
-                              </span>
-                              <div className="w-full h-px bg-gray-200 mt-1"></div>
-                            </div>
-                          </td>
-                          <td className="py-4 px-6 text-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleBlockDriver(driver.id)
-                              }}
-                            >
-                              Block
-                            </Button>
-                          </td>
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Approved Drivers ({studentData.approvedDrivers.length})</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Rating</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Rides Completed</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {studentData.approvedDrivers.map((driver, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.id}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.name}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900 flex items-center gap-1">
+                              {driver.rating} <Star className="w-4 h-4 text-yellow-500" />
+                            </td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.ridesCompleted}</td>
+                            <td className="py-4 px-4">
+                              <StatusBadge status={driver.status} />
+                            </td>
+                            <td className="py-4 px-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleBlockDriver(driver.id)
+                                }}
+                              >
+                                Block
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </>
             )}
 
             {activeTab === 'blocked' && (
               <>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-red-600" />
-                    Blocked Drivers
-                  </h2>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-                    onClick={() => setShowBlockDriverModal(true)}
-                  >
-                    <Plus className="w-4 h-4" />
-                    Block Driver
-                  </Button>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Driver ID</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Reason</th>
-                        <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {studentData.blockedDrivers.map((driver, index) => (
-                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                          <td className="py-4 px-6 text-sm text-gray-900 font-medium">{driver.id}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900 font-semibold">{driver.name}</td>
-                          <td className="py-4 px-6 text-sm text-gray-900">{driver.reason}</td>
-                          <td className="py-4 px-6 text-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                              onClick={() => handleUnblockDriver(driver.id)}
-                            >
-                              <Trash2 className="w-4 h-4 mr-1" />
-                              Remove
-                            </Button>
-                          </td>
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900">Blocked Drivers</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+                      onClick={() => setShowBlockDriverModal(true)}
+                    >
+                      <Plus className="w-4 h-4" />
+                      Block Driver
+                    </Button>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Reason</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {studentData.blockedDrivers.map((driver, index) => (
+                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.id}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.name}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{driver.reason}</td>
+                            <td className="py-4 px-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                                onClick={() => handleUnblockDriver(driver.id)}
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Remove
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </>
             )}
