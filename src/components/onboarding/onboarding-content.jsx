@@ -127,9 +127,7 @@ export default function OnboardingContent() {
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
-        <div>
-          <h1 className="text-3xl font-bold mb-8">Driver Onboarding</h1>
-        </div>
+        <h1 className="text-3xl font-bold mb-8">Driver Onboarding</h1>
       </div>
 
       <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6 mb-8">

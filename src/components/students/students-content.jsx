@@ -135,8 +135,8 @@ export default function StudentsContent() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Students Management</h1>
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-3xl font-bold mb-8">Students Management</h1>
         <Button
           variant="ghost"
           className="flex items-center gap-2 text-[var(--muted-text)]"
@@ -169,8 +169,8 @@ export default function StudentsContent() {
           </div>
           <div className="flex gap-3 flex-shrink-0">
             <Button
-              variant="outline"
-              className="text-sm flex items-center justify-center font-medium gap-2 whitespace-nowrap transition-all duration-200 hover:shadow-md"
+              variant="secondary"
+              className="text-sm flex items-center justify-center font-medium gap-2 border border-[var(--gray-300)] bg-white hover:bg-[var(--purple)] hover:text-white hover:border-[var(--purple)] whitespace-nowrap transition-all duration-200"
               onClick={() => setBulkUploadModalOpen(true)}
             >
               <Plus size={18} />
