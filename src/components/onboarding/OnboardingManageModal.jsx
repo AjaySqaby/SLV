@@ -107,8 +107,7 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
               <CheckCircle className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>{driverData.name} - Onboarding</h2>
-              <p style={{ color: '#6b7280' }}>Driver ID: {driverData.id} | Started: {driverData.startDate}</p>
+              <h2 className="text-2xl font-bold" style={{ color: '#111827' }}>Onboarding Details</h2>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -123,14 +122,20 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
           </div>
         </div>
 
-        {/* Collapse - Onboarding Information */}
-        <div className="px-6 pt-4">
-          <Collapse 
-            title="Onboarding Details" 
-            icon={<CheckCircle className="w-4 h-4 text-purple-600" />}
-            isOpen={openCollapse === 'onboarding-info'}
-            onToggle={() => handleCollapseToggle('onboarding-info')}
-          >
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 pt-4">
+            {/* Collapse - Onboarding Information */}
+            <Collapse 
+              title="Onboarding Details" 
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+              isOpen={openCollapse === 'onboarding-info'}
+              onToggle={() => handleCollapseToggle('onboarding-info')}
+            >
             <div className="space-y-6">
               {/* Driver Profile Header */}
               <div className="flex items-center justify-between">
@@ -237,105 +242,124 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
               </div>
             </div>
           </Collapse>
-        </div>
 
-        {/* Tabs */}
-        <div className="flex items-center space-x-2 mt-4 ml-8 flex-shrink-0 overflow-x-auto pb-2">
-          <button 
-            onClick={() => setActiveTab('background-check')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'background-check' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'background-check' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'background-check' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Background Check</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('fingerprinting')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'fingerprinting' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'fingerprinting' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'fingerprinting' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Fingerprinting</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('document-collection')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'document-collection' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'document-collection' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'document-collection' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Document Collection</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('medical-drug-tests')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'medical-drug-tests' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'medical-drug-tests' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'medical-drug-tests' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Medical & Drug Tests</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('vehicle-inspection')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'vehicle-inspection' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'vehicle-inspection' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'vehicle-inspection' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Vehicle Inspection</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('training-assessments')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'training-assessments' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'training-assessments' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'training-assessments' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Training & Assessments</span>
-          </button>
-          <button 
-            onClick={() => setActiveTab('summary')}
-            className="px-6 py-3 text-sm font-medium cursor-pointer flex items-center gap-2 transition-all duration-200 hover:opacity-90 whitespace-nowrap"
-            style={{
-              backgroundColor: activeTab === 'summary' ? '#8b5cf6' : '#f3f4f6',
-              color: activeTab === 'summary' ? '#ffffff' : '#6b7280',
-              border: activeTab === 'summary' ? 'none' : '1px solid #e5e7eb',
-              borderRadius: '12px'
-            }}
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Summary</span>
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1 min-h-0">
+          {/* Tabs Section - always visible outside general info */}
+          <div className="pt-4 border-t border-[var(--gray-200)]">
+            <div className="flex mt-2 overflow-x-auto pb-2">
+              <button 
+                onClick={() => setActiveTab('background-check')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'background-check' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'background-check' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'background-check' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Background Check</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('fingerprinting')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'fingerprinting' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'fingerprinting' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'fingerprinting' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Fingerprinting</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('document-collection')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'document-collection' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'document-collection' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'document-collection' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Document Collection</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('medical-drug-tests')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'medical-drug-tests' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'medical-drug-tests' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'medical-drug-tests' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Medical & Drug Tests</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('vehicle-inspection')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'vehicle-inspection' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'vehicle-inspection' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'vehicle-inspection' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Vehicle Inspection</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('training-assessments')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'training-assessments' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'training-assessments' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'training-assessments' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Training & Assessments</span>
+                </div>
+              </button>
+              <button 
+                onClick={() => setActiveTab('summary')}
+                className="px-6 py-3 font-medium cursor-pointer transition-all duration-200 hover:opacity-90 rounded-lg whitespace-nowrap"
+                style={{
+                  backgroundColor: activeTab === 'summary' ? 'var(--primary)' : 'var(--gray-100)',
+                  color: activeTab === 'summary' ? 'var(--on-primary)' : 'var(--muted-text)',
+                  borderBottom: activeTab === 'summary' ? '2px solid var(--primary)' : 'none',
+                  marginRight: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Summary</span>
+                </div>
+              </button>
+            </div>
+            <div className="mt-4">
             {activeTab === "background-check" && (
               <BackgroundCheckTab driverId={driverData.id} />
             )}
@@ -357,8 +381,11 @@ export default function OnboardingManageModal({ open, onClose, driver }) {
             {activeTab === "summary" && (
               <SummaryTab driverId={driverData.id} />
             )}
+            </div>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
