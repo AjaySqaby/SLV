@@ -5,7 +5,7 @@ import StudentFormFields from "./StudentFormFields";
 export default function StudentEditForm({ form, handleChange, handleSubmit, gradeOptions, statusOptions, isModal = false }) {
   return (
     <div className={`${isModal ? 'p-6' : 'bg-[var(--gray-50)] min-h-screen p-6'}`}>
-      <div className="max-w-5xl mx-auto">
+      <div className={`${isModal ? '' : 'max-w-5xl mx-auto'}`}>
         {!isModal && (
           <>
             <div className="flex items-center mb-6">
@@ -19,6 +19,7 @@ export default function StudentEditForm({ form, handleChange, handleSubmit, grad
           <StudentFormFields 
             form={form}
             onChange={handleChange}
+            isModal={isModal}
           />
         
         </form>

@@ -18,6 +18,7 @@ import CustomSelect from "@/components/ui/CustomSelect";
 import AddDriverModal from "@/components/drivers/AddDriverModal";
 import DriverActionsDropdown from "@/components/drivers/DriverActionsDropdown";
 import DriverDetailModal from "@/components/drivers/DriverDetailModal";
+import DriverEditModal from "@/components/drivers/DriverEditModal";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Link from "next/link";
 
@@ -66,6 +67,8 @@ export default function DriversContent() {
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
   const [showDriverDetailModal, setShowDriverDetailModal] = useState(false);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
+  const [showDriverEditModal, setShowDriverEditModal] = useState(false);
+  const [editingDriver, setEditingDriver] = useState(null);
 
   const drivers = [
     {
@@ -147,8 +150,9 @@ export default function DriversContent() {
   };
 
   const handleEditDriver = (driverId) => {
-    // TODO: Implement edit driver functionality
-    console.log('Edit driver:', driverId);
+    const drv = drivers.find(d => d.id === driverId);
+    setEditingDriver(drv || null);
+    setShowDriverEditModal(true);
   };
 
   return (
@@ -263,6 +267,20 @@ export default function DriversContent() {
           setSelectedDriverId(null);
         }}
         driverId={selectedDriverId}
+      />
+
+      <DriverEditModal
+        isOpen={showDriverEditModal}
+        onClose={() => {
+          setShowDriverEditModal(false);
+          setEditingDriver(null);
+        }}
+        initialData={editingDriver || {}}
+        onSave={(data) => {
+          console.log("Driver updated:", data);
+          setShowDriverEditModal(false);
+          setEditingDriver(null);
+        }}
       />
     </div>
   );

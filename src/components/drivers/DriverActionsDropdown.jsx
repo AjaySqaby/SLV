@@ -66,7 +66,10 @@ export default function DriverActionsDropdown({
             return (
               <button
                 key={index}
-                onClick={item.action}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  item.action();
+                }}
                 className={`w-full px-4 py-2 text-left flex items-center gap-3 transition-colors ${item.className}`}
               >
                 <IconComponent className="w-4 h-4" />

@@ -1,9 +1,10 @@
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
+import Toggle from '@/components/ui/Toggle'
 import { User, Home, GraduationCap, Phone, Mail, UserPlus } from 'lucide-react'
 import { EQUIPMENT_TYPES, labelToKey } from '@/utils/equipment'
 
-export default function StudentFormFields({ form, onChange, className = "" }) {
+export default function StudentFormFields({ form, onChange, className = "", isModal = false }) {
   const gradeOptions = Array.from({length: 12}, (_, i) => ({
     value: (i+1).toString(), 
     label: `Grade ${i+1}`
@@ -26,17 +27,19 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
     { value: 'campus2', label: 'Campus 2' },
   ]
 
+  const sectionBase = isModal ? "p-0 border-0 bg-transparent shadow-none" : "bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200"
+
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Student Information */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
             <User className="w-5 h-5 text-[var(--blue-600)]" />
           </div>
           <div className="font-semibold text-[var(--primary-black)]">Student Information</div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input 
             label="Full Name" 
             name="fullName" 
@@ -65,8 +68,8 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
       </div>
 
       {/* Address Information */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--green-100)] rounded-full flex items-center justify-center">
             <Home className="w-5 h-5 text-[var(--green-600)]" />
           </div>
@@ -90,8 +93,8 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
       </div>
 
       {/* School Information */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--purple-100)] rounded-full flex items-center justify-center">
             <GraduationCap className="w-5 h-5 text-[var(--purple-600)]" />
           </div>
@@ -118,14 +121,14 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
       </div>
 
       {/* Guardian Information */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--amber-100)] rounded-full flex items-center justify-center">
             <Phone className="w-5 h-5 text-[var(--amber-600)]" />
           </div>
           <div className="font-semibold text-[var(--primary-black)]">Guardian Information</div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input 
             label="Guardian Full Name" 
             name="guardianName" 
@@ -151,14 +154,14 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
       </div>
 
       {/* Secondary Contact */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--gray-100)] rounded-full flex items-center justify-center">
             <UserPlus className="w-5 h-5 text-[var(--gray-600)]" />
           </div>
           <div className="font-semibold text-[var(--primary-black)]">Secondary Contact (Optional)</div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input 
             label="Secondary Contact Name" 
             name="secondaryName" 
@@ -181,25 +184,24 @@ export default function StudentFormFields({ form, onChange, className = "" }) {
       </div>
 
       {/* Special Equipment */}
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="flex items-center gap-3 mb-4">
+      <div className={sectionBase}>
+        <div className={`flex items-center gap-3 ${isModal ? 'mb-2' : 'mb-4'}`}>
           <div className="w-10 h-10 bg-[var(--cyan-100)] rounded-full flex items-center justify-center">
             <span className="text-lg">🧰</span>
           </div>
           <div className="font-semibold text-[var(--primary-black)]">Special Equipment</div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {EQUIPMENT_TYPES.map((label) => {
             const key = labelToKey(label)
             return (
-              <label key={key} className="flex items-center justify-between p-3 rounded-lg border border-[var(--gray-200)] cursor-pointer">
-                <span className="text-sm text-[var(--gray-700)]">{label}</span>
-                <input
-                  type="checkbox"
+              <div key={key} className="flex items-center justify-between p-3 rounded-lg border border-[var(--gray-200)]">
+                <label className="text-sm text-[var(--gray-700)]">{label}</label>
+                <Toggle
                   checked={!!form[key]}
-                  onChange={(e) => onChange({ target: { name: key, value: e.target.checked } })}
+                  onChange={(value) => onChange({ target: { name: key, value } })}
                 />
-              </label>
+              </div>
             )
           })}
         </div>

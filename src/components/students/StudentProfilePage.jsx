@@ -117,17 +117,17 @@ export default function StudentProfilePage({ studentId }) {
     // Rides data
     upcomingRides: [
       {
-        id: "RD-12345",
-        date: "May 20, 2025",
-        driver: "John Smith",
-        route: "North District Route",
-        status: "Scheduled"
+        id: "2",
+        routeId: "RT-30843",
+        scheduledDate: "04/03/2025",
+        students: 5,
+        status: "Assigned"
       },
       {
-        id: "RD-12346", 
-        date: "May 21, 2025",
-        driver: "Jane Doe",
-        route: "North District Route",
+        id: "3", 
+        routeId: "RT-30844",
+        scheduledDate: "04/04/2025",
+        students: 4,
         status: "Scheduled"
       }
     ],
@@ -546,9 +546,9 @@ export default function StudentProfilePage({ studentId }) {
                       <thead>
                         <tr className="border-b border-gray-200">
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Date</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Scheduled Date</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
@@ -557,9 +557,9 @@ export default function StudentProfilePage({ studentId }) {
                         {studentData.upcomingRides.map((ride, index) => (
                           <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                             <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.date}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.driver}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.route}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.routeId || ride.route}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.scheduledDate || ride.date}</td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{ride.students ?? '-'}</td>
                             <td className="py-4 px-4">
                               <StatusBadge status={ride.status} />
                             </td>
