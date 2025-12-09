@@ -130,13 +130,13 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Campuses ({mockCampuses.length})
         </h3>
-        <Button
+        {/* <Button
           variant="primary"
           icon={<Plus size={16} />}
           size="sm"
         >
           Add New Campus
-        </Button>
+        </Button> */}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -188,13 +188,13 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Students ({mockStudents.length})
         </h3>
-        <Button
+        {/* <Button
           variant="primary"
           icon={<Plus size={16} />}
           size="sm"
         >
           Add New Student
-        </Button>
+        </Button> */}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -304,13 +304,13 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Rides ({mockRides.length})
         </h3>
-        <Button
+        {/* <Button
           variant="primary"
           icon={<Plus size={16} />}
           size="sm"
         >
           Add New Ride
-        </Button>
+        </Button> */}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
