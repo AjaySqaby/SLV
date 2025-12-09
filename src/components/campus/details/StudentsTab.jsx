@@ -1,27 +1,14 @@
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import SearchInput from "@/components/ui/SearchInput";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge"
 import { AiOutlineUser } from "react-icons/ai";
 import { Plus } from "lucide-react";
 
 export default function StudentsTab({ students }) {
-  const [search, setSearch] = useState("");
   const router = useRouter();
-  const filteredStudents = students.filter(s =>
-    s.name.toLowerCase().includes(search.toLowerCase()) ||
-    s.id.toLowerCase().includes(search.toLowerCase())
-  );
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <SearchInput
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search students..."
-          width="w-[300px]"
-        />
+      <div className="flex justify-end items-center mb-4">
         <Button size="sm" variant="primary" icon={<Plus className="w-4 h-4" />}>Add Student</Button>
       </div>
       <div className="overflow-x-auto">
@@ -39,7 +26,7 @@ export default function StudentsTab({ students }) {
             </tr>
           </thead>
           <tbody>
-            {filteredStudents.map((s) => (
+            {students.map((s) => (
               <tr 
                 key={s.id} 
                 className="border-b border-gray-100 hover:bg-gray-50"

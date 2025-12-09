@@ -22,7 +22,6 @@ export default function RoutesTab({ routes }) {
               <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
@@ -45,9 +44,6 @@ export default function RoutesTab({ routes }) {
                 <td className="py-4 px-4 text-sm text-gray-900">{r.stops}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{r.distance}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{r.students}</td>
-                <td className="py-4 px-4">
-                  <StatusBadge status={r.status} />
-                </td>
                 <td className="py-4 px-4">
                   <Button 
                     variant="outline"
