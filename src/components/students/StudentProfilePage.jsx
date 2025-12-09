@@ -58,10 +58,14 @@ import StatusBadge from '@/components/ui/StatusBadge'
 import Select from '@/components/ui/Select'
 import Input from '@/components/ui/Input'
 import Collapse from '@/components/ui/Collapse'
+import DateRangePicker from '@/components/rides/DateRangePicker'
+import RidesTable from '@/components/rides/RidesTable'
 
 export default function StudentProfilePage({ studentId }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState(null)
+  const [rideStart, setRideStart] = useState(null)
+  const [rideEnd, setRideEnd] = useState(null)
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showAddGuardianModal, setShowAddGuardianModal] = useState(false)
   const [showBlockDriverModal, setShowBlockDriverModal] = useState(false)
@@ -539,48 +543,38 @@ export default function StudentProfilePage({ studentId }) {
 
             {activeTab === 'rides' && (
               <>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Rides ({studentData.upcomingRides.length})</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Scheduled Date</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {studentData.upcomingRides.map((ride, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.routeId || ride.route}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.scheduledDate || ride.date}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{ride.students ?? '-'}</td>
-                            <td className="py-4 px-4">
-                              <StatusBadge status={ride.status} />
-                            </td>
-                            <td className="py-4 px-4">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleViewRide(ride.id)
-                                }}
-                              >
-                                View
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                <div className="mt-4 space-y-4">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <h3 className="text-lg font-semibold text-gray-900">Rides</h3>
+                    <div className="w-full md:w-80">
+                      <DateRangePicker
+                        startDate={rideStart}
+                        endDate={rideEnd}
+                        onDateRangeChange={(s, e) => {
+                          setRideStart(s)
+                          setRideEnd(e)
+                        }}
+                      />
+                    </div>
                   </div>
+                  {(() => {
+                    // Map student rides to RidesTable structure
+                    const ridesForTable = (studentData.upcomingRides || []).map((r, i) => ({
+                      id: `R-${r.id}`,
+                      district: r.routeId || r.route || '—',
+                      date: r.scheduledDate || r.date || '',
+                      scheduledTime: '08:30 AM',
+                      timezone: 'EST',
+                      pickup: { scheduled: '08:30 AM', arrived: '', confirmed: '08:20 AM', location: 'Downtown Pickup Point' },
+                      dropoff: { scheduled: '09:30 AM', arrived: '', completed: '', location: 'Central High School' },
+                      driver: { name: '-', vehicle: '-' },
+                      details: { distance: '3.5 mi', duration: '30 min', stops: 2, students: r.students ?? 1 },
+                      status: r.status || 'Scheduled',
+                      nextStop: { address: 'Central High School' },
+                      stops: []
+                    }))
+                    return <RidesTable rides={ridesForTable} />
+                  })()}
                 </div>
               </>
             )}
