@@ -35,9 +35,7 @@ export default function RoutesTab({ routes }) {
                 <td className="py-4 px-4 text-sm text-gray-900">{r.id}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">
                   <span className="flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center">
-                      <FaBus className="text-blue-500 w-4 h-4" />
-                    </span>
+                    
                     <span>{r.name}</span>
                   </span>
                 </td>
