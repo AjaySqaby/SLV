@@ -116,7 +116,7 @@ export default function StudentProfileView({ student, activeTab, setActiveTab })
                       <th className="px-6 py-3 font-medium">Name</th>
                       <th className="px-6 py-3 font-medium">Stops</th>
                       <th className="px-6 py-3 font-medium">Distance</th>
-                      <th className="px-6 py-3 font-medium">Status</th>
+                      <th className="px-6 py-3 font-medium">Students</th>
                       <th className="px-6 py-3 font-medium">Actions</th>
                     </tr>
                   </thead>
@@ -127,11 +127,7 @@ export default function StudentProfileView({ student, activeTab, setActiveTab })
                         <td className="px-6 py-4">{route.name}</td>
                         <td className="px-6 py-4">{route.stops}</td>
                         <td className="px-6 py-4">{route.distance}</td>
-                        <td className="px-6 py-4">
-                          <span className="px-2 py-1 bg-[var(--green-100)] text-[var(--success-dark)] rounded-full text-xs font-medium">
-                            {route.status}
-                          </span>
-                        </td>
+                        <td className="px-6 py-4">{route.students ?? "-"}</td>
                         <td className="px-6 py-4">
                           <button className="text-[var(--blue-600)] hover:text-[var(--blue-800)]">View</button>
                         </td>

@@ -59,7 +59,7 @@ export default function StudentDetailContent({ studentId }) {
         name: "North District Route",
         stops: 5,
         distance: "12.4 mi",
-        status: "Active"
+        students: 7
       }
     ],
     rides: [
@@ -102,7 +102,7 @@ export default function StudentDetailContent({ studentId }) {
 
             <div className="overflow-x-auto">
               <Table
-                columns={["Route ID", "Name", "Stops", "Distance", "Status", "Actions"]}
+                columns={["Route ID", "Name", "Stops", "Distance", "Students", "Actions"]}
                 data={studentData.assignedRoutes}
                 renderRow={(route) => (
                   <tr key={route.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
@@ -110,9 +110,7 @@ export default function StudentDetailContent({ studentId }) {
                     <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.name}</td>
                     <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.stops}</td>
                     <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.distance}</td>
-                    <td className="py-4 px-4">
-                      <StatusBadge status={route.status} />
-                    </td>
+                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.students}</td>
                     <td className="py-4 px-4">
                       <Button
                         variant="outline"

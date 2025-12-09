@@ -110,7 +110,7 @@ export default function StudentProfilePage({ studentId }) {
         name: "North District Route",
         stops: 5,
         distance: "12.4 mi",
-        status: "Active"
+        students: 7
       }
     ],
     
@@ -503,7 +503,7 @@ export default function StudentProfilePage({ studentId }) {
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
                           <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                         </tr>
                       </thead>
@@ -514,9 +514,7 @@ export default function StudentProfilePage({ studentId }) {
                             <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
                             <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
                             <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
-                            <td className="py-4 px-4">
-                              <StatusBadge status={route.status} />
-                            </td>
+                            <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
                             <td className="py-4 px-4">
                               <Button
                                 variant="outline"
