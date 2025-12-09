@@ -32,6 +32,8 @@
   --button-text: #fff;
   --blue: #3b82f6;
   --purple-700: #6B21A8;
+  --purple-100: #F3E8FF;
+  --purple-800: #6B21A8;
   --blue-800: #1E40AF;
   --green-100: #D1FAE5;
   --amber-500: #F59E0B;
@@ -47,6 +49,8 @@
   --danger: #ef4444;
   --danger-dark: #b91c1c;
   --red-600: #DC2626;
+  --orange-100: #FFEDD5;
+  --orange-800: #9A3412;
   --warning: #f59e42;
   --on-warning: #fff;
   --warning-dark: #b45309;
