@@ -23,8 +23,11 @@ import {
   Globe,
   X,
 } from "lucide-react";
+import DateRangePicker from "@/components/rides/DateRangePicker";
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
+  // Guard BEFORE any hooks to keep hook order stable
+  if (!open || !districtData) return null;
   const [activeTab, setActiveTab] = useState(null);
   const [openCollapse, setOpenCollapse] = useState(null);
 
@@ -32,7 +35,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
     setOpenCollapse(openCollapse === collapseId ? null : collapseId);
   };
 
-  if (!districtData) return null;
+  // districtData is guaranteed by the top guard
 
   // Mock data based on screenshots
   const mockDistrictData = {
@@ -68,15 +71,19 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
       name: "Emma Johnson",
       grade: 9,
       campus: "Riverdale High",
+      homeroom: "9A",
       address: "123 Lake St, Riverdale, GA",
+      transportation: "Route R-002",
       status: "Active",
     },
     {
       id: "S-002",
-      name: "Michael Brown",
-      grade: 5,
+      name: "Jacob Martinez",
+      grade: 11,
       campus: "Westview Elementary",
-      address: "88 Main Ave, Atlanta, GA",
+      homeroom: "11C",
+      address: "789 Pine Ave, Sandy Springs, GA",
+      transportation: "Route R-001",
       status: "Active",
     },
   ];
@@ -116,6 +123,24 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
       status: "Assigned",
     },
   ];
+
+  // Date range filter state for Rides tab
+  const [rideStart, setRideStart] = useState(null);
+  const [rideEnd, setRideEnd] = useState(null);
+  const parseUsDate = (mmddyyyy) => {
+    if (!mmddyyyy) return null;
+    const parts = String(mmddyyyy).split("/");
+    if (parts.length !== 3) return new Date(mmddyyyy);
+    const [mm, dd, yyyy] = parts.map((v) => parseInt(v, 10));
+    return new Date(yyyy, mm - 1, dd);
+  };
+  const filteredRides = mockRides.filter((r) => {
+    const d = parseUsDate(r.scheduledDate);
+    if (!d || isNaN(d.getTime())) return false;
+    if (rideStart && d < new Date(rideStart.getFullYear(), rideStart.getMonth(), rideStart.getDate())) return false;
+    if (rideEnd && d > new Date(rideEnd.getFullYear(), rideEnd.getMonth(), rideEnd.getDate())) return false;
+    return true;
+  });
 
   const tabs = [
     { id: 0, label: "Campuses", icon: Building2 },
@@ -203,8 +228,9 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
               <th className="text-left py-3 px-4 font-medium text-gray-700">Student ID</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Grade</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Campus</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Homeroom</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-700">Transportation</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
@@ -218,12 +244,9 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                 <td className="py-4 px-4 text-sm text-gray-900">{student.id}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{student.name}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{student.grade}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">
-                  <span className="text-[var(--blue-600)] hover:underline cursor-pointer">
-                    {student.campus}
-                  </span>
-                </td>
+                <td className="py-4 px-4 text-sm text-gray-900">{student.homeroom || "-"}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{student.address}</td>
+                <td className="py-4 px-4 text-sm text-gray-900">{student.transportation || "-"}</td>
                 <td className="py-4 px-4">
                   <StatusBadge status={student.status} />
                 </td>
@@ -300,17 +323,18 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
 
   const renderRidesTab = () => (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Rides ({mockRides.length})
-        </h3>
-        {/* <Button
-          variant="primary"
-          icon={<Plus size={16} />}
-          size="sm"
-        >
-          Add New Ride
-        </Button> */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <h3 className="text-lg font-semibold text-gray-900">Rides</h3>
+        <div className="w-full md:w-80">
+          <DateRangePicker
+            startDate={rideStart}
+            endDate={rideEnd}
+            onDateRangeChange={(s, e) => {
+              setRideStart(s);
+              setRideEnd(e);
+            }}
+          />
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -325,7 +349,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
             </tr>
           </thead>
           <tbody>
-            {mockRides.map((ride) => (
+            {filteredRides.map((ride) => (
               <tr
                 key={ride.id}
                 className="border-b border-gray-100 hover:bg-gray-50"
@@ -373,8 +397,6 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   const renderContent = () => {
     return renderTabContent();
   };
-
-  if (!open) return null;
 
   return (
     <div
