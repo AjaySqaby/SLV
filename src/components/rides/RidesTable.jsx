@@ -12,6 +12,7 @@ import DriverDetailModal from "@/components/drivers/DriverDetailModal";
 import StatusBadge from "@/components/ui/StatusBadge";
 import HoverTooltip from "@/components/ui/HoverTooltip";
 import InProgressTooltipContent from "@/components/ui/InProgressTooltipContent";
+import EditTripModal from "@/components/common/modals/EditTripModal";
 
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
   const [selectedRideId, setSelectedRideId] = useState(null);
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
+  const [showEditTripModal, setShowEditTripModal] = useState(false);
   const actionMenuRef = useRef();
 
   const computeLateMinutes = (ride) => {
@@ -300,7 +302,8 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setShowActionMenu(false);
-                                // Add edit functionality here
+                                setSelectedRide(ride);
+                                setShowEditTripModal(true);
                               }}
                             >
                               <Edit size={16} /> Edit
@@ -400,6 +403,25 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
           }
         }}
         driverId={selectedDriverId}
+      />
+
+      {/* Edit Trip Modal */}
+      <EditTripModal
+        isOpen={showEditTripModal}
+        onClose={() => {
+          setShowEditTripModal(false);
+          // don't clear selectedRide here in case we want to reuse it after closing
+        }}
+        rideId={selectedRide?.id}
+        initialData={{
+          pickupAddress: selectedRide?.pickup?.location || "",
+          dropoffAddress: selectedRide?.dropoff?.location || "",
+        }}
+        onConfirm={(data) => {
+          // Placeholder: integrate with update API when available
+          console.log("Edit Trip confirmed:", data);
+          setShowEditTripModal(false);
+        }}
       />
     </div>
   );
