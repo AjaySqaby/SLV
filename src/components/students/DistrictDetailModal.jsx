@@ -27,7 +27,7 @@ import {
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   const [activeTab, setActiveTab] = useState(null);
   const [openCollapse, setOpenCollapse] = useState(null);
-  
+
   const handleCollapseToggle = (collapseId) => {
     setOpenCollapse(openCollapse === collapseId ? null : collapseId);
   };
@@ -166,8 +166,8 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                   <StatusBadge status={campus.status} />
                 </td>
                 <td className="py-4 px-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                   >
@@ -228,8 +228,8 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                   <StatusBadge status={student.status} />
                 </td>
                 <td className="py-4 px-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                   >
@@ -250,13 +250,13 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Routes ({mockRoutes.length})
         </h3>
-        <Button
+        {/* <Button
           variant="primary"
           icon={<Plus size={16} />}
           size="sm"
         >
           Add New Route
-        </Button>
+        </Button> */}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -267,7 +267,6 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
               <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
               <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
             </tr>
           </thead>
@@ -283,11 +282,8 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                 <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
                 <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
                 <td className="py-4 px-4">
-                  <StatusBadge status={route.status} />
-                </td>
-                <td className="py-4 px-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                   >
@@ -342,8 +338,8 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                   <StatusBadge status={ride.status} />
                 </td>
                 <td className="py-4 px-4">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
                   >
@@ -381,11 +377,11 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
   if (!open) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] backdrop-blur-sm"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white rounded-2xl !max-w-[82rem] mx-4 w-full h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
@@ -413,8 +409,8 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <div className="flex-1 overflow-y-auto">
           <div className="px-6 pt-4">
             {/* Collapse - District Information */}
-            <Collapse 
-              title="District Information" 
+            <Collapse
+              title="District Information"
               icon={
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="text-purple-600">
                   <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -453,7 +449,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                       <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.id}</div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--blue-100)] flex items-center justify-center">
                       <Globe className="w-4 h-4 text-[var(--blue-600)]" />
@@ -463,7 +459,7 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
                       <div className="text-sm font-medium text-[var(--primary-black)]">{mockDistrictData.region}</div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[var(--orange-100)] flex items-center justify-center">
                       <MapPin className="w-4 h-4 text-[var(--orange-600)]" />
