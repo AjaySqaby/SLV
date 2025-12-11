@@ -248,6 +248,148 @@ export default function ReportsContent() {
     return partnerFinanceRows.filter(r => selectedEntityLabels.includes(r.name));
   }, [scope, selectedEntityLabels]);
 
+  // --- Rides report filtering (mock aggregation using simple multipliers) ---
+  const multipliersByLabel = useMemo(() => {
+    return {
+      // Districts
+      "Atlanta Public Schools": 1.0,
+      "Fulton County Schools": 0.9,
+      "Cobb County Schools": 0.8,
+      "Northside School District": 0.6,
+      "DeKalb County Schools": 0.7,
+      "Gwinnett County Schools": 1.2,
+      // Campuses
+      "Riverdale High": 0.55,
+      "Westview Elementary": 0.40,
+      "Lincoln Middle School": 0.45,
+      "Washington High": 0.50,
+      // Partners
+      "City Transit Solutions": 0.9,
+      "School Ride Services": 0.7,
+      "Metro Transport Co.": 0.6,
+      "Green Routes LLC": 0.5,
+    };
+  }, []);
+
+  const { ridesByDayFiltered, rideStatusFiltered } = useMemo(() => {
+    // Only apply when we're on the Rides report; otherwise return defaults
+    const shouldApply = selectedReport === "rides";
+    // Compute scale:
+    // - If specific entities are selected: sum their multipliers
+    // - If "All" (no specific selections): use the average multiplier for the current scope options
+    let scale = 1;
+    if (shouldApply) {
+      if (selectedEntityLabels.length > 0) {
+        scale = selectedEntityLabels.reduce((acc, label) => acc + (multipliersByLabel[label] || 1), 0);
+      } else {
+        const labels = currentEntityOptions.map(o => o.label);
+        if (labels.length > 0) {
+          const sum = labels.reduce((acc, label) => acc + (multipliersByLabel[label] || 1), 0);
+          scale = sum / labels.length;
+        }
+      }
+    }
+
+    const scaleNumber = (n) => Math.round(n * scale);
+    const ridesByDayFilteredLocal = ridesByDayData.map((d) => ({
+      day: d.day,
+      completed: scaleNumber(d.completed),
+      inProgress: scaleNumber(d.inProgress),
+      cancelled: scaleNumber(d.cancelled),
+    }));
+
+    // Build ride status distribution from the aggregated rides by day
+    const totals = ridesByDayFilteredLocal.reduce(
+      (acc, d) => {
+        acc.completed += d.completed;
+        acc.inProgress += d.inProgress;
+        acc.cancelled += d.cancelled;
+        return acc;
+      },
+      { completed: 0, inProgress: 0, cancelled: 0 }
+    );
+    const grand = totals.completed + totals.inProgress + totals.cancelled;
+    const pct = (v) => (grand === 0 ? 0 : Math.round((v / grand) * 100));
+    const completedPct = pct(totals.completed);
+    const inProgressPct = pct(totals.inProgress);
+    const cancelledPct = pct(totals.cancelled);
+    const assignedPct = Math.max(0, 100 - completedPct - inProgressPct - cancelledPct);
+
+    const rideStatusFilteredLocal = [
+      { name: "Completed", value: completedPct, color: "#22c55e" },
+      { name: "In Progress", value: inProgressPct, color: "#F59E0B" },
+      { name: "Cancelled", value: cancelledPct, color: "#ef4444" },
+      { name: "Assigned", value: assignedPct, color: "#3b82f6" },
+    ];
+
+    return {
+      ridesByDayFiltered: shouldApply ? ridesByDayFilteredLocal : ridesByDayData,
+      rideStatusFiltered: shouldApply ? rideStatusFilteredLocal : rideStatusData,
+    };
+  }, [selectedReport, selectedEntityLabels, multipliersByLabel, ridesByDayData, rideStatusData, currentEntityOptions]);
+
+  // Scale value accessible for overview stats
+  const ridesScale = useMemo(() => {
+    if (selectedReport !== "rides") return 1;
+    if (selectedEntityLabels.length > 0) {
+      return selectedEntityLabels.reduce((acc, label) => acc + (multipliersByLabel[label] || 1), 0);
+    }
+    const labels = currentEntityOptions.map(o => o.label);
+    if (labels.length === 0) return 1;
+    const sum = labels.reduce((acc, label) => acc + (multipliersByLabel[label] || 1), 0);
+    return sum / labels.length;
+  }, [selectedReport, selectedEntityLabels, multipliersByLabel, currentEntityOptions]);
+
+  const ridesOverviewStats = useMemo(() => {
+    if (selectedReport !== "rides") return overviewStats;
+    // Compute totals from filtered rides
+    const totals = ridesByDayFiltered.reduce(
+      (acc, d) => {
+        acc.completed += d.completed;
+        acc.inProgress += d.inProgress;
+        acc.cancelled += d.cancelled;
+        return acc;
+      },
+      { completed: 0, inProgress: 0, cancelled: 0 }
+    );
+    const totalRides = totals.completed + totals.inProgress + totals.cancelled;
+    const baseMiles = 4285; // from sample data
+    const baseStudents = 1246; // from sample data
+    const miles = Math.round(baseMiles * ridesScale);
+    const students = Math.round(baseStudents * ridesScale);
+    const formatNumber = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return [
+      {
+        title: "Total Rides",
+        subtitle: "Current reporting period",
+        value: `${formatNumber(totalRides)}`,
+        change: "↑ 12% from previous period",
+        changeType: "positive",
+      },
+      {
+        title: "Total Distance",
+        subtitle: "Miles traveled",
+        value: `${formatNumber(miles)} mi`,
+        change: "↑ 8% from previous period",
+        changeType: "positive",
+      },
+      {
+        title: "On-Time Rate",
+        subtitle: "Arrival performance",
+        value: `${rideStatusFiltered.find((r) => r.name === "Completed")?.value ?? 0}%`,
+        change: "↑ 2.5% from previous period",
+        changeType: "positive",
+      },
+      {
+        title: "Students Served",
+        subtitle: "Total passengers",
+        value: `${formatNumber(students)}`,
+        change: "↑ 5% from previous period",
+        changeType: "positive",
+      },
+    ];
+  }, [selectedReport, ridesByDayFiltered, rideStatusFiltered, ridesScale, overviewStats]);
+
   const renderNewReport = () => {
     // Backward-compatible: show useful content when "Driver Report" is chosen
     if (selectedReport === "drivers") {
@@ -726,8 +868,8 @@ export default function ReportsContent() {
       {selectedReport === "rides" ? (
         <>
           {/* Overview Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {overviewStats.map((stat, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {ridesOverviewStats.map((stat, index) => (
               <Card key={index} className="p-6 bg-white border border-[var(--border)]">
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--heading)] mb-1">
@@ -761,7 +903,7 @@ export default function ReportsContent() {
               </div>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={ridesByDayData}>
+                  <BarChart data={ridesByDayFiltered}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                     <XAxis
                       dataKey="day"
@@ -819,7 +961,7 @@ export default function ReportsContent() {
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={rideStatusData}
+                        data={rideStatusFiltered}
                         cx="50%"
                         cy="50%"
                         outerRadius={120}
