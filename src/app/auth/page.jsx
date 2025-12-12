@@ -9,6 +9,8 @@ import OTPVerificationModal from "@/components/auth/OTPVerificationModal";
 import SetNewPasswordModal from "@/components/auth/SetNewPasswordModal";
 import { useAuth } from "@/components/auth/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "sonner";
+import LoaderOverlay from "@/components/ui/LoaderOverlay";
 
 const LoginContent = () => {
   const router = useRouter();
@@ -46,7 +48,7 @@ const LoginContent = () => {
     setShowSetPassword(false);
     setEmail("");
     // Optionally show success message or redirect
-    alert("Password reset successful! Please login with your new password.");
+    toast.success("Password reset successful! Please login with your new password.");
   };
 
   useEffect(() => {
@@ -59,9 +61,11 @@ const LoginContent = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     if (!loginEmail || !loginPassword) {
+      toast.error("Please enter email and password");
       return;
     }
     if (loginEmail !== "admin@gmail.com" || loginPassword !== "1234") {
+      toast.error("Invalid credentials");
       return;
     }
     setIsSubmitting(true);
@@ -70,14 +74,26 @@ const LoginContent = () => {
       const redirectTo = searchParams.get("redirect") || "/dashboard";
       router.replace(redirectTo);
       setIsSubmitting(false);
+      toast.success("Welcome back!");
     }, 700);
   };
 
+  // Auth bootstrapping loader
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-secondary to-primary text-white text-lg">
-        Loading...
-      </div>
+      <>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-secondary to-primary">
+          <div className="bg-background rounded-2xl shadow-lg p-8 w-full max-w-md border border-card-border text-center">
+            <div className="flex items-center justify-center">
+              <svg className="animate-spin h-8 w-8 text-primary" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+            </div>
+            <p className="mt-3 text-heading font-medium">Preparing login…</p>
+          </div>
+        </div>
+      </>
     );
   }
 
@@ -169,6 +185,7 @@ const LoginContent = () => {
         }}
         onComplete={handlePasswordSet}
       />
+      <LoaderOverlay show={isSubmitting} label="Signing in…" />
     </>
   );
 };

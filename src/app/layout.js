@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TimezoneProvider } from "@/contexts/TimezoneContext";
 import { AuthProvider } from "@/components/auth/AuthContext";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,8 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <TimezoneProvider>
             {children}
+            {/* Global toaster for app-wide notifications */}
+            <Toaster position="top-right" richColors expand={false} />
           </TimezoneProvider>
         </AuthProvider>
       </body>
