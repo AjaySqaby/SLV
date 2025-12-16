@@ -5,6 +5,8 @@ import { useState } from "react";
 import Tabs from "@/components/ui/Tabs";
 import StatusBadge from "@/components/ui/StatusBadge";
 import Button from "@/components/ui/Button";
+import RidesTable from "@/components/rides/RidesTable";
+import DateRangePicker from "@/components/rides/DateRangePicker";
 import {
   ArrowLeft,
   Building2,
@@ -26,6 +28,8 @@ import Collapse from "@/components/ui/Collapse";
 export default function CampusDetailModal({ open, onClose, campusData }) {
   const [activeTab, setActiveTab] = useState(null);
   const [openCollapse, setOpenCollapse] = useState('campus-info');
+  const [rideStart, setRideStart] = useState(null);
+  const [rideEnd, setRideEnd] = useState(null);
   
   const handleCollapseToggle = (collapseId) => {
     setOpenCollapse(openCollapse === collapseId ? null : collapseId);
@@ -219,52 +223,62 @@ export default function CampusDetailModal({ open, onClose, campusData }) {
         <h3 className="text-lg font-semibold text-gray-900">
           Rides ({mockRides.length})
         </h3>
-        <Button
-          variant="primary"
-          icon={<Plus size={16} />}
-          size="sm"
-        >
-          Add New Ride
-        </Button>
+        <div className="w-full md:w-80">
+          <DateRangePicker
+            startDate={rideStart}
+            endDate={rideEnd}
+            onDateRangeChange={(s, e) => {
+              setRideStart(s);
+              setRideEnd(e);
+            }}
+          />
+        </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Scheduled Date</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Driver</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockRides.map((ride) => (
-              <tr
-                key={ride.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.route}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.scheduledDate}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.driver}</td>
-                <td className="py-4 px-4">
-                  <StatusBadge status={ride.status} />
-                </td>
-                <td className="py-4 px-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
+        <RidesTable
+          rides={(function() {
+            const parseUsDate = (mmddyyyy) => {
+              if (!mmddyyyy) return null;
+              const parts = String(mmddyyyy).split("/");
+              if (parts.length !== 3) return new Date(mmddyyyy);
+              const [mm, dd, yyyy] = parts.map((v) => parseInt(v, 10));
+              return new Date(yyyy, mm - 1, dd);
+            };
+            const filtered = (mockRides || []).filter((r) => {
+              const d = parseUsDate(r.scheduledDate);
+              if (!d || isNaN(d.getTime())) return false;
+              if (rideStart && d < new Date(rideStart.getFullYear(), rideStart.getMonth(), rideStart.getDate())) return false;
+              if (rideEnd && d > new Date(rideEnd.getFullYear(), rideEnd.getMonth(), rideEnd.getDate())) return false;
+              return true;
+            });
+            return filtered.map((r) => ({
+            id: r.id,
+            district: "86022-Z",
+            date: r.scheduledDate,
+            scheduledTime: "09:00 AM",
+            timezone: "America/Los_Angeles",
+            pickup: {
+              scheduled: "08:30 AM",
+              arrived: "08:30 AM",
+              confirmed: "08:35 AM",
+              location: "1221 Broadway, Oakland, CA 94612",
+            },
+            dropoff: {
+              scheduled: "10:30 AM",
+              arrived: "09:00 AM",
+              completed: r.status === "Completed" ? "09:20 AM" : undefined,
+              location: "388 9th St, Oakland, CA 94607",
+            },
+            driver: { name: r.driver, vehicle: "Ford Transit" },
+            details: { distance: "3.5 mi", duration: "30 min", stops: 2, students: 1 },
+            status: r.status,
+            nextStop: { address: "Oakland High School" },
+            stops: 2,
+            }));
+          })()}
+          currentPage={1}
+          itemsPerPage={(mockRides || []).length || 10}
+        />
       </div>
     </div>
   );

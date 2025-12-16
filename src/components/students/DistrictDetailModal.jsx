@@ -24,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import DateRangePicker from "@/components/rides/DateRangePicker";
+import RidesTable from "@/components/rides/RidesTable";
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   // Guard BEFORE any hooks to keep hook order stable
@@ -336,44 +337,36 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
           />
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Ride ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Route</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Scheduled Date</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Driver</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRides.map((ride) => (
-              <tr
-                key={ride.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-sm text-gray-900">#{ride.id}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.route}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.scheduledDate}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{ride.driver}</td>
-                <td className="py-4 px-4">
-                  <StatusBadge status={ride.status} />
-                </td>
-                <td className="py-4 px-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Reuse the same design as Rides page */}
+      <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
+        <RidesTable
+          rides={filteredRides.map((r) => ({
+            id: r.id,
+            district: "86022-Z",
+            date: r.scheduledDate,
+            scheduledTime: "09:00 AM",
+            timezone: "America/Los_Angeles",
+            pickup: {
+              scheduled: "08:30 AM",
+              arrived: "08:30 AM",
+              confirmed: "08:35 AM",
+              location: "1221 Broadway, Oakland, CA 94612",
+            },
+            dropoff: {
+              scheduled: "10:30 AM",
+              arrived: "09:00 AM",
+              completed: r.status === "Completed" ? "09:20 AM" : undefined,
+              location: "388 9th St, Oakland, CA 94607",
+            },
+            driver: { name: r.driver, vehicle: "Ford Transit" },
+            details: { distance: "3.5 mi", duration: "30 min", stops: 2, students: 1 },
+            status: r.status,
+            nextStop: { address: "Oakland High School" },
+            stops: 2,
+          }))}
+          currentPage={1}
+          itemsPerPage={filteredRides.length || 10}
+        />
       </div>
     </div>
   );

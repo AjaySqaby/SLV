@@ -30,10 +30,14 @@ import Card from '@/components/ui/Card'
 import StatusBadge from '@/components/ui/StatusBadge'
 import Tabs from '@/components/ui/Tabs'
 import Table from '@/components/ui/Table'
+import RidesTable from '@/components/rides/RidesTable'
+import DateRangePicker from '@/components/rides/DateRangePicker'
 
 export default function StudentDetailContent({ studentId }) {
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
+  const [rideStart, setRideStart] = useState(null)
+  const [rideEnd, setRideEnd] = useState(null)
 
   // Mock data - replace with actual API call
   const studentData = {
@@ -131,41 +135,64 @@ export default function StudentDetailContent({ studentId }) {
       case 1:
         return (
           <Card className="p-6 bg-white shadow-sm border border-[var(--gray-100)]">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-[var(--gray-900)] flex items-center gap-2">
                 <Car className="w-5 h-5 text-[var(--blue-600)]" />
                 Scheduled Rides ({studentData.rides.length})
               </h2>
+              <div className="w-full md:w-80">
+                <DateRangePicker
+                  startDate={rideStart}
+                  endDate={rideEnd}
+                  onDateRangeChange={(s, e) => {
+                    setRideStart(s)
+                    setRideEnd(e)
+                  }}
+                />
+              </div>
             </div>
-
-            <div className="overflow-x-auto">
-              <Table
-                columns={["Ride ID", "Route", "Scheduled Date", "Driver", "Status", "Actions"]}
-                data={studentData.rides}
-                renderRow={(ride) => (
-                  <tr key={ride.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{ride.id}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.route}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.date}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{ride.driver}</td>
-                    <td className="py-4 px-4">
-                      <StatusBadge
-                        status={ride.status}
-                        type={ride.status === "In progress" ? "active" : "warning"}
-                      />
-                    </td>
-                    <td className="py-4 px-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                      >
-                        View
-                      </Button>
-                    </td>
-                  </tr>
-                )}
-              />
+            <div className="bg-background rounded-lg border border-[var(--gray-200)] overflow-hidden">
+              {(() => {
+                const parseUsDate = (mmddyyyy) => {
+                  if (!mmddyyyy) return null
+                  const parts = String(mmddyyyy).split("/")
+                  if (parts.length !== 3) return new Date(mmddyyyy)
+                  const [mm, dd, yyyy] = parts.map((v) => parseInt(v, 10))
+                  return new Date(yyyy, mm - 1, dd)
+                }
+                const filtered = (studentData.rides || []).filter((r) => {
+                  const d = parseUsDate(r.date)
+                  if (!d || isNaN(d.getTime())) return false
+                  if (rideStart && d < new Date(rideStart.getFullYear(), rideStart.getMonth(), rideStart.getDate())) return false
+                  if (rideEnd && d > new Date(rideEnd.getFullYear(), rideEnd.getMonth(), rideEnd.getDate())) return false
+                  return true
+                })
+                const ridesForTable = filtered.map((r) => ({
+                  id: r.id,
+                  district: r.route,
+                  date: r.date,
+                  scheduledTime: '08:30 AM',
+                  timezone: 'America/Los_Angeles',
+                  pickup: {
+                    scheduled: '08:30 AM',
+                    arrived: r.status === 'Completed' ? '08:35 AM' : '',
+                    confirmed: '08:20 AM',
+                    location: '1221 Broadway, Oakland, CA 94612',
+                  },
+                  dropoff: {
+                    scheduled: '09:30 AM',
+                    arrived: r.status === 'In progress' ? '09:10 AM' : '',
+                    completed: r.status === 'Completed' ? '09:25 AM' : '',
+                    location: '388 9th St, Oakland, CA 94607',
+                  },
+                  driver: { name: r.driver || 'Assigned Driver', vehicle: 'Ford Transit' },
+                  details: { distance: '3.5 mi', duration: '30 min', stops: 2, students: 1 },
+                  status: r.status,
+                  nextStop: { address: 'Oakland High School' },
+                  stops: [],
+                }))
+                return <RidesTable rides={ridesForTable} currentPage={1} itemsPerPage={ridesForTable.length || 10} />
+              })()}
             </div>
           </Card>
         );
