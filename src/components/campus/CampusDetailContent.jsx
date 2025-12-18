@@ -258,7 +258,10 @@ export default function CampusDetailContent({ campusId, isModal = false, isEditM
     if (activeTab === null) return null;
     switch (activeTab) {
       case 0:
-        return <StudentsTab students={students} />
+        {
+          const districtCode = (campusData?.district || '').match(/\(([^)]+)\)/)?.[1] || campusData?.district || '-'
+          return <StudentsTab students={students} campusName={campusData?.name} district={districtCode} />
+        }
 
       case 1:
         return <RoutesTab routes={routes} />

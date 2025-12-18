@@ -25,6 +25,9 @@ import {
 } from "lucide-react";
 import DateRangePicker from "@/components/rides/DateRangePicker";
 import RidesTable from "@/components/rides/RidesTable";
+import StudentsTable from "@/components/students/StudentsTable";
+import RoutesTable from "@/components/routes/RoutesTable";
+import CampusesTable from "@/components/campus/CampusesTable";
 
 export default function DistrictDetailModal({ open, onClose, districtData }) {
   // Guard BEFORE any hooks to keep hook order stable
@@ -156,55 +159,12 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Campuses ({mockCampuses.length})
         </h3>
-        {/* <Button
-          variant="primary"
-          icon={<Plus size={16} />}
-          size="sm"
-        >
-          Add New Campus
-        </Button> */}
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Campus ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockCampuses.map((campus) => (
-              <tr
-                key={campus.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-sm text-gray-900">{campus.id}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{campus.name}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{campus.type}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{campus.address}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{campus.students}</td>
-                <td className="py-4 px-4">
-                  <StatusBadge status={campus.status} />
-                </td>
-                <td className="py-4 px-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <CampusesTable
+        campuses={mockCampuses.map((c) => ({ ...c, district: mockDistrictData.id }))}
+        onView={() => {}}
+        onEdit={() => {}}
+      />
     </div>
   );
 
@@ -214,57 +174,18 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Students ({mockStudents.length})
         </h3>
-        {/* <Button
-          variant="primary"
-          icon={<Plus size={16} />}
-          size="sm"
-        >
-          Add New Student
-        </Button> */}
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Student ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Grade</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Homeroom</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Address</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Transportation</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockStudents.map((student) => (
-              <tr
-                key={student.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-sm text-gray-900">{student.id}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{student.name}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{student.grade}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{student.homeroom || "-"}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{student.address}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{student.transportation || "-"}</td>
-                <td className="py-4 px-4">
-                  <StatusBadge status={student.status} />
-                </td>
-                <td className="py-4 px-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <StudentsTable
+        students={mockStudents.map((s) => ({
+          id: s.id,
+          name: s.name,
+          grade: s.grade,
+          campus: s.campus,
+          district: mockDistrictData.id,
+          address: s.address,
+          status: s.status,
+        }))}
+      />
     </div>
   );
 
@@ -274,51 +195,19 @@ export default function DistrictDetailModal({ open, onClose, districtData }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Routes ({mockRoutes.length})
         </h3>
-        {/* <Button
-          variant="primary"
-          icon={<Plus size={16} />}
-          size="sm"
-        >
-          Add New Route
-        </Button> */}
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockRoutes.map((route) => (
-              <tr
-                key={route.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-sm text-gray-900">{route.id}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
-                <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
-                <td className="py-4 px-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                  >
-                    View
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RoutesTable
+        routes={mockRoutes.map((r) => ({
+          id: r.id,
+          name: r.name,
+          district: mockDistrictData.id,
+          stops: r.stops,
+          distance: r.distance,
+          students: r.students,
+          status: r.status,
+          driver: null,
+        }))}
+      />
     </div>
   );
 
