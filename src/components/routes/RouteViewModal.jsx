@@ -14,7 +14,8 @@ import RouteEditModal from './RouteEditModal';
 import { countEquipmentFromStudents, formatEquipmentCounts } from '@/utils/equipment';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
-  const [activeTab, setActiveTab] = useState(0);
+  // Default to the Rides tab so users immediately see ride details matching Rides Management
+  const [activeTab, setActiveTab] = useState(4);
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
@@ -34,7 +35,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
   const routeData = {
     id: routeId || "RT-30842",
     name: "North District Route",
-    district: "86022-Z",
+    // Show district name to match Rides Management example
+    district: "Oakland Unified School District",
     stops: 5,
     distance: "12.4 mi",
     students: 7,
@@ -470,22 +472,33 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     return true;
   });
 
+  // Format "MM/DD/YYYY" -> "MM/DD/YYYY (Wednesday)"
+  const formatDateWithWeekday = (mmddyyyy) => {
+    const d = parseUsDate(mmddyyyy);
+    if (!d || isNaN(d.getTime())) return mmddyyyy;
+    const weekday = d.toLocaleDateString('en-US', { weekday: 'long' });
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${mm}/${dd}/${yyyy} (${weekday})`;
+  };
+
   const renderRides = () => {
-    const equipmentSummary = formatEquipmentCounts(countEquipmentFromStudents(routeData.students));
     const ridesForTable = filteredRouteRides.map((r) => ({
       id: r.id,
-      district: r.route,
-      date: r.date,
+      // Display the district name in the table
+      district: routeData.district,
+      date: formatDateWithWeekday(r.date),
       scheduledTime: '08:30 AM',
       timezone: 'America/Los_Angeles',
       pickup: { scheduled: '08:30 AM', arrived: r.status === 'Completed' ? '08:35 AM' : '', confirmed: '08:20 AM', location: '1221 Broadway, Oakland, CA 94612' },
       dropoff: { scheduled: '09:30 AM', arrived: r.status === 'In progress' ? '09:10 AM' : '', completed: r.status === 'Completed' ? '09:25 AM' : '', location: '388 9th St, Oakland, CA 94607' },
-      driver: { name: r.driver, vehicle: 'Toyota Sienna' },
+      // Match the example driver & vehicle
+      driver: { name: 'Michael Davis', vehicle: 'Ford Transit' },
       details: { distance: '3.5 mi', duration: '30 min', stops: 2, students: 2 },
       status: r.status,
       nextStop: { address: 'Central High School' },
-      stops: [],
-      equipmentSummary,
+      stops: []
     }));
     return (
       <div className="space-y-4">

@@ -47,25 +47,31 @@ export default function AssignedRoutesTab({ driverId }) {
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+            <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Route ID</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Name</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Stops</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Distance</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Students</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Status</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-[var(--gray-700)]">Actions</th>
               </tr>
             </thead>
             <tbody>
               {assignedRoutes.map((route) => (
-                <tr key={route.routeId} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-4 px-4 text-sm text-gray-900">{route.routeId}</td>
-                  <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
-                  <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
-                  <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
-                  <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
-                  <td className="py-4 px-4">
+                <tr key={route.routeId} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)]">
+                  <td className="px-4 py-4 text-sm text-[var(--primary-black)]">{route.routeId}</td>
+                  <td className="px-4 py-4 text-sm text-[var(--primary-black)]">{route.name}</td>
+                  <td className="px-4 py-4 text-sm text-[var(--primary-black)]">{route.stops}</td>
+                  <td className="px-4 py-4 text-sm text-[var(--primary-black)]">{route.distance}</td>
+                  <td className="px-4 py-4 text-sm text-[var(--primary-black)]">{route.students}</td>
+                  <td className="px-4 py-4">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${route.status === 'Active' ? 'bg-[var(--purple)] text-white' : 'bg-[var(--gray-200)] text-[var(--muted-text)]'}`}>
+                      {route.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
                     <div className="flex gap-2">
                       <Button 
                         variant="outline" 

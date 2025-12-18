@@ -151,12 +151,12 @@ const LoginContent = () => {
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
           </form>
-          <div className="mt-6 text-center text-sm text-muted">
+          {/* <div className="mt-6 text-center text-sm text-muted">
             Don't have an account?{" "}
             <a href="#" className="text-primary font-medium hover:underline">
               Sign up
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
 
