@@ -60,12 +60,20 @@ import Input from '@/components/ui/Input'
 import Collapse from '@/components/ui/Collapse'
 import DateRangePicker from '@/components/rides/DateRangePicker'
 import RidesTable from '@/components/rides/RidesTable'
+import RoutesTable from '@/components/routes/RoutesTable'
+import dynamic from 'next/dynamic'
+import DriversTable from '@/components/drivers/DriversTable'
+import BlockedDriversTable from '@/components/students/BlockedDriversTable'
+
+const RouteViewModal = dynamic(() => import('@/components/routes/RouteViewModal'), { ssr: false })
 
 export default function StudentProfilePage({ studentId }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState(null)
   const [rideStart, setRideStart] = useState(null)
   const [rideEnd, setRideEnd] = useState(null)
+  const [showRouteModal, setShowRouteModal] = useState(false)
+  const [selectedRouteId, setSelectedRouteId] = useState(null)
   const [showManageTripModal, setShowManageTripModal] = useState(false)
   const [showAddGuardianModal, setShowAddGuardianModal] = useState(false)
   const [showBlockDriverModal, setShowBlockDriverModal] = useState(false)
@@ -141,6 +149,9 @@ export default function StudentProfilePage({ studentId }) {
       {
         id: "DRV-5432",
         name: "John Smith",
+        phone: "(404) 555-1234",
+        email: "john.s@example.com",
+        vehicle: "Ford Transit",
         rating: "4.8",
         ridesCompleted: 24,
         status: "Active"
@@ -148,6 +159,9 @@ export default function StudentProfilePage({ studentId }) {
       {
         id: "DRV-7654",
         name: "Jane Doe", 
+        phone: "(404) 555-5678",
+        email: "jane.d@example.com",
+        vehicle: "Toyota Sienna",
         rating: "4.9",
         ridesCompleted: 36,
         status: "Active"
@@ -174,8 +188,8 @@ export default function StudentProfilePage({ studentId }) {
 
   // Modal handlers
   const handleViewRoute = (routeId) => {
-    // Show route details in modal or navigate to routes page
-    router.push('/routes')
+    setSelectedRouteId(routeId)
+    setShowRouteModal(true)
   }
 
   const handleViewRide = (rideId) => {
@@ -496,49 +510,32 @@ export default function StudentProfilePage({ studentId }) {
           {/* Dynamic Content based on active tab */}
           <div>
             {activeTab === 'routes' && (
-              <>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Assigned Routes ({studentData.assignedRoutes.length})</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Route ID</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Stops</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Distance</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Students</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {studentData.assignedRoutes.map((route, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="py-4 px-4 text-sm text-gray-900">{route.id}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{route.name}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{route.stops}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{route.distance}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{route.students}</td>
-                            <td className="py-4 px-4">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleViewRoute(route.id)
-                                }}
-                              >
-                                View
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </>
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Assigned Routes ({studentData.assignedRoutes.length})
+                </h3>
+                {(() => {
+                  const routesForTable = (studentData.assignedRoutes || []).map((r) => ({
+                    id: r.id,
+                    name: r.name,
+                    district: '86022-Z',
+                    stops: r.stops,
+                    distance: r.distance,
+                    students: r.students,
+                    status: 'Active',
+                    driver: null,
+                  }))
+                  return (
+                    <RoutesTable
+                      routes={routesForTable}
+                      onView={(id) => handleViewRoute(id)}
+                      onEdit={() => {}}
+                      onSchedule={() => {}}
+                      onAssignDriver={() => {}}
+                    />
+                  )
+                })()}
+              </div>
             )}
 
             {activeTab === 'rides' && (
@@ -580,104 +577,55 @@ export default function StudentProfilePage({ studentId }) {
             )}
 
             {activeTab === 'drivers' && (
-              <>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Approved Drivers ({studentData.approvedDrivers.length})</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Rating</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Rides Completed</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {studentData.approvedDrivers.map((driver, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.id}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.name}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900 flex items-center gap-1">
-                              {driver.rating} <Star className="w-4 h-4 text-yellow-500" />
-                            </td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.ridesCompleted}</td>
-                            <td className="py-4 px-4">
-                              <StatusBadge status={driver.status} />
-                            </td>
-                            <td className="py-4 px-4">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleBlockDriver(driver.id)
-                                }}
-                              >
-                                Block
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </>
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Approved Drivers ({studentData.approvedDrivers.length})
+                </h3>
+                {(() => {
+                  const drivers = (studentData.approvedDrivers || []).map((d) => ({
+                    id: d.id,
+                    name: d.name,
+                    phone: d.phone || '-',
+                    email: d.email || '-',
+                    vehicle: d.vehicle || '-',
+                    totalRides: d.ridesCompleted,
+                    rating: d.rating,
+                    status: d.status,
+                  }))
+                  const driverStatuses = Object.fromEntries(
+                    drivers.map((d) => [d.id, d.status || 'Active'])
+                  )
+                  return (
+                    <DriversTable
+                      drivers={drivers}
+                      driverStatuses={driverStatuses}
+                      onView={(driverId) => router.push('/drivers')}
+                      onEdit={(driverId) => router.push('/drivers')}
+                    />
+                  )
+                })()}
+              </div>
             )}
 
             {activeTab === 'blocked' && (
-              <>
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Blocked Drivers</h3>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-                      onClick={() => setShowBlockDriverModal(true)}
-                    >
-                      <Plus className="w-4 h-4" />
-                      Block Driver
-                    </Button>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Driver ID</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Reason</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {studentData.blockedDrivers.map((driver, index) => (
-                          <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.id}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.name}</td>
-                            <td className="py-4 px-4 text-sm text-gray-900">{driver.reason}</td>
-                            <td className="py-4 px-4">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                                onClick={() => handleUnblockDriver(driver.id)}
-                              >
-                                <Trash2 className="w-4 h-4 mr-1" />
-                                Remove
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Blocked Drivers</h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => setShowBlockDriverModal(true)}
+                  >
+                    <Plus className="w-4 h-4" />
+                    Block Driver
+                  </Button>
                 </div>
-              </>
+                <BlockedDriversTable
+                  drivers={studentData.blockedDrivers}
+                  onRemove={handleUnblockDriver}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -735,6 +683,13 @@ export default function StudentProfilePage({ studentId }) {
           </div>
         </div>
       )}
+
+      {/* Route modal */}
+      <RouteViewModal
+        isOpen={showRouteModal}
+        onClose={() => { setShowRouteModal(false); setSelectedRouteId(null) }}
+        routeId={selectedRouteId}
+      />
     </div>
   );
 }

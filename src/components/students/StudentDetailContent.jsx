@@ -32,12 +32,18 @@ import Tabs from '@/components/ui/Tabs'
 import Table from '@/components/ui/Table'
 import RidesTable from '@/components/rides/RidesTable'
 import DateRangePicker from '@/components/rides/DateRangePicker'
+import RoutesTable from '@/components/routes/RoutesTable'
+import dynamic from 'next/dynamic'
+
+const RouteViewModal = dynamic(() => import('@/components/routes/RouteViewModal'), { ssr: false })
 
 export default function StudentDetailContent({ studentId }) {
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
   const [rideStart, setRideStart] = useState(null)
   const [rideEnd, setRideEnd] = useState(null)
+  const [showRouteModal, setShowRouteModal] = useState(false)
+  const [selectedRouteId, setSelectedRouteId] = useState(null)
 
   // Mock data - replace with actual API call
   const studentData = {
@@ -103,32 +109,27 @@ export default function StudentDetailContent({ studentId }) {
                 Assigned Routes ({studentData.assignedRoutes.length})
               </h2>
             </div>
-
-            <div className="overflow-x-auto">
-              <Table
-                columns={["Route ID", "Name", "Stops", "Distance", "Students", "Actions"]}
-                data={studentData.assignedRoutes}
-                renderRow={(route) => (
-                  <tr key={route.id} className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-colors">
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)] font-medium">{route.id}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.name}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.stops}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.distance}</td>
-                    <td className="py-4 px-4 text-sm text-[var(--gray-900)]">{route.students}</td>
-                    <td className="py-4 px-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        onClick={() => window.location.href = `/routes/${route.id}`}
-                      >
-                        View
-                      </Button>
-                    </td>
-                  </tr>
-                )}
-              />
-            </div>
+            {(() => {
+              const routesForTable = (studentData.assignedRoutes || []).map((r) => ({
+                id: r.id,
+                name: r.name,
+                district: "86022-Z",
+                stops: r.stops,
+                distance: r.distance,
+                students: r.students,
+                status: "Active",
+                driver: null
+              }))
+              return (
+                <RoutesTable
+                  routes={routesForTable}
+                  onView={(id) => { setSelectedRouteId(id); setShowRouteModal(true); }}
+                  onEdit={() => {}}
+                  onSchedule={() => {}}
+                  onAssignDriver={() => {}}
+                />
+              )
+            })()}
           </Card>
         );
 
@@ -439,6 +440,13 @@ export default function StudentDetailContent({ studentId }) {
         {/* Tab Content */}
         {renderTabContent()}
       </div>
+
+      {/* Route Details modal */}
+      <RouteViewModal
+        isOpen={showRouteModal}
+        onClose={() => { setShowRouteModal(false); setSelectedRouteId(null); }}
+        routeId={selectedRouteId}
+      />
     </div>
   )
 }
