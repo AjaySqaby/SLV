@@ -44,9 +44,7 @@ export default function UpcomingRidesTab({ driverId }) {
           <p className="text-sm">There are no scheduled rides for this driver.</p>
         </div>
       ) : (
-        <div className="bg-background rounded-lg shadow-sm border border-[var(--gray-200)] overflow-hidden">
-          <RidesTable rides={ridesForTable} currentPage={1} itemsPerPage={ridesForTable.length || 10} />
-        </div>
+        <RidesTable rides={ridesForTable} currentPage={1} itemsPerPage={ridesForTable.length || 10} />
       )}
     </div>
   );

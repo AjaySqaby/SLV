@@ -126,7 +126,7 @@ export default function HolidayExceptionsTab({ holidays = [], onAddHoliday, onEd
               {holidays.map((holiday) => (
                 <tr 
                   key={holiday.id} 
-                  className="border-b border-gray-100 hover:bg-gray-50"
+                  className="border-b border-[var(--gray-100)] hover:bg-[var(--gray-50)] transition-all duration-200"
                 >
                   <td className="py-4 px-4 text-sm text-gray-900">
                     <div className="flex items-center gap-3">

@@ -101,14 +101,12 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     const statusMap = { "D-001": "Active", "D-002": "Active", "D-003": "Active" };
 
     return (
-      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6">
-        <DriversTable
-          drivers={partnerDrivers}
-          driverStatuses={statusMap}
-          onView={(id) => console.log("view driver", id)}
-          onEdit={(id) => console.log("edit driver", id)}
-        />
-      </div>
+      <DriversTable
+        drivers={partnerDrivers}
+        driverStatuses={statusMap}
+        onView={(id) => console.log("view driver", id)}
+        onEdit={(id) => console.log("edit driver", id)}
+      />
     );
   };
 
@@ -120,15 +118,13 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     ];
 
     return (
-      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6">
-        <RoutesTable
-          routes={partnerRoutes}
-          onView={(id) => console.log("view route", id)}
-          onEdit={(id) => console.log("edit route", id)}
-          onSchedule={(id) => console.log("schedule route", id)}
-          onAssignDriver={(route) => console.log("assign driver", route)}
-        />
-      </div>
+      <RoutesTable
+        routes={partnerRoutes}
+        onView={(id) => console.log("view route", id)}
+        onEdit={(id) => console.log("edit route", id)}
+        onSchedule={(id) => console.log("schedule route", id)}
+        onAssignDriver={(route) => console.log("assign driver", route)}
+      />
     );
   };
 

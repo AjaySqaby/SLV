@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import AddMaintenanceModal from "@/components/maintenance/AddMaintenanceModal";
 import MaintenanceDetailModal from "@/components/maintenance/MaintenanceDetailModal";
+import MaintenanceActionsDropdown from "@/components/maintenance/MaintenanceActionsDropdown";
 
 export default function MaintenanceTab({ driverId }) {
   const router = useRouter();
@@ -70,9 +71,9 @@ export default function MaintenanceTab({ driverId }) {
            </div>
         ) : (
           <div className="overflow-x-auto">
-                         <table className="w-full">
-               <thead>
-                 <tr className="border-b border-[var(--gray-200)]">
+            <table className="w-full">
+              <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+                <tr>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Type</th>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Due Date</th>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Status</th>
@@ -85,17 +86,18 @@ export default function MaintenanceTab({ driverId }) {
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.type}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.dueDate}</td>
                     <td className="py-3 px-4">
-                     <StatusBadge status={item.status} />
+                      <StatusBadge status={item.status} />
                     </td>
                     <td className="py-3 px-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        onClick={() => { setSelectedMaintenanceId(`M-${index + 1}`); setShowDetailModal(true); }}
-                      >
-                        View
-                      </Button>
+                      <div className="flex justify-center">
+                        <MaintenanceActionsDropdown
+                          item={{ ...item, id: `M-${index + 1}` }}
+                          onView={() => {
+                            setSelectedMaintenanceId(`M-${index + 1}`);
+                            setShowDetailModal(true);
+                          }}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -115,9 +117,9 @@ export default function MaintenanceTab({ driverId }) {
            </div>
         ) : (
           <div className="overflow-x-auto">
-                         <table className="w-full">
-               <thead>
-                 <tr className="border-b border-[var(--gray-200)]">
+            <table className="w-full">
+              <thead className="bg-[var(--gray-50)] border-b border-[var(--gray-200)]">
+                <tr>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Type</th>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Date</th>
                    <th className="text-left py-3 px-4 font-medium text-[var(--gray-700)]">Mileage</th>
@@ -132,17 +134,18 @@ export default function MaintenanceTab({ driverId }) {
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.type}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.date}</td>
                      <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.mileage}</td>
-                     <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.serviceProvider}</td>
+                    <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.serviceProvider}</td>
                     <td className="py-3 px-4 text-sm text-[var(--gray-900)]">{item.cost}</td>
-                   <td className="py-3 px-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="text-[var(--blue-600)] border-[var(--blue-200)] hover:bg-[var(--blue-50)] hover:border-[var(--blue-300)]"
-                        onClick={() => { setSelectedMaintenanceId(`M-${index + 1}`); setShowDetailModal(true); }}
-                      >
-                        View Details
-                      </Button>
+                    <td className="py-3 px-4">
+                      <div className="flex justify-center">
+                        <MaintenanceActionsDropdown
+                          item={{ ...item, id: `H-${index + 1}` }}
+                          onView={() => {
+                            setSelectedMaintenanceId(`H-${index + 1}`);
+                            setShowDetailModal(true);
+                          }}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
