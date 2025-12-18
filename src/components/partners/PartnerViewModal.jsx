@@ -6,6 +6,8 @@ import RidesTable from '@/components/rides/RidesTable';
 import Button from '@/components/ui/Button';
 import Collapse from '@/components/ui/Collapse';
 import AddPartnerModal from './AddPartnerModal';
+import DriversTable from '@/components/drivers/DriversTable';
+import RoutesTable from '@/components/routes/RoutesTable';
 
 export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
   // Guard before any hooks to satisfy Rules of Hooks when modal is closed
@@ -90,66 +92,45 @@ export default function PartnerViewModal({ isOpen, onClose, partnerId }) {
     </div>
   );
 
-  const renderDrivers = () => (
-    <div className="space-y-4">
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold text-[var(--primary-black)] mb-4">Active Drivers</h3>
-        <div className="space-y-3">
-          {[
-            { name: "Mike Johnson", status: "Active", rides: 45, rating: 4.9 },
-            { name: "Sarah Wilson", status: "Active", rides: 38, rating: 4.8 },
-            { name: "David Brown", status: "Active", rides: 42, rating: 4.7 }
-          ].map((driver, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-[var(--gray-50)] rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--purple)] text-white rounded-full flex items-center justify-center text-sm font-bold">
-                  {driver.name.split(' ').map(n => n[0]).join('')}
-                </div>
-                <div>
-                  <div className="font-medium text-[var(--primary-black)]">{driver.name}</div>
-                  <div className="text-sm text-[var(--muted-text)]">{driver.rides} rides • {driver.rating}★</div>
-                </div>
-              </div>
-              <span className="px-2 py-1 bg-[var(--green-100)] text-[var(--green-600)] text-xs font-medium rounded-full">
-                {driver.status}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  const renderDrivers = () => {
+    const partnerDrivers = [
+      { id: "D-001", name: "Mike Johnson", phone: "(404) 555-1234", email: "mike.j@example.com", vehicle: "Ford Transit", totalRides: 156, status: "Active" },
+      { id: "D-002", name: "Sarah Wilson", phone: "(404) 555-5678", email: "sarah.w@example.com", vehicle: "Tesla X", totalRides: 142, status: "Active" },
+      { id: "D-003", name: "David Brown", phone: "(404) 555-9012", email: "david.b@example.com", vehicle: "Honda Odyssey", totalRides: 128, status: "Active" },
+    ];
+    const statusMap = { "D-001": "Active", "D-002": "Active", "D-003": "Active" };
 
-  const renderRoutes = () => (
-    <div className="space-y-4">
-      <div className="bg-white rounded-lg border border-[var(--gray-200)] p-6 shadow-sm hover:shadow-md transition-all duration-200">
-        <h3 className="text-lg font-semibold text-[var(--primary-black)] mb-4">Active Routes</h3>
-        <div className="space-y-3">
-          {[
-            { name: "Downtown Route", stops: 8, students: 25, duration: "45 min" },
-            { name: "Suburban Route", stops: 12, students: 18, duration: "60 min" },
-            { name: "Airport Route", stops: 5, students: 12, duration: "30 min" }
-          ].map((route, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-[var(--gray-50)] rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[var(--blue-100)] rounded-full flex items-center justify-center">
-                  <Route className="w-4 h-4 text-[var(--blue-600)]" />
-                </div>
-                <div>
-                  <div className="font-medium text-[var(--primary-black)]">{route.name}</div>
-                  <div className="text-sm text-[var(--muted-text)]">{route.stops} stops • {route.students} students</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-[var(--primary-black)]">{route.duration}</div>
-                <div className="text-xs text-[var(--muted-text)]">Duration</div>
-              </div>
-            </div>
-          ))}
-        </div>
+    return (
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6">
+        <DriversTable
+          drivers={partnerDrivers}
+          driverStatuses={statusMap}
+          onView={(id) => console.log("view driver", id)}
+          onEdit={(id) => console.log("edit driver", id)}
+        />
       </div>
-    </div>
-  );
+    );
+  };
+
+  const renderRoutes = () => {
+    const partnerRoutes = [
+      { id: "RT-30842", name: "North District Route", district: "86022-Z", stops: 5, distance: "12.4 mi", students: 7, status: "Active", driver: "Sam Kebede" },
+      { id: "RT-30843", name: "South Campus Route", district: "86022-Z", stops: 4, distance: "10.2 mi", students: 5, status: "Active", driver: null },
+      { id: "RT-30841", name: "West Campus Route", district: "75044-A", stops: 3, distance: "8.5 mi", students: 4, status: "Active", driver: null },
+    ];
+
+    return (
+      <div className="bg-[var(--surface-bg)] rounded-lg shadow-sm border border-[var(--card-border)] p-6">
+        <RoutesTable
+          routes={partnerRoutes}
+          onView={(id) => console.log("view route", id)}
+          onEdit={(id) => console.log("edit route", id)}
+          onSchedule={(id) => console.log("schedule route", id)}
+          onAssignDriver={(route) => console.log("assign driver", route)}
+        />
+      </div>
+    );
+  };
 
   const renderRides = () => {
     const ridesForTable = filteredPartnerRides.map((r) => ({
