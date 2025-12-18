@@ -17,6 +17,29 @@ import EditTripModal from "@/components/common/modals/EditTripModal";
 export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }) {
   const router = useRouter();
 
+  // Format "MM/DD/YYYY" -> "MM/DD/YYYY (Wednesday)"; gracefully fallback if unparseable
+  const formatDateWithWeekday = (value) => {
+    if (!value) return value;
+    const tryParse = (v) => {
+      // Handle MM/DD/YYYY specifically
+      const parts = String(v).split('/');
+      if (parts.length === 3) {
+        const [mm, dd, yyyy] = parts.map((p) => parseInt(p, 10));
+        const d = new Date(Number.isFinite(yyyy) ? yyyy : 0, Number.isFinite(mm) ? mm - 1 : 0, Number.isFinite(dd) ? dd : 1);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d;
+    };
+    const d = tryParse(value);
+    if (!d) return value;
+    const weekday = d.toLocaleDateString('en-US', { weekday: 'long' });
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${mm}/${dd}/${yyyy} (${weekday})`;
+  };
+
   const handleRideClick = (rideId) => {
     setSelectedRideId(rideId);
     setShowRideDetailModal(true);
@@ -137,12 +160,13 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           {ride.district}
                         </div>
                         <div className="text-xs text-[var(--gray-500)]">
-                          {ride.date}
+                          {formatDateWithWeekday(ride.date)}
                         </div>
                         <div className="text-xs text-[var(--blue-dark)] font-semibold mt-1">
                           Scheduled: <DualTimeDisplay
                             rideTime={ride.scheduledTime}
                             rideTimezone={ride.timezone}
+                            userTimezone="Asia/Kolkata"
                             showLabels={false}
                             className="text-[var(--blue-dark)]"
                             compact={true}
@@ -165,6 +189,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           Scheduled: <DualTimeDisplay
                             rideTime={ride.pickup.scheduled}
                             rideTimezone={ride.timezone}
+                            userTimezone="Asia/Kolkata"
                             showLabels={false}
                             className="text-[var(--blue-600)]"
                             compact={true}
@@ -174,6 +199,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           Arrived: <DualTimeDisplay
                             rideTime={ride.pickup.arrived}
                             rideTimezone={ride.timezone}
+                            userTimezone="Asia/Kolkata"
                             showLabels={false}
                             className="text-[var(--success-dark)]"
                             compact={true}
@@ -184,6 +210,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                             Confirmed: <DualTimeDisplay
                               rideTime={ride.pickup.confirmed}
                               rideTimezone={ride.timezone}
+                              userTimezone="Asia/Kolkata"
                               showLabels={false}
                               className="text-[var(--warning-dark)]"
                               compact={true}
@@ -205,6 +232,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           Scheduled: <DualTimeDisplay
                             rideTime={ride.dropoff.scheduled}
                             rideTimezone={ride.timezone}
+                            userTimezone="Asia/Kolkata"
                             showLabels={false}
                             className="text-[var(--blue-600)]"
                             compact={true}
@@ -214,6 +242,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                           Arrived: <DualTimeDisplay
                             rideTime={ride.dropoff.arrived}
                             rideTimezone={ride.timezone}
+                            userTimezone="Asia/Kolkata"
                             showLabels={false}
                             className="text-[var(--success-dark)]"
                             compact={true}
@@ -224,6 +253,7 @@ export default function RidesTable({ rides, currentPage = 1, itemsPerPage = 10 }
                             Completed: <DualTimeDisplay
                               rideTime={ride.dropoff.completed}
                               rideTimezone={ride.timezone}
+                              userTimezone="Asia/Kolkata"
                               showLabels={false}
                               className="text-[var(--warning-dark)]"
                               compact={true}

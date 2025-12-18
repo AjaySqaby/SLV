@@ -12,6 +12,7 @@ import StudentProfilePage from '@/components/students/StudentProfilePage';
 import Collapse from '@/components/ui/Collapse';
 import RouteEditModal from './RouteEditModal';
 import { countEquipmentFromStudents, formatEquipmentCounts } from '@/utils/equipment';
+import DualTimeDisplay from '@/components/ui/DualTimeDisplay';
 
 export default function RouteViewModal({ isOpen, onClose, routeId }) {
   // Default to the Rides tab so users immediately see ride details matching Rides Management
@@ -154,6 +155,8 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
       }
     ]
   };
+  // Use PST everywhere to match Ride page flow (PST -> GMT+5:30)
+  const routeTimezone = 'America/Los_Angeles';
 
   const tabs = [
     { id: 1, label: "Route Stops" },
@@ -205,7 +208,18 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
                       <span>{stop.typeIcon}</span>
                     </div>
                     <div className="ml-6">
-                      <span>Scheduled {stop.time} EST {index === 0 ? 'Pick up' : 'Drop off'} {stop.students} student{stop.students !== 1 ? 's' : ''}</span>
+                      <span>
+                        Scheduled:{' '}
+                        <DualTimeDisplay
+                          rideTime={stop.time}
+                          rideTimezone={routeTimezone}
+                          userTimezone="Asia/Kolkata"
+                          showLabels={false}
+                          compact={true}
+                          className="text-[var(--gray-700)]"
+                        />{' '}
+                        {index === 0 ? 'Pick up' : 'Drop off'} {stop.students} student{stop.students !== 1 ? 's' : ''}
+                      </span>
                     </div>
                   </div>
 
@@ -288,7 +302,15 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
                 <div className="flex items-center gap-2 mb-2">
                   <h4 className="font-semibold" style={{ color: '#111827' }}>Pickup</h4>
                   <Clock className="w-4 h-4" style={{ color: '#6b7280' }} />
-                  <span className="text-sm" style={{ color: '#6b7280' }}>8:00 AM EST</span>
+                  <span className="text-sm" style={{ color: '#6b7280' }}>
+                    <DualTimeDisplay
+                      rideTime="8:00 AM"
+                      rideTimezone={routeTimezone}
+                      userTimezone="Asia/Kolkata"
+                      showLabels={false}
+                      compact={true}
+                    />
+                  </span>
                 </div>
                 <p className="text-sm" style={{ color: '#6b7280' }}>
                   {routeData.stops[0]?.address}
@@ -323,7 +345,15 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
                 <div className="flex items-center gap-2 mb-2">
                   <h4 className="font-semibold" style={{ color: '#111827' }}>Dropoff</h4>
                   <Clock className="w-4 h-4" style={{ color: '#6b7280' }} />
-                  <span className="text-sm" style={{ color: '#6b7280' }}>8:25 AM EST</span>
+                  <span className="text-sm" style={{ color: '#6b7280' }}>
+                    <DualTimeDisplay
+                      rideTime="8:25 AM"
+                      rideTimezone={routeTimezone}
+                      userTimezone="Asia/Kolkata"
+                      showLabels={false}
+                      compact={true}
+                    />
+                  </span>
                 </div>
                 <p className="text-sm" style={{ color: '#6b7280' }}>
                   {routeData.stops[routeData.stops.length - 1]?.address}
@@ -472,23 +502,12 @@ export default function RouteViewModal({ isOpen, onClose, routeId }) {
     return true;
   });
 
-  // Format "MM/DD/YYYY" -> "MM/DD/YYYY (Wednesday)"
-  const formatDateWithWeekday = (mmddyyyy) => {
-    const d = parseUsDate(mmddyyyy);
-    if (!d || isNaN(d.getTime())) return mmddyyyy;
-    const weekday = d.toLocaleDateString('en-US', { weekday: 'long' });
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    return `${mm}/${dd}/${yyyy} (${weekday})`;
-  };
-
   const renderRides = () => {
     const ridesForTable = filteredRouteRides.map((r) => ({
       id: r.id,
       // Display the district name in the table
       district: routeData.district,
-      date: formatDateWithWeekday(r.date),
+      date: r.date,
       scheduledTime: '08:30 AM',
       timezone: 'America/Los_Angeles',
       pickup: { scheduled: '08:30 AM', arrived: r.status === 'Completed' ? '08:35 AM' : '', confirmed: '08:20 AM', location: '1221 Broadway, Oakland, CA 94612' },
