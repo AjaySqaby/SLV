@@ -11,6 +11,7 @@ import Select from '@/components/ui/Select'
 import SearchInput from '@/components/ui/SearchInput'
 import Input from '@/components/ui/Input'
 import RideMap from './RideMap'
+import DualTimeDisplay from '@/components/ui/DualTimeDisplay'
 import { useRouter } from 'next/navigation'
 import RouteViewModal from '@/components/routes/RouteViewModal'
 import ForceStartModal from '@/components/common/modals/ForceStartModal'
@@ -101,6 +102,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
       // Completed ride
       return {
         id: id,
+        timezone: "America/New_York",
         status: "Completed",
         eta: "7:35 AM",
         driver: {
@@ -166,6 +168,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
       // In Progress ride
       return {
         id: id,
+        timezone: "America/New_York",
         status: "In Progress",
         eta: "8:15 AM",
         driver: {
@@ -204,6 +207,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
       // Upcoming ride
       return {
         id: id,
+        timezone: "America/New_York",
         status: "Upcoming",
         eta: "8:30 AM",
         driver: {
@@ -242,6 +246,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
       // Delayed ride
       return {
         id: id,
+        timezone: "America/New_York",
         status: "Delayed",
         eta: "9:35 AM",
         driver: {
@@ -296,6 +301,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
 
       return {
         id: id,
+        timezone: "America/New_York",
         status: randomStatus,
         eta: "7:35 AM",
         driver: {
@@ -495,7 +501,14 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
             <h1 className="text-2xl font-bold text-[var(--blue-600)]">Ride Details #{rideData.id}</h1>
             <StatusBadge status={displayStatus} fontSize="text-lg" lateMinutes={lateMinutes} />
             <span className="text-sm font-medium text-gray-700">
-              ETA: {formatTimeWithHighlight(rideData.eta, 'EST')}
+              ETA: <DualTimeDisplay
+                rideTime={rideData.eta}
+                rideTimezone={rideData.timezone}
+                userTimezone="Asia/Kolkata"
+                showLabels={false}
+                className="text-[var(--blue-600)]"
+                compact={true}
+              />
             </span>
           </div>
           {onClose && (
@@ -713,19 +726,42 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-green-600"><span className="w-2 h-2 rounded-full bg-green-600 mr-2"></span>Start</div>
                 <div className="font-medium text-gray-900">
-                  {formatTimeWithHighlight(rideData.pickup?.scheduledTime, 'EST')}
+                  <DualTimeDisplay
+                    rideTime={rideData.pickup?.scheduledTime}
+                    rideTimezone={rideData.timezone}
+                    userTimezone="Asia/Kolkata"
+                    showLabels={false}
+                    className="text-gray-900"
+                    compact={true}
+                  />
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-red-600"><span className="w-2 h-2 rounded-full bg-red-600 mr-2"></span>End</div>
                 <div className="font-medium text-gray-900">
-                  {formatTimeWithHighlight(rideData.dropoff?.scheduledTime, 'EST')}
+                  <DualTimeDisplay
+                    rideTime={rideData.dropoff?.scheduledTime}
+                    rideTimezone={rideData.timezone}
+                    userTimezone="Asia/Kolkata"
+                    showLabels={false}
+                    className="text-gray-900"
+                    compact={true}
+                  />
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-gray-600"><span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>Completed</div>
                 <div className="font-medium text-gray-900">
-                  {displayStatus === 'Completed' ? formatTimeWithHighlight(rideData.dropoff?.actualTime, 'EST') : '--'}
+                  {displayStatus === 'Completed' ? (
+                    <DualTimeDisplay
+                      rideTime={rideData.dropoff?.actualTime}
+                      rideTimezone={rideData.timezone}
+                      userTimezone="Asia/Kolkata"
+                      showLabels={false}
+                      className="text-gray-900"
+                      compact={true}
+                    />
+                  ) : '--'}
                 </div>
               </div>
             </div>
@@ -807,7 +843,17 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                 <span>Residential • Door-to-door pickup</span>
                               </div>
                               <div className="ml-6">
-                                <span>Scheduled 7:15 AM EST Pick up 1 student</span>
+                                <span>
+                                  Scheduled{' '}
+                                  <DualTimeDisplay
+                                    rideTime="7:15 AM"
+                                    rideTimezone={rideData.timezone}
+                                    userTimezone="Asia/Kolkata"
+                                    showLabels={false}
+                                    compact={true}
+                                  />{' '}
+                                  Pick up 1 student
+                                </span>
                               </div>
                             </div>
 
@@ -857,7 +903,17 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                 <span>School Campus • Main entrance</span>
                               </div>
                               <div className="ml-6">
-                                <span>Scheduled 7:45 AM EST Drop off 1 student</span>
+                                <span>
+                                  Scheduled{' '}
+                                  <DualTimeDisplay
+                                    rideTime="7:45 AM"
+                                    rideTimezone={rideData.timezone}
+                                    userTimezone="Asia/Kolkata"
+                                    showLabels={false}
+                                    compact={true}
+                                  />{' '}
+                                  Drop off 1 student
+                                </span>
                               </div>
                             </div>
 
@@ -951,7 +1007,15 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                             <div className="flex items-center gap-2 mb-2">
                               <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Pickup</h4>
                               <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:15 AM EST</span>
+                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                                <DualTimeDisplay
+                                  rideTime="7:15 AM"
+                                  rideTimezone={rideData.timezone}
+                                  userTimezone="Asia/Kolkata"
+                                  showLabels={false}
+                                  compact={true}
+                                />
+                              </span>
                             </div>
                             <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
                               1425 Oak Street Apt 204, Springfield, MA 01103
@@ -986,7 +1050,15 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                             <div className="flex items-center gap-2 mb-2">
                               <h4 className="font-semibold" style={{ color: 'var(--heading)' }}>Dropoff</h4>
                               <Clock className="w-4 h-4" style={{ color: 'var(--muted-text)' }} />
-                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>7:45 AM EST</span>
+                              <span className="text-sm" style={{ color: 'var(--muted-text)' }}>
+                                <DualTimeDisplay
+                                  rideTime="7:45 AM"
+                                  rideTimezone={rideData.timezone}
+                                  userTimezone="Asia/Kolkata"
+                                  showLabels={false}
+                                  compact={true}
+                                />
+                              </span>
                             </div>
                             <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
                               Lincoln Academy High School
