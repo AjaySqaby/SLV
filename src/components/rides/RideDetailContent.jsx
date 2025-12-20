@@ -506,7 +506,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                 rideTimezone={rideData.timezone}
                 userTimezone="Asia/Kolkata"
                 showLabels={false}
-                className="text-[var(--blue-600)]"
+                className="whitespace-nowrap text-[var(--blue-600)]"
                 compact={true}
               />
             </span>
@@ -725,7 +725,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-green-600"><span className="w-2 h-2 rounded-full bg-green-600 mr-2"></span>Start</div>
-                <div className="font-medium text-gray-900">
+                <div className="font-medium text-gray-900 text-right">
                   <DualTimeDisplay
                     rideTime={rideData.pickup?.scheduledTime}
                     rideTimezone={rideData.timezone}
@@ -738,7 +738,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-red-600"><span className="w-2 h-2 rounded-full bg-red-600 mr-2"></span>End</div>
-                <div className="font-medium text-gray-900">
+                <div className="font-medium text-gray-900 text-right">
                   <DualTimeDisplay
                     rideTime={rideData.dropoff?.scheduledTime}
                     rideTimezone={rideData.timezone}
@@ -751,7 +751,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-gray-600"><span className="w-2 h-2 rounded-full bg-gray-400 mr-2"></span>Completed</div>
-                <div className="font-medium text-gray-900">
+                <div className="font-medium text-gray-900 text-right">
                   {displayStatus === 'Completed' ? (
                     <DualTimeDisplay
                       rideTime={rideData.dropoff?.actualTime}
@@ -850,6 +850,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                     rideTimezone={rideData.timezone}
                                     userTimezone="Asia/Kolkata"
                                     showLabels={false}
+                                    className="whitespace-nowrap"
                                     compact={true}
                                   />{' '}
                                   Pick up 1 student
@@ -910,6 +911,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                     rideTimezone={rideData.timezone}
                                     userTimezone="Asia/Kolkata"
                                     showLabels={false}
+                                    className="whitespace-nowrap"
                                     compact={true}
                                   />{' '}
                                   Drop off 1 student
@@ -1013,6 +1015,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                   rideTimezone={rideData.timezone}
                                   userTimezone="Asia/Kolkata"
                                   showLabels={false}
+                                  className="whitespace-nowrap"
                                   compact={true}
                                 />
                               </span>
@@ -1056,6 +1059,7 @@ export default function RideDetailContent({ rideId, onClose, onViewDriver, onVie
                                   rideTimezone={rideData.timezone}
                                   userTimezone="Asia/Kolkata"
                                   showLabels={false}
+                                  className="whitespace-nowrap"
                                   compact={true}
                                 />
                               </span>
