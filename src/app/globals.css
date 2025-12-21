@@ -84,7 +84,6 @@
   --timezone-hover: #be5eed;
 }
 
-/* Animated progress stripe for In Progress status bar */
 @keyframes slv-progress-slide {
   0% { background-position: 0 0; }
   100% { background-position: 40px 0; }
